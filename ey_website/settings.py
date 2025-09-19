@@ -179,7 +179,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'core.User'
 
 # Security settings - adjust these based on your environment
-DEBUG = True
+DEBUG = False
 
 # Logging configuration
 LOGGING = {
