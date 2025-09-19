@@ -181,17 +181,3 @@ AUTH_USER_MODEL = 'core.User'
 # Security settings - adjust these based on your environment
 DEBUG = False
 
-# Logging configuration
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'root': {
-        'handlers': ['console'],
-        'level': 'WARNING',
-    },
-}
