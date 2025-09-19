@@ -1,0 +1,14 @@
+# Django project .gitignore
+# Django
+*.log
+*.pot
+*.pyc
+__pycache__/
+db.sqlite3
+media/
+
+# Virtual environment
+venv/
+env/
+ENV/
+.venv/
