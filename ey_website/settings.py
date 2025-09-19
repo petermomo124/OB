@@ -181,12 +181,6 @@ AUTH_USER_MODEL = 'core.User'
 # Security settings - adjust these based on your environment
 DEBUG = True
 
-    # If you're behind a proxy/load balancer that handles SSL
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
-    # For Render deployment specifically
-    SECURE_SSL_REDIRECT = True
-
 # Logging configuration
 LOGGING = {
     'version': 1,
