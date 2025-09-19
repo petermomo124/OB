@@ -1,0 +1,260 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+
+@import "tailwindcss";
+@import "tw-animate-css";
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  /* Shadcn/UI colors */
+  --color-background: #ffffff;
+  --color-foreground: #0a0a0a;
+
+  --color-card: #ffffff;
+  --color-card-foreground: #0a0a0a;
+
+  --color-popover: #ffffff;
+  --color-popover-foreground: #0a0a0a;
+
+  /* Primary set to Obllcus blue */
+  --color-primary: #7ba0d4;
+  --color-primary-foreground: #ffffff;
+
+  /* Secondary set to black (with white foreground) as requested */
+  --color-secondary: #000000;
+  --color-secondary-foreground: #ffffff;
+
+  --color-muted: #f5f5f5;
+  --color-muted-foreground: #737373;
+
+  --color-accent: #f5f5f5;
+  --color-accent-foreground: #171717;
+
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #fafafa;
+
+  --color-border: #e5e5e5;
+  --color-input: #e5e5e5;
+  --color-ring: #0a0a0a;
+
+  --color-chart-1: #e67e22;
+  --color-chart-2: #2d8659;
+  --color-chart-3: #1e3a5f;
+  --color-chart-4: #f1c40f;
+  --color-chart-5: #e74c3c;
+
+  --color-sidebar: #f7f7f7;
+  --color-sidebar-foreground: #404040;
+  --color-sidebar-primary: #1a1a1a;
+  --color-sidebar-primary-foreground: #fafafa;
+  --color-sidebar-accent: #f0f0f0;
+  --color-sidebar-accent-foreground: #1a1a1a;
+  --color-sidebar-border: #d4d4d8;
+  --color-sidebar-ring: #3b82f6;
+
+  --radius-lg: 0rem; /* Adjusted for sharp corners */
+  --radius-md: 0rem; /* Adjusted for sharp corners */
+  --radius-sm: 0rem; /* Adjusted for sharp corners */
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+
+  /* Brand Colors (remapped for Obllcus) */
+  --color-ey-primary-yellow: #7ba0d4; /* use Obllcus blue wherever EY yellow was used */
+  --color-ey-dark-charcoal: #000000; /* secondary color: black */
+  --color-ey-pure-white: #FFFFFF;
+  --color-ey-light-gray: #F5F5F5;
+  --color-ey-medium-gray: #666666;
+  --color-ey-dark-gray: #333333;
+  --color-ey-blue-accent: #7ba0d4; /* links and interactive elements */
+  --color-ey-warm-orange: #FF6B35;
+  --color-ey-success-green: #28A745;
+
+  /* Typography */
+  --font-ey-interstate: "EYInterstate", Arial, sans-serif;
+  --font-ey-body: "Inter", sans-serif; /* Using Inter as a close alternative for body */
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: #e5e5e5;
+  }
+}
+
+@layer utilities {
+  body {
+    font-family: var(--font-ey-body);
+  }
+}
+
+@layer base {
+  :root {
+    /* Shadcn/UI variables */
+    --background: var(--color-background);
+    --foreground: var(--color-foreground);
+    --card: var(--color-card);
+    --card-foreground: var(--color-card-foreground);
+    --popover: var(--color-popover);
+    --popover-foreground: var(--color-popover-foreground);
+    --primary: var(--color-primary);
+    --primary-foreground: var(--color-primary-foreground);
+    --secondary: var(--color-secondary);
+    --secondary-foreground: var(--color-secondary-foreground);
+    --muted: var(--color-muted);
+    --muted-foreground: var(--color-muted-foreground);
+    --accent: var(--color-accent);
+    --accent-foreground: var(--color-accent-foreground);
+    --destructive: var(--color-destructive);
+    --destructive-foreground: var(--color-destructive-foreground);
+    --border: var(--color-border);
+    --input: var(--color-input);
+    --ring: var(--color-ring);
+    --chart-1: var(--color-chart-1);
+    --chart-2: var(--color-chart-2);
+    --chart-3: var(--color-chart-3);
+    --chart-4: var(--color-chart-4);
+    --chart-5: var(--color-chart-5);
+    --radius: 0rem; /* Adjusted for sharp corners */
+    --sidebar-background: var(--color-sidebar);
+    --sidebar-foreground: var(--color-sidebar-foreground);
+    --sidebar-primary: var(--color-sidebar-primary);
+    --sidebar-primary-foreground: var(--color-sidebar-primary-foreground);
+    --sidebar-accent: var(--color-sidebar-accent);
+    --sidebar-accent-foreground: var(--color-sidebar-accent-foreground);
+    --sidebar-border: var(--color-sidebar-border);
+    --sidebar-ring: var(--color-sidebar-ring);
+
+    /* Brand Color Variables (Obllcus mapping) */
+    --ey-primary-yellow: var(--color-ey-primary-yellow);
+    --ey-dark-charcoal: var(--color-ey-dark-charcoal);
+    --ey-pure-white: var(--color-ey-pure-white);
+    --ey-light-gray: var(--color-ey-light-gray);
+    --ey-medium-gray: var(--color-ey-medium-gray);
+    --ey-dark-gray: var(--color-ey-dark-gray);
+    --ey-blue-accent: var(--color-ey-blue-accent);
+    --ey-warm-orange: var(--color-ey-warm-orange);
+    --ey-success-green: var(--color-ey-success-green);
+  }
+
+  /* No dark theme detected, so no .dark block */
+
+  * {
+    border-color: var(--border);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-ey-body);
+  }
+
+  h1 {
+    font-family: var(--font-ey-interstate);
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--ey-dark-gray);
+  }
+
+  h2 {
+    font-family: var(--font-ey-interstate);
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--ey-dark-gray);
+  }
+
+  h3 {
+    font-family: var(--font-ey-interstate);
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.3;
+    color: var(--ey-dark-gray);
+  }
+
+  p {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--ey-medium-gray);
+  }
+
+  small {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--ey-medium-gray);
+  }
+
+  a {
+    color: var(--ey-blue-accent);
+    text-decoration: none;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+    h1 {
+      font-size: 36px;
+    }
+    h2 {
+      font-size: 28px;
+    }
+    h3 {
+      font-size: 20px;
+    }
+    p {
+      font-size: 15px;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .container {
+      padding-left: 30px;
+      padding-right: 30px;
+    }
+  }
+}
+
+/* Hide Next.js error overlay portal */
+nextjs-portal {
+  display: none !important;
+}

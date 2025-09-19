@@ -1,0 +1,243 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Global Presence | OB Global{% endblock %}
+
+{% block content %}
+<div class="bg-white">
+    <!-- Hero Section -->
+    <div class="relative bg-primary-800 text-white">
+        <div class="container mx-auto px-4 py-20 lg:py-28">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6">Our Global Presence</h1>
+                <p class="text-xl text-primary-100 max-w-3xl mx-auto">
+                    Serving clients across multiple regions with local expertise and global reach.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- World Map Section -->
+    <div class="relative py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Our Global Network</h2>
+                <div class="w-20 h-1 bg-primary-600 mx-auto"></div>
+            </div>
+            
+            <!-- World Map with Locations -->
+            <div class="relative max-w-4xl mx-auto">
+                <img src="{% static 'images/world-map.svg' %}" alt="World Map" class="w-full h-auto">
+                
+                <!-- Map Markers -->
+                <div class="absolute top-1/4 left-1/4 transform -translate-x-1/2 -translate-y-1/2">
+                    <div class="relative group">
+                        <div class="w-4 h-4 bg-primary-600 rounded-full border-2 border-white shadow-lg"></div>
+                        <div class="absolute left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-white text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                            New York, USA
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Add more map markers for other locations -->
+                <div class="absolute top-1/3 left-2/3 transform -translate-x-1/2 -translate-y-1/2">
+                    <div class="relative group">
+                        <div class="w-4 h-4 bg-primary-600 rounded-full border-2 border-white shadow-lg"></div>
+                        <div class="absolute left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-white text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                            London, UK
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="absolute top-1/2 left-1/3 transform -translate-x-1/2 -translate-y-1/2">
+                    <div class="relative group">
+                        <div class="w-4 h-4 bg-primary-600 rounded-full border-2 border-white shadow-lg"></div>
+                        <div class="absolute left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-white text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                            Dubai, UAE
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="absolute top-2/3 left-2/3 transform -translate-x-1/2 -translate-y-1/2">
+                    <div class="relative group">
+                        <div class="w-4 h-4 bg-primary-600 rounded-full border-2 border-white shadow-lg"></div>
+                        <div class="absolute left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-white text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                            Singapore
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Regions Section -->
+    <div class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Our Regions</h2>
+                <div class="w-20 h-1 bg-primary-600 mx-auto"></div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Americas -->
+                <div class="border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+                    <div class="bg-primary-100 p-4">
+                        <h3 class="text-xl font-semibold text-primary-800">Americas</h3>
+                    </div>
+                    <div class="p-6">
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-primary-600 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                                <div>
+                                    <h4 class="font-medium">United States</h4>
+                                    <p class="text-sm text-gray-600">New York, Miami, Minneapolis, Dallas, Washington DC</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-primary-600 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                                <div>
+                                    <h4 class="font-medium">Canada</h4>
+                                    <p class="text-sm text-gray-600">Toronto, Vancouver</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- EMEA -->
+                <div class="border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+                    <div class="bg-primary-100 p-4">
+                        <h3 class="text-xl font-semibold text-primary-800">EMEA</h3>
+                    </div>
+                    <div class="p-6">
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-primary-600 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                                <div>
+                                    <h4 class="font-medium">United Kingdom</h4>
+                                    <p class="text-sm text-gray-600">London</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-primary-600 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                                <div>
+                                    <h4 class="font-medium">United Arab Emirates</h4>
+                                    <p class="text-sm text-gray-600">Dubai</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Asia Pacific -->
+                <div class="border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+                    <div class="bg-primary-100 p-4">
+                        <h3 class="text-xl font-semibold text-primary-800">Asia Pacific</h3>
+                    </div>
+                    <div class="p-6">
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-primary-600 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                                <div>
+                                    <h4 class="font-medium">Singapore</h4>
+                                    <p class="text-sm text-gray-600">Downtown Core</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-primary-600 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                                <div>
+                                    <h4 class="font-medium">Hong Kong</h4>
+                                    <p class="text-sm text-gray-600">Central District</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Regional Leadership -->
+    <div class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Regional Leadership</h2>
+                <div class="w-20 h-1 bg-primary-600 mx-auto"></div>
+            </div>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Americas Leader -->
+                <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                    <div class="w-32 h-32 mx-auto rounded-full overflow-hidden mb-4">
+                        <img src="{% static 'images/team/robert-johnson.jpg' %}" alt="Robert Johnson" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-xl font-semibold">Robert Johnson</h3>
+                    <p class="text-primary-600 mb-2">Americas Managing Partner</p>
+                    <p class="text-sm text-gray-600">Based in New York</p>
+                </div>
+
+                <!-- EMEA Leader -->
+                <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                    <div class="w-32 h-32 mx-auto rounded-full overflow-hidden mb-4">
+                        <img src="{% static 'images/team/sarah-williams.jpg' %}" alt="Sarah Williams" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-xl font-semibold">Sarah Williams</h3>
+                    <p class="text-primary-600 mb-2">EMEA Managing Partner</p>
+                    <p class="text-sm text-gray-600">Based in London</p>
+                </div>
+
+                <!-- APAC Leader -->
+                <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                    <div class="w-32 h-32 mx-auto rounded-full overflow-hidden mb-4">
+                        <img src="{% static 'images/team/david-chen.jpg' %}" alt="David Chen" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-xl font-semibold">David Chen</h3>
+                    <p class="text-primary-600 mb-2">APAC Managing Partner</p>
+                    <p class="text-sm text-gray-600">Based in Singapore</p>
+                </div>
+
+                <!-- Global Operations -->
+                <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                    <div class="w-32 h-32 mx-auto rounded-full overflow-hidden mb-4">
+                        <img src="{% static 'images/team/maria-rodriguez.jpg' %}" alt="Maria Rodriguez" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-xl font-semibold">Maria Rodriguez</h3>
+                    <p class="text-primary-600 mb-2">Chief Operating Officer</p>
+                    <p class="text-sm text-gray-600">Based in New York</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact CTA -->
+    <div class="bg-primary-800 text-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-6">Connect With Our Global Team</h2>
+            <p class="text-xl text-primary-100 max-w-2xl mx-auto mb-8">
+                Our experts are ready to assist you with your business needs, no matter where you're located.
+            </p>
+            <a href="/contact" class="inline-block bg-white text-primary-800 px-8 py-3 rounded-md font-medium hover:bg-gray-100 transition-colors">
+                Contact Us
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

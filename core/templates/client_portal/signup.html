@@ -1,0 +1,463 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Client Registration | OB Global{% endblock %}
+
+{% block extra_css %}
+<style>
+    .login-container {
+        background-image: url('{% static "images/login.jpg" %}');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        margin: 0;
+        position: relative;
+    }
+
+    .login-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.1);
+        z-index: 0;
+    }
+
+    .glass-form-container {
+        display: flex;
+        width: 950px;
+        max-height: 650px;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(1px);
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        margin: 0;
+        position: relative;
+        z-index: 1;
+    }
+
+    .user-emoji-side {
+    flex: 0 0 35%;
+    background:  
+                url('{% static "images/sidebar-bg.jpg" %}') center/cover no-repeat;
+    backdrop-filter: blur(1px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 25px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.user-emoji {
+    font-size: 80px;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.2));
+    color: white;
+    position: relative;
+    z-index: 1;
+}
+
+.welcome-text {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+    margin-top: 10px;
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+    .form-side {
+        flex: 0 0 65%;
+        padding: 25px;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+    }
+
+    .form-header {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .form-header h2 {
+        font-size: 24px;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 5px;
+    }
+
+    .form-header p {
+        color: #6b7280;
+        font-size: 13px;
+    }
+
+    .registration-form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .form-group {
+        margin-bottom: 0;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 4px;
+        font-weight: 500;
+        color: #374151;
+        font-size: 13px;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        font-size: 13px;
+        transition: all 0.2s;
+        background: rgba(255, 255, 255, 0.7);
+        height: 36px;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    .form-row {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 0;
+    }
+
+    .form-col {
+        flex: 1;
+    }
+
+    .form-col-2 {
+        flex: 2;
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 10px;
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        margin-top: 8px;
+        height: 38px;
+    }
+
+    .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(59, 130, 246, 0.3);
+    }
+
+    .login-section {
+        text-align: center;
+        margin-top: 15px;
+        font-size: 13px;
+        color: #6b7280;
+    }
+
+    .login-link {
+        color: #3b82f6;
+        font-weight: 500;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+
+    .login-link:hover {
+        color: #2563eb;
+    }
+
+    .error-message {
+        color: #ef4444;
+        font-size: 11px;
+        margin-top: 3px;
+    }
+
+    .password-input-container {
+        position: relative;
+    }
+
+    .show-password-btn {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #6b7280;
+        font-size: 13px;
+        padding: 0;
+        width: 20px;
+        height: 20px;
+    }
+
+    /* Django message styling */
+    .alert {
+        padding: 12px;
+        border-radius: 6px;
+        margin-bottom: 15px;
+    }
+
+    .alert-error {
+        background-color: #fee2e2;
+        color: #b91c1c;
+        border: 1px solid #fecaca;
+    }
+
+    .alert-success {
+        background-color: #d1fae5;
+        color: #065f46;
+        border: 1px solid #a7f3d0;
+    }
+
+    @media (max-width: 1000px) {
+        .glass-form-container {
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+        }
+    }
+
+    @media (max-width: 850px) {
+        .glass-form-container {
+            flex-direction: column;
+            width: 100%;
+            max-width: 500px;
+            max-height: 85vh;
+        }
+
+        .user-emoji-side {
+            padding: 20px;
+            flex: 0 0 auto;
+        }
+
+        .user-emoji {
+            font-size: 60px;
+        }
+
+        .form-side {
+            padding: 20px;
+            flex: 1;
+        }
+
+        .form-row {
+            flex-direction: column;
+            gap: 0;
+        }
+    }
+.user-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+    @media (max-width: 480px) {
+        .login-container {
+            padding: 10px;
+        }
+
+        .glass-form-container {
+            border-radius: 15px;
+        }
+
+        .user-emoji-side {
+            padding: 15px;
+        }
+
+        .form-side {
+            padding: 15px;
+        }
+
+        .form-input {
+            padding: 6px 10px;
+            font-size: 12px;
+        }
+    }
+    .user-emoji i {
+    font-size: 180px;
+    color: white;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="glass-form-container">
+        <!-- User Emoji Side -->
+        <div class="user-emoji-side">
+<div class="user-emoji">
+    <i class="fas fa-user-circle"></i>
+</div>            <div class="welcome-text">Create Your OB Global Client Account</div>
+        </div>
+
+        <!-- Form Side -->
+        <div class="form-side">
+            <div class="form-header">
+                <h2>Client Registration</h2>
+                <p>Create your account to access our services</p>
+            </div>
+
+            <!-- Display Django messages -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{% if message.tags == 'error' %}error{% else %}success{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form class="registration-form" method="POST" action="{% url 'signup' %}">
+                {% csrf_token %}
+
+                <!-- First row: First Name, Last Name, Email -->
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="firstName">First Name *</label>
+                            <input id="firstName" name="first_name" type="text" required class="form-input" placeholder="First name" value="{{ request.POST.first_name }}">
+                        </div>
+                    </div>
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="lastName">Last Name *</label>
+                            <input id="lastName" name="last_name" type="text" required class="form-input" placeholder="Last name" value="{{ request.POST.last_name }}">
+                        </div>
+                    </div>
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input id="email" name="email" type="email" required class="form-input" placeholder="Email address" value="{{ request.POST.email }}">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Second row: Phone, Date of Birth, Nationality -->
+                <div class="form-row">
+                    <!-- In your signup.html template, update the phone input field -->
+<div class="form-group">
+    <label for="phone">Phone Number *</label>
+    <input id="phone" name="phone_number" type="tel" required class="form-input"
+           placeholder="+1234567890 (include country code)" value="{{ request.POST.phone_number }}">
+
+                    </div>
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="dob">Date of Birth *</label>
+                            <input id="dob" name="date_of_birth" type="date" required class="form-input" value="{{ request.POST.date_of_birth }}">
+                        </div>
+                    </div>
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="nationality">Nationality *</label>
+                            <input id="nationality" name="nationality" type="text" required class="form-input" placeholder="Nationality" value="{{ request.POST.nationality }}">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Third row: Address (full width) -->
+                <div class="form-row">
+                    <div class="form-col-2">
+                        <div class="form-group">
+                            <label for="address">Address *</label>
+                            <input id="address" name="address" type="text" required class="form-input" placeholder="Full address" value="{{ request.POST.address }}">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fourth row: Password and Confirm Password -->
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="password">Password *</label>
+                            <div class="password-input-container">
+                                <input id="password" name="password" type="password" required class="form-input" placeholder="Password (min. 8 characters)">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm Password *</label>
+                            <div class="password-input-container">
+                                <input id="confirmPassword" name="confirm_password" type="password" required class="form-input" placeholder="Confirm password">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">Create Account</button>
+            </form>
+
+            <div class="login-section">
+                <p>Already have an account? <a href="{% url 'user_login' %}" class="login-link">Sign in here</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Simple password visibility toggle only
+    const togglePassword = document.getElementById('togglePassword');
+    const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+
+    if (togglePassword && passwordInput) {
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+
+            const icon = this.querySelector('i');
+            if (icon) {
+                icon.classList.toggle('fa-eye-slash');
+                icon.classList.toggle('fa-eye');
+            }
+        });
+    }
+
+    if (toggleConfirmPassword && confirmPasswordInput) {
+        toggleConfirmPassword.addEventListener('click', function() {
+            const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            confirmPasswordInput.setAttribute('type', type);
+
+            const icon = this.querySelector('i');
+            if (icon) {
+                icon.classList.toggle('fa-eye-slash');
+                icon.classList.toggle('fa-eye');
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

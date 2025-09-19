@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Subscribe | OB Global{% endblock %}
+
+{% block content %}
+<div class="bg-white py-16 px-4 overflow-hidden sm:px-6 lg:px-8">
+    <div class="max-w-3xl mx-auto">
+        <div class="text-center">
+            <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+                Stay Updated with OB Global
+            </h2>
+            <p class="mt-4 text-lg leading-6 text-gray-500">
+                Subscribe to our newsletter for the latest insights, news, and updates from OB Global.
+            </p>
+        </div>
+        
+        <div class="mt-12">
+            <form action="#" method="POST" class="space-y-8">
+                <div class="space-y-4">
+                    <div>
+                        <label for="full-name" class="block text-sm font-medium text-gray-700">Full name</label>
+                        <div class="mt-1">
+                            <input type="text" name="full-name" id="full-name" autocomplete="name" 
+                                class="py-3 px-4 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 border-gray-300 rounded-md">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
+                        <div class="mt-1">
+                            <input id="email" name="email" type="email" autocomplete="email" required 
+                                class="py-3 px-4 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 border-gray-300 rounded-md">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="company" class="block text-sm font-medium text-gray-700">Company (Optional)</label>
+                        <div class="mt-1">
+                            <input type="text" name="company" id="company" 
+                                class="py-3 px-4 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 border-gray-300 rounded-md">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="job-title" class="block text-sm font-medium text-gray-700">Job Title (Optional)</label>
+                        <div class="mt-1">
+                            <input type="text" name="job-title" id="job-title" 
+                                class="py-3 px-4 block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 border-gray-300 rounded-md">
+                        </div>
+                    </div>
+                    
+                    <div class="pt-2">
+                        <p class="text-sm font-medium text-gray-700">I'm interested in:</p>
+                        <div class="mt-2 space-y-2">
+                            <div class="flex items-start">
+                                <div class="flex items-center h-5">
+                                    <input id="industry-news" name="interests[]" type="checkbox" value="industry-news" checked
+                                        class="focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-300 rounded">
+                                </div>
+                                <div class="ml-3 text-sm">
+                                    <label for="industry-news" class="font-medium text-gray-700">Industry News</label>
+                                    <p class="text-gray-500">Latest trends and developments in your industry</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="flex items-center h-5">
+                                    <input id="company-updates" name="interests[]" type="checkbox" value="company-updates" checked
+                                        class="focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-300 rounded">
+                                </div>
+                                <div class="ml-3 text-sm">
+                                    <label for="company-updates" class="font-medium text-gray-700">Company Updates</label>
+                                    <p class="text-gray-500">News and announcements from OB Global</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="flex items-center h-5">
+                                    <input id="events" name="interests[]" type="checkbox" value="events" checked
+                                        class="focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-300 rounded">
+                                </div>
+                                <div class="ml-3 text-sm">
+                                    <label for="events" class="font-medium text-gray-700">Events & Webinars</label>
+                                    <p class="text-gray-500">Invitations to our upcoming events and webinars</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="flex items-center h-5">
+                                    <input id="research" name="interests[]" type="checkbox" value="research"
+                                        class="focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-300 rounded">
+                                </div>
+                                <div class="ml-3 text-sm">
+                                    <label for="research" class="font-medium text-gray-700">Research & Insights</label>
+                                    <p class="text-gray-500">Exclusive research reports and thought leadership</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="pt-2">
+                        <div class="flex items-start">
+                            <div class="flex items-center h-5">
+                                <input id="privacy-policy" name="privacy-policy" type="checkbox" required
+                                    class="focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-300 rounded">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="privacy-policy" class="font-medium text-gray-700">I agree to the <a href="/privacy-policy" class="text-primary-600 hover:text-primary-500">Privacy Policy</a> and <a href="/terms" class="text-primary-600 hover:text-primary-500">Terms of Service</a></label>
+                                <p class="text-gray-500">You can unsubscribe at any time by clicking the link in the footer of our emails.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pt-4">
+                    <button type="submit" 
+                        class="w-full flex justify-center py-3 px-6 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                        Subscribe Now
+                    </button>
+                </div>
+            </form>
+            
+            <div class="mt-8 border-t border-gray-200 pt-8">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-10 w-10 text-primary-500" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-medium text-gray-900">Email Support</h3>
+                        <p class="mt-1 text-sm text-gray-500">
+                            Have questions about your subscription? Email us at 
+                            <a href="mailto:support@obglobal.com" class="text-primary-600 hover:text-primary-500">
+                                support@obglobal.com
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,492 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}User Details | OB Global{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="card fixed-header">
+        <div class="card-header-custom">
+            <div class="card-icon">
+                <i class="fas fa-user"></i>
+            </div>
+            <h1 class="card-title-custom">User Profile</h1>
+        </div>
+    </div>
+<div class="user-details-wrapper">
+    <div class="profile-card">
+        <div class="profile-header">
+            <div class="profile-image-container">
+                {% if user_to_view.profile_image %}
+                            <img src="{{ user_to_view.profile_image }}" alt="{{ user_to_view.first_name }}'s profile image" class="profile-image-preview" id="profile-image-preview">
+                {% else %}
+                    <div class="face-card">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+            <div class="profile-content">
+                <div class="user-info-and-actions">
+                    <div class="user-info">
+                        <h3 class="profile-name">{{ user_to_view.first_name }} {{ user_to_view.last_name }}</h3>
+                        <p class="profile-email">{{ user_to_view.email }}</p>
+                    </div>
+                    <div class="action-buttons-group">
+                        <a href="{% url 'manage_users' %}" class="btn btn-action btn-back">
+                            <i class="fas fa-arrow-left"></i> Back to Users
+                        </a>
+                        <a href="{% url 'update_user' user_to_view.id %}" class="btn btn-action btn-edit">
+                            <i class="fas fa-edit"></i> Edit User
+                        </a>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <h4 class="section-title"><i class="fas fa-info-circle"></i> Personal Information</h4>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <span class="detail-label">Role:</span>
+                            <span class="detail-value">{{ user_to_view.get_role_display|default:"-" }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Status:</span>
+                            <span class="detail-value status">
+                                {% if user_to_view.is_active %}<span class="active-status"><i class="fas fa-check-circle"></i> Active</span>{% else %}<span class="inactive-status"><i class="fas fa-times-circle"></i> Inactive</span>{% endif %}
+                            </span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Approved:</span>
+                            <span class="detail-value status">
+                                {% if user_to_view.is_approved %}<span class="approved-status"><i class="fas fa-check-circle"></i> Approved</span>{% else %}<span class="pending-status"><i class="fas fa-clock"></i> Pending</span>{% endif %}
+                            </span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Staff:</span>
+                            <span class="detail-value">{{ user_to_view.is_staff|yesno:"Yes,No" }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Date Joined:</span>
+                            <span class="detail-value">{{ user_to_view.date_joined|date:"M d, Y"|default:"-" }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Phone Number:</span>
+                            <span class="detail-value">{{ user_to_view.phone_number|default:"-" }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Date of Birth:</span>
+                            <span class="detail-value">{{ user_to_view.date_of_birth|default:"-" }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Nationality:</span>
+                            <span class="detail-value">{{ user_to_view.nationality|default:"-" }}</span>
+                        </div>
+                        <div class="detail-item full-width">
+                            <span class="detail-label">Address:</span>
+                            <span class="detail-value">{{ user_to_view.address|default:"-" }}</span>
+                        </div>
+                        <div class="detail-item full-width">
+                            <span class="detail-label">LinkedIn:</span>
+                            <span class="detail-value">{{ user_to_view.linkedin|default:"-" }}</span>
+                        </div>
+                        <div class="detail-item full-width">
+                            <span class="detail-label">Last Login:</span>
+                            <span class="detail-value">{{ user_to_view.last_login|date:"M d, Y P"|default:"-" }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                {% if user_to_view.office or user_to_view.office_impact or user_to_view.company_impact or user_to_view.field_position or user_to_view.executive_position_description or user_to_view.executive_team %}
+                <div class="detail-section">
+                    <h4 class="section-title"><i class="fas fa-briefcase"></i> Professional Information</h4>
+                    <div class="detail-grid">
+                        {% if user_to_view.office %}
+                        <div class="detail-item">
+                            <span class="detail-label">Office:</span>
+                            <span class="detail-value">{{ user_to_view.office.office_location|default:"-" }}</span>
+                        </div>
+                        {% endif %}
+                        {% if user_to_view.office_impact %}
+                        <div class="detail-item full-width">
+                            <span class="detail-label">Office Impact:</span>
+                            <span class="detail-value">{{ user_to_view.office_impact|default:"-" }}</span>
+                        </div>
+                        {% endif %}
+                        {% if user_to_view.company_impact %}
+                        <div class="detail-item full-width">
+                            <span class="detail-label">Company Impact:</span>
+                            <span class="detail-value">{{ user_to_view.company_impact|default:"-" }}</span>
+                        </div>
+                        {% endif %}
+                        {% if user_to_view.field_position %}
+                        <div class="detail-item">
+                            <span class="detail-label">Field Position:</span>
+                            <span class="detail-value">{{ user_to_view.field_position|default:"-" }}</span>
+                        </div>
+                        {% endif %}
+                        {% if user_to_view.executive_team %}
+                        <div class="detail-item full-width">
+                            <span class="detail-label">Executive Team:</span>
+                            <span class="detail-value">Yes</span>
+                        </div>
+                        {% endif %}
+                        {% if user_to_view.executive_position_description %}
+                        <div class="detail-item full-width">
+                            <span class="detail-label">Executive Position:</span>
+                            <span class="detail-value">{{ user_to_view.executive_position_description|default:"-" }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="detail-section">
+                    <h4 class="section-title"><i class="fas fa-cogs"></i> Services</h4>
+                    <div class="detail-grid services-grid">
+                        <div class="detail-item">
+                            <span class="detail-label">Audit:</span>
+                            <span class="detail-value">{{ user_to_view.audit|yesno:"Yes,No" }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Tax:</span>
+                            <span class="detail-value">{{ user_to_view.tax|yesno:"Yes,No" }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Consulting:</span>
+                            <span class="detail-value">{{ user_to_view.consulting|yesno:"Yes,No" }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Forensic Service:</span>
+                            <span class="detail-value">{{ user_to_view.forensic_service|yesno:"Yes,No" }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Managed Service:</span>
+                            <span class="detail-value">{{ user_to_view.managed_service|yesno:"Yes,No" }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Technology Solution:</span>
+                            <span class="detail-value">{{ user_to_view.technology_solution|yesno:"Yes,No" }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Advisory:</span>
+                            <span class="detail-value">{{ user_to_view.advisory|yesno:"Yes,No" }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ... (The CSS provided in your original code, no changes needed here) ... */
+/* Base Styles */
+body {
+    background-image: url('{% static "images/bk.jpg" %}');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.page-container {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+/* Card and Header Styles */
+.card {
+    background-color: transparent;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: none;
+    border: none;
+    margin-bottom: 20px;
+}
+
+.fixed-header {
+    background-color: transparent;
+}
+
+.card-header-custom {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.card-icon {
+    width: 50px;
+    height: 50px;
+    background: #007bff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.card-title-custom {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+}
+
+/* Admin and Button Controls */
+.admin-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 15px;
+}
+
+h2 {
+    font-size: 1.5rem;
+    color: #007bff;
+    margin: 0;
+}
+
+.action-buttons-group {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-action {
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    border: 1px solid;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn-edit {
+    color: #28a745;
+    background-color: white;
+    border-color: #28a745;
+}
+
+.btn-edit:hover {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-back {
+    color: #6c757d;
+    background-color: white;
+    border-color: #6c757d;
+}
+
+.btn-back:hover {
+    background-color: #6c757d;
+    color: white;
+}
+
+/* User Profile Section */
+.user-details-wrapper {
+    flex-grow: 1;
+}
+
+.profile-card {
+    background: none;
+    
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+.profile-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-image-container {
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 15px;
+    border: 3px solid #007bff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.face-card {
+    width: 100%;
+    height: 100%;
+    background: #f0f0f0;
+    color: #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+}
+
+.profile-content {
+    padding: 20px;
+}
+
+.user-info-and-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.user-info {
+    flex: 1;
+    min-width: 0;
+}
+
+/* MODIFIED: Allow long words to break and wrap to the next line */
+.profile-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0;
+    color: #333;
+    word-break: break-word; /* This is the key change */
+}
+
+/* MODIFIED: Allow long words to break and wrap to the next line */
+.profile-email {
+    font-size: 1rem;
+    color: #666;
+    margin-top: 5px;
+    word-break: break-word; /* This is the key change */
+}
+
+.action-buttons-group {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.btn-action {
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    border: 1px solid;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Detail Section */
+.detail-section {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.section-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 15px;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.detail-label {
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+/* MODIFIED: Allow long text in detail values to wrap */
+.detail-value {
+    font-size: 0.95rem;
+    color: #333;
+    word-break: break-word; /* This is the key change */
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+.status .fas {
+    margin-right: 5px;
+}
+
+.active-status { color: #28a745; }
+.inactive-status { color: #dc3545; }
+.approved-status { color: #28a745; }
+.pending-status { color: #ffc107; }
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+    .page-container {
+        padding: 10px;
+        margin: 10px;
+    }
+
+    .user-info-and-actions {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .action-buttons-group {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .btn-action {
+        flex-grow: 1;
+        text-align: center;
+    }
+
+    .profile-name,
+    .profile-email,
+    .detail-value {
+        word-break: break-all; /* Ensures even long words without spaces will break */
+    }
+
+    .detail-grid {
+        gap: 20px;
+    }
+}
+</style>
+{% endblock %}

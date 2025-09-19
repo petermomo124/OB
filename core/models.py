@@ -1,0 +1,90 @@
+from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.utils import timezone
+
+
+class Office(models.Model):
+    office_location = models.CharField(max_length=255)
+    office_purpose = models.TextField()
+    # Add the new column here
+    office_Name = models.CharField(max_length=255, default='Unnamed Office')
+
+    def __str__(self):
+        return self.office_location
+
+
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('The Email field must be set')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_approved', True)
+        extra_fields.setdefault('role', 'admin')
+
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True.')
+
+        return self.create_user(email, password, **extra_fields)
+
+
+class User(AbstractBaseUser, PermissionsMixin):
+    ROLE_CHOICES = [
+        ('admin', 'Admin'),
+        ('staff', 'Staff'),
+        ('client', 'Client'),
+    ]
+
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    email = models.EmailField(unique=True)
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
+    date_of_birth = models.DateField(blank=True, null=True)
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='client')
+    nationality = models.CharField(max_length=100, blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    is_approved = models.BooleanField(default=False)
+
+    # Add the date_joined field here
+    date_joined = models.DateTimeField(default=timezone.now)
+
+    # Service booleans
+    audit = models.BooleanField(default=False)
+    tax = models.BooleanField(default=False)
+    consulting = models.BooleanField(default=False)
+    forensic_service = models.BooleanField(default=False)
+    managed_service = models.BooleanField(default=False)
+    technology_solution = models.BooleanField(default=False)
+    advisory = models.BooleanField(default=False)
+
+    # Executive team fields
+    executive_team = models.BooleanField(default=False)
+    executive_position_description = models.TextField(blank=True, null=True)
+    linkedin = models.URLField(blank=True, null=True)
+    profile_image = models.ImageField(upload_to='profile_images/', blank=True, null=True)
+
+    # Company and office impact
+    company_impact = models.CharField(max_length=255, blank=True, null=True)
+    office = models.ForeignKey(Office, on_delete=models.SET_NULL, blank=True, null=True)
+    office_impact = models.CharField(max_length=255, blank=True, null=True)
+    field_position = models.CharField(max_length=255, blank=True, null=True)
+
+    is_staff = models.BooleanField(default=False)
+
+    objects = CustomUserManager()
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['first_name', 'last_name']
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} ({self.email})"

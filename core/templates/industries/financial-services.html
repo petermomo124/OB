@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Financial Services | OB Global{% endblock %}
+
+{% block content %}
+<div class="bg-white">
+    <!-- Hero Section -->
+    <div class="relative bg-primary-800 text-white">
+        <div class="container mx-auto px-4 py-20 lg:py-28">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6">Financial Services</h1>
+                <p class="text-xl text-primary-100 max-w-3xl mx-auto">
+                    Tailored solutions for banks, insurance companies, and financial institutions navigating complex regulatory landscapes.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-16 lg:py-24">
+        <div class="flex flex-col lg:flex-row gap-12">
+            <!-- Main Content -->
+            <div class="lg:w-2/3">
+                <section class="mb-12">
+                    <h2 class="text-3xl font-bold mb-6">Transforming Financial Services</h2>
+                    <p class="text-lg text-gray-700 mb-6">
+                        In today's rapidly evolving financial landscape, institutions face unprecedented challenges from 
+                        regulatory changes, digital transformation, and shifting customer expectations. Our team of 
+                        financial services experts helps you navigate these challenges with confidence.
+                    </p>
+                    <p class="text-gray-600">
+                        We combine deep industry knowledge with cutting-edge technology to deliver solutions that drive 
+                        growth, enhance operational efficiency, and ensure compliance in an increasingly complex 
+                        regulatory environment.
+                    </p>
+                </section>
+
+                <section class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-4">What We Can Do For You</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <h4 class="text-xl font-semibold mb-2 text-primary-700">Risk Management</h4>
+                            <p class="text-gray-600">Comprehensive risk assessment and mitigation strategies tailored to your institution's needs.</p>
+                        </div>
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <h4 class="text-xl font-semibold mb-2 text-primary-700">Regulatory Compliance</h4>
+                            <p class="text-gray-600">Stay ahead of regulatory changes with our expert compliance solutions.</p>
+                        </div>
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <h4 class="text-xl font-semibold mb-2 text-primary-700">Digital Transformation</h4>
+                            <p class="text-gray-600">Modernize your operations with innovative digital solutions.</p>
+                        </div>
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <h4 class="text-xl font-semibold mb-2 text-primary-700">Customer Experience</h4>
+                            <p class="text-gray-600">Enhance customer engagement and satisfaction through data-driven insights.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-12">
+                    <h3 class="text-2xl font-semibold mb-4">Case Studies</h3>
+                    <div class="space-y-6">
+                        <div class="border-l-4 border-primary-500 pl-4">
+                            <h4 class="text-xl font-semibold">Digital Banking Transformation</h4>
+                            <p class="text-gray-600 mt-2">
+                                How we helped a regional bank modernize its digital infrastructure, resulting in a 40% 
+                                increase in mobile banking adoption and improved customer satisfaction scores.
+                            </p>
+                        </div>
+                        <div class="border-l-4 border-primary-500 pl-4">
+                            <h4 class="text-xl font-semibold">Regulatory Compliance Overhaul</h4>
+                            <p class="text-gray-600 mt-2">
+                                Implementing a comprehensive compliance framework for an investment firm, reducing 
+                                compliance-related issues by 75%.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="lg:w-1/3 space-y-8">
+                <!-- Industry Stats -->
+                <div class="bg-primary-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-4">Financial Services at a Glance</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="text-3xl font-bold text-primary-700">15+</div>
+                            <div class="text-gray-600">Years of Experience</div>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-bold text-primary-700">200+</div>
+                            <div class="text-gray-600">Financial Institutions Served</div>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-bold text-primary-700">95%</div>
+                            <div class="text-gray-600">Client Retention Rate</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Team Members -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Our Financial Services Team</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-16 h-16 bg-gray-200 rounded-full overflow-hidden">
+                                <img src="{% static 'images/team/john-doe.jpg' %}" alt="John Doe" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <h4 class="font-semibold">John Doe</h4>
+                                <p class="text-sm text-gray-600">Financial Services Lead</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <div class="w-16 h-16 bg-gray-200 rounded-full overflow-hidden">
+                                <img src="{% static 'images/team/jane-smith.jpg' %}" alt="Jane Smith" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <h4 class="font-semibold">Jane Smith</h4>
+                                <p class="text-sm text-gray-600">Risk Management Expert</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact CTA -->
+                <div class="bg-primary-800 text-white p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-3">Ready to transform your financial services?</h3>
+                    <p class="mb-4 text-primary-100">Contact our experts today for a consultation.</p>
+                    <a href="/contact" class="inline-block bg-white text-primary-800 px-6 py-2 rounded-md font-medium hover:bg-gray-100 transition-colors">
+                        Get in Touch
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Services -->
+    <div class="bg-gray-50 py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Explore Our Financial Services</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <h3 class="text-xl font-semibold mb-3">Risk & Compliance</h3>
+                    <p class="text-gray-600 mb-4">Navigate complex regulatory requirements with confidence.</p>
+                    <a href="/services/risk-compliance" class="text-primary-600 hover:text-primary-800 font-medium inline-flex items-center">
+                        Learn more
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </a>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <h3 class="text-xl font-semibold mb-3">Digital Transformation</h3>
+                    <p class="text-gray-600 mb-4">Modernize your operations with cutting-edge technology.</p>
+                    <a href="/services/digital-transformation" class="text-primary-600 hover:text-primary-800 font-medium inline-flex items-center">
+                        Learn more
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </a>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <h3 class="text-xl font-semibold mb-3">Wealth Management</h3>
+                    <p class="text-gray-600 mb-4">Strategies to grow and protect your clients' assets.</p>
+                    <a href="/services/wealth-management" class="text-primary-600 hover:text-primary-800 font-medium inline-flex items-center">
+                        Learn more
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,117 @@
+<section class="py-20 bg-white">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
+            <div class="h-1 w-24 bg-blue-600 mx-auto"></div>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto mt-6">
+                Find answers to common questions about our services and how we can help your business grow.
+            </p>
+        </div>
+        
+        <div class="max-w-4xl mx-auto">
+            <div class="space-y-4">
+                <!-- FAQ Item 1 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden">
+                    <button class="faq-question w-full px-6 py-4 text-left flex justify-between items-center bg-gray-50 hover:bg-gray-100 transition-colors">
+                        <span class="font-medium text-gray-900">What services does OB provide?</span>
+                        <i class="fas fa-chevron-down text-blue-600 transition-transform"></i>
+                    </button>
+                    <div class="faq-answer px-6 py-4 bg-white hidden">
+                        <p class="text-gray-600">
+                            OB provides a comprehensive range of professional services including business advisory, tax services, audit & assurance, digital transformation, consulting, and training & development. Our team of experts works closely with clients to deliver tailored solutions that drive growth and success.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 2 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden">
+                    <button class="faq-question w-full px-6 py-4 text-left flex justify-between items-center bg-gray-50 hover:bg-gray-100 transition-colors">
+                        <span class="font-medium text-gray-900">How can OB help my business grow?</span>
+                        <i class="fas fa-chevron-down text-blue-600 transition-transform"></i>
+                    </button>
+                    <div class="faq-answer px-6 py-4 bg-white hidden">
+                        <p class="text-gray-600">
+                            We help businesses grow by providing strategic guidance, identifying opportunities for improvement, and implementing solutions that drive efficiency and profitability. Our services are designed to address your specific challenges and help you achieve your business objectives.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 3 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden">
+                    <button class="faq-question w-full px-6 py-4 text-left flex justify-between items-center bg-gray-50 hover:bg-gray-100 transition-colors">
+                        <span class="font-medium text-gray-900">What industries do you specialize in?</span>
+                        <i class="fas fa-chevron-down text-blue-600 transition-transform"></i>
+                    </button>
+                    <div class="faq-answer px-6 py-4 bg-white hidden">
+                        <p class="text-gray-600">
+                            Our team has extensive experience working with clients across various industries including technology, healthcare, manufacturing, retail, financial services, and more. We bring industry-specific knowledge and best practices to every engagement.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 4 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden">
+                    <button class="faq-question w-full px-6 py-4 text-left flex justify-between items-center bg-gray-50 hover:bg-gray-100 transition-colors">
+                        <span class="font-medium text-gray-900">How do I get started with your services?</span>
+                        <i class="fas fa-chevron-down text-blue-600 transition-transform"></i>
+                    </button>
+                    <div class="faq-answer px-6 py-4 bg-white hidden">
+                        <p class="text-gray-600">
+                            Getting started is easy! Simply contact us through our website, email, or phone to schedule a consultation. During this initial discussion, we'll learn about your needs and discuss how we can help. From there, we'll develop a customized plan tailored to your specific requirements.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 5 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden">
+                    <button class="faq-question w-full px-6 py-4 text-left flex justify-between items-center bg-gray-50 hover:bg-gray-100 transition-colors">
+                        <span class="font-medium text-gray-900">What makes OB different from other consulting firms?</span>
+                        <i class="fas fa-chevron-down text-blue-600 transition-transform"></i>
+                    </button>
+                    <div class="faq-answer px-6 py-4 bg-white hidden">
+                        <p class="text-gray-600">
+                            What sets us apart is our client-centric approach, deep industry expertise, and commitment to delivering measurable results. We take the time to understand your unique challenges and goals, and we work as an extension of your team to achieve success together. Our focus on building long-term relationships and delivering exceptional value is what makes us different.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <p class="text-gray-600 mb-6">Still have questions? We're here to help!</p>
+                <a href="/contact" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-3 rounded-lg transition-colors">
+                    Contact Us
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+// FAQ Toggle Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const faqQuestions = document.querySelectorAll('.faq-question');
+    
+    faqQuestions.forEach(question => {
+        question.addEventListener('click', function() {
+            const answer = this.nextElementSibling;
+            const icon = this.querySelector('i');
+            
+            // Toggle answer visibility
+            answer.classList.toggle('hidden');
+            
+            // Toggle icon rotation
+            icon.classList.toggle('transform');
+            icon.classList.toggle('rotate-180');
+            
+            // Close other open FAQs
+            faqQuestions.forEach(item => {
+                if (item !== this) {
+                    item.nextElementSibling.classList.add('hidden');
+                    const itemIcon = item.querySelector('i');
+                    itemIcon.classList.remove('transform', 'rotate-180');
+                }
+            });
+        });
+    });
+});
+</script>

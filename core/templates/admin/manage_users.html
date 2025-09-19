@@ -1,0 +1,567 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Manage Users | OB Global{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>User Management</h1>
+
+    <div class="admin-controls">
+        <form method="GET" class="search-form">
+            <input type="text" name="search" placeholder="Search users..." value="{{ search_query }}">
+            <button type="submit">Search</button>
+            <a href="{% url 'manage_users' %}" class="button">Clear</a>
+        </form>
+        <a href="{% url 'add_user' %}" class="button primary">Add New User</a>
+    </div>
+
+    <div class="users-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th> <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th>Address</th>
+                    <th>Date of Birth</th>
+                    <th>Role</th>
+                    <th>Nationality</th>
+                    <th>Date Joined</th>
+                    <th>Active</th>
+                    <th>Approved</th>
+                    <th>Audit</th>
+                    <th>Tax</th>
+                    <th>Consulting</th>
+                    <th>Forensic Service</th>
+                    <th>Managed Service</th>
+                    <th>Technology Solution</th>
+                    <th>Advisory</th>
+                    <th>Executive Team</th>
+                    <th>Executive Position</th>
+                    <th>LinkedIn</th>
+                    <th>Company Impact</th>
+                    <th>Office</th>
+                    <th>Office Impact</th>
+                    <th>Field Position</th>
+                    <th>Staff</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ forloop.counter }}</td> <td class="truncate">{{ user.first_name }}</td>
+                    <td class="truncate">{{ user.last_name }}</td>
+                    <td class="truncate">{{ user.email }}</td>
+                    <td class="truncate">{{ user.phone_number|default:"-" }}</td>
+                    <td class="truncate">{{ user.address|default:"-" }}</td>
+                    <td>{{ user.date_of_birth|default:"-" }}</td>
+                    <td>{{ user.get_role_display }}</td>
+                    <td class="truncate">{{ user.nationality|default:"-" }}</td>
+                    <td>{{ user.date_joined|date:"M d, Y" }}</td>
+                    <td>{% if user.is_active %}Yes{% else %}No{% endif %}</td>
+                    <td>{% if user.is_approved %}Yes{% else %}No{% endif %}</td>
+                    <td>{% if user.audit %}Yes{% else %}No{% endif %}</td>
+                    <td>{% if user.tax %}Yes{% else %}No{% endif %}</td>
+                    <td>{% if user.consulting %}Yes{% else %}No{% endif %}</td>
+                    <td>{% if user.forensic_service %}Yes{% else %}No{% endif %}</td>
+                    <td>{% if user.managed_service %}Yes{% else %}No{% endif %}</td>
+                    <td>{% if user.technology_solution %}Yes{% else %}No{% endif %}</td>
+                    <td>{% if user.advisory %}Yes{% else %}No{% endif %}</td>
+                    <td>{% if user.executive_team %}Yes{% else %}No{% endif %}</td>
+                    <td class="truncate">{{ user.executive_position_description|default:"-" }}</td>
+                    <td class="truncate">{{ user.linkedin|default:"-" }}</td>
+                    <td class="truncate">{{ user.company_impact|default:"-" }}</td>
+                    <td>{{ user.office.office_location|default:"-" }}</td>
+                    <td class="truncate">{{ user.office_impact|default:"-" }}</td>
+                    <td class="truncate">{{ user.field_position|default:"-" }}</td>
+                    <td>{% if user.is_staff %}Yes{% else %}No{% endif %}</td>
+                    <td class="actions">
+                        <a href="{% url 'user_detail' user.id %}" class="btn view">View</a>
+                        <a href="{% url 'update_user' user.id %}" class="btn edit">Edit</a>
+                        <a href="#" class="btn delete delete-trigger"
+                           data-user-id="{{ user.id }}"
+                           data-user-name="{{ user.first_name }} {{ user.last_name }}">Delete</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="28">No users found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="modal-backdrop" id="deleteModal" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                    <button type="button" class="btn-close" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete the user <strong id="modal-user-name"></strong>?</p>
+                    <p>This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-cancel">Cancel</button>
+                    <form id="delete-form" method="post" action="">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('deleteModal');
+        const modalUserName = document.getElementById('modal-user-name');
+        const deleteForm = document.getElementById('delete-form');
+        const deleteTriggers = document.querySelectorAll('.delete-trigger');
+        const closeBtn = modal.querySelector('.btn-close');
+        const cancelBtn = modal.querySelector('.btn-cancel');
+
+        deleteTriggers.forEach(trigger => {
+            trigger.addEventListener('click', function(e) {
+                e.preventDefault();
+                const userId = this.getAttribute('data-user-id');
+                const userName = this.getAttribute('data-user-name');
+
+                // Update the modal content and form action
+                modalUserName.textContent = userName;
+                deleteForm.action = `/manage/user/${userId}/delete/`;
+
+                // Show the modal
+                modal.classList.add('show-modal');
+            });
+        });
+
+        // Hide the modal when the close or cancel button is clicked
+        closeBtn.addEventListener('click', () => {
+            modal.classList.remove('show-modal');
+        });
+        cancelBtn.addEventListener('click', () => {
+            modal.classList.remove('show-modal');
+        });
+
+        // Hide modal when clicking outside of it
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('show-modal');
+            }
+        });
+        
+        // --- PDF Generation Script ---
+        const downloadButton = document.getElementById('downloadPdfButton');
+        const usersTable = document.querySelector('.users-table');
+
+        downloadButton.addEventListener('click', function() {
+            // Temporarily hide the 'Actions' column before capturing the PDF
+            const actionsHeader = usersTable.querySelector('thead th:last-child');
+            const actionsCells = usersTable.querySelectorAll('tbody td:last-child');
+            
+            actionsHeader.style.display = 'none';
+            actionsCells.forEach(cell => {
+                cell.style.display = 'none';
+            });
+
+            // Set a small delay to allow the browser to render the change
+            setTimeout(() => {
+                const options = {
+                    scale: 2,
+                    useCORS: true
+                };
+
+                html2canvas(usersTable, options).then(canvas => {
+                    const imgData = canvas.toDataURL('image/png');
+                    const { jsPDF } = window.jspdf;
+                    const pdf = new jsPDF('l', 'mm', 'a4'); // 'l' for landscape, 'mm', 'a4'
+                    
+                    const imgProps = pdf.getImageProperties(imgData);
+                    const pdfWidth = pdf.internal.pageSize.getWidth();
+                    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+                    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                    pdf.save('users_report.pdf');
+
+                    // Restore the 'Actions' column after the PDF is generated
+                    actionsHeader.style.display = '';
+                    actionsCells.forEach(cell => {
+                        cell.style.display = '';
+                    });
+                });
+            }, 100);
+        });
+    });
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Base Styles */
+body {
+    background-image: url('{% static "images/bk.jpg" %}');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    color: black; /* Make heading visible on the background image */
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5); /* Add a subtle shadow for readability */
+}
+
+.admin-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 15px;
+}
+
+.search-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.search-form input {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    min-width: 250px;
+}
+
+/* Base button styles for both search and clear buttons */
+.button, .search-form button {
+    padding: 8px 16px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    text-align: center;
+}
+
+/* Specific styles for the Search button */
+.search-form button {
+    background-color: #007bff;
+    color: white;
+    border: 1px solid #007bff;
+}
+
+.search-form button:hover {
+    background-color: #0056b3;
+}
+
+/* Specific styles for the Clear button (which is an anchor tag) */
+.search-form .button {
+    background: white;
+    color: #007bff;
+    border: 1px solid #007bff;
+}
+
+.search-form .button:hover {
+    background: #e9ecef;
+}
+
+/* Styles for the "Add New User" button */
+.button.primary {
+    background: #28a745;
+    color: white;
+    border: 1px solid #28a745;
+}
+
+.button.primary:hover {
+    background: #218838;
+}
+
+/* Styles for the "Download PDF" button */
+.button.download-pdf {
+    background-color: #dc3545;
+    color: white;
+    border: 1px solid #dc3545;
+}
+
+.button.download-pdf:hover {
+    background-color: #c82333;
+}
+
+.users-table {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    
+    /* MODIFIED CODE */
+    max-height: 315px; /* Adjust this value based on your row height to show 7 rows */
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    white-space: nowrap;
+}
+
+th {
+    background: #f8f9fa;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+/* Truncate long text in table cells */
+.truncate {
+    max-width: 150px; /* Adjust this value as needed */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.actions {
+    display: flex;
+    gap: 5px;
+}
+
+.btn {
+    padding: 4px 8px;
+    border-radius: 3px;
+    text-decoration: none;
+    font-size: 12px;
+    border: 1px solid;
+}
+
+.btn.view {
+    color: #17a2b8;
+    border-color: #17a2b8;
+}
+
+.btn.edit {
+    color: #28a745;
+    border-color: #28a745;
+}
+
+.btn.delete {
+    color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn:hover {
+    opacity: 0.8;
+}
+
+/* ------------------ MODAL STYLES ------------------ */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-backdrop.show-modal {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-dialog {
+    background:none;
+    
+    padding: 20px;
+    transform: translateY(-50px);
+    transition: transform 0.3s ease;
+    max-width: 450px;
+    width: 90%;
+}
+
+.modal-backdrop.show-modal .modal-dialog {
+    transform: translateY(0);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.modal-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.modal-body {
+    padding-bottom: 20px;
+}
+
+.modal-body p {
+    margin: 0 0 10px;
+    color: #555;
+    font-size: 1rem;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.modal-footer .btn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    border: none;
+}
+
+.btn-cancel {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-cancel:hover {
+    background-color: #5a6268;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+.btn-close {
+    border: none;
+    background: transparent;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    color: #999;
+}
+
+/* ------------------ Mobile-Specific Styles ------------------ */
+@media (max-width: 768px) {
+    .container {
+        padding-top: 20px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .admin-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .search-form {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        gap: 10px;
+    }
+
+    .search-form input {
+        flex-grow: 1;
+        min-width: 0;
+        padding: 8px 10px;
+        font-size: 14px;
+        box-sizing: border-box;
+    }
+
+    .search-buttons {
+        display: flex;
+        width: 100%;
+        gap: 10px;
+    }
+
+    .button, .search-form button {
+        flex: 1;
+        text-align: center;
+        padding: 8px 15px;
+        font-size: 14px;
+        box-sizing: border-box;
+    }
+
+    .search-form button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+    }
+
+    .search-form button:hover {
+        background-color: #0056b3;
+    }
+
+    .search-form .button {
+        background-color: #6c757d;
+        color: white;
+        border: none;
+    }
+
+    .search-form .button:hover {
+        background-color: #5a6268;
+    }
+    
+    .users-table {
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+        min-width: 750px;
+    }
+
+    th, td {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .btn {
+        padding: 1px 6px;
+        font-size: 10px;
+    }
+}
+</style>
+
+{% endblock %}

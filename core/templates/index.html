@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <!-- Hero Section -->
+    {% include 'partials/_hero_section.html' %}
+    
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-16">
+        <!-- About Section -->
+        <section class="mb-24 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Welcome to OB Global</h2>
+            <div class="h-1 w-20 bg-blue-600 mx-auto mb-8"></div>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto mb-12">
+                We are a leading professional services firm dedicated to helping businesses thrive in today's dynamic environment. 
+                Our expert team delivers innovative solutions tailored to your unique needs.
+            </p>
+            
+            <div class="grid md:grid-cols-3 gap-8 mb-16">
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <div class="text-blue-600 text-3xl mb-4">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Innovation</h3>
+                    <p class="text-gray-600">Harnessing cutting-edge solutions to drive your business forward.</p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <div class="text-blue-600 text-3xl mb-4">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Partnership</h3>
+                    <p class="text-gray-600">Building lasting relationships based on trust and results.</p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <div class="text-blue-600 text-3xl mb-4">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Growth</h3>
+                    <p class="text-gray-600">Delivering measurable results that drive your success.</p>
+                </div>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="/services" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors text-center">
+                    Our Services
+                </a>
+                <a href="/contact" class="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 px-8 py-3 rounded-lg font-medium transition-colors text-center">
+                    Contact Us
+                </a>
+            </div>
+        </section>
+        
+        <!-- Featured Services -->
+        <section class="mb-24">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Our Core Services</h2>
+                <div class="h-1 w-20 bg-blue-600 mx-auto mb-6"></div>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                    Comprehensive solutions designed to meet your business needs and drive sustainable growth.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="h-48 bg-blue-600 flex items-center justify-center">
+                        <i class="fas fa-briefcase text-white text-5xl"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-3">Business Advisory</h3>
+                        <p class="text-gray-600 mb-4">Strategic guidance to navigate challenges and seize opportunities.</p>
+                        <a href="/services/advisory" class="text-blue-600 font-medium hover:underline">Learn more →</a>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="h-48 bg-green-600 flex items-center justify-center">
+                        <i class="fas fa-file-invoice-dollar text-white text-5xl"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-3">Tax Services</h3>
+                        <p class="text-gray-600 mb-4">Comprehensive tax planning and compliance solutions.</p>
+                        <a href="/services/tax" class="text-blue-600 font-medium hover:underline">Learn more →</a>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="h-48 bg-purple-600 flex items-center justify-center">
+                        <i class="fas fa-chart-pie text-white text-5xl"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-3">Audit & Assurance</h3>
+                        <p class="text-gray-600 mb-4">Independent audit services for financial confidence.</p>
+                        <a href="/services/audit" class="text-blue-600 font-medium hover:underline">Learn more →</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="/services" class="inline-block border-2 border-blue-600 text-blue-600 hover:bg-blue-50 px-8 py-3 rounded-lg font-medium transition-colors">
+                    View All Services
+                </a>
+            </div>
+        </section>
+        
+        <!-- CTA Section -->
+        <section class="bg-blue-600 text-white rounded-2xl p-8 md:p-12 mb-12">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-2xl md:text-3xl font-bold mb-4">Ready to Transform Your Business?</h2>
+                <p class="text-blue-100 text-lg mb-8 max-w-2xl mx-auto">
+                    Let's discuss how our expertise can help you achieve your business goals. Contact us today for a free consultation.
+                </p>
+                <a href="/contact" class="inline-block bg-white text-blue-600 hover:bg-gray-100 px-8 py-3 rounded-lg font-medium transition-colors">
+                    Get Started
+                </a>
+            </div>
+        </section>
+    </main>
+    
+    <style>
+        /* Smooth scrolling for the entire page */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Animation for section headers */
+        .section-header {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+        
+        .section-header:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            border-radius: 3px;
+        }
+        
+        /* Hover effects for cards */
+        .service-card {
+            transition: all 0.3s ease;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+    
+    <script>
+        // Initialize AOS (Animate On Scroll)
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof AOS !== 'undefined') {
+                AOS.init({
+                    duration: 800,
+                    once: true,
+                    easing: 'ease-in-out',
+                    offset: 100
+                });
+            }
+            
+            // Add smooth scrolling to all anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const href = this.getAttribute('href');
+                    if (href !== '#') {
+                        e.preventDefault();
+                        const target = document.querySelector(href);
+                        if (target) {
+                            target.scrollIntoView({
+                                behavior: 'smooth'
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}
+    

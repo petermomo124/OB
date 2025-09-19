@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="page-container">
+    <div class="greeting-message-container">
+        <h1 class="greeting-heading">Welcome, {{ user.first_name }} {{ user.last_name }}!</h1>
+        <p class="greeting-subheading">Your dashboard at a glance.</p>
+    </div>
+
+    {% if user.role == 'admin' %}
+        <div class="admin-stats-container">
+            <h2 class="stats-heading">Admin Dashboard</h2>
+            <div class="flex-boxes-wrapper">
+                <div class="stat-box all-users-box">
+                    <span class="emoji">👨‍👩‍👧‍👦</span>
+                    <div class="stat-content">
+                        <span class="stat-number">{{ total_users }}</span>
+                        <span class="stat-label">Total Users</span>
+                    </div>
+                </div>
+
+                <div class="stat-box clients-box">
+                    <span class="emoji">🤝</span>
+                    <div class="stat-content">
+                        <span class="stat-number">{{ total_clients }}</span>
+                        <span class="stat-label">Total Clients</span>
+                    </div>
+                </div>
+
+                <div class="stat-box staffs-box">
+                    <span class="emoji">👔</span>
+                    <div class="stat-content">
+                        <span class="stat-number">{{ total_staffs }}</span>
+                        <span class="stat-label">Total Staffs</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background-image: url('{% static "images/bd.jpg" %}');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        font-family: 'Arial', sans-serif;
+    }
+
+    .page-container {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 20px;
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        box-sizing: border-box;
+    }
+
+    .greeting-message-container {
+        text-align: center;
+        margin-bottom: 40px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .greeting-heading {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #1a237e;
+        margin-bottom: 5px;
+    }
+
+    .greeting-subheading {
+        font-size: 1.2rem;
+        color: #616161;
+    }
+
+    .admin-stats-container {
+        margin-top: 30px;
+    }
+
+    .stats-heading {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #37474f;
+        margin-bottom: 25px;
+        text-align: center;
+    }
+
+    .flex-boxes-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 25px;
+        justify-content: center;
+    }
+
+    .stat-box {
+        flex: 1 1 280px;
+        padding: 30px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+    }
+
+    .stat-box:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .stat-box .emoji {
+        font-size: 3rem;
+    }
+
+    .stat-content {
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+    }
+
+    .stat-label {
+        font-size: 1rem;
+        color: #757575;
+    }
+
+    /* Specific box colors */
+    .all-users-box {
+        background-color: #e3f2fd; /* Light Blue */
+        border: 2px solid #90caf9;
+    }
+
+    .all-users-box .stat-number {
+        color: #1e88e5;
+    }
+
+    .clients-box {
+        background-color: #e8f5e9; /* Light Green */
+        border: 2px solid #a5d6a7;
+    }
+
+    .clients-box .stat-number {
+        color: #43a047;
+    }
+
+    .staffs-box {
+        background-color: #fce4ec; /* Light Pink */
+        border: 2px solid #f48fb1;
+    }
+
+    .staffs-box .stat-number {
+        color: #d81b60;
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+        .page-container {
+            margin: 20px auto;
+            padding: 15px;
+        }
+
+        .greeting-heading {
+            font-size: 2rem;
+        }
+
+        .greeting-subheading {
+            font-size: 1rem;
+        }
+
+        .flex-boxes-wrapper {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-box {
+            width: 100%;
+            max-width: 350px;
+            padding: 25px;
+        }
+    }
+</style>
+{% endblock %}

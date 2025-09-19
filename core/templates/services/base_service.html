@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ service_name }} | OB Global{% endblock %}
+
+{% block content %}
+<div class="bg-white">
+    <!-- Hero Section -->
+    <div class="relative bg-primary-800 text-white">
+        <div class="container mx-auto px-4 py-20 lg:py-28">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6">{{ service_name }}</h1>
+                <p class="text-xl text-primary-100 max-w-3xl mx-auto">{{ service_tagline }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Service Content -->
+    <div class="container mx-auto px-4 py-16 lg:py-24">
+        <div class="flex flex-col lg:flex-row gap-12">
+            <!-- Main Content -->
+            <div class="lg:w-2/3">
+                {% block service_content %}{% endblock %}
+            </div>
+            
+            <!-- Sidebar with Photos -->
+            <div class="lg:w-1/3 space-y-6">
+                {% for photo in service_photos %}
+                <div class="rounded-lg overflow-hidden shadow-lg">
+                    <img src="{% static photo %}" alt="{{ service_name }} - {{ forloop.counter }}" class="w-full h-auto">
+                </div>
+                {% endfor %}
+                
+                <!-- Quick Links -->
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold mb-4">Related Services</h3>
+                    <ul class="space-y-2">
+                        {% for service in related_services %}
+                        <li>
+                            <a href="{{ service.url }}" class="text-primary-600 hover:text-primary-800 flex items-center">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                                {{ service.name }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- What OB Can Do For You -->
+        <div class="mt-24">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold">What OB Can Do For You</h2>
+                <div class="w-20 h-1 bg-primary-600 mx-auto mt-4"></div>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {% for benefit in benefits %}
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <div class="text-primary-600 mb-4">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">{{ benefit.title }}</h3>
+                    <p class="text-gray-600">{{ benefit.description }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- How OB Can Help -->
+        <div class="mt-24 bg-gray-50 p-8 rounded-lg">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold text-center mb-8">How OB Can Help</h2>
+                <div class="space-y-6">
+                    {% for help_item in how_we_help %}
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <div class="flex items-center justify-center h-12 w-12 rounded-md bg-primary-600 text-white">
+                                {{ forloop.counter }}
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-medium">{{ help_item.title }}</h3>
+                            <p class="mt-2 text-gray-600">{{ help_item.description }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- The Team -->
+        <div class="mt-24">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold">The Team</h2>
+                <div class="w-20 h-1 bg-primary-600 mx-auto mt-4"></div>
+            </div>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                {% for member in team_members %}
+                <div class="text-center">
+                    <div class="w-40 h-40 mx-auto rounded-full overflow-hidden mb-4">
+                        <img src="{% static member.photo %}" alt="{{ member.name }}" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-xl font-semibold">{{ member.name }}</h3>
+                    <p class="text-primary-600">{{ member.position }}</p>
+                    <p class="text-sm text-gray-600 mt-2">{{ member.bio }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- CTA Section -->
+    <div class="bg-primary-800 text-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-6">Ready to get started?</h2>
+            <p class="text-xl text-primary-100 max-w-2xl mx-auto mb-8">
+                Contact us today to learn more about our {{ service_name }} services and how we can help your business grow.
+            </p>
+            <a href="/contact" class="inline-block bg-white text-primary-800 px-8 py-3 rounded-md font-medium hover:bg-gray-100 transition-colors">
+                Get in Touch
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

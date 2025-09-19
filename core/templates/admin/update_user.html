@@ -1,0 +1,564 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Update User | OB Global{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="card fixed-header">
+        <div class="card-header-custom">
+            <div class="card-icon">
+                <i class="fas fa-edit"></i>
+            </div>
+            <h1 class="card-title-custom">Update User Profile</h1>
+        </div>
+    </div>
+
+    <div class="form-wrapper">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="profile-card">
+                <div class="profile-header-edit">
+                    <div class="profile-image-container">
+                        {% if user_to_update.profile_image %}
+                            <img src="{{ user_to_update.profile_image }}" alt="{{ user_to_update.first_name }}'s profile image" class="profile-image-preview" id="profile-image-preview">
+                        {% else %}
+                            <div class="face-card" id="face-card-preview">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <label for="profile_image" class="file-upload-label">
+                        <i class="fas fa-camera"></i> Change Image
+                    </label>
+                    <input type="file" id="profile_image" name="profile_image" accept="image/*" class="file-input" onchange="previewImage(event);">
+                </div>
+
+                <div class="form-content">
+                    <div class="form-section">
+                        <h4 class="section-title"><i class="fas fa-info-circle"></i> Personal Information</h4>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="first_name">First Name <span class="required">*</span></label>
+                                <input type="text" id="first_name" name="first_name" value="{{ user_to_update.first_name }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="last_name">Last Name <span class="required">*</span></label>
+                                <input type="text" id="last_name" name="last_name" value="{{ user_to_update.last_name }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email <span class="required">*</span></label>
+                                <input type="email" id="email" name="email" value="{{ user_to_update.email }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone_number">Phone Number <span class="required">*</span></label>
+                                <input type="tel" id="phone_number" name="phone_number" value="{{ user_to_update.phone_number|default:'' }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="date_of_birth">Date of Birth <span class="required">*</span></label>
+                                <input type="date" id="date_of_birth" name="date_of_birth" value="{{ user_to_update.date_of_birth|date:'Y-m-d'|default:'' }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="nationality">Nationality <span class="required">*</span></label>
+                                <input type="text" id="nationality" name="nationality" value="{{ user_to_update.nationality|default:'' }}" required>
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="address">Address <span class="required">*</span></label>
+                                <textarea id="address" name="address" rows="3" required>{{ user_to_update.address|default:'' }}</textarea>
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="linkedin">LinkedIn Profile URL</label>
+                                <input type="url" id="linkedin" name="linkedin" value="{{ user_to_update.linkedin|default:'' }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="new_password">New Password (optional)</label>
+                                <input type="password" id="new_password" name="new_password" placeholder="Leave empty to keep current password">
+                            </div>
+                            <div class="form-group">
+                                <label for="confirm_password">Confirm New Password</label>
+                                <input type="password" id="confirm_password" name="confirm_password">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h4 class="section-title"><i class="fas fa-briefcase"></i> Professional Information</h4>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="role">User Role <span class="required">*</span></label>
+                                <select id="role" name="role" required>
+                                    {% for role_value, role_label in roles %}
+                                        <option value="{{ role_value }}" {% if user_to_update.role == role_value %}selected{% endif %}>{{ role_label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="office">Office Location</label>
+                                <select id="office" name="office">
+                                    <option value="">Select an Office</option>
+                                    {% for office in offices %}
+                                        <option value="{{ office.id }}" {% if user_to_update.office and user_to_update.office.id == office.id %}selected{% endif %}>
+                                            {{ office.office_location }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="office_impact">Office Impact</label>
+                                <input type="text" id="office_impact" name="office_impact" value="{{ user_to_update.office_impact|default:'' }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="company_impact">Company Impact</label>
+                                <input type="text" id="company_impact" name="company_impact" value="{{ user_to_update.company_impact|default:'' }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="field_position">Field Position</label>
+                                <input type="text" id="field_position" name="field_position" value="{{ user_to_update.field_position|default:'' }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="executive_position_description">Executive Position Description</label>
+                                <input type="text" id="executive_position_description" name="executive_position_description" value="{{ user_to_update.executive_position_description|default:'' }}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h4 class="section-title"><i class="fas fa-cogs"></i> Services</h4>
+                        <div class="checkbox-grid">
+                            <div class="form-group-check">
+                                <input type="checkbox" id="audit" name="audit" {% if user_to_update.audit %}checked{% endif %}>
+                                <label for="audit">Audit</label>
+                            </div>
+                            <div class="form-group-check">
+                                <input type="checkbox" id="tax" name="tax" {% if user_to_update.tax %}checked{% endif %}>
+                                <label for="tax">Tax</label>
+                            </div>
+                            <div class="form-group-check">
+                                <input type="checkbox" id="consulting" name="consulting" {% if user_to_update.consulting %}checked{% endif %}>
+                                <label for="consulting">Consulting</label>
+                            </div>
+                            <div class="form-group-check">
+                                <input type="checkbox" id="forensic_service" name="forensic_service" {% if user_to_update.forensic_service %}checked{% endif %}>
+                                <label for="forensic_service">Forensic Service</label>
+                            </div>
+                            <div class="form-group-check">
+                                <input type="checkbox" id="managed_service" name="managed_service" {% if user_to_update.managed_service %}checked{% endif %}>
+                                <label for="managed_service">Managed Service</label>
+                            </div>
+                            <div class="form-group-check">
+                                <input type="checkbox" id="technology_solution" name="technology_solution" {% if user_to_update.technology_solution %}checked{% endif %}>
+                                <label for="technology_solution">Technology Solution</label>
+                            </div>
+                            <div class="form-group-check">
+                                <input type="checkbox" id="advisory" name="advisory" {% if user_to_update.advisory %}checked{% endif %}>
+                                <label for="advisory">Advisory</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h4 class="section-title"><i class="fas fa-user-shield"></i> Admin Controls</h4>
+                        <div class="checkbox-grid">
+                            <div class="form-group-check">
+                                <input type="checkbox" id="is_active" name="is_active" {% if user_to_update.is_active %}checked{% endif %}>
+                                <label for="is_active">Is Active</label>
+                            </div>
+                            <div class="form-group-check">
+                                <input type="checkbox" id="is_approved" name="is_approved" {% if user_to_update.is_approved %}checked{% endif %}>
+                                <label for="is_approved">Is Approved</label>
+                            </div>
+                            <div class="form-group-check">
+                                <input type="checkbox" id="is_staff" name="is_staff" {% if user_to_update.is_staff %}checked{% endif %}>
+                                <label for="is_staff">Is Staff</label>
+                            </div>
+                            <div class="form-group-check">
+                                <input type="checkbox" id="executive_team" name="executive_team" {% if user_to_update.executive_team %}checked{% endif %}>
+                                <label for="executive_team">Executive Team Member</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-save">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+                <a href="{% url 'manage_users' %}" class="btn btn-cancel">
+                    <i class="fas fa-times-circle"></i> Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function previewImage(event) {
+        const preview = document.getElementById('profile-image-preview');
+        const faceCard = document.getElementById('face-card-preview');
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+                if (faceCard) {
+                    faceCard.style.display = 'none';
+                }
+            };
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = '';
+            preview.style.display = 'none';
+            if (faceCard) {
+                faceCard.style.display = 'flex';
+            }
+        }
+    }
+</script>
+{% endblock %}
+
+
+{% block extra_css %}
+<style>
+/* Base styles from previous template */
+body {
+    background-image: url('{% static "images/bk.jpg" %}');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    font-family: 'Arial', sans-serif;
+}
+
+.page-container {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.card {
+    background-color: transparent;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: none;
+    border: none;
+    margin-bottom: 20px;
+}
+
+.fixed-header {
+    background-color: transparent;
+}
+
+.card-header-custom {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.card-icon {
+    width: 50px;
+    height: 50px;
+    background: #007bff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.card-title-custom {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+}
+
+.profile-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+/* New Form Styles */
+.form-wrapper {
+    margin-top: 20px;
+}
+
+.profile-header-edit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.profile-image-container {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 15px;
+    border: 3px solid #007bff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-image-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.face-card {
+    width: 100%;
+    height: 100%;
+    background: #f0f0f0;
+    color: #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+}
+
+.file-upload-label {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+}
+
+.file-upload-label:hover {
+    background-color: #0056b3;
+}
+
+.file-input {
+    display: none;
+}
+
+.form-section {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.section-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.form-group-check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.form-group-check input[type="checkbox"] {
+    width: auto;
+}
+
+.form-group-check label {
+    font-weight: normal;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.btn-save, .btn-cancel {
+    padding: 12px 25px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    border: none;
+}
+
+.btn-save {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-save:hover {
+    background-color: #218838;
+}
+
+.btn-cancel {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-cancel:hover {
+    background-color: #c82333;
+}
+
+.required {
+    color: red;
+}
+
+/* === New & Modified Styles === */
+
+/* Style for text cropping in table cells (e.g., for long emails) */
+.table-responsive td.crop-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px; /* Adjust as needed */
+}
+
+/* Style for the search bar and buttons */
+.search-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.search-input {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.search-btn, .clear-btn {
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    border: 1px solid #ccc;
+}
+
+.search-btn {
+    background-color: #007bff;
+    color: white;
+    border: 1px solid #007bff;
+}
+
+.search-btn:hover {
+    background-color: #0056b3;
+}
+
+.clear-btn {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.clear-btn:hover {
+    background-color: #e0e0e0;
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+    .page-container {
+        padding: 10px;
+        margin: 10px;
+    }
+    .form-grid, .checkbox-grid {
+        grid-template-columns: 1fr;
+    }
+    .form-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    .btn-save, .btn-cancel {
+        width: 100%;
+    }
+    /* Reduce size of search elements on small screens */
+    .search-input {
+        width: 100%;
+        font-size: 0.9rem;
+    }
+    .search-btn, .clear-btn {
+        padding: 6px 12px;
+        font-size: 0.9rem;
+    }
+    .search-container {
+        flex-wrap: wrap;
+    }
+}
+
+</style>
+{% endblock %}

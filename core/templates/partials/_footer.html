@@ -1,0 +1,126 @@
+{% if not user.is_authenticated or user.role == 'client' %}
+<footer class="bg-gray-900 text-white">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+            <div>
+                <h3 class="text-xl font-bold text-white mb-4">About OB</h3>
+                <p class="text-gray-400 text-sm mb-4">
+                    Delivering exceptional professional services with integrity and innovation to help businesses thrive in a dynamic world.
+                </p>
+                <div class="flex space-x-4 mt-4">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors" aria-label="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors" aria-label="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors" aria-label="YouTube">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+
+            {% if not user.is_authenticated %}
+            <div>
+                <h3 class="text-xl font-bold text-white mb-4">Quick Links</h3>
+                <ul class="space-y-3">
+                    <li><a href="/about" class="text-gray-400 hover:text-white transition-colors flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-blue-400"></i> About Us</a></li>
+                    <li><a href="/services" class="text-gray-400 hover:text-white transition-colors flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-blue-400"></i> Our Services</a></li>
+                    <li><a href="/insights" class="text-gray-400 hover:text-white transition-colors flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-blue-400"></i> Insights</a></li>
+                    <li><a href="/careers" class="text-gray-400 hover:text-white transition-colors flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-blue-400"></i> Careers</a></li>
+                    <li><a href="/contact" class="text-gray-400 hover:text-white transition-colors flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-blue-400"></i> Contact Us</a></li>
+                </ul>
+            </div>
+            {% endif %}
+
+            {% if not user.is_authenticated %}
+            <div>
+                <h3 class="text-xl font-bold text-white mb-4">Our Services</h3>
+                <ul class="space-y-3">
+                    <li><a href="/services/advisory" class="text-gray-400 hover:text-white transition-colors flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-blue-400"></i> Business Advisory</a></li>
+                    <li><a href="/services/tax" class="text-gray-400 hover:text-white transition-colors flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-blue-400"></i> Tax Services</a></li>
+                    <li><a href="/services/audit" class="text-gray-400 hover:text-white transition-colors flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-blue-400"></i> Audit & Assurance</a></li>
+                    <li><a href="/services/digital" class="text-gray-400 hover:text-white transition-colors flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-blue-400"></i> Digital Transformation</a></li>
+                    <li><a href="/services/consulting" class="text-gray-400 hover:text-white transition-colors flex items-center"><i class="fas fa-chevron-right text-xs mr-2 text-blue-400"></i> Consulting</a></li>
+                </ul>
+            </div>
+            {% endif %}
+
+            <div>
+                <h3 class="text-xl font-bold text-white mb-4">Contact Us</h3>
+                <address class="not-italic text-gray-400 text-sm space-y-3">
+                    <div class="flex items-start">
+                        <i class="fas fa-map-marker-alt mt-1 mr-3 text-blue-400"></i>
+                        <span>123 Business Avenue<br>Kigali, Rwanda</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-phone-alt mr-3 text-blue-400"></i>
+                        <span>+250 700 000 000</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-envelope mr-3 text-blue-400"></i>
+                        <span>info@obllc.com</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="far fa-clock mr-3 text-blue-400"></i>
+                        <span>Mon-Fri: 9:00 AM - 5:00 PM</span>
+                    </div>
+                </address>
+            </div>
+        </div>
+
+        <div class="bg-gray-800 rounded-lg p-8 mb-16">
+            <div class="max-w-4xl mx-auto text-center">
+                <h3 class="text-2xl font-bold text-white mb-4">Stay Updated</h3>
+                <p class="text-gray-400 mb-6 max-w-2xl mx-auto">Subscribe to our newsletter for the latest insights, news, and updates.</p>
+                <form class="max-w-md mx-auto flex">
+                    <input type="email" placeholder="Your email address" class="flex-grow px-4 py-3 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900">
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-r-lg font-medium transition-colors">
+                        Subscribe
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="border-t border-gray-800 pt-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <a href="/" class="text-2xl font-bold text-white">OB Global</a>
+                    <p class="text-gray-400 text-sm mt-1">Transforming businesses through innovation and expertise</p>
+                </div>
+                
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="/privacy" class="text-gray-400 hover:text-white text-sm transition-colors">Privacy Policy</a>
+                    <span class="text-gray-600">•</span>
+                    <a href="/terms" class="text-gray-400 hover:text-white text-sm transition-colors">Terms of Service</a>
+                    <span class="text-gray-600">•</span>
+                    <a href="/cookies" class="text-gray-400 hover:text-white text-sm transition-colors">Cookie Policy</a>
+                    <span class="text-gray-600">•</span>
+                    <a href="/sitemap" class="text-gray-400 hover:text-white text-sm transition-colors">Sitemap</a>
+                </div>
+            </div>
+            
+            <div class="mt-8 pt-6 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-500 text-sm text-center md:text-left mb-4 md:mb-0">
+                    &copy; 2023 OB Global. All rights reserved.
+                </p>
+                
+                <div class="flex items-center space-x-6">
+                    <span class="text-gray-600 text-sm">We accept:</span>
+                    <div class="flex space-x-2">
+                        <span class="text-gray-400"><i class="fab fa-cc-visa text-xl"></i></span>
+                        <span class="text-gray-400"><i class="fab fa-cc-mastercard text-xl"></i></span>
+                        <span class="text-gray-400"><i class="fab fa-cc-paypal text-xl"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+{% endif %}
