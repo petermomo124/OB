@@ -88,3 +88,20 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} ({self.email})"
+
+# core/models.py
+
+from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.utils import timezone
+from .models import User  # Import your User model if it's in the same file
+
+class PasswordResetOTP(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    otp = models.CharField(max_length=4)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def is_valid(self):
+        """Checks if the OTP is still valid (e.g., within 10 minutes of creation)."""
+        ten_minutes_ago = timezone.now() - timezone.timedelta(minutes=10)
+        return self.created_at >= ten_minutes_ago

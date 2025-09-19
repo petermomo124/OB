@@ -3,6 +3,9 @@ from django.views.generic import TemplateView
 from . import views
 
 urlpatterns = [
+    path('client-portal/password-reset/', views.forgot_password, name='forgot_password'),
+    path('client-portal/verify-otp/', views.verify_otp, name='verify_otp'),
+    path('client-portal/reset-password/', views.reset_password, name='reset_password'),
 
     path('user-profile/<int:user_id>/', views.user_profile, name='user_profile'),
 

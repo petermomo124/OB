@@ -532,6 +532,21 @@ import cloudinary.uploader
 def is_admin(user):
     return user.is_authenticated and user.role == 'admin'
 
+
+from django.contrib.auth.hashers import make_password
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib import messages
+from .models import User, Office
+import cloudinary.uploader
+import os
+
+
+# Helper function to check if a user is an admin
+def is_admin(user):
+    return user.is_authenticated and user.role == 'admin'
+
+
 @login_required
 @user_passes_test(is_admin)
 def update_user(request, user_id):
@@ -541,9 +556,6 @@ def update_user(request, user_id):
 
     if request.method == 'POST':
         # --- Form Validation and Data Retrieval ---
-        # NOTE: All the validation logic below is correct, but could be cleaner
-        # and more robust using a Django ModelForm. For now, we'll assume
-        # you want to stick with this manual method.
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
         email = request.POST.get('email')
@@ -553,8 +565,6 @@ def update_user(request, user_id):
         nationality = request.POST.get('nationality')
         role = request.POST.get('role')
         office_id = request.POST.get('office')
-
-        # New password fields
         new_password = request.POST.get('new_password')
         confirm_password = request.POST.get('confirm_password')
 
@@ -573,7 +583,8 @@ def update_user(request, user_id):
         if phone_number:
             phone_digits = phone_number.replace('+', '').strip()
             if not phone_number.startswith('+') or not phone_digits.isdigit() or len(phone_digits) < 9:
-                messages.error(request, 'Phone number must start with "+", contain only digits after the plus sign, and be at least 9 digits long.')
+                messages.error(request,
+                               'Phone number must start with "+", contain only digits after the plus sign, and be at least 9 digits long.')
                 return redirect('update_user', user_id=user_to_update.id)
 
         # Email and Phone Number Uniqueness Validation
@@ -624,7 +635,8 @@ def update_user(request, user_id):
         user_to_update.company_impact = request.POST.get('company_impact', user_to_update.company_impact)
         user_to_update.office_impact = request.POST.get('office_impact', user_to_update.office_impact)
         user_to_update.field_position = request.POST.get('field_position', user_to_update.field_position)
-        user_to_update.executive_position_description = request.POST.get('executive_position_description', user_to_update.executive_position_description)
+        user_to_update.executive_position_description = request.POST.get('executive_position_description',
+                                                                         user_to_update.executive_position_description)
 
         # Boolean fields
         user_to_update.is_active = 'is_active' in request.POST
@@ -639,6 +651,17 @@ def update_user(request, user_id):
         user_to_update.advisory = 'advisory' in request.POST
         user_to_update.executive_team = 'executive_team' in request.POST
 
+        # --- LOGIC TO SET is_superuser BASED ON ROLE ---
+        if role == 'admin':
+            user_to_update.is_superuser = True
+            # When a user is an admin, they are also considered staff by Django
+            user_to_update.is_staff = True
+        else:
+            user_to_update.is_superuser = False
+            # To ensure consistency, if they are not an admin, check if they
+            # should still be staff based on the form
+            user_to_update.is_staff = 'is_staff' in request.POST
+
         # Handle profile image upload
         if 'profile_image' in request.FILES:
             image_file = request.FILES['profile_image']
@@ -651,27 +674,42 @@ def update_user(request, user_id):
 
         user_to_update.save()
         messages.success(request, f'User {user_to_update.email} updated successfully.')
-        return redirect('manage_users')
-
+        return redirect('dashboard')
     context = {
         'user_to_update': user_to_update,
         'offices': offices,
         'roles': User.ROLE_CHOICES,
     }
     return render(request, 'admin/update_user.html', context)
+from django.contrib.auth import logout
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib import messages
+from .models import User
+
 @login_required
 @user_passes_test(is_admin)
 def delete_user(request, user_id):
-    user = get_object_or_404(User, id=user_id)
+    user_to_delete = get_object_or_404(User, id=user_id)
 
     if request.method == 'POST':
-        email = user.email
-        user.delete()
-        messages.success(request, f'User {email} deleted successfully.')
-        return redirect('manage_users')
+        # Check if the logged-in user is deleting their own account
+        if request.user.id == user_to_delete.id:
+            # Delete the user's account
+            user_to_delete.delete()
+            # Log out the user
+            logout(request)
+            messages.success(request, 'Your account has been successfully deleted.')
+            # Redirect to the index page
+            return redirect('index')
+        else:
+            # Logic for an admin deleting a different user's account
+            email = user_to_delete.email
+            user_to_delete.delete()
+            messages.success(request, f'User {email} deleted successfully.')
+            return redirect('manage_users')
 
-    return render(request, 'admin/delete_user.html', {'user': user})
-
+    return render(request, 'admin/delete_user.html', {'user': user_to_delete})
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
@@ -742,6 +780,7 @@ def add_user(request):
 
         # --- Create New User Model Instance ---
         try:
+            # We will set is_superuser and is_staff based on the role below
             user = User.objects.create_user(
                 email=email,
                 password=new_password,
@@ -757,17 +796,9 @@ def add_user(request):
             messages.error(request, f'Failed to create user: {e}')
             return redirect('add_user')
 
-        # Handle optional fields
-        user.linkedin = request.POST.get('linkedin', '')
-        user.company_impact = request.POST.get('company_impact', '')
-        user.office_impact = request.POST.get('office_impact', '')
-        user.field_position = request.POST.get('field_position', '')
-        user.executive_position_description = request.POST.get('executive_position_description', '')
-
         # Handle boolean fields
         user.is_active = 'is_active' in request.POST
         user.is_approved = 'is_approved' in request.POST
-        user.is_staff = 'is_staff' in request.POST
         user.executive_team = 'executive_team' in request.POST
         user.audit = 'audit' in request.POST
         user.tax = 'tax' in request.POST
@@ -776,6 +807,21 @@ def add_user(request):
         user.managed_service = 'managed_service' in request.POST
         user.technology_solution = 'technology_solution' in request.POST
         user.advisory = 'advisory' in request.POST
+
+        # Handle `is_staff` and `is_superuser` based on the selected role
+        if role == 'admin':
+            user.is_superuser = True
+            user.is_staff = True
+        else:
+            user.is_superuser = False
+            user.is_staff = 'is_staff' in request.POST
+
+        # Handle optional fields
+        user.linkedin = request.POST.get('linkedin', '')
+        user.company_impact = request.POST.get('company_impact', '')
+        user.office_impact = request.POST.get('office_impact', '')
+        user.field_position = request.POST.get('field_position', '')
+        user.executive_position_description = request.POST.get('executive_position_description', '')
 
         # Handle profile image upload
         if 'profile_image' in request.FILES:
@@ -809,7 +855,6 @@ def add_user(request):
     }
     return render(request, 'admin/add_user.html', context)
 
-
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import User  # Assuming your custom user model is named User
@@ -831,3 +876,137 @@ def user_profile(request, user_id):
     }
     return render(request, 'user_profile.html', context)  # You'll need to create this template
 
+
+# core/views.py
+
+import random
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.conf import settings
+from django.utils import timezone  # <-- Make sure this is imported
+from .models import User, PasswordResetOTP
+
+def forgot_password(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        try:
+            user = User.objects.get(email=email)
+
+            # Generate a 4-digit OTP
+            otp = str(random.randint(1000, 9999))
+
+            # Update or create the OTP object, ensuring the timestamp is always current
+            otp_obj, created = PasswordResetOTP.objects.update_or_create(
+                user=user,
+                defaults={'otp': otp, 'created_at': timezone.now()}
+            )
+
+            # --- Professional Email Message Styling ---
+            subject = 'OB Global Password Reset'
+            context = {
+                'user_name': user.first_name,
+                'otp': otp,
+            }
+            html_message = render_to_string('emails/password_reset.html', context)
+            plain_message = strip_tags(html_message)
+            from_email = settings.EMAIL_HOST_USER
+            recipient_list = [user.email]
+
+            send_mail(
+                subject,
+                plain_message,
+                from_email,
+                recipient_list,
+                html_message=html_message
+            )
+
+            messages.success(request, 'A password reset code has been sent to your email.')
+            return redirect('verify_otp')
+
+        except User.DoesNotExist:
+            messages.error(request, 'No user found with that email address.')
+
+    return render(request, 'authentication/forgot_password.html')
+
+
+# core/views.py
+from django.contrib.auth.hashers import make_password
+
+
+# ... other imports from above
+def verify_otp(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        otp = request.POST.get('otp')
+
+        try:
+            user = User.objects.get(email=email)
+            otp_obj = PasswordResetOTP.objects.get(user=user)
+
+            if otp_obj.otp == otp:
+                # OTP is correct, redirect to password reset page
+                request.session['temp_user_id'] = user.id
+                messages.success(request, 'OTP verified. You can now reset your password.')
+                return redirect('reset_password')
+            else:
+                messages.error(request, 'Invalid OTP.')
+        except (User.DoesNotExist, PasswordResetOTP.DoesNotExist):
+            messages.error(request, 'Invalid email or OTP.')
+
+    return render(request, 'authentication/verify_otp.html')
+
+# core/views.py
+# ... other imports from above
+
+import re
+
+
+def reset_password(request):
+    if 'temp_user_id' not in request.session:
+        messages.error(request, 'Please go through the password reset process again.')
+        return redirect('forgot_password')
+
+    user_id = request.session['temp_user_id']
+    user = get_object_or_404(User, id=user_id)
+
+    if request.method == 'POST':
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+
+        # 1. Check if passwords match
+        if new_password != confirm_password:
+            messages.error(request, 'Passwords do not match.')
+            return render(request, 'authentication/reset_password.html')
+
+        # 2. Check for minimum length
+        if len(new_password) < 8:
+            messages.error(request, 'Password must be at least 8 characters long.')
+            return render(request, 'authentication/reset_password.html')
+
+        # 3. Check if password is alphanumeric
+        # The isalnum() method checks if a string contains only letters and numbers and is not empty.
+        if not new_password.isalnum():
+            messages.error(request, 'Password must contain only letters and numbers (no special characters or spaces).')
+            return render(request, 'authentication/reset_password.html')
+
+        # 4. Check if password contains both letters and numbers
+        # Use regex to ensure the password has at least one letter and one number.
+        if not (re.search(r'[a-zA-Z]', new_password) and re.search(r'\d', new_password)):
+            messages.error(request, 'Password must be alphanumeric and contain both letters and numbers.')
+            return render(request, 'authentication/reset_password.html')
+
+        # If all checks pass, update the password
+        user.set_password(new_password)
+        user.save()
+
+        # Clear the temporary user ID from the session and delete the OTP
+        del request.session['temp_user_id']
+        PasswordResetOTP.objects.filter(user=user).delete()
+
+        messages.success(request, 'Your password has been reset successfully.')
+        return redirect('user_login')
+
+    return render(request, 'authentication/reset_password.html')
