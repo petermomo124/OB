@@ -92,15 +92,16 @@ WSGI_APPLICATION = 'ey_website.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'mysql.connector.django',
+        'ENGINE': 'django.db.backends.mysql',  # ← Change this line
         'NAME': 'test',
         'USER': 'JmKhKqoAam5FV5E.root',
         'PASSWORD': '3130TGcNFxkHKrDj',
         'HOST': 'gateway01.eu-central-1.prod.aws.tidbcloud.com',
         'PORT': 4000,
         'OPTIONS': {
-            'ssl_ca': os.path.join(BASE_DIR, 'cert', 'isrgrootx1.pem'),
-            'ssl_verify_cert': True,
+            'ssl': {
+                'ca': os.path.join(BASE_DIR, 'cert', 'isrgrootx1.pem')
+            }
         }
     }
 }
