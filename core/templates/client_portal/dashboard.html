@@ -11,13 +11,15 @@
     <div class="stat-container">
         <h2 class="stats-heading">Dashboard</h2>
         <div class="flex-boxes-wrapper">
-            <div class="stat-box tasks-box">
-                <span class="emoji">✅</span>
-                <div class="stat-content">
-                    <span class="stat-number">{{ total_tasks }}</span>
-                    <span class="stat-label">Total Tasks</span>
+            {% if user.role == 'admin' or user.role == 'staff' %}
+                <div class="stat-box tasks-box">
+                    <span class="emoji">✅</span>
+                    <div class="stat-content">
+                        <span class="stat-number">{{ total_tasks }}</span>
+                        <span class="stat-label">Total Tasks</span>
+                    </div>
                 </div>
-            </div>
+            {% endif %}
 
             {% if user.role == 'admin' %}
                 <div class="stat-box all-users-box">

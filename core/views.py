@@ -237,30 +237,47 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from .models import User, Task
 
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.db.models import Count, Q
+import json
+
+
+# Assuming Task and User models are correctly imported
+# from .models import Task, User
 
 @login_required
 def dashboard(request):
     current_user = request.user
 
     total_tasks = 0
+    tasks_to_filter = None
+    status_data = {}
+
+    # Initialize other stats to None unless user is admin
     total_users = None
     total_clients = None
     total_staffs = None
-    status_data = {}
 
+    # Determine which tasks the user can see based on their role
     if current_user.role == 'admin':
-        total_tasks = Task.objects.count()
+        # Admin can see all tasks and all user statistics
+        tasks_to_filter = Task.objects.all()
         total_users = User.objects.count()
         total_clients = User.objects.filter(role='client').count()
         total_staffs = User.objects.filter(role='staff').count()
 
-        tasks_by_status = Task.objects.values('status').annotate(total=Count('status'))
-        status_data = {item['status']: item['total'] for item in tasks_by_status}
-
     elif current_user.role == 'staff':
-        total_tasks = Task.objects.filter(supervisee=current_user).count()
+        # Staff can only see tasks they are assigned to
+        tasks_to_filter = Task.objects.filter(
+            Q(supervisee=current_user) | Q(supervisor=current_user)
+        )
+    # The 'else' case for 'client' is implicitly handled; tasks_to_filter remains None
 
-        tasks_by_status = Task.objects.filter(supervisee=current_user).values('status').annotate(total=Count('status'))
+    if tasks_to_filter is not None:
+        # Calculate total tasks and status breakdown if the user has tasks to view
+        total_tasks = tasks_to_filter.count()
+        tasks_by_status = tasks_to_filter.values('status').annotate(total=Count('status'))
         status_data = {item['status']: item['total'] for item in tasks_by_status}
 
     status_data_json = json.dumps(status_data)
