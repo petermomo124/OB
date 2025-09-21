@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Task List{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+    :root {
+        --primary-color: #3b82f6;
+        --secondary-color: #6c757d;
+        --warning-color: #ffc107;
+        --danger-color: #dc3545;
+        --success-color: #28a745;
+        --card-bg: rgba(255, 255, 255, 0.85);
+        --glass-border: 1px solid rgba(255, 255, 255, 0.6);
+        --shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        --transition: all 0.3s ease;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: url('https://res.cloudinary.com/dpupwwixw/image/upload/v1721508215/TaskMaster/login_background_placeholder.jpg') no-repeat center center fixed; /* Placeholder image */
+        background-size: cover;
+        min-height: 100vh;
+        color: #333; /* Ensure text is readable on the background */
+    }
+
+    .container {
+        padding-top: 5rem;
+        padding-bottom: 5rem;
+    }
+
+    .glass-card {
+        background: var(--card-bg);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        box-shadow: var(--shadow);
+        border: var(--glass-border);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .glass-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+    }
+    
+    .list-group {
+        counter-reset: task-color;
+    }
+
+    .list-group-item {
+        background: rgba(255, 255, 255, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        border-radius: 10px;
+        margin-bottom: 1rem;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        display: flex; /* Use flexbox for alignment */
+        align-items: center; /* Vertically align items */
+        padding: 1rem; /* Adjust padding */
+        counter-increment: task-color;
+    }
+    
+    .list-group-item:nth-child(2n+1) { /* Odd items */
+        background-color: #e3f2fd;
+        border-left: 5px solid #64b5f6;
+    }
+
+    .list-group-item:nth-child(2n) { /* Even items */
+        background-color: #e8f5e9;
+        border-left: 5px solid #81c784;
+    }
+    
+    .list-group-item:hover {
+        background: rgba(255, 255, 255, 0.8);
+        transform: translateY(-3px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .task-content {
+        flex-grow: 1; /* Allows content to take available space */
+    }
+
+    .task-icon {
+        font-size: 2rem; /* Size of the file emoji */
+        color: var(--primary-color);
+        margin-right: 1rem; /* Space between icon and text */
+        opacity: 0.7;
+    }
+
+    .btn-custom {
+        padding: 10px 25px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        border-radius: 50px;
+        transition: var(--transition);
+        border: none;
+        color: white;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    .btn-custom:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+    .btn-primary {
+        background-image: linear-gradient(45deg, #3b82f6, #2563eb);
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    }
+
+    .alert {
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(5px);
+        border: var(--glass-border);
+        color: #333;
+    }
+
+    .page-header h1 {
+        font-weight: 700;
+        color: #1a202c;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+    }
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-bottom: 2rem;
+    }
+
+    @media (max-width: 576px) {
+        .page-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .page-header h1 {
+            margin-bottom: 1rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="page-header">
+        <h1>Task List</h1>
+        {% if is_admin %}
+        <a href="{% url 'task_create' %}" class="btn btn-primary btn-custom">Create New Task</a>
+        {% endif %}
+    </div>
+
+    {% if messages %}
+        <div class="alert alert-dismissible fade show glass-card" role="alert">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+
+    {% if tasks %}
+    <div class="list-group">
+        {% for task in tasks %}
+        <a href="{% url 'task_detail' task.id %}" class="list-group-item list-group-item-action glass-card">
+            <i class="far fa-file-alt task-icon"></i>
+            <div class="task-content">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">{{ task.task_title }}</h5>
+                    <small class="text-muted">{{ task.status }}</small>
+                </div>
+                <p class="mb-1">{{ task.task_purpose|truncatechars:100 }}</p>
+                <small class="text-muted">Assigned to: {{ task.supervisee.first_name }} {{ task.supervisee.last_name }} | Supervised by: {{ task.supervisor.first_name }} {{ task.supervisor.last_name }}</small>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="glass-card p-4 text-center">
+        <p class="mb-0">No tasks found.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,233 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Update Task{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+    :root {
+        --primary-color: #3b82f6;
+        --secondary-color: #6c757d;
+        --success-color: #198754;
+        --danger-color: #dc3545;
+        --white-color: #ffffff;
+        --card-bg: rgba(255, 255, 255, 0.85);
+        --glass-border: 1px solid rgba(255, 255, 255, 0.6);
+        --shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        --transition: all 0.3s ease;
+        --form-field-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: url('https://res.cloudinary.com/dpupwwixw/image/upload/v1721508215/TaskMaster/login_background_placeholder.jpg') no-repeat center center fixed;
+        background-size: cover;
+        min-height: 100vh;
+        color: #333;
+    }
+
+    .form-container {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .file-card-container {
+        background: var(--card-bg);
+        border-radius: 20px;
+        border: var(--glass-border);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(5px);
+        padding: 25px;
+        max-width: 800px;
+        width: 100%;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .file-card-container h1 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #333;
+    }
+
+    .file-card-container .card-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #555;
+    }
+
+    .btn-custom {
+        padding: 10px 25px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        border-radius: 50px;
+        transition: var(--transition);
+        border: none;
+    }
+
+    .btn-primary-custom {
+        background-image: linear-gradient(45deg, var(--primary-color) 0%, #2563eb 100%);
+        color: var(--white-color);
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    }
+    .btn-primary-custom:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+    }
+
+    .btn-secondary-custom {
+        background-color: var(--secondary-color);
+        color: var(--white-color);
+    }
+    .btn-secondary-custom:hover {
+        background-color: #5a6268;
+        transform: translateY(-3px);
+    }
+
+    /* Dynamic Form Field Styling */
+    .form-control, .form-select, .form-control-static {
+        background: rgba(255, 255, 255, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(5px);
+        color: #333;
+        transition: var(--transition);
+        box-shadow: var(--form-field-shadow);
+    }
+
+    .form-field-group {
+        position: relative;
+        overflow: hidden;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .form-field-group:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .col-12:nth-of-type(odd) .form-control, .col-md-6:nth-of-type(odd) .form-control,
+    .col-12:nth-of-type(odd) .form-select, .col-md-6:nth-of-type(odd) .form-select {
+        background-color: #e3f2fd;
+        border-left: 5px solid #64b5f6;
+    }
+
+    .col-12:nth-of-type(even) .form-control, .col-md-6:nth-of-type(even) .form-control,
+    .col-12:nth-of-type(even) .form-select, .col-md-6:nth-of-type(even) .form-select {
+        background-color: #e8f5e9;
+        border-left: 5px solid #81c784;
+    }
+
+    .form-control:focus, .form-select:focus {
+        background: rgba(255, 255, 255, 0.9);
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.25), var(--form-field-shadow);
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 0.5rem;
+    }
+
+    .required-star {
+        color: var(--danger-color);
+    }
+
+    .form-control::placeholder {
+        color: #6c757d;
+        font-style: italic;
+    }
+
+    /* Media Queries */
+    @media (max-width: 768px) {
+        .file-card-container {
+            padding: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="file-card-container">
+        <h1 class="text-center mb-4">Update Task</h1>
+
+        <div class="card-body text-center">
+            <p class="mb-4 text-muted">Modify the task details below.</p>
+
+            <form method="post" enctype="multipart/form-data" class="row g-4 text-start">
+                {% csrf_token %}
+
+                <div class="col-12">
+                    <label for="task_title" class="form-label">Task Title <span class="required-star">*</span></label>
+                    <input type="text" class="form-control" id="task_title" name="task_title" value="{{ task.task_title }}" required>
+                </div>
+
+                <div class="col-12">
+                    <label for="task_purpose" class="form-label">Task Purpose <span class="required-star">*</span></label>
+                    <textarea class="form-control" id="task_purpose" name="task_purpose" rows="4" required>{{ task.task_purpose }}</textarea>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="start_date" class="form-label">Start Date <span class="required-star">*</span></label>
+                    <input type="datetime-local" class="form-control" id="start_date" name="start_date" value="{{ task.start_date|date:'Y-m-d\TH:i' }}" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="end_date" class="form-label">End Date</label>
+                    <input type="datetime-local" class="form-control" id="end_date" name="end_date" value="{% if task.end_date %}{{ task.end_date|date:'Y-m-d\TH:i' }}{% endif %}">
+                </div>
+
+                {% if is_admin %}
+                <div class="col-md-6">
+                    <label class="form-label">Supervisor</label>
+                    <p class="form-control-static form-control">{{ task.supervisor.first_name }} {{ task.supervisor.last_name }}</p>
+                    <input type="hidden" name="supervisor" value="{{ task.supervisor.id }}">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Supervisee</label>
+                    <p class="form-control-static form-control">{{ task.supervisee.first_name }} {{ task.supervisee.last_name }}</p>
+                    <input type="hidden" name="supervisee" value="{{ task.supervisee.id }}">
+                </div>
+                {% endif %}
+
+                {% if is_admin or is_supervisor %}
+                    <div class="col-12">
+                        <label for="status" class="form-label">Task Status</label>
+                        <select class="form-select" id="status" name="status">
+                            {% for status_choice in task_status_choices %}
+                            <option value="{{ status_choice.0 }}" {% if status_choice.0 == task.status %}selected{% endif %}>{{ status_choice.1 }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="key_note" class="form-label">Key Notes (for Supervisor)</label>
+                        <textarea class="form-control" id="key_note" name="key_note" rows="3">{{ task.key_note|default_if_none:"" }}</textarea>
+                    </div>
+                {% endif %}
+
+                {% if is_supervisee %}
+                    <div class="col-12">
+                        <label for="supervisee_feedback" class="form-label">Your Feedback</label>
+                        <textarea class="form-control" id="supervisee_feedback" name="supervisee_feedback" rows="3">{{ task.supervisee_feedback|default_if_none:"" }}</textarea>
+                    </div>
+                {% endif %}
+
+                <div class="col-12 d-flex justify-content-end gap-3 mt-4">
+                    <a href="{% url 'task_detail' task.id %}" class="btn btn-secondary-custom btn-custom">Cancel</a>
+                    <button type="submit" class="btn btn-primary-custom btn-custom">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -8,10 +8,18 @@
         <p class="greeting-subheading">Your dashboard at a glance.</p>
     </div>
 
-    {% if user.role == 'admin' %}
-        <div class="admin-stats-container">
-            <h2 class="stats-heading">Admin Dashboard</h2>
-            <div class="flex-boxes-wrapper">
+    <div class="stat-container">
+        <h2 class="stats-heading">Dashboard</h2>
+        <div class="flex-boxes-wrapper">
+            <div class="stat-box tasks-box">
+                <span class="emoji">✅</span>
+                <div class="stat-content">
+                    <span class="stat-number">{{ total_tasks }}</span>
+                    <span class="stat-label">Total Tasks</span>
+                </div>
+            </div>
+
+            {% if user.role == 'admin' %}
                 <div class="stat-box all-users-box">
                     <span class="emoji">👨‍👩‍👧‍👦</span>
                     <div class="stat-content">
@@ -35,8 +43,15 @@
                         <span class="stat-label">Total Staffs</span>
                     </div>
                 </div>
-            </div>
+            {% endif %}
         </div>
+    </div>
+
+    {% if user.role == 'admin' or user.role == 'staff' %}
+    <div class="chart-container">
+        <h2 class="chart-heading">Task Status Breakdown</h2>
+        <canvas id="taskStatusChart"></canvas>
+    </div>
     {% endif %}
 </div>
 {% endblock %}
@@ -80,11 +95,10 @@
         font-size: 1.2rem;
         color: #616161;
     }
-
-    .admin-stats-container {
+    
+    .stat-container {
         margin-top: 30px;
     }
-
     .stats-heading {
         font-size: 1.8rem;
         font-weight: bold;
@@ -111,6 +125,8 @@
         transition: transform 0.3s ease, box-shadow 0.3s ease;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         cursor: pointer;
+        min-height: 150px;
+        box-sizing: border-box;
     }
 
     .stat-box:hover {
@@ -120,12 +136,14 @@
 
     .stat-box .emoji {
         font-size: 3rem;
+        flex-shrink: 0;
     }
 
     .stat-content {
         display: flex;
         flex-direction: column;
         text-align: left;
+        flex-grow: 1;
     }
 
     .stat-number {
@@ -136,11 +154,21 @@
     .stat-label {
         font-size: 1rem;
         color: #757575;
+        margin-top: 5px;
     }
 
     /* Specific box colors */
+    .tasks-box {
+        background-color: #f1f8e9;
+        border: 2px solid #c8e6c9;
+    }
+
+    .tasks-box .stat-number {
+        color: #689f38;
+    }
+
     .all-users-box {
-        background-color: #e3f2fd; /* Light Blue */
+        background-color: #e3f2fd;
         border: 2px solid #90caf9;
     }
 
@@ -149,7 +177,7 @@
     }
 
     .clients-box {
-        background-color: #e8f5e9; /* Light Green */
+        background-color: #e8f5e9;
         border: 2px solid #a5d6a7;
     }
 
@@ -158,12 +186,45 @@
     }
 
     .staffs-box {
-        background-color: #fce4ec; /* Light Pink */
+        background-color: #fce4ec;
         border: 2px solid #f48fb1;
     }
 
     .staffs-box .stat-number {
         color: #d81b60;
+    }
+
+    /* Chart styles */
+    .chart-container {
+        margin-top: 50px;
+        padding: 20px; /* Reduced padding for a smaller box */
+        background-color: #fff;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        /* Set a fixed size and center the container */
+        width: 350px;
+        height: 370px;
+        margin-left: auto;
+        margin-right: auto;
+        /* Use flexbox for internal alignment */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .chart-heading {
+        font-size: 1.2rem; /* Reduced font size for the heading */
+        font-weight: bold;
+        color: #37474f;
+        margin-bottom: 10px; /* Reduced margin */
+        text-align: center;
+    }
+
+    /* This rule ensures the canvas fits the new fixed-size container */
+    .chart-container canvas {
+        width: 100% !important;
+        height: 100% !important;
     }
 
     /* Mobile responsiveness */
@@ -190,7 +251,119 @@
             width: 100%;
             max-width: 350px;
             padding: 25px;
+            min-height: 130px;
+        }
+
+        .stat-box .emoji {
+            font-size: 2.5rem;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+        }
+
+        /* Adjust chart container for mobile */
+        .chart-container {
+            width: 90%; /* Use a percentage for mobile to be more flexible */
+            height: auto;
+            min-height: 300px;
+            padding: 15px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .stat-box {
+            flex-direction: column;
+            text-align: center;
+            gap: 15px;
+        }
+
+        .stat-content {
+            text-align: center;
         }
     }
 </style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Ensure the chart container exists before trying to render
+        const chartElement = document.getElementById('taskStatusChart');
+        if (!chartElement) {
+            console.warn("Chart container not found. This is expected if the user is a client.");
+            return;
+        }
+        
+        const statusData = {{ status_data_json|safe }};
+        
+        // Log the data for debugging
+        console.log("Task data for chart:", statusData);
+        
+        const labels = Object.keys(statusData);
+        const data = Object.values(statusData);
+        
+        // Hide the chart if there is no data
+        if (labels.length === 0) {
+            const chartContainer = chartElement.closest('.chart-container');
+            if (chartContainer) {
+                chartContainer.style.display = 'none';
+            }
+            return;
+        }
+
+        const backgroundColors = labels.map(label => {
+            switch(label) {
+                case 'Pending':
+                    return '#ffc107'; // Yellow
+                case 'In Progress':
+                    return '#17a2b8'; // Cyan
+                case 'Completed':
+                    return '#28a745'; // Green
+                case 'Canceled':
+                    return '#dc3545'; // Red
+                default:
+                    return '#6c757d'; // Gray
+            }
+        });
+        
+        new Chart(chartElement, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Number of Tasks',
+                    data: data,
+                    backgroundColor: backgroundColors,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: false,
+                        text: 'Task Status Breakdown'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.parsed;
+                                const total = context.dataset.data.reduce((acc, curr) => acc + curr, 0);
+                                const percentage = ((value / total) * 100).toFixed(2);
+                                return `${label}: ${value} (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
 {% endblock %}

@@ -231,33 +231,49 @@ def user_login(request):
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from .models import User  # Make sure to import your custom User model
+import json
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.db.models import Count
+from .models import User, Task
+
 
 @login_required
 def dashboard(request):
-    # Retrieve the currently logged-in user
     current_user = request.user
 
-    # Initialize variables for the counts
+    total_tasks = 0
     total_users = None
     total_clients = None
     total_staffs = None
+    status_data = {}
 
-    # Check if the user is an admin before performing calculations
     if current_user.role == 'admin':
-        # Perform the calculations
+        total_tasks = Task.objects.count()
         total_users = User.objects.count()
         total_clients = User.objects.filter(role='client').count()
-        total_staffs = User.objects.filter(is_staff=True).count()
-        # You can adjust the filter for staffs based on your model field (e.g., role='staff')
+        total_staffs = User.objects.filter(role='staff').count()
+
+        tasks_by_status = Task.objects.values('status').annotate(total=Count('status'))
+        status_data = {item['status']: item['total'] for item in tasks_by_status}
+
+    elif current_user.role == 'staff':
+        total_tasks = Task.objects.filter(supervisee=current_user).count()
+
+        tasks_by_status = Task.objects.filter(supervisee=current_user).values('status').annotate(total=Count('status'))
+        status_data = {item['status']: item['total'] for item in tasks_by_status}
+
+    status_data_json = json.dumps(status_data)
 
     context = {
         'user': current_user,
+        'total_tasks': total_tasks,
         'total_users': total_users,
         'total_clients': total_clients,
         'total_staffs': total_staffs,
+        'status_data_json': status_data_json,
     }
     return render(request, 'client_portal/dashboard.html', context)
-
 def user_logout(request):
     logout(request)
     messages.success(request, 'You have been logged out successfully.')
@@ -1010,3 +1026,503 @@ def reset_password(request):
         return redirect('user_login')
 
     return render(request, 'authentication/reset_password.html')
+
+
+# core/views.py
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.http import HttpResponseForbidden
+from .models import User, Task, TaskFile, TaskStatus
+from django.db.models import Q
+
+
+# Decorator for admin-only access
+def admin_required(view_func):
+    def wrapper_func(request, *args, **kwargs):
+        if not request.user.is_authenticated or request.user.role != 'admin':
+            return HttpResponseForbidden("You are not authorized to access this page.")
+        return view_func(request, *args, **kwargs)
+
+    return wrapper_func
+
+
+# Decorator for admin or supervisor access
+def admin_or_supervisor_required(view_func):
+    def wrapper_func(request, *args, **kwargs):
+        if not request.user.is_authenticated or (request.user.role != 'admin' and request.user.role != 'supervisor'):
+            return HttpResponseForbidden("You are not authorized to access this page.")
+        return view_func(request, *args, **kwargs)
+
+    return wrapper_func
+
+
+# your_app/views.py
+
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.db import models  # 👈 Add this line
+from .models import Task, User
+
+
+@login_required
+def task_list(request):
+    user = request.user
+
+    if user.role == 'admin':
+        # Admin can view all tasks
+        tasks = Task.objects.all().order_by('-created_at')
+    else:
+        # Staff and other roles can only see tasks where they are either
+        # the supervisee or the supervisor.
+        tasks = Task.objects.filter(
+            models.Q(supervisee=user) | models.Q(supervisor=user)
+        ).order_by('-created_at')
+
+    context = {
+        'tasks': tasks,
+        'is_admin': user.role == 'admin'
+    }
+    return render(request, 'tasks/task_list.html', context)
+# your_app/views.py
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from .models import Task, User
+from .decorators import admin_required
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from .models import Task, User
+from .decorators import admin_required
+from datetime import datetime
+
+@admin_required
+def task_create(request):
+    if request.method == 'POST':
+        task_title = request.POST.get('task_title')
+        task_purpose = request.POST.get('task_purpose')
+        start_date_str = request.POST.get('start_date')
+        end_date_str = request.POST.get('end_date')
+        supervisor_id = request.POST.get('supervisor')
+        supervisee_id = request.POST.get('supervisee')
+
+        supervisor = get_object_or_404(User, id=supervisor_id)
+        supervisee = get_object_or_404(User, id=supervisee_id)
+
+        if supervisor == supervisee:
+            messages.error(request, 'Supervisor and Supervisee cannot be the same person.')
+            return redirect('task_create')
+
+        # Convert date strings to datetime objects for comparison
+        # Use try-except to handle potential errors if date strings are invalid
+        try:
+            start_date = datetime.strptime(start_date_str, '%Y-%m-%dT%H:%M')
+            end_date = datetime.strptime(end_date_str, '%Y-%m-%dT%H:%M') if end_date_str else None
+        except (ValueError, TypeError):
+            messages.error(request, 'Invalid date format. Please use a valid date and time.')
+            return redirect('task_create')
+
+        # ⚠️ New validation check
+        if end_date and start_date > end_date:
+            messages.error(request, 'The start date cannot be after the end date.')
+            return redirect('task_create')
+
+        # Create the task using the converted datetime objects
+        task = Task.objects.create(
+            task_title=task_title,
+            task_purpose=task_purpose,
+            start_date=start_date,
+            end_date=end_date,
+            supervisor=supervisor,
+            supervisee=supervisee,
+            created_by=request.user,
+        )
+
+        messages.success(request, 'Task created successfully. You can now add files to it.')
+        return redirect('task_list')
+
+    available_users = User.objects.filter(role='staff')
+    context = {
+        'available_users': available_users,
+    }
+    return render(request, 'tasks/task_create.html', context)
+@login_required
+def task_detail(request, task_id):
+    task = get_object_or_404(Task, id=task_id)
+    user = request.user
+
+    # Permission check: user must be admin, supervisor, or supervisee of the task
+    if not (user.role == 'admin' or task.supervisor == user or task.supervisee == user):
+        return HttpResponseForbidden("You do not have permission to view this task.")
+
+    context = {
+        'task': task,
+        'is_admin': user.role == 'admin',
+        'is_supervisor': task.supervisor == user,
+        'is_supervisee': task.supervisee == user,
+        'task_files': task.task_files.filter(file_type='task_document'),
+        'submission_files': task.task_files.filter(file_type='submission_file')
+    }
+    return render(request, 'tasks/task_detail.html', context)
+
+
+# your_app/views.py
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.http import HttpResponseForbidden
+from django.db.models import Q
+from .models import User, Task, TaskStatus
+
+# your_app/views.py
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.http import HttpResponseForbidden
+from django.db.models import Q
+from .models import Task, User, TaskStatus # Import TaskStatus
+
+@login_required
+def task_update(request, task_id):
+    task = get_object_or_404(Task, id=task_id)
+    user = request.user
+
+    if not (user.role == 'admin' or task.supervisor == user):
+        return HttpResponseForbidden("You do not have permission to update this task.")
+
+    if request.method == 'POST':
+        task.task_title = request.POST.get('task_title')
+        task.task_purpose = request.POST.get('task_purpose')
+        task.start_date = request.POST.get('start_date')
+        task.end_date = request.POST.get('end_date')
+
+        if user.role == 'admin' or task.supervisor == user:
+            task.status = request.POST.get('status')
+            task.key_note = request.POST.get('key_note')
+
+        if task.supervisee == user:
+            task.supervisee_feedback = request.POST.get('supervisee_feedback')
+
+        if user.role == 'admin':
+            supervisor_id = request.POST.get('supervisor')
+            supervisee_id = request.POST.get('supervisee')
+
+            # The fix: Get the users directly by ID from the User model.
+            # This ensures we can find them even if their role is 'admin'.
+            supervisor = get_object_or_404(User, id=supervisor_id)
+            supervisee = get_object_or_404(User, id=supervisee_id)
+
+            if supervisor == supervisee:
+                messages.error(request, 'Supervisor and Supervisee cannot be the same person.')
+                return redirect('task_update', task_id=task.id)
+
+            task.supervisor = supervisor
+            task.supervisee = supervisee
+
+        task.save()
+        messages.success(request, 'Task updated successfully.')
+        return redirect('task_detail', task_id=task.id)
+
+    # For GET request, provide filtered user lists for the template.
+    # This logic is for displaying the dropdowns and should not be used for POST.
+    available_users = User.objects.exclude(role='admin')
+
+    context = {
+        'task': task,
+        'available_users': available_users,
+        'is_admin': user.role == 'admin',
+        'is_supervisor': task.supervisor == user,
+        'is_supervisee': task.supervisee == user,
+        'task_status_choices': TaskStatus.choices,
+    }
+    return render(request, 'tasks/task_update.html', context)
+
+# your_app/views.py
+import cloudinary.utils
+from django.shortcuts import get_object_or_404, redirect
+from django.http import HttpResponse, HttpResponseForbidden
+from django.contrib import messages
+import os
+
+from .models import TaskFile, Task
+
+import cloudinary
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.http import HttpResponseForbidden
+from urllib.parse import urlparse
+import os
+
+from .models import TaskFile, Task
+
+# your_app/views.py
+import requests
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.http import HttpResponse, HttpResponseForbidden
+import os
+
+from .models import TaskFile, Task
+
+import os
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.http import HttpResponseForbidden
+from .models import Task, TaskFile
+
+# This view is for handling the POST request from the Cloudinary widget
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.http import HttpResponseForbidden
+from django.contrib.auth.decorators import login_required
+from .models import Task, TaskFile
+
+@login_required
+def task_add_file(request, task_id):
+    task = get_object_or_404(Task, id=task_id)
+    user = request.user
+
+    if request.method == 'POST':
+        cloudinary_url = request.POST.get('cloudinary_url')
+        public_id = request.POST.get('public_id')
+        file_type = request.POST.get('file_type')
+
+        # This check is crucial to ensure the correct access permissions are set for each file type.
+        # It assumes that a 'submission_file' upload should be made by the advisee.
+        if file_type == 'submission_file':
+            if task.supervisee != user:
+                return HttpResponseForbidden("You do not have permission to add a submission file.")
+            if TaskFile.objects.filter(task=task, uploaded_by=user, file_type='submission_file').exists():
+                messages.error(request, 'You can only submit one file for this task.')
+                return redirect('task_detail', task_id=task.id)
+        # This part of the check is for other file types, like 'task_document'.
+        # These can only be uploaded by the admin or the supervisor.
+        elif not (user.role == 'admin' or task.supervisor == user):
+            return HttpResponseForbidden("You do not have permission to add this type of file.")
+
+        if not cloudinary_url or not public_id:
+            messages.error(request, 'Missing document information. Please try again.')
+            return redirect('task_detail', task_id=task.id)
+
+        try:
+            TaskFile.objects.create(
+                task=task,
+                cloudinary_url=cloudinary_url,
+                public_id=public_id,
+                file_type=file_type,
+                uploaded_by=user,
+            )
+            messages.success(request, 'File(s) added successfully.')
+            return redirect('task_detail', task_id=task.id)
+        except Exception as e:
+            messages.error(request, f"Error saving file: {str(e)}")
+            return redirect('task_detail', task_id=task.id)
+
+    context = {'task': task}
+    return render(request, 'tasks/task_add_file.html', context)
+
+# your_app/views.py
+import requests
+import os
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.http import HttpResponse, HttpResponseForbidden
+
+from .models import Task, TaskFile
+
+
+@login_required
+def task_download_file(request, task_id, file_id):
+    try:
+        task = get_object_or_404(Task, id=task_id)
+        task_file = get_object_or_404(TaskFile, id=file_id)
+        user = request.user
+
+        # Ensure the file belongs to the task and the user has permission
+        if task_file.task != task:
+            messages.error(request, "File does not belong to this task.")
+            return redirect('task_detail', task_id=task.id)
+
+        can_download = (user.role == 'admin' or task.supervisor == user or task.supervisee == user)
+        if not can_download:
+            return HttpResponseForbidden("You do not have permission to download this file.")
+
+        # Check if the public_id exists
+        if not task_file.public_id:
+            messages.error(request, "File is missing its public ID. It might have been uploaded incorrectly.")
+            return redirect('task_detail', task_id=task.id)
+
+        # Get the file extension from the public_id
+        file_extension = os.path.splitext(task_file.public_id)[-1].lstrip('.')
+
+        # Determine the Cloudinary resource type. This is important for downloads.
+        resource_type = 'raw' if file_extension in ['pdf', 'doc', 'docx', 'zip', 'txt'] else 'image'
+
+        # Construct the direct Cloudinary URL with the 'fl_attachment' transformation to force download.
+        download_url = (
+            f"https://res.cloudinary.com/dpupwwixw/{resource_type}/upload/fl_attachment/"
+            f"{task_file.public_id}"
+        )
+
+        # Stream the file from Cloudinary and serve it with Django's HttpResponse
+        response_from_cloudinary = requests.get(download_url, stream=True)
+        response_from_cloudinary.raise_for_status()  # Raise an exception for bad status codes
+
+        # Prepare Django's HttpResponse to send the file to the user
+        filename = f"{task_file.public_id.split('/')[-1]}"  # Use the last part of public_id as filename
+        django_response = HttpResponse(
+            response_from_cloudinary.iter_content(chunk_size=8192),
+            content_type=response_from_cloudinary.headers.get('Content-Type', 'application/octet-stream')
+        )
+        django_response['Content-Disposition'] = f'attachment; filename="{filename}"'
+
+        return django_response
+
+    except Exception as e:
+        messages.error(request, f"An error occurred while downloading the file: {e}")
+        return redirect('task_detail', task_id=task.id)
+
+@admin_required
+def task_delete(request, task_id):
+    task = get_object_or_404(Task, id=task_id)
+    if request.method == 'POST':
+        task.delete()
+        messages.success(request, 'Task deleted successfully.')
+        return redirect('task_list')
+    return render(request, 'tasks/task_delete.html', {'task': task})
+
+
+import cloudinary.uploader
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.http import HttpResponseForbidden
+
+from .models import Task, TaskFile
+
+# your_app/views.py
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.http import HttpResponseForbidden
+
+from .models import Task, TaskFile
+# your_app/views.py
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.http import HttpResponseForbidden
+from .models import Task, TaskFile
+import os
+
+@login_required
+def task_delete_file(request, task_id, file_id):
+    task = get_object_or_404(Task, id=task_id)
+    task_file = get_object_or_404(TaskFile, id=file_id, task=task)
+    user = request.user
+
+    # Permissions
+    can_delete = False
+    # Admin can delete any file
+    if user.role == 'admin':
+        can_delete = True
+    # Supervisor can delete any file on their task
+    elif task.supervisor == user:
+        can_delete = True
+    # Supervisee can only delete their own submission file
+    elif task.supervisee == user and task_file.file_type == 'submission_file' and task_file.uploaded_by == user:
+        can_delete = True
+
+    if not can_delete:
+        return HttpResponseForbidden("You do not have permission to delete this file.")
+
+    # ⚠️ This is the fix: Extract the filename to pass to the template
+    filename = os.path.basename(task_file.public_id) if task_file.public_id else "File"
+
+    if request.method == 'POST':
+        task_file.delete()
+        messages.success(request, f'File "{filename}" deleted successfully.')
+        return redirect('task_detail', task_id=task.id)
+
+    context = {
+        'task_file': task_file,
+        'filename': filename  # ⚠️ Pass the extracted filename to the template
+    }
+    return render(request, 'tasks/task_delete_file.html', context)
+from django import template
+
+register = template.Library()
+
+@register.filter
+def filename_from_public_id(public_id):
+    """
+    Extracts the filename from a Cloudinary public_id.
+    e.g., 'tasks/30001/example_file.pdf' -> 'example_file.pdf'
+    """
+    return public_id.split('/')[-1]
+
+
+# core/views.py
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse, HttpResponseForbidden
+from .models import Task # Make sure Task is imported
+
+@login_required
+def task_feedback(request, task_id):
+    task = get_object_or_404(Task, id=task_id)
+    user = request.user
+
+    # Permission check: Only the assigned supervisee can submit/edit feedback.
+    if user != task.supervisee:
+        return HttpResponseForbidden("You do not have permission to provide feedback for this task.")
+
+    if request.method == 'POST':
+        feedback_text = request.POST.get('feedback_text')
+
+        # Update the supervisee_feedback field on the Task model
+        task.supervisee_feedback = feedback_text
+        task.save()
+        messages.success(request, 'Feedback saved successfully.')
+        return redirect('task_detail', task_id=task.id)
+
+    # For a GET request, we just return a success message or JSON data
+    return JsonResponse({'status': 'ok'})
+
+
+# core/views.py
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
+from .models import Task
+
+@login_required
+def task_clear_feedback(request, task_id):
+    task = get_object_or_404(Task, id=task_id)
+    user = request.user
+
+    # Permission check: only the assigned supervisee can clear their feedback.
+    if user != task.supervisee:
+        return HttpResponseForbidden("You do not have permission to clear feedback for this task.")
+
+    if request.method == 'POST':
+        # Clear the feedback by setting the field to an empty string.
+        task.supervisee_feedback = ""
+        task.save()
+        messages.success(request, 'Feedback cleared successfully.')
+        return redirect('task_detail', task_id=task.id)
+
+    return HttpResponseForbidden("Invalid request method.")
+

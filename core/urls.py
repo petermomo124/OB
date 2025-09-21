@@ -3,6 +3,20 @@ from django.views.generic import TemplateView
 from . import views
 
 urlpatterns = [
+
+ # Task Management URLs
+    path('tasks/', views.task_list, name='task_list'),
+    path('tasks/create/', views.task_create, name='task_create'),
+    path('tasks/<int:task_id>/', views.task_detail, name='task_detail'),
+    path('tasks/<int:task_id>/update/', views.task_update, name='task_update'),
+    path('tasks/<int:task_id>/delete/', views.task_delete, name='task_delete'),
+    path('tasks/<int:task_id>/add-file/', views.task_add_file, name='task_add_file'),
+    path('tasks/<int:task_id>/delete-file/<int:file_id>/', views.task_delete_file, name='task_delete_file'),
+    path('tasks/<int:task_id>/delete-file/<int:file_id>/', views.task_delete_file, name='task_delete_file'),
+    path('tasks/<int:task_id>/download-file/<int:file_id>/', views.task_download_file, name='task_download_file'),
+    path('tasks/<int:task_id>/feedback/', views.task_feedback, name='task_feedback'),
+    path('tasks/<int:task_id>/clear-feedback/', views.task_clear_feedback, name='task_clear_feedback'),
+
     path('client-portal/password-reset/', views.forgot_password, name='forgot_password'),
     path('client-portal/verify-otp/', views.verify_otp, name='verify_otp'),
     path('client-portal/reset-password/', views.reset_password, name='reset_password'),

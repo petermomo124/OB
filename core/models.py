@@ -105,3 +105,86 @@ class PasswordResetOTP(models.Model):
         """Checks if the OTP is still valid (e.g., within 10 minutes of creation)."""
         ten_minutes_ago = timezone.now() - timezone.timedelta(minutes=10)
         return self.created_at >= ten_minutes_ago
+
+
+# core/models.py
+# ... (Your existing imports and models: Office, CustomUserManager, User, PasswordResetOTP) ...
+from django.db import models
+from django.utils import timezone
+from .models import User  # Ensure this import is correct based on your file structure
+
+
+class TaskStatus(models.TextChoices):
+    PENDING = 'Pending', 'Pending'
+    IN_PROGRESS = 'In Progress', 'In Progress'
+    COMPLETED = 'Completed', 'Completed'
+    CANCELED = 'Canceled', 'Canceled'
+
+
+class Task(models.Model):
+    task_title = models.CharField(max_length=255)
+    task_purpose = models.TextField()
+    status = models.CharField(
+        max_length=20,
+        choices=TaskStatus.choices,
+        default=TaskStatus.PENDING
+    )
+    start_date = models.DateTimeField(default=timezone.now)
+    end_date = models.DateTimeField(blank=True, null=True)
+    completion_date = models.DateTimeField(blank=True, null=True)
+
+    # Relationships
+    created_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        related_name='created_tasks',
+        null=True
+    )
+    supervisor = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        related_name='supervised_tasks',
+        null=True
+    )
+    supervisee = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        related_name='assigned_tasks',
+        null=True
+    )
+
+    # Text fields
+    comments = models.TextField(blank=True, null=True)
+    key_note = models.TextField(blank=True, null=True)
+    supervisee_feedback = models.TextField(blank=True, null=True)
+
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.task_title
+
+
+from django.db import models
+from django.utils import timezone
+from .models import User
+from .models import Task
+
+class TaskFile(models.Model):
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='task_files')
+    # Use a CharField to store the full Cloudinary URL
+    cloudinary_url = models.CharField(max_length=255)
+    file_type = models.CharField(max_length=50)
+    uploaded_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    # Store the Cloudinary-generated public ID to use for secure downloads
+    public_id = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.file_type} for {self.task.task_title}"
+
+    # You might need to add a method to get the file's name
+    def get_file_name(self):
+        # Extract the filename from the public_id
+        return self.public_id.split('/')[-1] if self.public_id else "No Name"

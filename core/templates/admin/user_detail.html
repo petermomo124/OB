@@ -64,10 +64,7 @@
                                 {% if user_to_view.is_approved %}<span class="approved-status"><i class="fas fa-check-circle"></i> Approved</span>{% else %}<span class="pending-status"><i class="fas fa-clock"></i> Pending</span>{% endif %}
                             </span>
                         </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Staff:</span>
-                            <span class="detail-value">{{ user_to_view.is_staff|yesno:"Yes,No" }}</span>
-                        </div>
+                        
                         <div class="detail-item">
                             <span class="detail-label">Date Joined:</span>
                             <span class="detail-value">{{ user_to_view.date_joined|date:"M d, Y"|default:"-" }}</span>

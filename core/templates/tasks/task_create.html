@@ -1,0 +1,370 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Create Task | OB Global{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+    .login-container {
+        background-image: url('{% static "images/login.jpg" %}');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        margin: 0;
+        position: relative;
+    }
+
+    .login-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.1);
+        z-index: 0;
+    }
+
+    .glass-form-container {
+        display: flex;
+        width: 950px;
+        max-height: 650px;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(1px);
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        margin: 0;
+        position: relative;
+        z-index: 1;
+    }
+
+    .user-emoji-side {
+        flex: 0 0 35%;
+        background: url('{% static "images/sidebar-bg.jpg" %}') center/cover no-repeat;
+        backdrop-filter: blur(1px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 25px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .user-emoji {
+        font-size: 80px;
+        margin-bottom: 15px;
+        filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.2));
+        color: white;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .welcome-text {
+        text-align: center;
+        font-size: 16px;
+        font-weight: 500;
+        margin-top: 10px;
+        position: relative;
+        z-index: 1;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .form-side {
+        flex: 0 0 65%;
+        padding: 25px;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+    }
+
+    .form-header {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .form-header h2 {
+        font-size: 24px;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 5px;
+    }
+
+    .form-header p {
+        color: #6b7280;
+        font-size: 13px;
+    }
+
+    .registration-form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .form-group {
+        margin-bottom: 0;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 4px;
+        font-weight: 500;
+        color: #374151;
+        font-size: 13px;
+    }
+
+    .form-input, .form-select, .form-control {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        font-size: 13px;
+        transition: all 0.2s;
+        background: rgba(255, 255, 255, 0.7);
+        height: 36px;
+    }
+
+    .form-input:focus, .form-select:focus, .form-control:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    .form-row {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 0;
+    }
+
+    .form-col {
+        flex: 1;
+    }
+
+    .form-col-2 {
+        flex: 2;
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 10px;
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        margin-top: 8px;
+        height: 38px;
+    }
+
+    .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(59, 130, 246, 0.3);
+    }
+    .submit-btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        color: #fff;
+    }
+    .submit-btn-secondary:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+    }
+
+    @media (max-width: 1000px) {
+        .glass-form-container {
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+        }
+    }
+
+    @media (max-width: 850px) {
+        .glass-form-container {
+            flex-direction: column;
+            width: 100%;
+            max-width: 500px;
+            max-height: 85vh;
+        }
+
+        .user-emoji-side {
+            padding: 20px;
+            flex: 0 0 auto;
+        }
+
+        .user-emoji {
+            font-size: 60px;
+        }
+
+        .form-side {
+            padding: 20px;
+            flex: 1;
+        }
+
+        .form-row {
+            flex-direction: column;
+            gap: 0;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .login-container {
+            padding: 10px;
+        }
+
+        .glass-form-container {
+            border-radius: 15px;
+        }
+
+        .user-emoji-side {
+            padding: 15px;
+        }
+
+        .form-side {
+            padding: 15px;
+        }
+
+        .form-input, .form-select, .form-control {
+            padding: 6px 10px;
+            font-size: 12px;
+        }
+    }
+    .user-emoji i {
+        font-size: 180px;
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="glass-form-container">
+        <div class="user-emoji-side">
+            <div class="user-emoji">
+                <i class="fas fa-clipboard-list"></i>
+            </div>
+            <div class="welcome-text">Create New Task</div>
+        </div>
+
+        <div class="form-side">
+            <div class="form-header">
+                <h2>New Task Assignment</h2>
+                <p>Fill out the details to assign a task</p>
+            </div>
+
+            <form class="registration-form" method="post" class="row g-4">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="task_title" class="form-label">Task Title <span class="text-danger">*</span></label>
+                    <input type="text" class="form-input" id="task_title" name="task_title" placeholder="e.g., Q3 Financial Report" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="task_purpose" class="form-label">Task Purpose <span class="text-danger">*</span></label>
+                    <textarea class="form-input" id="task_purpose" name="task_purpose" rows="4" placeholder="Describe the task objective and key deliverables." required></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="start_date" class="form-label">Start Date <span class="text-danger">*</span></label>
+                            <input type="datetime-local" class="form-input" id="start_date" name="start_date" required>
+                        </div>
+                    </div>
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="end_date" class="form-label">End Date</label>
+                            <input type="datetime-local" class="form-input" id="end_date" name="end_date">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="supervisor" class="form-label">Supervisor <span class="text-danger">*</span></label>
+                            <select class="form-input" id="supervisor" name="supervisor" required>
+                                <option value="" disabled selected>Select a Supervisor</option>
+                                {% for user in available_users %}
+                                <option value="{{ user.id }}" data-full-name="{{ user.first_name }} {{ user.last_name }}">{{ user.first_name }} {{ user.last_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="supervisee" class="form-label">Supervisee <span class="text-danger">*</span></label>
+                            <select class="form-input" id="supervisee" name="supervisee" required>
+                                <option value="" disabled selected>Select a Supervisee</option>
+                                {% for user in available_users %}
+                                <option value="{{ user.id }}" data-full-name="{{ user.first_name }} {{ user.last_name }}">{{ user.first_name }} {{ user.last_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row d-flex justify-content-end gap-3 mt-4">
+                    <a href="{% url 'task_list' %}" class="btn submit-btn submit-btn-secondary">Cancel</a>
+                    <button type="submit" class="btn submit-btn">Create Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const supervisorSelect = document.getElementById('supervisor');
+        const superviseeSelect = document.getElementById('supervisee');
+        
+        function updateDropdowns() {
+            const selectedSupervisor = supervisorSelect.value;
+            const selectedSupervisee = superviseeSelect.value;
+
+            const supervisorOptions = Array.from(supervisorSelect.options);
+            const superviseeOptions = Array.from(superviseeSelect.options);
+            
+            supervisorOptions.forEach(opt => { opt.disabled = false; opt.style.display = ''; });
+            superviseeOptions.forEach(opt => { opt.disabled = false; opt.style.display = ''; });
+
+            if (selectedSupervisor) {
+                const superviseeOptionToDisable = superviseeSelect.querySelector(`option[value="${selectedSupervisor}"]`);
+                if (superviseeOptionToDisable) {
+                    superviseeOptionToDisable.disabled = true;
+                    superviseeOptionToDisable.style.display = 'none';
+                }
+            }
+            
+            if (selectedSupervisee) {
+                const supervisorOptionToDisable = supervisorSelect.querySelector(`option[value="${selectedSupervisee}"]`);
+                if (supervisorOptionToDisable) {
+                    supervisorOptionToDisable.disabled = true;
+                    supervisorOptionToDisable.style.display = 'none';
+                }
+            }
+        }
+
+        supervisorSelect.addEventListener('change', updateDropdowns);
+        superviseeSelect.addEventListener('change', updateDropdowns);
+
+        updateDropdowns();
+    });
+</script>
+{% endblock %}
