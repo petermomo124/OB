@@ -70,7 +70,7 @@ urlpatterns = [
     # Client Portal
     path('client-portal/', views.user_login, name='client_portal'),
     # Subscription
-    path('subscribe/', TemplateView.as_view(template_name='subscription/subscribe.html'), name='subscribe'),
+    path('subscribe/', views.subscribe_redirect, name='subscribe'), # Replaces the old static view
     
     # RFP
     path('rfp/', TemplateView.as_view(template_name='rfp/request.html'), name='request_proposal'),

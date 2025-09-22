@@ -1543,3 +1543,22 @@ def task_clear_feedback(request, task_id):
 
     return HttpResponseForbidden("Invalid request method.")
 
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.urls import reverse
+from django.db.models import Q
+from django.utils import timezone
+import random
+from cloudinary.uploader import destroy as cloudinary_destroy
+import cloudinary
+
+
+def subscribe_redirect(request):
+    """
+    Redirects the user to the newsletter app's subscription page.
+    """
+    return redirect('newsletter:subscribe')

@@ -1,0 +1,303 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}Create Newsletter | OB Global{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ---------------------------------- */
+    /* Base & Layout Styles               */
+    /* ---------------------------------- */
+    body {
+        background-image: url('{% static "images/bk.jpg" %}');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .form-card {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+    }
+
+    h1 {
+        color: black;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-weight: 700;
+        text-align: center;
+    }
+
+    .form-header {
+        text-align: center;
+        margin-bottom: 30px;
+        border-bottom: 2px solid #e0e0e0;
+        padding-bottom: 20px;
+    }
+
+    .form-header h2 {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 5px;
+        color: #1a202c;
+    }
+
+    .form-header p {
+        color: #718096;
+        font-size: 16px;
+    }
+
+    /* ---------------------------------- */
+    /* Form Field Styles                  */
+    /* ---------------------------------- */
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 10px;
+        color: #2d3748;
+        font-size: 15px;
+    }
+
+    .form-field {
+        width: 100%;
+        padding: 14px 18px;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        box-sizing: border-box;
+        font-size: 16px;
+        transition: all 0.3s ease-in-out;
+        background-color: #f7fafc;
+        color: #4a5568;
+    }
+
+    .form-field:focus {
+        outline: none;
+        border-color: #4299e1;
+        box-shadow: 0 0 0 4px rgba(66, 153, 225, 0.2);
+        background-color: white;
+    }
+
+    .form-field:hover {
+        border-color: #a0aec0;
+    }
+
+    .form-group textarea.form-field {
+        min-height: 180px;
+        resize: vertical;
+    }
+
+    /* Styles for checkboxes */
+    .checkbox-group p {
+        font-weight: 600;
+        color: #2d3748;
+        font-size: 15px;
+        margin-bottom: 15px;
+    }
+
+    .checkbox-item {
+        display: inline-flex;
+        align-items: center;
+        margin-right: 30px;
+        margin-bottom: 10px;
+    }
+
+    .checkbox-item label {
+        display: inline-block;
+        margin: 0;
+        font-weight: 500;
+        color: #4a5568;
+        font-size: 15px;
+        cursor: pointer;
+    }
+
+    .checkbox-item input[type="checkbox"] {
+        margin-right: 10px;
+        vertical-align: middle;
+        width: 18px;
+        height: 18px;
+        border: 1px solid #cbd5e0;
+        border-radius: 4px;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .checkbox-item input[type="checkbox"]:checked {
+        background-color: #4299e1;
+        border-color: #4299e1;
+    }
+
+    .checkbox-item input[type="checkbox"]:checked::after {
+        content: '\2713';
+        color: white;
+        font-size: 14px;
+        position: relative;
+        top: -2px;
+        left: 2px;
+    }
+
+    /* ---------------------------------- */
+    /* Button Styles                      */
+    /* ---------------------------------- */
+    .button-group {
+        margin-top: 35px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 15px;
+    }
+
+    .btn {
+        padding: 12px 28px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-align: center;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        font-size: 16px;
+    }
+
+    .btn-cancel {
+        background-color: #e2e8f0;
+        color: #4a5568;
+    }
+
+    .btn-cancel:hover {
+        background-color: #cbd5e0;
+        transform: translateY(-2px);
+    }
+
+    .btn-save {
+        background-color: #48bb78;
+        color: white;
+    }
+
+    .btn-save:hover {
+        background-color: #38a169;
+        transform: translateY(-2px);
+    }
+
+    .btn i {
+        margin-right: 8px;
+    }
+
+    /* ---------------------------------- */
+    /* Mobile Responsiveness              */
+    /* ---------------------------------- */
+    @media (max-width: 768px) {
+        .container {
+            padding: 15px;
+        }
+
+        .form-card {
+            padding: 25px;
+            box-shadow: none; /* Reduce shadow for a cleaner look on mobile */
+        }
+
+        .form-header h2 {
+            font-size: 24px;
+        }
+
+        .form-header p {
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-field {
+            padding: 12px 15px;
+            font-size: 15px;
+        }
+
+        .form-group textarea.form-field {
+            min-height: 150px;
+        }
+
+        .checkbox-group p {
+            font-size: 14px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            margin-right: 0;
+            margin-bottom: 10px;
+        }
+
+        .button-group {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+        }
+    }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Create Newsletter</h1>
+    <div class="form-card">
+        <div class="form-header">
+            <h2>Compose a New Newsletter</h2>
+            <p>Fill out the details to create a new newsletter.</p>
+        </div>
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="{{ form.title.id_for_label }}">Title</label>
+                {{ form.title|add_class:"form-field" }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.message.id_for_label }}">Message</label>
+                {{ form.message|add_class:"form-field" }}
+            </div>
+
+            <div class="form-group checkbox-group">
+                <p><b>Target Audience Preferences:</b></p>
+                {% for field in form.preferences %}
+                <div class="checkbox-item">
+                    {{ field.tag }}
+                    <label for="{{ field.id_for_label }}">{{ field.choice_label }}</label>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="button-group">
+                <a href="{% url 'newsletter:newsletter_list' %}" class="btn btn-cancel">
+                    <i class="fas fa-times"></i> Cancel
+                </a>
+                <button type="submit" class="btn btn-save">
+                    <i class="fas fa-plus"></i> Create Newsletter
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

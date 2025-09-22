@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Primary Color Palette */
+    --color-primary-50: #f0f5ff;
+    --color-primary-100: #e0ebff;
+    --color-primary-200: #c7dbff;
+    --color-primary-300: #a5c4ff;
+    --color-primary-400: #7ba0d4;
+    --color-primary-500: #5a7fb8;
+    --color-primary-600: #4a6ba3;
+    --color-primary-700: #3d5784;
+    --color-primary-800: #344966;
+    --color-primary-900: #2c3c54;
+    --color-primary-950: #1e2838;
+    
+    /* Black and white */
+    --color-black: #000000;
+    --color-white: #FFFFFF;
+    
+    /* Grayscale */
+    --color-gray-50: #f9fafb;
+    --color-gray-100: #f3f4f6;
+    --color-gray-200: #e5e7eb;
+    --color-gray-300: #d1d5db;
+    --color-gray-400: #9ca3af;
+    --color-gray-500: #6b7280;
+    --color-gray-600: #4b5563;
+    --color-gray-700: #374151;
+    --color-gray-800: #1f2937;
+    --color-gray-900: #111827;
+    
+    /* Semantic colors */
+    --color-success: #10b981;
+    --color-warning: #f59e0b;
+    --color-error: #ef4444;
+    --color-info: #3b82f6;
+  }
+}
+
+/* Custom Fonts */
+@font-face {
+  font-family: 'EYInterstate';
+  src: url('../fonts/EYInterstate-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'EYInterstate';
+  src: url('../fonts/EYInterstate-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Custom Utilities */
+.font-ey-interstate {
+  font-family: 'EYInterstate', Arial, sans-serif;
+}

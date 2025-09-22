@@ -1,0 +1,419 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Newsletter | OB Global{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ---------------------------------- */
+    /* Base Styles & Layout      */
+    /* ---------------------------------- */
+    .login-container {
+        background-image: url('{% static "images/login.jpg" %}');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        margin: 0;
+        position: relative;
+    }
+
+    .login-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.1);
+        z-index: 0;
+    }
+
+    .glass-form-container {
+        display: flex;
+        flex-direction: column; /* Changed to column for dashboard layout */
+        width: 90%;
+        max-width: 900px;
+        background: rgba(255, 255, 255, 0.9); /* Slightly more transparent */
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        position: relative;
+        z-index: 1;
+    }
+
+    .dashboard-header {
+        text-align: center;
+        padding: 30px 20px 10px;
+        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        color: white;
+        border-radius: 0 0 30px 30px;
+        margin-bottom: 20px;
+    }
+
+    .dashboard-header h2 {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .dashboard-header p {
+        font-size: 16px;
+        opacity: 0.9;
+    }
+
+    .dashboard-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 25px;
+        padding: 20px 30px 40px;
+    }
+
+    .dashboard-card {
+        flex: 0 0 calc(50% - 25px);
+        max-width: 300px;
+        background: white;
+        border-radius: 16px;
+        padding: 30px 25px;
+        text-align: center;
+        text-decoration: none;
+        color: #1f2937;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .dashboard-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+    }
+
+    .dashboard-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .dashboard-card i {
+        font-size: 48px;
+        margin-bottom: 20px;
+        background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        transition: all 0.3s ease;
+    }
+
+    .dashboard-card:hover i {
+        transform: scale(1.2);
+    }
+
+    .dashboard-card h3 {
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .dashboard-card p {
+        font-size: 14px;
+        color: #6b7280;
+        margin: 0;
+    }
+
+    /* Messages */
+    .alert {
+        padding: 15px 20px;
+        border-radius: 12px;
+        margin: 20px 30px 10px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 500;
+    }
+
+    .alert-success {
+        background-color: #d1fae5;
+        color: #065f46;
+        border: 1px solid #a7f3d0;
+    }
+
+    .alert-error, .alert-danger {
+        background-color: #fee2e2;
+        color: #b91c1c;
+        border: 1px solid #fecaca;
+    }
+
+    .alert-info {
+        background-color: #dbeafe;
+        color: #1e40af;
+        border: 1px solid #bfdbfe;
+    }
+
+    .alert-warning {
+        background-color: #fef3c7;
+        color: #92400e;
+        border: 1px solid #fde68a;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .dashboard-card {
+            flex: 0 0 100%;
+        }
+
+        .glass-form-container {
+            width: 95%;
+        }
+
+        .dashboard-container {
+            padding: 20px 15px 30px;
+            gap: 15px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .dashboard-header h2 {
+            font-size: 24px;
+        }
+
+        .dashboard-header p {
+            font-size: 14px;
+        }
+
+        .dashboard-card {
+            padding: 20px 15px;
+        }
+
+        .dashboard-card i {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .dashboard-card h3 {
+            font-size: 18px;
+        }
+    }
+
+    /* Animation */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .dashboard-card {
+        animation: fadeIn 0.5s ease forwards;
+    }
+
+    .dashboard-card:nth-child(1) {
+        animation-delay: 0.1s;
+    }
+
+    .dashboard-card:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    /* --- New Visualization Styles (using CSS Grid) --- */
+    .dashboard-stats-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+        padding: 0px 30px 40px;
+    }
+
+    .chart-card {
+        background: white;
+        border-radius: 16px;
+        padding: 25px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .chart-card h3 {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 15px;
+        color: #1f2937;
+    }
+
+    .chart-card canvas {
+        max-height: 250px;
+    }
+
+    /* Responsive grid layout */
+    @media (max-width: 768px) {
+        .dashboard-stats-container {
+            grid-template-columns: 1fr;
+            padding: 0px 15px 30px;
+        }
+    }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="glass-form-container">
+        <div class="dashboard-header">
+            <h2><i class="fas fa-newspaper me-2"></i> Newsletter Dashboard</h2>
+            <p>Manage your newsletter subscribers and content</p>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    <i class="fas
+                        {% if message.tags == 'success' %}fa-check-circle
+                        {% elif message.tags == 'error' or message.tags == 'danger' %}fa-exclamation-circle
+                        {% elif message.tags == 'warning' %}fa-exclamation-triangle
+                        {% else %}fa-info-circle{% endif %}">
+                    </i>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="dashboard-container">
+            <a href="{% url 'newsletter:subscriber_list' %}" class="dashboard-card">
+                <i class="fas fa-users"></i>
+                <h3>Manage Subscribers</h3>
+                <p>View, add, edit, or remove newsletter subscribers</p>
+            </a>
+
+            <a href="{% url 'newsletter:newsletter_list' %}" class="dashboard-card">
+                <i class="fas fa-envelope-open-text"></i>
+                <h3>Manage Newsletters</h3>
+                <p>Create and send newsletters to your subscribers</p>
+            </a>
+        </div>
+
+        <div class="dashboard-stats-container">
+            <div class="chart-card">
+                <h3>Subscriber Verification</h3>
+                <canvas id="verificationChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3>Newsletter Preferences</h3>
+                <canvas id="preferencesChart"></canvas>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Data for Subscriber Verification Chart
+        const verificationData = {
+            labels: ['Verified', 'Unverified'],
+            datasets: [{
+                label: 'Subscriber Verification',
+                data: [{{ verified_subscribers }}, {{ unverified_subscribers }}],
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.8)',
+                    'rgba(255, 99, 132, 0.8)'
+                ],
+                borderColor: [
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(255, 99, 132, 1)'
+                ],
+                borderWidth: 1
+            }]
+        };
+
+        const verificationConfig = {
+            type: 'doughnut',
+            data: verificationData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+                    title: {
+                        display: false,
+                    }
+                }
+            }
+        };
+
+        new Chart(
+            document.getElementById('verificationChart'),
+            verificationConfig
+        );
+
+        // Data for Newsletter Preferences Chart
+        const preferenceData = {
+            labels: [{% for label in preference_labels %}'{{ label|title }}'{% if not forloop.last %}, {% endif %}{% endfor %}],
+            datasets: [{
+                label: 'Subscribers by Preference',
+                data: [{{ preference_data|join:"," }}],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.8)',
+                    'rgba(255, 159, 64, 0.8)',
+                    'rgba(255, 205, 86, 0.8)',
+                    'rgba(75, 192, 192, 0.8)',
+                    'rgba(54, 162, 235, 0.8)',
+                    'rgba(153, 102, 255, 0.8)',
+                    'rgba(201, 203, 207, 0.8)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(255, 205, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(201, 203, 207, 1)'
+                ],
+                borderWidth: 1
+            }]
+        };
+
+        const preferencesConfig = {
+            type: 'bar',
+            data: preferenceData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        };
+
+        new Chart(
+            document.getElementById('preferencesChart'),
+            preferencesConfig
+        );
+    });
+</script>
+{% endblock %}

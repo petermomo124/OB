@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Manage Subscribers | OB Global{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ---------------------------------- */
+    /* Base Styles & Layout               */
+    /* ---------------------------------- */
+    body {
+        background-image: url('{% static "images/bk.jpg" %}'); /* Consistent background image */
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    /* ---------------------------------- */
+    /* User Table-like Styles             */
+    /* ---------------------------------- */
+    h1 {
+        color: black;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .admin-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        gap: 15px;
+    }
+
+    .table-container {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        overflow-x: auto;
+    }
+
+    .styled-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .styled-table thead tr {
+        background: #f8f9fa; /* Consistent header background */
+        color: #1f2937;
+    }
+
+    .styled-table th,
+    .styled-table td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #dee2e6; /* Consistent border color */
+        white-space: nowrap;
+    }
+
+    .styled-table th {
+        font-weight: 600;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    .styled-table tbody tr:nth-of-type(even) {
+        background-color: #f6f6f6; /* Lighter even row color for consistency */
+    }
+
+    .styled-table tbody tr:hover {
+        background-color: #e9ecef; /* Consistent hover effect */
+    }
+
+    .styled-table tbody tr:last-of-type {
+        border-bottom: 2px solid #3b82f6;
+    }
+
+    .empty-message {
+        text-align: center;
+        padding: 20px;
+        color: #6b7280;
+    }
+
+    /* Actions buttons */
+    .btn-actions {
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+    }
+
+    .btn-actions .btn {
+        padding: 4px 8px; /* Smaller padding for consistency */
+        border: 1px solid;
+        border-radius: 3px;
+        color: white;
+        cursor: pointer;
+        text-decoration: none;
+        font-size: 12px; /* Smaller font for consistency */
+        transition: opacity 0.3s;
+    }
+    .btn-actions .btn:hover {
+        opacity: 0.8;
+    }
+
+    .btn-view { background-color: #17a2b8; border-color: #17a2b8; }
+    .btn-update { background-color: #ffc107; border-color: #ffc107; color: black; }
+    .btn-delete { background-color: #dc3545; border-color: #dc3545; }
+
+    /* Messages */
+    .alert {
+        padding: 15px 20px;
+        border-radius: 12px;
+        margin: 20px 0 10px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 500;
+    }
+
+    .alert-success {
+        background-color: #d1fae5;
+        color: #065f46;
+        border: 1px solid #a7f3d0;
+    }
+
+    .alert-error {
+        background-color: #fee2e2;
+        color: #b91c1c;
+        border: 1px solid #fecaca;
+    }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Manage Subscribers</h1>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="table-container">
+        {% if subscribers %}
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Verified</th>
+                    <th>Preferences</th>
+                    <th>Subscribed On</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for subscriber in subscribers %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ subscriber.first_name }} {{ subscriber.last_name }}</td>
+                    <td>{{ subscriber.email }}</td>
+                    <td>
+                        {% if subscriber.is_verified %}
+                            <i class="fas fa-check-circle" style="color: green;"></i> Yes
+                        {% else %}
+                            <i class="fas fa-times-circle" style="color: red;"></i> No
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if subscriber.audit %}Audit{% endif %}
+                        {% if subscriber.tax %}, Tax{% endif %}
+                        {% if subscriber.consulting %}, Consulting{% endif %}
+                        {% if subscriber.forensic_service %}, Forensic Service{% endif %}
+                        {% if subscriber.managed_service %}, Managed Service{% endif %}
+                        {% if subscriber.technology_solution %}, Technology Solution{% endif %}
+                        {% if subscriber.advisory %}, Advisory{% endif %}
+                    </td>
+                    <td>{{ subscriber.created_at|date:"M d, Y" }}</td>
+                    <td class="btn-actions">
+                        <a href="{% url 'newsletter:subscriber_detail' pk=subscriber.pk %}" class="btn btn-view">
+                            <i class="fas fa-eye"></i> View
+                        </a>
+                        <a href="{% url 'newsletter:update_subscriber' pk=subscriber.pk %}" class="btn btn-update">
+                            <i class="fas fa-edit"></i> Update
+                        </a>
+                        <form method="post" action="{% url 'newsletter:delete_subscriber' pk=subscriber.pk %}" onsubmit="return confirm('Are you sure you want to delete this subscriber?');" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-delete">
+                                <i class="fas fa-trash-alt"></i> Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="empty-message">No subscribers found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <p class="empty-message">No subscribers found.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

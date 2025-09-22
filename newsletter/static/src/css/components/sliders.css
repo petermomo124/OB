@@ -1,0 +1,240 @@
+/* Hero Slider Styles */
+.hero-slider {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.hero-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.hero-slide.active {
+    opacity: 1;
+    z-index: 1;
+}
+
+.hero-slide-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
+    color: white;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* Slider Navigation */
+.slider-nav {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    z-index: 10;
+    padding: 0 1rem;
+    transform: translateY(-50%);
+}
+
+.slider-prev,
+.slider-next {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.slider-prev:hover,
+.slider-next:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(1.1);
+}
+
+/* Slider Dots */
+.slider-dots {
+    position: absolute;
+    bottom: 2rem;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    z-index: 10;
+}
+
+.slider-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.slider-dot.active,
+.slider-dot:hover {
+    background: white;
+    transform: scale(1.2);
+}
+
+/* Testimonial Slider */
+.testimonial-slider {
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem 0;
+}
+
+.testimonial {
+    display: none;
+    text-align: center;
+    padding: 2rem;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.testimonial.active {
+    display: block;
+    opacity: 1;
+}
+
+.testimonial-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin: 0 auto 1.5rem;
+    overflow: hidden;
+    border: 4px solid #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.testimonial-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.testimonial-content {
+    font-style: italic;
+    font-size: 1.25rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    color: #4a5568;
+}
+
+.testimonial-author {
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 0.25rem;
+}
+
+.testimonial-role {
+    color: #718096;
+    font-size: 0.9rem;
+}
+
+.testimonial-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+}
+
+.testimonial-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #cbd5e0;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.testimonial-dot.active,
+.testimonial-dot:hover {
+    background: #4a5568;
+    transform: scale(1.2);
+}
+
+/* Counter Styles */
+.counter-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 2rem;
+    padding: 3rem 0;
+}
+
+.counter-item {
+    text-align: center;
+    flex: 1;
+    min-width: 150px;
+}
+
+.counter {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #2b6cb0;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.counter-label {
+    font-size: 1.1rem;
+    color: #4a5568;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .hero-slide-content {
+        padding: 1rem;
+    }
+    
+    .testimonial-content {
+        font-size: 1.1rem;
+    }
+    
+    .counter-item {
+        min-width: 120px;
+    }
+    
+    .counter {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .slider-nav {
+        display: none;
+    }
+    
+    .counter-container {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .counter-item {
+        min-width: 100%;
+    }
+}

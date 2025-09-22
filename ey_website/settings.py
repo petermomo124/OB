@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     'core',
     'cloudinary',
     'cloudinary_storage',
+    'newsletter',  # <-- Add the new app here
+    'widget_tweaks',  # Add this line
+
 ]
 
 # Cloudinary Configuration
