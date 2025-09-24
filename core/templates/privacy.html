@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Privacy Policy | OB Global{% endblock %}
+
+{% block extra_css %}
+<style>
+    .login-container {
+        background-image: url('{% static "images/login.jpg" %}');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        margin: 0;
+        position: relative;
+    }
+
+    .login-container::before {
+        content: '';
+        position: absolute;
+        top: 5;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.1);
+        z-index: 0;
+    }
+
+    .glass-form-container {
+        display: flex;
+        width: 950px;
+        max-width: 95%;
+        max-height: 590px;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(1px);
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        margin: 0;
+        position: relative;
+        z-index: 1;
+    }
+
+    .user-emoji-side {
+        flex: 0 0 35%;
+        background: url('{% static "images/sidebar-bg.jpg" %}') center/cover no-repeat;
+        backdrop-filter: blur(1px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 25px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .user-emoji {
+        font-size: 80px;
+        margin-bottom: 15px;
+        filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.2));
+        color: white;
+        position: relative;
+        z-index: 1;
+    }
+
+    .welcome-text {
+        text-align: center;
+        font-size: 16px;
+        font-weight: 500;
+        margin-top: 10px;
+        position: relative;
+        z-index: 1;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    .form-side {
+        flex: 0 0 65%;
+        padding: 25px;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+    }
+
+    .form-header {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .form-header h2 {
+        font-size: 24px;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 5px;
+    }
+
+    .form-header p {
+        color: #6b7280;
+        font-size: 13px;
+    }
+
+    /* Additional styles for the privacy content */
+    .form-side .prose {
+        margin-top: 10px;
+        font-size: 15px;
+    }
+
+    .form-side .prose h2 {
+        font-size: 18px;
+        font-weight: bold;
+        margin-top: 20px;
+        margin-bottom: 8px;
+        color: #1f2937;
+    }
+
+    .form-side .prose p {
+        margin-bottom: 12px;
+    }
+
+    @media (max-width: 1000px) {
+        .glass-form-container {
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+        }
+    }
+
+    @media (max-width: 850px) {
+        .glass-form-container {
+            flex-direction: column;
+            width: 100%;
+            max-width: 500px;
+            max-height: 85vh;
+        }
+
+        .user-emoji-side {
+            padding: 20px;
+            flex: 0 0 auto;
+        }
+
+        .user-emoji {
+            font-size: 60px;
+        }
+
+        .form-side {
+            padding: 20px;
+            flex: 1;
+        }
+
+        .form-row {
+            flex-direction: column;
+            gap: 0;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .login-container {
+            padding: 10px;
+        }
+
+        .glass-form-container {
+            border-radius: 15px;
+        }
+
+        .user-emoji-side {
+            padding: 15px;
+        }
+
+        .form-side {
+            padding: 15px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="glass-form-container">
+        <div class="user-emoji-side">
+            <div class="user-emoji">🛡️</div>
+            <div class="welcome-text">Your Privacy Matters</div>
+        </div>
+
+        <div class="form-side">
+            <div class="form-header">
+                <h2>Privacy Policy</h2>
+                <p>Learn how we protect your personal information.</p>
+            </div>
+            
+            <div class="prose max-w-none text-gray-600 space-y-6">
+                <p>
+                    This Privacy Policy describes how your personal information is collected, used, and shared when you visit or interact with our services.
+                </p>
+
+                <h2>Information We Collect</h2>
+                <p>
+                    When you contact us, we collect information such as your name, email address, and message content. This information is used solely to respond to your inquiry and provide the requested services.
+                </p>
+
+                <h2>How We Use Your Information</h2>
+                <p>
+                    The information we collect is used to communicate with you, process your requests, and improve our services. We do not share your personal information with third parties for marketing purposes.
+                </p>
+
+                <h2>Security of Your Information</h2>
+                <p>
+                    We take reasonable measures to protect your information from unauthorized access, use, or disclosure. However, no internet transmission is ever completely secure or error-free. You are responsible for protecting your own account credentials and information.
+                </p>
+
+                <h2>Your Choices</h2>
+                <p>
+                    You have the right to access, correct, or delete your personal information. If you wish to exercise these rights, please contact us using the information on our contact page.
+                </p>
+
+                <h2>Changes to This Policy</h2>
+                <p>
+                    We may update this privacy policy from time to time. We will notify you of any changes by posting the new policy on this page. We encourage you to review this policy periodically for any updates.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

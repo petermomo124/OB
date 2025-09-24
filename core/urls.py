@@ -65,8 +65,9 @@ urlpatterns = [
     path('about/global-presence/', TemplateView.as_view(template_name='regional/index.html'), name='global_presence'),
     
     # Contact
-    path('contact/', TemplateView.as_view(template_name='contact/index.html'), name='contact'),
-    
+    path('contact/', views.contact_us, name='contact'),
+    path('privacy-policy/', views.privacy_policy, name='privacy'),
+
     # Client Portal
     path('client-portal/', views.user_login, name='client_portal'),
     # Subscription

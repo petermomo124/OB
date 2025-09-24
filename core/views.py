@@ -1562,3 +1562,89 @@ def subscribe_redirect(request):
     Redirects the user to the newsletter app's subscription page.
     """
     return redirect('newsletter:subscribe')
+
+from django.shortcuts import render, redirect
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.contrib import messages
+
+# ... (rest of your existing views)
+
+def contact_us(request):
+    """
+    Handles the contact form submission and sends an email.
+    """
+    if request.method == 'POST':
+        # Get data from the form
+        category = request.POST.get('question_category')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        job_title = request.POST.get('job_title')
+        company = request.POST.get('company')
+        location = request.POST.get('location')
+        postal_code = request.POST.get('postal_code')
+        message = request.POST.get('message')
+        phone_number = request.POST.get('phone_number')
+        email = request.POST.get('email')
+        hear_about = request.POST.get('hear_about_us')
+
+        # Check for required fields
+        if not all([category, first_name, last_name, email, message]):
+            messages.error(request, "Please fill in all required fields.")
+            return render(request, 'contact/index.html')
+
+        # Render email content from a template
+        subject = f'New Contact Form Submission: {category}'
+        html_message = render_to_string('contact/email_template.html', {
+            'category': category,  # Pass the category variable to the template
+            'first_name': first_name,
+            'last_name': last_name,
+            'job_title': job_title,
+            'company': company,
+            'location': location,
+            'postal_code': postal_code,
+            'message': message,
+            'phone_number': phone_number,
+            'email': email,
+            'hear_about': hear_about,
+        })
+        plain_message = f"""
+        New Contact Form Submission
+
+        Category: {category}
+        Name: {first_name} {last_name}
+        Job Title: {job_title}
+        Company: {company}
+        Location: {location}
+        Postal Code: {postal_code}
+        Phone: {phone_number}
+        Email: {email}
+        Heard About Us: {hear_about}
+        Message: {message}
+        """
+
+        try:
+            # Send the email using settings from your settings.py
+            send_mail(
+                subject,
+                plain_message,
+                'petermomo124@gmail.com',  # From email, defined in settings
+                ['Obconsultfirm@gmail.com'],  # To email
+                html_message=html_message,
+                fail_silently=False,
+            )
+            messages.success(request, "Thank you! Your message has been sent successfully.")
+            return redirect('contact')
+        except Exception as e:
+            messages.error(request, f"There was an error sending your message. Please try again. Error: {e}")
+            return render(request, 'contact/index.html')
+
+    # For a GET request, just render the form
+    return render(request, 'contact/index.html')
+
+
+
+from django.shortcuts import render
+
+def privacy_policy(request):
+    return render(request, 'privacy.html')

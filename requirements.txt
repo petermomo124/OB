@@ -1,10 +1,10 @@
 Django==5.2.1
-gunicorn==21.2.0
+gunicorn==23.0.0
 whitenoise==6.6.0
 dj-database-url==2.0.0
 cloudinary==1.44.0
 django-cloudinary-storage==0.3.0
-mysqlclient==2.1.1  
+mysqlclient==2.2.7
 mysql-connector-python==8.0.33
 Pillow==10.4.0
 requests==2.31.0
@@ -14,4 +14,6 @@ django-pwa==1.1.0
 qrcode==7.4.2
 reportlab==4.4.3
 africastalking==1.2.9
+setuptools<81.0.0
+
 

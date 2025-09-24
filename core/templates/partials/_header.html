@@ -6,8 +6,7 @@
         <div class="container">
             {% if not user.is_authenticated %}
             <div class="global-links">
-                <a href="#" class="global-link"><i class="fas fa-envelope"></i> Contact Us</a>
-                <span class="separator">|</span>
+<a href="{% url 'contact' %}" class="global-link"><i class="fas fa-envelope"></i> Contact Us</a>                <span class="separator">|</span>
                 <a href="#" class="global-link"><i class="fas fa-question-circle"></i> RFP</a>
                 <span class="separator">|</span>
 <a href="{% url 'newsletter:subscribe' %}" class="global-link"><i class="fas fa-bell"></i> Subscription</a>                <span class="separator">|</span>
