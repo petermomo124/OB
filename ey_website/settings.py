@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'cloudinary_storage',
     'newsletter',  # <-- Add the new app here
     'widget_tweaks',  # Add this line
+    'chatbot',
 
 ]
 
@@ -209,3 +210,5 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'petermomo124@gmail.com'
 EMAIL_HOST_PASSWORD = 'opnz wkay pouc wbwz'
+
+GEMINI_API_KEY = 'AIzaSyBlxToNTAEUXmZtqgCV9XsZww6gu9QqB7Y'

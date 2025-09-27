@@ -22,4 +22,6 @@ urlpatterns = [
     path('', include('core.urls')),
     path('newsletter/', include('newsletter.urls')),  # <-- Add this line
 
+    path('ai/', include('chatbot.urls')),  # Access the chatbot via /ai/chat/
+
 ]

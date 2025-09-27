@@ -239,6 +239,9 @@
 {% endif %}
 
     {% if request.user.is_authenticated %}
+        <a href="{% url 'chatbot_view' %}" class="global-link chatbot-link">
+        <i class="fas fa-robot"></i> AI Chatbot
+    </a>
         {% if request.user.role == 'admin' or request.user.role == 'staff' %}
             <a href="{% url 'task_list' %}" class="global-link"><i class="fas fa-tasks"></i> Tasks</a>
             <span class="separator">|</span>
@@ -931,6 +934,59 @@ body {
 .separator {
     color: #ccc;
     padding: 0 10px;
+}
+/* Basic styling for the new chatbot link */
+.chatbot-link {
+    /* Optional: Add a subtle color to distinguish it from other links */
+    color: #3498db; /* A blue color often associated with AI/tech */
+    font-weight: 600;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.chatbot-link:hover {
+    color: #2980b9; /* Darker blue on hover */
+    /* Optional: Small lift effect */
+    transform: translateY(-1px);
+}
+
+/* Ensure Font Awesome icons look correct */
+.chatbot-link i {
+    margin-right: 0.5rem;
+}
+
+/* Basic styling for the new chatbot link */
+.chatbot-link {
+    /* Optional: Add a subtle color to distinguish it from other links */
+    color: #3498db; /* A blue color often associated with AI/tech */
+    font-weight: 600;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.chatbot-link:hover {
+    color: #2980b9; /* Darker blue on hover */
+    /* Optional: Small lift effect */
+    transform: translateY(-1px);
+}
+
+/* Ensure Font Awesome icons look correct */
+.chatbot-link i {
+    margin-right: 0.5rem;
+}
+
+/* Style for the separator, if needed */
+.separator {
+    color: #ccc;
+    margin: 0 8px;
+    font-size: 1.1rem;
+}
+
+/* Ensure .global-link styles are consistent for all links */
+.global-link {
+    text-decoration: none;
+    padding: 0.5rem 0.8rem;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
 }
 </style>
 
