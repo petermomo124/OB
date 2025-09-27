@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-6qie*%tx8#%7sr7kch=mt+y=^fyd8ajekc04n@_mntmws5m-p5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # Allow all hosts - USE WITH CAUTION IN PRODUCTION!
 ALLOWED_HOSTS = ['*']
@@ -183,7 +183,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'core.User'
 
 # Security settings - adjust these based on your environment
-DEBUG = True
+DEBUG = False
 
 # Logging configuration
 LOGGING = {
