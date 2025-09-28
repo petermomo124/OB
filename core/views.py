@@ -105,7 +105,7 @@ def service_detail(request, service_slug):
         # Handle 404 if service not found
         from django.http import Http404
         raise Http404("Service not found")
-    
+
     # Add related services (all other services)
     related_services = [
         {'name': 'Tax Services', 'url': '/services/tax'},
@@ -114,7 +114,7 @@ def service_detail(request, service_slug):
         {'name': 'Technology Solutions', 'url': '/services/technology'},
         {'name': 'Managed Services', 'url': '/services/managed'}
     ]
-    
+
     context = {
         'service_name': service['name'],
         'service_tagline': service['tagline'],
@@ -124,7 +124,7 @@ def service_detail(request, service_slug):
         'team_members': service['team_members'],
         'related_services': related_services
     }
-    
+
     return render(request, f'services/{service_slug}.html', context)
 
 # Industry Data
@@ -172,7 +172,7 @@ def industry_detail(request, industry_slug):
     if not industry:
         from django.http import Http404
         raise Http404("Industry not found")
-    
+
     context = {
         'industry': industry,
         'industry_name': industry['name'],
@@ -181,7 +181,7 @@ def industry_detail(request, industry_slug):
         'team_members': industry['team_members'],
         'case_studies': industry['case_studies']
     }
-    
+
     return render(request, f'industries/{industry_slug}.html', context)
 
 
@@ -1201,6 +1201,14 @@ from django.contrib import messages
 from django.http import HttpResponseForbidden
 from django.db.models import Q
 from .models import Task, User, TaskStatus # Import TaskStatus
+# views.py
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.http import HttpResponseForbidden
+from django.contrib.auth.decorators import login_required
+from .models import Task, User, TaskStatus  # Assuming User and TaskStatus are correctly imported
+
 
 @login_required
 def task_update(request, task_id):
@@ -1213,38 +1221,50 @@ def task_update(request, task_id):
     if request.method == 'POST':
         task.task_title = request.POST.get('task_title')
         task.task_purpose = request.POST.get('task_purpose')
-        task.start_date = request.POST.get('start_date')
-        task.end_date = request.POST.get('end_date')
+
+        # --- FIX FOR VALIDATION ERROR ---
+        # 1. Get the raw POST values for date fields
+        start_date_raw = request.POST.get('start_date')
+        end_date_raw = request.POST.get('end_date')
+
+        # 2. Assign the value, setting it to None if the string is empty
+        # This prevents the ValidationError when a required date field is left blank.
+        task.start_date = start_date_raw if start_date_raw else None
+        task.end_date = end_date_raw if end_date_raw else None
+        # --- END FIX ---
 
         if user.role == 'admin' or task.supervisor == user:
             task.status = request.POST.get('status')
-            task.key_note = request.POST.get('key_note')
+
+            # Key Note Field: Ensure this is also handled if it can be optional
+            key_note_raw = request.POST.get('key_note')
+            task.key_note = key_note_raw if key_note_raw else None
 
         if task.supervisee == user:
-            task.supervisee_feedback = request.POST.get('supervisee_feedback')
+            supervisee_feedback_raw = request.POST.get('supervisee_feedback')
+            task.supervisee_feedback = supervisee_feedback_raw if supervisee_feedback_raw else ""  # Assuming feedback is a CharField/TextField
 
         if user.role == 'admin':
             supervisor_id = request.POST.get('supervisor')
             supervisee_id = request.POST.get('supervisee')
 
-            # The fix: Get the users directly by ID from the User model.
-            # This ensures we can find them even if their role is 'admin'.
-            supervisor = get_object_or_404(User, id=supervisor_id)
-            supervisee = get_object_or_404(User, id=supervisee_id)
+            # Ensure IDs are present before fetching (optional but safe)
+            if supervisor_id and supervisee_id:
+                supervisor = get_object_or_404(User, id=supervisor_id)
+                supervisee = get_object_or_404(User, id=supervisee_id)
 
-            if supervisor == supervisee:
-                messages.error(request, 'Supervisor and Supervisee cannot be the same person.')
-                return redirect('task_update', task_id=task.id)
+                if supervisor == supervisee:
+                    messages.error(request, 'Supervisor and Supervisee cannot be the same person.')
+                    return redirect('task_update', task_id=task.id)
 
-            task.supervisor = supervisor
-            task.supervisee = supervisee
+                task.supervisor = supervisor
+                task.supervisee = supervisee
 
         task.save()
         messages.success(request, 'Task updated successfully.')
         return redirect('task_detail', task_id=task.id)
 
     # For GET request, provide filtered user lists for the template.
-    # This logic is for displaying the dropdowns and should not be used for POST.
     available_users = User.objects.exclude(role='admin')
 
     context = {
@@ -1256,7 +1276,6 @@ def task_update(request, task_id):
         'task_status_choices': TaskStatus.choices,
     }
     return render(request, 'tasks/task_update.html', context)
-
 # your_app/views.py
 import cloudinary.utils
 from django.shortcuts import get_object_or_404, redirect
@@ -1293,41 +1312,93 @@ from django.contrib import messages
 from django.http import HttpResponseForbidden
 from .models import Task, TaskFile
 
-# This view is for handling the POST request from the Cloudinary widget
+# This view handles the file upload directly from the browser to Django,
+# and then from Django to Cloudinary's API.
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.http import HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
 from .models import Task, TaskFile
+import cloudinary.uploader  # <--- NEW: Import the Cloudinary uploader SDK
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
+from django.contrib import messages
+import cloudinary.uploader
+import os  # <-- 1. IMPORT OS FOR FILEPATH OPERATIONS
+
+
+# NOTE: Ensure Task and TaskFile are imported from your models file
+# from .models import Task, TaskFile
 
 @login_required
 def task_add_file(request, task_id):
+    """
+    Handles file upload, validates the file extension, and ensures public access
+    on Cloudinary.
+    """
     task = get_object_or_404(Task, id=task_id)
     user = request.user
 
+    # 2. DEFINE ALLOWED EXTENSIONS
+    ALLOWED_EXTENSIONS = ['.txt', '.docx', '.png', '.jpg']
+
     if request.method == 'POST':
-        cloudinary_url = request.POST.get('cloudinary_url')
-        public_id = request.POST.get('public_id')
+        # 1. Retrieve the uploaded file and file_type
+        uploaded_file = request.FILES.get('file_to_upload')
         file_type = request.POST.get('file_type')
 
-        # This check is crucial to ensure the correct access permissions are set for each file type.
-        # It assumes that a 'submission_file' upload should be made by the advisee.
-        if file_type == 'submission_file':
+        # --- File Presence Check ---
+        if not uploaded_file:
+            messages.error(request, 'Please select a file to upload before submitting.')
+            # Use 'task_detail' redirect here, as the view will be accessed via GET redirect from there.
+            return redirect('task_detail', task_id=task.id)
+
+        # --- NEW: File Extension Validation ---
+        file_name = uploaded_file.name
+        # os.path.splitext returns a tuple (root, ext), e.g., ('report', '.pdf')
+        _, file_extension = os.path.splitext(file_name)
+
+        # Convert to lowercase to ensure case-insensitive validation
+        if file_extension.lower() not in ALLOWED_EXTENSIONS:
+            messages.error(
+                request,
+                f"File type '{file_extension}' is not allowed. Only {', '.join(ALLOWED_EXTENSIONS)} are permitted."
+            )
+            return redirect('task_detail', task_id=task.id)
+
+        # 2. Permission and File Count Check (Existing Logic)
+        is_submission = (file_type == 'submission_file')
+
+        if is_submission:
             if task.supervisee != user:
                 return HttpResponseForbidden("You do not have permission to add a submission file.")
+            # Use your actual model name for TaskFile
             if TaskFile.objects.filter(task=task, uploaded_by=user, file_type='submission_file').exists():
                 messages.error(request, 'You can only submit one file for this task.')
                 return redirect('task_detail', task_id=task.id)
-        # This part of the check is for other file types, like 'task_document'.
-        # These can only be uploaded by the admin or the supervisor.
         elif not (user.role == 'admin' or task.supervisor == user):
             return HttpResponseForbidden("You do not have permission to add this type of file.")
 
-        if not cloudinary_url or not public_id:
-            messages.error(request, 'Missing document information. Please try again.')
-            return redirect('task_detail', task_id=task.id)
-
+        # 3. Server-Side Cloudinary Upload
         try:
+            folder_path = f"tasks/{task_id}/{file_type}"
+
+            # Upload the file using the Cloudinary SDK
+            upload_result = cloudinary.uploader.upload(
+                uploaded_file,
+                folder=folder_path,
+                resource_type='auto',
+                access_mode='public',  # <--- Ensures public access (Fixes 401 error)
+                timeout=600
+            )
+
+            # Extract necessary data from the result
+            cloudinary_url = upload_result.get('secure_url')
+            public_id = upload_result.get('public_id')
+
+            # 4. Save to Database (Use your actual model name for TaskFile)
             TaskFile.objects.create(
                 task=task,
                 cloudinary_url=cloudinary_url,
@@ -1335,15 +1406,23 @@ def task_add_file(request, task_id):
                 file_type=file_type,
                 uploaded_by=user,
             )
-            messages.success(request, 'File(s) added successfully.')
+            messages.success(request, f"File '{file_name}' added successfully.")
             return redirect('task_detail', task_id=task.id)
+
         except Exception as e:
-            messages.error(request, f"Error saving file: {str(e)}")
+            messages.error(request,
+                           f"Upload failed: A server error occurred during file processing. ({type(e).__name__}: {str(e)})")
             return redirect('task_detail', task_id=task.id)
 
-    context = {'task': task}
-    return render(request, 'tasks/task_add_file.html', context)
+    # --- GET Request (Display Form) ---
+    file_type = request.GET.get('file_type', 'document')
 
+    context = {
+        'task': task,
+        'file_type': file_type,
+        'allowed_extensions_list': ALLOWED_EXTENSIONS  # Pass to template for display
+    }
+    return render(request, 'tasks/task_add_file.html', context)
 # your_app/views.py
 import requests
 import os

@@ -28,6 +28,28 @@ from django.conf import settings
 from .models import Subscriber
 from .forms import SubscriberForm
 
+import random
+import logging
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+from django.conf import settings
+from django.utils import timezone
+from django.db.models import Q
+
+from .models import Subscriber, Newsletter
+from .forms import SubscriberForm, OTPForm, NewsletterForm
+
+# Set up logger
+logger = logging.getLogger(__name__)
+
+
+# Helper function to check if a user is an admin
+def is_admin(user):
+    return user.is_authenticated and user.is_staff
+
 
 def newsletter_subscribe(request):
     """
@@ -42,6 +64,8 @@ def newsletter_subscribe(request):
             return render(request, 'newsletter/subscribe.html', {'form': form})
 
         email = form.cleaned_data['email']
+        first_name = form.cleaned_data['first_name']
+        last_name = form.cleaned_data['last_name']
         preferences = form.cleaned_data['preferences']
 
         try:
@@ -53,50 +77,72 @@ def newsletter_subscribe(request):
                 messages.warning(request, "This email is already subscribed and verified.")
                 return redirect('newsletter:subscribe')
 
-            # Scenario 2: Subscriber exists but is unverified
-            # The code will continue to the common update/save logic below
-            messages.info(request, "This email is already on our list, but unverified. A new OTP has been sent.")
+            # Scenario 2: Subscriber exists but is unverified - UPDATE EXISTING
+            subscriber.first_name = first_name
+            subscriber.last_name = last_name
+
+            # Update preferences
+            subscriber.audit = 'audit' in preferences
+            subscriber.tax = 'tax' in preferences
+            subscriber.consulting = 'consulting' in preferences
+            subscriber.forensic_service = 'forensic_service' in preferences
+            subscriber.managed_service = 'managed_service' in preferences
+            subscriber.technology_solution = 'technology_solution' in preferences
+            subscriber.advisory = 'advisory' in preferences
+
+            # Generate and save the new OTP
+            new_otp = str(random.randint(1000, 9999))
+            subscriber.otp = new_otp
+            subscriber.save()
+
+            messages.info(request, "New verification code sent to your email. Please check and verify.")
 
         except Subscriber.DoesNotExist:
             # Scenario 3: New subscriber - create a new instance
             subscriber = Subscriber()
-            messages.success(request, "Subscription request received. Please check your email for the OTP.")
+            subscriber.first_name = first_name
+            subscriber.last_name = last_name
+            subscriber.email = email
 
-        # Common logic for both new and unverified existing subscribers
-        # Update user details from the form
-        subscriber.first_name = form.cleaned_data.get('first_name')
-        subscriber.last_name = form.cleaned_data.get('last_name')
-        subscriber.email = email
+            # Set preferences
+            subscriber.audit = 'audit' in preferences
+            subscriber.tax = 'tax' in preferences
+            subscriber.consulting = 'consulting' in preferences
+            subscriber.forensic_service = 'forensic_service' in preferences
+            subscriber.managed_service = 'managed_service' in preferences
+            subscriber.technology_solution = 'technology_solution' in preferences
+            subscriber.advisory = 'advisory' in preferences
 
-        # Update preferences
-        subscriber.audit = 'audit' in preferences
-        subscriber.tax = 'tax' in preferences
-        subscriber.consulting = 'consulting' in preferences
-        subscriber.forensic_service = 'forensic_service' in preferences
-        subscriber.managed_service = 'managed_service' in preferences
-        subscriber.technology_solution = 'technology_solution' in preferences
-        subscriber.advisory = 'advisory' in preferences
+            # Generate and save the new OTP
+            new_otp = str(random.randint(1000, 9999))
+            subscriber.otp = new_otp
+            subscriber.save()
 
-        # Generate and save the new OTP for both new and existing unverified users
-        new_otp = str(random.randint(1000, 9999))
-        subscriber.otp = new_otp
-        subscriber.save()
+            messages.success(request,
+                             "Subscription request received. Please check your email for the verification code.")
 
-        # Send the OTP email
-        context = {
-            'user_name': subscriber.first_name,
-            'otp': new_otp,
-            'is_otp': True,
-        }
-        html_content = render_to_string('newsletter/otp_email.html', context)
-        email_message = EmailMessage(
-            subject='Verify Your Subscription to OB Global Newsletter',
-            body=html_content,
-            from_email=settings.EMAIL_HOST_USER,
-            to=[email],
-        )
-        email_message.content_subtype = 'html'
-        email_message.send()
+        # Send the OTP email (common for both scenarios)
+        try:
+            context = {
+                'user_name': subscriber.first_name,
+                'otp': new_otp,
+                'is_otp': True,
+            }
+            html_content = render_to_string('newsletter/otp_email.html', context)
+            email_message = EmailMessage(
+                subject='Verify Your Subscription to OB Global Newsletter',
+                body=html_content,
+                from_email=settings.EMAIL_HOST_USER,
+                to=[email],
+            )
+            email_message.content_subtype = 'html'
+            email_message.send()
+            logger.info(f"OTP email sent successfully to {email}")
+
+        except Exception as e:
+            logger.error(f"Failed to send OTP email to {email}: {str(e)}")
+            messages.info(request,
+                          "Subscription received! If you don't receive the verification email, please contact support.")
 
         request.session['temp_subscriber_id'] = subscriber.id
         return redirect('newsletter:verify_otp')
@@ -106,9 +152,11 @@ def newsletter_subscribe(request):
 
     return render(request, 'newsletter/subscribe.html', {'form': form})
 
+
 def verify_otp(request):
     """
     Handles OTP verification for new subscribers.
+    No time limit for OTP input - OTP remains valid until used.
     """
     subscriber_id = request.session.get('temp_subscriber_id')
     if not subscriber_id:
@@ -121,28 +169,41 @@ def verify_otp(request):
         form = OTPForm(request.POST)
         if form.is_valid():
             user_otp = form.cleaned_data['otp']
+
+            # Check if OTP matches (no time limit)
             if user_otp == subscriber.otp:
                 subscriber.is_verified = True
-                subscriber.otp = None
+                subscriber.otp = None  # Clear OTP after successful verification
                 subscriber.save()
 
-                # Prepare and send the HTML confirmation email
-                context = {
-                    'user_name': subscriber.first_name,
-                    'is_otp': False,
-                }
-                html_content = render_to_string('newsletter/welcome_email.html', context)
+                # Prepare and send the HTML confirmation email WITH ERROR HANDLING
+                try:
+                    context = {
+                        'user_name': subscriber.first_name,
+                        'is_otp': False,
+                    }
+                    html_content = render_to_string('newsletter/welcome_email.html', context)
 
-                email_message = EmailMessage(
-                    subject='Welcome to the OB Global Newsletter!',
-                    body=html_content,
-                    from_email=settings.EMAIL_HOST_USER,
-                    to=[subscriber.email],
-                )
-                email_message.content_subtype = 'html'
-                email_message.send()
+                    email_message = EmailMessage(
+                        subject='Welcome to the OB Global Newsletter!',
+                        body=html_content,
+                        from_email=settings.EMAIL_HOST_USER,
+                        to=[subscriber.email],
+                    )
+                    email_message.content_subtype = 'html'
 
-                messages.success(request, "You have been successfully subscribed! A confirmation email has been sent.")
+                    # Send email with fail_silently to prevent crashes
+                    email_message.send(fail_silently=True)
+
+                    messages.success(request,
+                                     "You have been successfully subscribed! A confirmation email has been sent.")
+
+                except Exception as e:
+                    # Log the error but continue with successful subscription
+                    logger.error(f"Welcome email failed for {subscriber.email}: {str(e)}")
+                    messages.success(request, "You have been successfully subscribed! (Welcome email may be delayed)")
+
+                # Clear session and redirect
                 del request.session['temp_subscriber_id']
                 return redirect('index')
             else:
@@ -151,7 +212,6 @@ def verify_otp(request):
         form = OTPForm()
 
     return render(request, 'newsletter/verify_otp.html', {'form': form, 'email': subscriber.email})
-
 
 # --- Admin Dashboard Views ---
 # (Rest of the views remain unchanged)
@@ -335,6 +395,10 @@ def delete_newsletter(request, pk):
 
 
 # newsletter/views.py
+# newsletter/views.py
+
+from django.db import connection  # ⬅️ ADD THIS IMPORT AT THE TOP OF THE FILE
+
 
 @login_required
 @user_passes_test(is_admin)
@@ -357,22 +421,29 @@ def send_newsletter(request, pk):
     if newsletter.advisory:
         q_objects |= Q(advisory=True)
 
+    # 🚨 MODIFICATION 1: Use .values_list() for efficiency
+    # This fetches only the 'email' column, reducing query load and memory,
+    # and preventing timeouts during the initial database query.
     if not q_objects:
-        recipients = Subscriber.objects.filter(is_verified=True)
+        email_list = list(Subscriber.objects.filter(is_verified=True).values_list('email', flat=True))
     else:
-        recipients = Subscriber.objects.filter(q_objects, is_verified=True)
-
-    email_list = [sub.email for sub in recipients]
+        email_list = list(Subscriber.objects.filter(q_objects, is_verified=True).values_list('email', flat=True))
 
     if email_list:
         # Prepare the HTML content for the email using a template
         html_content = render_to_string('newsletter/newsletter_email.html', {'newsletter': newsletter})
+
+        # CRITICAL FIX: Close the database connection
+        # before the long-running email process begins.
+        # This ensures the connection isn't idle long enough to be timed out by the server.
+        connection.close()
 
         # Create an EmailMessage instance
         email_message = EmailMessage(
             subject=newsletter.title,
             body=html_content,
             from_email=settings.EMAIL_HOST_USER,
+            # Using a list comprehension to prepare the 'to' field for bulk sending
             to=email_list,
         )
 
@@ -380,8 +451,10 @@ def send_newsletter(request, pk):
         email_message.content_subtype = 'html'
 
         # Send the email
+        # NOTE: For bulk, use email_message.send(fail_silently=True) for better resilience
         email_message.send()
 
+        # Django will automatically re-open a new connection for the save operation.
         newsletter.sent = True
         newsletter.sent_at = timezone.now()
         newsletter.save()
@@ -390,7 +463,6 @@ def send_newsletter(request, pk):
         messages.warning(request, "No subscribers found for the selected preferences.")
 
     return redirect('newsletter:admin_dashboard')
-
 @login_required
 @user_passes_test(is_admin)
 def subscriber_detail(request, pk):
@@ -452,16 +524,49 @@ from .models import Subscriber
 from .forms import SubscriberForm
 from django.contrib import messages
 
+# newsletter/views.py (CORRECTED update_subscriber view)
+
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Subscriber
+from .forms import SubscriberForm
+from django.contrib import messages
+
 
 def update_subscriber(request, pk):
     subscriber = get_object_or_404(Subscriber, pk=pk)
+
+    # NOTE: Since SubscriberForm is a forms.Form, the 'instance=subscriber'
+    # must be handled by the form's __init__ (which you've done correctly).
     if request.method == 'POST':
         form = SubscriberForm(request.POST, instance=subscriber)
+
         if form.is_valid():
-            form.save()
+            cleaned_data = form.cleaned_data
+
+            # 1. Update the simple fields manually
+            subscriber.first_name = cleaned_data['first_name']
+            subscriber.last_name = cleaned_data['last_name']
+            subscriber.email = cleaned_data['email']
+
+            # 2. Update the boolean preference fields manually
+            preferences = cleaned_data.get('preferences', [])
+
+            subscriber.audit = 'audit' in preferences
+            subscriber.tax = 'tax' in preferences
+            subscriber.consulting = 'consulting' in preferences
+            subscriber.forensic_service = 'forensic_service' in preferences
+            subscriber.managed_service = 'managed_service' in preferences
+            subscriber.technology_solution = 'technology_solution' in preferences
+            subscriber.advisory = 'advisory' in preferences
+
+            # 3. Save the model instance to the database
+            subscriber.save()  # ✅ Correct: save on the model instance
+
             messages.success(request, 'Subscriber updated successfully.')
             return redirect('newsletter:subscriber_detail', pk=subscriber.pk)
     else:
+        # Initializing the form using 'instance' to pre-populate is fine
+        # because the form's __init__ handles it.
         form = SubscriberForm(instance=subscriber)
 
     context = {
@@ -469,7 +574,6 @@ def update_subscriber(request, pk):
         'subscriber': subscriber,
     }
     return render(request, 'newsletter/update_subscriber.html', context)
-
 
 # newsletter/views.py
 from django.contrib.auth.decorators import login_required, user_passes_test

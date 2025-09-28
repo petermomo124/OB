@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-
+{% load custom_filters %}  <-- ADD THIS LINE
 {% block title %}User Details | OB Global{% endblock %}
 
 {% block content %}
@@ -18,7 +18,9 @@
         <div class="profile-header">
             <div class="profile-image-container">
                 {% if user_to_view.profile_image %}
-                            <img src="{{ user_to_view.profile_image }}" alt="{{ user_to_view.first_name }}'s profile image" class="profile-image-preview" id="profile-image-preview">
+<img src="{{ user_to_view.profile_image|replace:'/upload/,/upload/q_auto,f_auto/' }}" 
+     alt="{{ user_to_view.first_name }}'s profile image" 
+     class="profile-image-preview" id="profile-image-preview">
                 {% else %}
                     <div class="face-card">
                         <i class="fas fa-user-circle"></i>

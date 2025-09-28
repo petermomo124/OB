@@ -9,7 +9,10 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+# settings.py (at the very top)
+from dotenv import load_dotenv
+# Load environment variables from .env file
+load_dotenv()
 import os
 from pathlib import Path
 
@@ -23,8 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-6qie*%tx8#%7sr7kch=mt+y=^fyd8ajekc04n@_mntmws5m-p5'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+
 
 # Allow all hosts - USE WITH CAUTION IN PRODUCTION!
 ALLOWED_HOSTS = ['*']
@@ -93,15 +95,19 @@ WSGI_APPLICATION = 'ey_website.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+# Database
+# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',  # ← Change this line
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'test',
         'USER': 'JmKhKqoAam5FV5E.root',
         'PASSWORD': '3130TGcNFxkHKrDj',
         'HOST': 'gateway01.eu-central-1.prod.aws.tidbcloud.com',
         'PORT': 4000,
+        # ADD THIS LINE for persistent connections to prevent connection loss (Error 2013)
+        'CONN_MAX_AGE': 48000, # Keep connections open for up to 10 minutes (600 seconds)
         'OPTIONS': {
             'ssl': {
                 'ca': os.path.join(BASE_DIR, 'cert', 'isrgrootx1.pem')
@@ -202,13 +208,25 @@ LOGGING = {
 # settings.py
 
 # ... other settings
-
 # Email Configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'petermomo124@gmail.com'
-EMAIL_HOST_PASSWORD = 'opnz wkay pouc wbwz'
+EMAIL_PORT = 465       # MODIFIED: Changed from 587
+EMAIL_USE_TLS = False  # MODIFIED: Changed from True
+EMAIL_USE_SSL = True   # ADDED: Must be True for port 465
+
+# MODIFIED: Fetch sensitive credentials from environment variables (Render/production setting)
+EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
 
 GEMINI_API_KEY = 'AIzaSyBlxToNTAEUXmZtqgCV9XsZww6gu9QqB7Y'
+
+# SET THESE TO PREVENT TIMEOUTS/CONNECTION RESETS ON LARGE FILE UPLOADS
+# Django's default limit for request body size is often too small (2.5MB).
+# Setting limits to 50MB should prevent errors during image uploads.
+
+# Maximum size of a request body that Django will process (50 MB)
+DATA_UPLOAD_MAX_MEMORY_SIZE = 52428800  # 50 * 1024 * 1024
+
+# Maximum size of an uploaded file that will be handled entirely in memory (50 MB)
+FILE_UPLOAD_MAX_MEMORY_SIZE = 52428800  # 50 * 1024 * 1024
