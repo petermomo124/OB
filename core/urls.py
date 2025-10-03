@@ -72,7 +72,10 @@ urlpatterns = [
     path('client-portal/', views.user_login, name='client_portal'),
     # Subscription
     path('subscribe/', views.subscribe_redirect, name='subscribe'), # Replaces the old static view
-    
+
+    path('profile/', views.view_my_profile, name='view_my_profile'),
+    path('profile/edit/', views.edit_my_profile, name='edit_my_profile'),
+
     # RFP
     path('rfp/', TemplateView.as_view(template_name='rfp/request.html'), name='request_proposal'),
 ]

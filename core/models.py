@@ -2,6 +2,17 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.utils import timezone
 
+from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.utils import timezone
+# NEW IMPORT: For generating the list of valid timezones
+from zoneinfo import available_timezones
+
+
+# Function to dynamically generate the list of IANA timezones
+def get_timezone_choices():
+    """Generates a list of (timezone_name, timezone_name) tuples for choices."""
+    return [(tz, tz) for tz in sorted(available_timezones())]
 
 class Office(models.Model):
     office_location = models.CharField(max_length=255)
@@ -72,7 +83,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     executive_position_description = models.TextField(blank=True, null=True)
     linkedin = models.URLField(blank=True, null=True)
     profile_image = models.ImageField(upload_to='profile_images/', blank=True, null=True)
-
+    timezone = models.CharField(
+        max_length=50,
+        choices=get_timezone_choices,  # Use the function for choices
+        default='UTC',  # Default to UTC
+        help_text="The IANA timezone for this user (e.g., 'America/New_York')."
+    )
     # Company and office impact
     company_impact = models.CharField(max_length=255, blank=True, null=True)
     office = models.ForeignKey(Office, on_delete=models.SET_NULL, blank=True, null=True)

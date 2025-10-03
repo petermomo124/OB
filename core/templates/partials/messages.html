@@ -1,0 +1,19 @@
+{% if messages %}
+<div class="messages-container my-3">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+</div>
+
+{% comment %} 
+Mapping of Django tags to Bootstrap classes:
+debug -> light
+info -> info
+success -> success
+warning -> warning
+error -> danger
+{% endcomment %}
+{% endif %}

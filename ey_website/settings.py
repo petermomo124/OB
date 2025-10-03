@@ -69,8 +69,10 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'core.middleware.TimezoneMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'ey_website.urls'
@@ -230,3 +232,9 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 52428800  # 50 * 1024 * 1024
 
 # Maximum size of an uploaded file that will be handled entirely in memory (50 MB)
 FILE_UPLOAD_MAX_MEMORY_SIZE = 52428800  # 50 * 1024 * 1024
+
+
+
+
+# This MUST match the path in your URL patterns: 'client-portal/login/'
+LOGIN_URL = '/client-portal/login/'
