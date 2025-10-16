@@ -40,12 +40,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',  # For human-readable formatting
     'core',
     'cloudinary',
     'cloudinary_storage',
-    'newsletter',  # <-- Add the new app here
-    'widget_tweaks',  # Add this line
+    'newsletter',
+    'widget_tweaks',
     'chatbot',
+    'attendance',  # Attendance management app
+    'rfp',  # <-- Add this back
 
 ]
 
@@ -69,8 +72,10 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'core.middleware.TimezoneMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'ey_website.urls'
@@ -93,10 +98,10 @@ TEMPLATES = [
 WSGI_APPLICATION = 'ey_website.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+# Database Configuration
+# MySQL database configuration using pymysql
+import pymysql
+pymysql.install_as_MySQLdb()
 
 DATABASES = {
     'default': {
@@ -105,34 +110,15 @@ DATABASES = {
         'USER': 'JmKhKqoAam5FV5E.root',
         'PASSWORD': '3130TGcNFxkHKrDj',
         'HOST': 'gateway01.eu-central-1.prod.aws.tidbcloud.com',
-        'PORT': 4000,
-        # ADD THIS LINE for persistent connections to prevent connection loss (Error 2013)
-        'CONN_MAX_AGE': 48000, # Keep connections open for up to 10 minutes (600 seconds)
+        'PORT': '4000',
         'OPTIONS': {
             'ssl': {
-                'ca': os.path.join(BASE_DIR, 'cert', 'isrgrootx1.pem')
+                'ca': os.path.join(BASE_DIR, 'cert', 'isrgrootx1.pem'),
+                'ssl_mode': 'VERIFY_IDENTITY'
             }
         }
     }
 }
-
-# Fallback to SQLite if MySQL connection fails (for development)
-try:
-    import mysql.connector
-    conn = mysql.connector.connect(
-        host='gateway01.eu-central-1.prod.aws.tidbcloud.com',
-        user='JmKhKqoAam5FV5E.root',
-        password='3130TGcNFxkHKrDj',
-        port=4000,
-        database='test'
-    )
-    conn.close()
-except Exception as e:
-    print(f"MySQL connection failed: {e}. Falling back to SQLite.")
-    DATABASES['default'] = {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
 
 
 # Password validation
@@ -230,3 +216,83 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 52428800  # 50 * 1024 * 1024
 
 # Maximum size of an uploaded file that will be handled entirely in memory (50 MB)
 FILE_UPLOAD_MAX_MEMORY_SIZE = 52428800  # 50 * 1024 * 1024
+
+
+
+
+# This MUST match the path in your URL patterns: 'client-portal/login/'
+LOGIN_URL = '/client-portal/login/'
+
+
+
+# settings.py
+
+# ... (Existing settings) ...
+
+# -------------------------------------------------------------
+# ⚠️ FIX: Content Security Policy (CSP) for Google Maps Embeds ⚠️
+# -------------------------------------------------------------
+
+# Add 'googleusercontent.com' and 'maps.google.com' to frame-ancestors
+# This tells the browser it's okay for content from these domains to be embedded.
+# Note: You may need to install django-csp for this to work in production,
+# but often Django's base security headers are enough for development.
+
+# Ensure the maps domains are allowed for IFRAMES
+CSRF_TRUSTED_ORIGINS = [
+    # Include your development URL here
+    'http://127.0.0.1:8000',
+    # And potentially the google domains if you are getting CSRF errors
+    'https://*.google.com',
+]
+
+# If you have SECUTIRY_MIDDLEWARE enabled, you may need to explicitly allow iframes:
+# IMPORTANT: Use the exact domains your embed URL uses!
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+# If you are using django-csp middleware, add this:
+CSP_FRAME_SRC = (
+    "'self'",
+    'https://www.google.com',
+    'https://googleusercontent.com',
+    'http://googleusercontent.com', # Use 'http' if your current URL starts with it
+    'https://maps.google.com',
+    'http://maps.google.com',
+)
+
+
+
+
+# Increase request timeout for large file processing
+REQUEST_TIMEOUT = 300  # 5 minutes
+
+# Add TinyMCE domains to CSP if you're using Content Security Policy
+CSP_SCRIPT_SRC = [
+    "'self'",
+    "https://cdn.tiny.cloud",  # Add TinyMCE CDN
+]
+
+CSP_STYLE_SRC = [
+    "'self'",
+    "https://cdn.tiny.cloud",  # Add TinyMCE CDN
+    "'unsafe-inline'",  # TinyMCE needs inline styles
+]
+
+CSP_IMG_SRC = [
+    "'self'",
+    "data:",  # Allow data URLs for images
+    "https:",  # Allow HTTPS images
+    "http:",   # Allow HTTP images (for development)
+]
+
+# Add Cloudinary to trusted origins
+CSRF_TRUSTED_ORIGINS = [
+    'http://127.0.0.1:8000',
+    'http://localhost:8000',
+    'https://*.cloudinary.com',
+    'https://res.cloudinary.com',
+]
+
+# Session settings for better editor experience
+SESSION_COOKIE_AGE = 3600  # 1 hour session
+SESSION_SAVE_EVERY_REQUEST = True
+

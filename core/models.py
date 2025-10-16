@@ -2,12 +2,25 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.utils import timezone
 
+from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.utils import timezone
+# NEW IMPORT: For generating the list of valid timezones
+from zoneinfo import available_timezones
+
+
+# Function to dynamically generate the list of IANA timezones
+def get_timezone_choices():
+    """Generates a list of (timezone_name, timezone_name) tuples for choices."""
+    return [(tz, tz) for tz in sorted(available_timezones())]
+
 
 class Office(models.Model):
     office_location = models.CharField(max_length=255)
     office_purpose = models.TextField()
-    # Add the new column here
     office_Name = models.CharField(max_length=255, default='Unnamed Office')
+    # 🆕 NEW COLUMN: Google Maps URL
+    google_map_url = models.URLField(max_length=500, blank=True, null=True)
 
     def __str__(self):
         return self.office_location
@@ -18,6 +31,12 @@ class CustomUserManager(BaseUserManager):
         if not email:
             raise ValueError('The Email field must be set')
         email = self.normalize_email(email)
+        
+        # Set is_staff=True if role is 'staff' or 'admin'
+        role = extra_fields.get('role', 'client')
+        if role in ['staff', 'admin']:
+            extra_fields.setdefault('is_staff', True)
+            
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
@@ -72,7 +91,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     executive_position_description = models.TextField(blank=True, null=True)
     linkedin = models.URLField(blank=True, null=True)
     profile_image = models.ImageField(upload_to='profile_images/', blank=True, null=True)
-
+    timezone = models.CharField(
+        max_length=50,
+        choices=get_timezone_choices,  # Use the function for choices
+        default='UTC',  # Default to UTC
+        help_text="The IANA timezone for this user (e.g., 'America/New_York')."
+    )
     # Company and office impact
     company_impact = models.CharField(max_length=255, blank=True, null=True)
     office = models.ForeignKey(Office, on_delete=models.SET_NULL, blank=True, null=True)

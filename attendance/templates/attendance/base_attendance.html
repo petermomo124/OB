@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% load user_filters %}
+
+{% block title %}Attendance System{% endblock %}
+
+{% block extra_head %}
+{{ block.super }}
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Add custom styles for attendance system */
+    .attendance-card {
+        border-radius: 10px;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        margin-bottom: 1.5rem;
+    }
+    .attendance-header {
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #e3e6f0;
+        padding: 1rem 1.25rem;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+    .attendance-body {
+        padding: 1.25rem;
+    }
+    .btn-clock {
+        font-size: 1.1rem;
+        font-weight: 600;
+        padding: 0.75rem 2rem;
+        border-radius: 50px;
+    }
+    .attendance-status {
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+    .status-badge {
+        padding: 0.35em 0.65em;
+        font-size: 0.75em;
+        font-weight: 700;
+        line-height: 1;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: baseline;
+        border-radius: 0.25rem;
+    }
+    .status-pending {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+    .status-approved {
+        background-color: #d4edda;
+        color: #155724;
+    }
+    .status-rejected {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">{% block page_header %}{% endblock %}</h1>
+        {% block header_actions %}{% endblock %}
+    </div>
+
+    {% if messages %}
+    <div class="mb-4">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% block attendance_content %}{% endblock %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<!-- DataTables JS -->
+<script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+<script src="{% static 'attendance/js/attendance.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize any plugins or add event listeners
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,257 @@
+{% load humanize %}
+{% load attendance_filters %}
+
+<!-- Leave Request Details Modal -->
+<div class="modal fade" id="leaveRequestModal" tabindex="-1" role="dialog" aria-labelledby="leaveRequestModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="leaveRequestModalLabel">Leave Request Details</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="leaveRequestModalBody">
+                <!-- Content will be loaded here via AJAX -->
+                <div class="text-center py-4">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <p class="mt-2">Loading leave request details...</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteLeaveRequestModal" tabindex="-1" role="dialog" aria-labelledby="deleteLeaveRequestModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteLeaveRequestModalLabel">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Confirm Deletion
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this leave request? This action cannot be undone.</p>
+                <p class="mb-0"><strong>This action is permanent and cannot be recovered.</strong></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    <i class="fas fa-times me-1"></i> Cancel
+                </button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
+                    <i class="fas fa-trash me-1"></i> Delete Request
+    // Handle view button click
+    $(document).on('click', '.view-leave-request', function(e) {
+        e.preventDefault();
+        const leaveId = $(this).data('leave-id');
+        showLeaveRequestDetails(leaveId);
+        var $modal = $('#leaveRequestModal');
+        
+        // Store the full notes in the modal's data attribute
+        var fullNotes = $row.find('.admin-notes-full').html();
+        $modal.data('full-notes', fullNotes);
+    });
+
+    // When the view modal is shown, update the notes section with the full content
+    $('#leaveRequestModal').on('shown.bs.modal', function () {
+        var $modal = $(this);
+        var fullNotes = $modal.data('full-notes');
+        
+        if (fullNotes) {
+            $modal.find('.admin-notes-section').html(fullNotes);
+        }
+    });
+});
+
+<style>
+/* Style for admin notes preview */
+.admin-notes-preview {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2; /* Standard property */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 3em;
+    line-height: 1.5em;
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin: 0;
+    padding: 0.25rem 0;
+}
+
+.admin-notes-cell {
+    max-width: 250px;
+    word-break: break-word;
+    vertical-align: middle !important;
+}
+
+/* Standard and webkit support */
+@supports (line-clamp: 2) or (-webkit-line-clamp: 2) {
+    .admin-notes-preview {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flexbox;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        line-clamp: 2; /* Standard property */
+        overflow: hidden;
+    }
+}
+</style>
+</script>
+
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover leave-requests-table" width="100%" cellspacing="0">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Staff Member</th>
+                        <th>Request Date</th>
+                        <th>Leave Type</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Duration</th>
+                        <th>Reason</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                        <th>Admin Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for req in requests %}
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle-sm mr-2">
+                                    <span class="initials">
+                                        {% if req.user.get_initials %}
+                                            {{ req.user.get_initials }}
+                                        {% else %}
+                                            {{ req.user.email|slice:":2"|upper }}
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                <div>
+                                    <div class="font-weight-bold">
+                                        {% if req.user.get_full_name %}
+                                            {{ req.user.get_full_name }}
+                                        {% else %}
+                                            {{ req.user.email|default:'Unknown User' }}
+                                        {% endif %}
+                                    </div>
+                                    <small class="text-muted">{{ req.user.department|default:'No Department' }}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{ req.created_at|date:"M d, Y" }}</td>
+                        <td>{{ req.get_leave_type_display|default:'N/A' }}</td>
+                        <td>{{ req.start_date|date:"M d, Y" }}</td>
+                        <td>{{ req.end_date|date:"M d, Y" }}</td>
+                        <td class="text-nowrap">
+                            {% if req.start_date and req.end_date %}
+                                {% with days=req.start_date|days_between:req.end_date %}
+                                    {{ days }} day{{ days|pluralize }}
+                                {% endwith %}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="badge {% if req.status == 'approved' %}bg-success text-white
+                                {% elif req.status == 'rejected' %}bg-danger text-white
+                                {% else %}bg-warning text-dark{% endif %} p-2">
+                                {{ req.get_status_display|upper }}
+                            </span>
+                            {% if req.processed_at %}
+                                <br><small class="text-muted">
+                                    {{ req.processed_at|timesince }} ago
+                                    {% if req.reviewed_by %}
+                                        by {% if req.reviewed_by.get_full_name %}
+                                                {{ req.reviewed_by.get_full_name }}
+                                            {% else %}
+                                                {{ req.reviewed_by.email|default:'System' }}
+                                            {% endif %}
+                                    {% endif %}
+                                </small>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if req.reason %}
+                                <div class="text-truncate" style="max-width: 200px;" 
+                                     title="{{ req.reason|escape }}">
+                                    {{ req.reason|truncatechars:50 }}
+                                </div>
+                                <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-center">
+                            <div class="btn-group btn-group-sm" role="group">
+                                <!-- View Button -->
+                                <button type="button" 
+                                    class="btn btn-outline-info view-leave-request"
+                                    data-leave-id="{{ req.id }}"
+                                    title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                
+                                {% if req.status == 'pending' %}
+                                <!-- Approve Button -->
+                                <button type="button" 
+                                    class="btn btn-outline-success approve-leave-request"
+                                    data-leave-id="{{ req.id }}"
+                                    title="Approve Request">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                                
+                                <!-- Reject Button -->
+                                <button type="button" 
+                                    class="btn btn-outline-danger reject-leave-request"
+                                    data-leave-id="{{ req.id }}"
+                                    title="Reject Request">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                                {% else %}
+                                <!-- Delete Button for non-pending requests -->
+                                <button type="button" 
+                                    class="btn btn-outline-danger delete-leave-request"
+                                    data-leave-id="{{ req.id }}"
+                                    title="Delete Request">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td class="admin-notes-cell" style="max-width: 200px;">
+                            {% if req.response_notes %}
+                                <div class="admin-notes-preview" 
+                                     title="Click 'View' to see full notes">
+                                    {{ req.response_notes|truncatewords:10 }}
+                                </div>
+                                <div class="admin-notes-full d-none">
+                                    {{ req.response_notes|linebreaksbr }}
+                                </div>
+                            {% else %}
+                                <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="10" class="text-center py-4">
+                            <i class="fas fa-inbox fa-3x text-gray-300 mb-3"></i>
+                            <p class="text-muted mb-0">No {{ status }} leave requests found</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

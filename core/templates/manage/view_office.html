@@ -1,0 +1,249 @@
+{% extends 'base.html' %}
+
+{% block title %}View Office: {{ office.office_Name }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-3 py-md-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+            <div class="card shadow-lg border-0 rounded-3">
+                
+                {# Card Header for Title #}
+                <div class="card-header bg-gradient-info text-white rounded-top-3 py-3 py-md-4">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-building fa-lg me-2 me-md-3"></i>
+                        <h1 class="mb-0 fs-4 fs-md-3">{{ office.office_Name }}</h1>
+                    </div>
+                </div>
+                
+                <div class="card-body p-3 p-md-4">
+                    
+                    {# Location #}
+                    <div class="row mb-3 mb-md-4 border-bottom pb-2 pb-md-3">
+                        <div class="col-12 col-md-4 mb-1 mb-md-0">
+                            <strong class="text-secondary">
+                                <i class="fas fa-map-marker-alt me-1"></i> Location:
+                            </strong>
+                        </div>
+                        <div class="col-12 col-md-8">
+                            <span class="fw-bold text-dark">{{ office.office_location }}</span>
+                        </div>
+                    </div>
+
+                    {# Purpose/Description #}
+                    <div class="row mb-4 mb-md-5 border-bottom pb-2 pb-md-3">
+                        <div class="col-12 col-md-4 mb-1 mb-md-0">
+                            <strong class="text-secondary">
+                                <i class="fas fa-info-circle me-1"></i> Purpose/Description:
+                            </strong>
+                        </div>
+                        <div class="col-12 col-md-8">
+                            <p class="text-wrap mb-0 lh-base">{{ office.office_purpose|linebreaksbr }}</p>
+                        </div>
+                    </div>
+                    
+                    {# Map Section #}
+                    <div class="mb-4 mb-md-5">
+                        <h4 class="mb-3 d-flex align-items-center">
+                            <i class="fas fa-map-pin me-2 text-primary"></i> Office Location Map
+                        </h4>
+
+                        {% if office.google_map_url %}
+                            
+                            {# Check for the required 'maps/embed' identifier #}
+                            {% if 'maps/embed' in office.google_map_url|lower %}
+                                
+                                {# Simplified map container for better mobile compatibility #}
+                                <div class="map-container rounded-3 shadow-sm overflow-hidden bg-light">
+                                    <div class="w-100" style="height: 300px; height: min(400px, 50vh);">
+                                        <iframe src="{{ office.google_map_url }}" 
+                                                class="w-100 h-100"
+                                                allowfullscreen="" 
+                                                loading="lazy" 
+                                                referrerpolicy="no-referrer-when-downgrade"
+                                                style="border:0;"></iframe>
+                                    </div>
+                                </div>
+                                
+                                {# Map instructions for mobile users #}
+                                <div class="mt-2">
+                                    <p class="text-muted small mb-0 d-none d-md-block">
+                                        <i class="fas fa-mouse-pointer me-1"></i> 
+                                        Click and drag to navigate the map
+                                    </p>
+                                    <p class="text-muted small mb-0 d-md-none">
+                                        <i class="fas fa-hand-pointer me-1"></i> 
+                                        Use two fingers to pan and zoom the map
+                                    </p>
+                                </div>
+                                
+                                {# Alternative: Full screen map button for mobile #}
+                                <div class="mt-3 d-md-none">
+                                    <button type="button" class="btn btn-outline-primary btn-sm w-100" onclick="openMapFullscreen()">
+                                        <i class="fas fa-expand me-2"></i>Open Map in Full Screen
+                                    </button>
+                                </div>
+                                
+                            {% else %}
+                                {# Error message displayed if the embed path is missing #}
+                                <div class="alert alert-warning" role="alert">
+                                    <h5 class="alert-heading fs-6 d-flex align-items-center">
+                                        <i class="fas fa-exclamation-triangle me-2"></i> Map Preview Error
+                                    </h5>
+                                    <p class="mb-2">The provided URL is likely a direct link and cannot be embedded due to security restrictions. For the preview to work, please ensure the URL you entered contains <code>maps/embed</code>.</p>
+                                    <p class="small mb-2">To fix: Get the <code>src</code> URL from the "Embed a map" tab in Google Maps.</p>
+                                    <p class="mt-2 mb-0 small text-break">Current URL: {{ office.google_map_url }}</p>
+                                </div>
+                            {% endif %}
+
+                        {% else %}
+                            <div class="alert alert-info d-flex align-items-center">
+                                <i class="fas fa-info-circle me-2 fa-lg"></i>
+                                <div>
+                                    <p class="mb-0">No Google Map link has been provided for this office.</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+
+
+                    {# Action Buttons #}
+                    <div class="d-flex flex-column flex-md-row justify-content-between mt-4 pt-3 border-top gap-3">
+                        <a href="{% url 'manage_offices' %}" class="btn btn-secondary order-2 order-md-1">
+                            <i class="fas fa-arrow-left me-1"></i> Back to Management
+                        </a>
+                        
+                        {% if request.user.role == 'admin' %}
+                        <div class="d-flex gap-2 order-1 order-md-2">
+                            <a href="{% url 'edit_office' office.id %}" class="btn btn-warning flex-fill">
+                                <i class="fas fa-edit me-1"></i> Edit
+                            </a>
+                            <a href="{% url 'delete_office' office.id %}" class="btn btn-danger flex-fill">
+                                <i class="fas fa-trash-alt me-1"></i> Delete
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Full screen map modal for mobile #}
+<div class="modal fade" id="fullscreenMapModal" tabindex="-1" aria-labelledby="fullscreenMapModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="fullscreenMapModalLabel">{{ office.office_Name }} - Location Map</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0">
+                {% if office.google_map_url and 'maps/embed' in office.google_map_url|lower %}
+                <iframe src="{{ office.google_map_url }}" 
+                        class="w-100 h-100"
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade"
+                        style="border:0;"></iframe>
+                {% endif %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close Map</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Custom styles for improved mobile responsiveness */
+    .bg-gradient-info {
+        background: linear-gradient(135deg, #17a2b8 0%, #138496 100%) !important;
+    }
+    
+    .map-container {
+        border: 1px solid #e9ecef;
+    }
+    
+    /* Ensure map iframe is properly interactive */
+    .map-container iframe {
+        pointer-events: auto;
+    }
+    
+    /* Improve touch interaction on mobile */
+    @media (max-width: 768px) {
+        .card {
+            border-radius: 0.5rem !important;
+        }
+        
+        .card-header {
+            padding: 1rem !important;
+        }
+        
+        .btn {
+            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+        }
+        
+        /* Better mobile map experience */
+        .map-container {
+            -webkit-overflow-scrolling: touch;
+        }
+    }
+    
+    /* Enhance desktop appearance */
+    @media (min-width: 769px) {
+        .card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1) !important;
+        }
+        
+        .btn {
+            transition: all 0.2s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+    }
+</style>
+
+<script>
+    function openMapFullscreen() {
+        // Use Bootstrap modal for full-screen map
+        var fullscreenModal = new bootstrap.Modal(document.getElementById('fullscreenMapModal'));
+        fullscreenModal.show();
+    }
+    
+    // Alternative: Direct fullscreen approach (may not work on all browsers)
+    function openMapFullscreenDirect() {
+        const mapContainer = document.querySelector('.map-container');
+        if (mapContainer.requestFullscreen) {
+            mapContainer.requestFullscreen();
+        } else if (mapContainer.webkitRequestFullscreen) {
+            mapContainer.webkitRequestFullscreen();
+        } else if (mapContainer.msRequestFullscreen) {
+            mapContainer.msRequestFullscreen();
+        }
+    }
+    
+    // Add touch event listeners to improve mobile map interaction
+    document.addEventListener('DOMContentLoaded', function() {
+        const mapIframe = document.querySelector('.map-container iframe');
+        if (mapIframe) {
+            // Ensure iframe can receive touch events
+            mapIframe.style.pointerEvents = 'auto';
+            
+            // Add a small delay to ensure iframe is fully loaded
+            setTimeout(function() {
+                mapIframe.contentWindow.postMessage('{"event":"command","func":"pause","args":""}', '*');
+            }, 1000);
+        }
+    });
+</script>
+{% endblock content %}

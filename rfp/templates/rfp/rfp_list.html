@@ -1,0 +1,701 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "RFP Management" %}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1>{% trans "Manage RFP" %}</h1>
+        <p class="subtitle">{% trans "Create, view, and manage your Request for Proposals" %}</p>
+    </div>
+
+    <div class="admin-controls">
+        {% if referrals %}
+        <div class="search-form">
+            <div class="search-input-wrapper">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="{% trans "Search RFPs by Title or Client..." %}">
+                <button type="button" id="clearSearchButton" class="button button-clear">
+                    <span class="mobile-hidden">{% trans "Clear" %}</span>
+                    <span class="mobile-only">✕</span>
+                </button>
+            </div>
+        </div>
+        {% endif %}
+
+        {# Create Button: Uses the new .button.primary style #}
+        {% if user.role == 'client' %}
+        <a href="{% url 'rfp_create' %}" class="button button-primary">
+            <span class="button-icon">+</span>
+            {% trans "Create New RFP" %}
+        </a>
+        {% endif %}
+    </div>
+
+    {% if referrals %}
+    <div class="table-container">
+        <div class="table-responsive">
+            <table class="rfp-table">
+                <thead>
+                    <tr>
+                        <th>{% trans "Title" %}</th>
+                        <th>{% trans "Organization" %}</th>
+                        <th>{% trans "Deadline" %}</th>
+                        <th>{% trans "Status" %}</th>
+                        {% if is_admin %}
+                        <th>{% trans "Client Email" %}</th>
+                        {% endif %}
+                        <th>{% trans "Actions" %}</th>
+                    </tr>
+                </thead>
+                <tbody id="rfpTableBody">
+                    {% for referral in referrals %}
+                    <tr>
+                        <td class="truncate" data-label="Title">{{ referral.proposal_title }}</td>
+                        <td class="truncate" data-label="Organization">{{ referral.organization }}</td>
+                        <td data-label="Deadline">{{ referral.proposal_deadline|date:"M d, Y" }}</td>
+                        <td data-label="Status">
+                            <span class="badge status-badge
+                                {% if referral.status == 'submitted' %}status-submitted
+                                {% elif referral.status == 'in_review' %}status-in-review
+                                {% elif referral.status == 'accepted' %}status-accepted
+                                {% else %}status-rejected{% endif %}">
+                                {{ referral.get_status_display }}
+                            </span>
+                        </td>
+
+                        {% if is_admin %}
+                        <td class="client-email truncate" data-label="Client Email">{{ referral.client.email }}</td>
+                        {% endif %}
+
+                        <td class="actions" data-label="Actions">
+                            {# View Button #}
+                            <a href="{% url 'rfp_detail' pk=referral.pk %}" class="btn btn-view" title="View Details">
+                                <span class="mobile-hidden">View</span>
+                                <span class="mobile-only">👁️</span>
+                            </a>
+
+                            {# Edit Button #}
+                            {% if is_admin or referral.client == user %}
+                            <a href="{% url 'rfp_update' pk=referral.pk %}" class="btn btn-edit" title="Edit">
+                                <span class="mobile-hidden">Edit</span>
+                                <span class="mobile-only">✏️</span>
+                            </a>
+                            {% endif %}
+
+                            {# Delete Button (Admin only) - MODIFIED FOR DIRECT LINK #}
+                            {% if is_admin %}
+                            <a href="{% url 'rfp_delete' pk=referral.pk %}" class="btn btn-delete" title="Delete">
+                                <span class="mobile-hidden">Delete</span>
+                                <span class="mobile-only">🗑️</span>
+                            </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="mobile-card-view">
+        {% for referral in referrals %}
+        <div class="rfp-card">
+            <div class="card-header">
+                <h3 class="card-title">{{ referral.proposal_title }}</h3>
+                <span class="badge status-badge
+                    {% if referral.status == 'submitted' %}status-submitted
+                    {% elif referral.status == 'in_review' %}status-in-review
+                    {% elif referral.status == 'accepted' %}status-accepted
+                    {% else %}status-rejected{% endif %}">
+                    {{ referral.get_status_display }}
+                </span>
+            </div>
+            <div class="card-body">
+                <div class="card-row">
+                    <span class="card-label">Organization:</span>
+                    <span class="card-value">{{ referral.organization }}</span>
+                </div>
+                <div class="card-row">
+                    <span class="card-label">Deadline:</span>
+                    <span class="card-value">{{ referral.proposal_deadline|date:"M d, Y" }}</span>
+                </div>
+                {% if is_admin %}
+                <div class="card-row">
+                    <span class="card-label">Client Email:</span>
+                    <span class="card-value">{{ referral.client.email }}</span>
+                </div>
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'rfp_detail' pk=referral.pk %}" class="btn btn-view">View</a>
+                {% if is_admin or referral.client == user %}
+                <a href="{% url 'rfp_update' pk=referral.pk %}" class="btn btn-edit">Edit</a>
+                {% endif %}
+                {% if is_admin %}
+                <a href="{% url 'rfp_delete' pk=referral.pk %}" class="btn btn-delete">
+                    <span class="mobile-hidden">Delete</span>
+                    <span class="mobile-only">🗑️</span>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    {# No records found message for ALL users. #}
+    <div class="empty-state">
+        <div class="empty-icon">📋</div>
+        <h3>{% trans "No RFP found." %}</h3>
+        {% if user.role == 'client' %}
+        <p>{% trans "Use the 'Create New RFP' button above to start a new request." %}</p>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const tableBody = document.getElementById('rfpTableBody');
+        const clearButton = document.getElementById('clearSearchButton');
+        const mobileCards = document.querySelectorAll('.rfp-card');
+
+        if (tableBody) {
+            const rows = tableBody.querySelectorAll('tr');
+
+            // Function to perform real-time row filtering
+            function filterTable() {
+                const filterText = searchInput.value.toLowerCase().trim();
+
+                rows.forEach(row => {
+                    // Get all text content from the row for comprehensive searching
+                    const rowText = row.textContent.toLowerCase();
+
+                    if (rowText.includes(filterText)) {
+                        row.style.display = ''; // Show row
+                    } else {
+                        row.style.display = 'none'; // Hide row
+                    }
+                });
+
+                // Also filter mobile cards
+                mobileCards.forEach(card => {
+                    const cardText = card.textContent.toLowerCase();
+                    if (cardText.includes(filterText)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+
+            // Event listener for real-time filtering (typing in the input)
+            if (searchInput) {
+                searchInput.addEventListener('keyup', filterTable);
+                searchInput.addEventListener('change', filterTable);
+            }
+
+            // Event listener for clear button
+            if (clearButton) {
+                clearButton.addEventListener('click', function() {
+                    searchInput.value = '';
+                    filterTable(); // Show all rows and cards
+                });
+            }
+        }
+    });
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Base Styles */
+:root {
+    --primary-color: #4361ee;
+    --primary-dark: #3a56d4;
+    --secondary-color: #7209b7;
+    --success-color: #4cc9f0;
+    --danger-color: #f72585;
+    --warning-color: #f8961e;
+    --light-color: #f8f9fa;
+    --dark-color: #212529;
+    --gray-color: #6c757d;
+    --border-color: #dee2e6;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --radius: 8px;
+    --transition: all 0.3s ease;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-image: url('{% static "images/bk.jpg" %}');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.page-header {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+h1 {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+}
+
+.subtitle {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+}
+
+.admin-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.search-form {
+    flex: 1;
+    min-width: 300px;
+}
+
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.search-icon {
+    padding: 0 15px;
+    color: var(--gray-color);
+}
+
+.search-form input {
+    flex: 1;
+    padding: 12px 0;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    background: transparent;
+}
+
+.search-form input::placeholder {
+    color: var(--gray-color);
+}
+
+/* Button Styles */
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    text-align: center;
+    border: none;
+    font-size: 16px;
+    gap: 8px;
+    box-shadow: var(--shadow);
+}
+
+.button-primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+.button-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.button-clear {
+    background: white;
+    color: var(--gray-color);
+    padding: 12px 16px;
+    border-left: 1px solid var(--border-color);
+    border-radius: 0;
+}
+
+.button-clear:hover {
+    background: #f8f9fa;
+    color: var(--danger-color);
+}
+
+/* Table and Card Container */
+.table-container {
+    display: block;
+}
+
+.mobile-card-view {
+    display: none;
+}
+
+.table-responsive {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow-x: auto;
+    margin-bottom: 30px;
+}
+
+.rfp-table {
+    width: 100%;
+    min-width: 800px;
+    border-collapse: collapse;
+}
+
+.rfp-table th, .rfp-table td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: top;
+}
+
+.rfp-table th {
+    background: #f8f9fa;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    color: var(--dark-color);
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* FIXED: Remove truncation and allow proper text wrapping */
+.rfp-table td {
+    word-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
+    line-height: 1.4;
+}
+
+/* Remove truncation styles completely */
+.truncate {
+    max-width: none;
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+    white-space: nowrap;
+    flex-wrap: wrap;
+}
+
+/* Button Styles */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    transition: var(--transition);
+    border: none;
+    cursor: pointer;
+    gap: 5px;
+    white-space: nowrap;
+}
+
+.btn-view {
+    background: rgba(23, 162, 184, 0.1);
+    color: #17a2b8;
+}
+
+.btn-view:hover {
+    background: #17a2b8;
+    color: white;
+}
+
+.btn-edit {
+    background: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+}
+
+.btn-edit:hover {
+    background: #28a745;
+    color: white;
+}
+
+.btn-delete {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+}
+
+.btn-delete:hover {
+    background: #dc3545;
+    color: white;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    color: white;
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.status-submitted { background-color: var(--gray-color); }
+.status-in-review { background-color: var(--success-color); }
+.status-accepted { background-color: #28a745; }
+.status-rejected { background-color: var(--danger-color); }
+
+/* Mobile Card Styles */
+.rfp-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.rfp-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+    background: #f8f9fa;
+}
+
+.card-title {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    flex: 1;
+    margin-right: 15px;
+    word-wrap: break-word;
+    word-break: break-word;
+    line-height: 1.4;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.card-row {
+    display: flex;
+    margin-bottom: 12px;
+}
+
+.card-label {
+    font-weight: 600;
+    width: 120px;
+    color: var(--gray-color);
+    flex-shrink: 0;
+}
+
+.card-value {
+    flex: 1;
+    word-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
+    line-height: 1.4;
+}
+
+.card-footer {
+    display: flex;
+    padding: 15px 20px;
+    background: #f8f9fa;
+    border-top: 1px solid var(--border-color);
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.card-footer .btn {
+    flex: 1;
+    padding: 10px;
+    min-width: 80px;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.empty-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+}
+
+.empty-state h3 {
+    color: var(--dark-color);
+    margin-bottom: 15px;
+}
+
+.empty-state p {
+    color: var(--gray-color);
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+/* Utility Classes */
+.mobile-hidden {
+    display: inline;
+}
+
+.mobile-only {
+    display: none;
+}
+
+/* ------------------ Mobile-Specific Styles ------------------ */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px 10px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .admin-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .search-form {
+        min-width: 100%;
+    }
+
+    .button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .mobile-hidden {
+        display: none;
+    }
+
+    .mobile-only {
+        display: inline;
+    }
+
+    /* Hide table on mobile, show cards */
+    .table-container {
+        display: none;
+    }
+
+    .mobile-card-view {
+        display: block;
+    }
+
+    .card-footer {
+        flex-direction: column;
+    }
+
+    .card-footer .btn {
+        min-width: auto;
+    }
+}
+
+/* For very small screens */
+@media (max-width: 480px) {
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .card-title {
+        margin-right: 0;
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+    }
+
+    .card-row {
+        flex-direction: column;
+    }
+
+    .card-label {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+
+    .actions {
+        justify-content: center;
+    }
+
+    .btn {
+        flex: 1;
+        min-width: 70px;
+    }
+}
+
+/* Additional responsive improvements for table on medium screens */
+@media (max-width: 1024px) and (min-width: 769px) {
+    .rfp-table {
+        min-width: 700px;
+    }
+
+    .rfp-table th, .rfp-table td {
+        padding: 12px 8px;
+    }
+
+    .btn {
+        padding: 6px 10px;
+        font-size: 13px;
+    }
+}
+</style>
+{% endblock %}

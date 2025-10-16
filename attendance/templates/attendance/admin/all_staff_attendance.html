@@ -1,0 +1,163 @@
+{% extends 'attendance/base_attendance.html' %}
+
+{% block title %}All Staff Attendance{% endblock %}
+
+{% block page_header %}
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">
+            <a href="{% url 'attendance:admin_dashboard' %}" class="text-decoration-none text-gray-600">
+                <i class="fas fa-arrow-left mr-2"></i>
+            </a>
+            All Staff Attendance
+        </h1>
+      
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block attendance_content %}
+<!-- Date Range Filter -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+        <h6 class="m-0 font-weight-bold text-primary">
+            <i class="fas fa-filter mr-2"></i>
+            Filter Records
+        </h6>
+        <div>
+            <form method="get" action="{% url 'attendance:all_staff_attendance' %}" class="form-inline mb-2">
+                <div class="form-group mr-2 mb-2">
+                    <label for="start_date" class="mr-2">From:</label>
+                    <input type="date" class="form-control form-control-sm" id="start_date" name="start_date" value="{{ start_date|date:'Y-m-d' }}" max="{{ end_date|date:'Y-m-d' }}">
+                </div>
+                <div class="form-group mr-2 mb-2">
+                    <label for="end_date" class="mr-2">To:</label>
+                    <input type="date" class="form-control form-control-sm" id="end_date" name="end_date" value="{{ end_date|date:'Y-m-d' }}" min="{{ start_date|date:'Y-m-d' }}" max="{% now 'Y-m-d' %}">
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm mb-2">
+                    <i class="fas fa-filter"></i> Filter
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Summary Card -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+        <h6 class="m-0 font-weight-bold text-primary">
+            Attendance Summary ({{ start_date|date:'M j, Y' }} - {{ end_date|date:'M j, Y' }})
+            <span class="badge badge-primary ml-2">{{ staff_attendance|length }} Staff Members</span>
+        </h6>
+        <div>
+            <span class="text-muted small">{{ total_days }} day{{ total_days|pluralize }} in period</span>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="staffAttendanceTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Staff Member</th>
+                        <th>Present Days</th>
+                        <th>Attendance %</th>
+                        <th>Total Hours</th>
+                        <th>Last Activity</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for staff in staff_attendance %}
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="symbol symbol-40 symbol-light-{{ forloop.counter|divisibleby:2|yesno:'success,info' }} mr-3">
+                                    <span class="symbol-label font-size-h5">{{ staff.staff.first_name|first|upper }}{{ staff.staff.last_name|first|upper }}</span>
+                                </div>
+                                <div>
+                                    <div class="font-weight-bold text-dark-75">{{ staff.staff.get_full_name }}</div>
+                                    <div class="text-muted">{{ staff.staff.email }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="align-middle">
+                            {{ staff.present_days }} of {{ staff.total_days }}
+                            <div class="progress mt-1" style="height: 5px;">
+                                <div class="progress-bar bg-{{ staff.attendance_percentage|default:0|floatformat:0|add:'0'|stringformat:'s'|slice:':1'|default:'1' }}00" 
+                                     role="progressbar" 
+                                     style="width: {{ staff.attendance_percentage|default:0 }}%" 
+                                     aria-valuenow="{{ staff.attendance_percentage|default:0 }}" 
+                                     aria-valuemin="0" 
+                                     aria-valuemax="100">
+                                </div>
+                            </div>
+                        </td>
+                        <td class="align-middle font-weight-bold">
+                            {{ staff.attendance_percentage|floatformat:1 }}%
+                        </td>
+                        <td class="align-middle">
+                            {{ staff.total_hours|floatformat:1 }} hours
+                        </td>
+                        <td class="align-middle">
+                            {% if staff.last_activity %}
+                                {{ staff.last_activity|date:"M j, Y H:i" }}
+                            {% else %}
+                                <span class="text-muted">No activity</span>
+                            {% endif %}
+                        </td>
+                        <td class="align-middle">
+                            <a href="{% url 'attendance:staff_attendance_history' user_id=staff.staff.id %}" 
+                               class="btn btn-sm btn-primary"
+                               data-toggle="tooltip" 
+                               title="View detailed attendance">
+                                <i class="fas fa-eye"></i> View
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center py-4">
+                            <div class="text-muted">No staff records found for the selected period.</div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize DataTable
+    $('#staffAttendanceTable').DataTable({
+        "order": [[0, "asc"]],
+        "pageLength": 25,
+        "responsive": true,
+        "columnDefs": [
+            { "orderable": false, "targets": [5] } // Disable sorting on action column
+        ]
+    });
+    
+    // Initialize tooltips
+    $('[data-toggle="tooltip"]').tooltip();
+    
+    // Set min/max dates for date inputs
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('end_date').max = today;
+    
+    // Update min date when end date changes
+    document.getElementById('end_date').addEventListener('change', function() {
+        document.getElementById('start_date').max = this.value;
+    });
+    
+    // Update max date when start date changes
+    document.getElementById('start_date').addEventListener('change', function() {
+        document.getElementById('end_date').min = this.value;
+    });
+});
+</script>
+{% endblock %}

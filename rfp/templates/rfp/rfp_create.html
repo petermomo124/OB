@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Create New RFP" %}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        {# Container column for responsiveness: narrower on large screens, full width on mobile #}
+        <div class="col-12 col-md-10 col-lg-8">
+            <div class="card shadow-lg border-0 rounded-3">
+                <div class="card-header bg-primary text-white text-center py-3 rounded-top-3">
+                    <h2 class="mb-0">
+                        <i class="fas fa-file-signature me-2"></i> {% trans "Submit New Request for Proposal (RFP)" %}
+                    </h2>
+                </div>
+
+                <div class="card-body p-4 p-md-5">
+                    <p class="text-muted text-center mb-4">
+                        {% trans "Please fill out all required details for your new proposal." %}
+                    </p>
+
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        {# Proposal Details Section #}
+                        <h4 class="text-primary mb-3 border-bottom pb-2"><i class="fas fa-clipboard-list me-2"></i> {% trans "Proposal Information" %}</h4>
+
+                        {# Proposal Title (Required) #}
+                        <div class="mb-3">
+                            <label for="id_proposal_title" class="form-label fw-bold">{% trans "Proposal Title" %}<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control rounded-pill" id="id_proposal_title" name="proposal_title" required aria-label="Proposal Title">
+                        </div>
+
+                        {# Organization (Required) #}
+                        <div class="mb-4">
+                            <label for="id_organization" class="form-label fw-bold">{% trans "Organization/Company Name" %}<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control rounded-pill" id="id_organization" name="organization" required aria-label="Organization Name">
+                        </div>
+
+                        {# Deadline and Location Section #}
+                        <h4 class="text-primary mb-3 border-bottom pb-2"><i class="fas fa-map-marker-alt me-2"></i> {% trans "Timeline & Location" %}</h4>
+
+                        {# Proposal Deadline (Required) #}
+                        <div class="mb-3">
+                            <label for="id_proposal_deadline" class="form-label fw-bold">{% trans "Submission Deadline" %}<span class="text-danger">*</span></label>
+                            <input type="datetime-local" class="form-control rounded-3" id="id_proposal_deadline" name="proposal_deadline" required aria-label="Submission Deadline">
+                            <small class="form-text text-muted">{% trans "The date and time (local) when submissions must be received." %}</small>
+                        </div>
+
+                        {# Location Fields - Responsive grid layout #}
+                        <div class="row g-3 mb-4">
+                            {# City (Required) #}
+                            <div class="col-12 col-sm-4">
+                                <label for="id_city" class="form-label">{% trans "City" %}<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control rounded-pill" id="id_city" name="city" required aria-label="City">
+                            </div>
+
+                            {# State/Province (Required) #}
+                            <div class="col-12 col-sm-4">
+                                <label for="id_state_province" class="form-label">{% trans "State/Province" %}<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control rounded-pill" id="id_state_province" name="state_province" required aria-label="State/Province">
+                            </div>
+
+                            {# International Postal Code (Required) - Includes client-side pattern #}
+                            <div class="col-12 col-sm-4">
+                                <label for="id_postal_code" class="form-label fw-bold">{% trans "Postal/Zip Code" %}<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control rounded-pill" id="id_postal_code" name="postal_code" required
+                                    {# HTML5 Pattern matches the server-side Regex: letters, numbers, spaces, and ()-+ #}
+                                    pattern="[a-zA-Z0-9\s()+-]+"
+                                    title="Only letters, numbers, spaces, and the symbols ( ) - + are allowed."
+                                    aria-label="Postal/Zip Code">
+                            </div>
+                            <div class="col-12">
+                                <small class="form-text text-muted">{% trans "Postal Code allows alphanumeric, spaces, and: ( ) - +." %}</small>
+                            </div>
+                        </div>
+
+
+
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-success btn-lg shadow-sm rounded-pill">
+                                <i class="fas fa-check-circle me-2"></i> {% trans "Submit RFP" %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

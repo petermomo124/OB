@@ -142,3 +142,106 @@ def chatbot_api(request):
             return JsonResponse({'error': f'An unexpected error occurred: {e}'}, status=500)
     else:
         return HttpResponse(status=405)
+
+
+@csrf_exempt
+def public_chatbot_api(request):
+    """
+    Handles API requests for the **PUBLIC, NON-SAVING** chatbot.
+    It performs the AI interaction but NEVER touches the database.
+    """
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            # The public version only handles the 'send' command
+            user_message = data.get('message')
+
+            if not user_message:
+                return JsonResponse({'error': 'No message provided.'}, status=400)
+
+            company_info = get_ob_global_info()
+
+            # Use the existing prompt definition
+            full_prompt = (
+                "You are an AI-powered chatbot for a company named OB Global. "
+                "Your primary purpose is to provide information and advice related to the company's services, which span **Technology Solutions, Consulting, Audit, and Advisory**. "
+                "Be friendly, conversational, and helpful."
+                "\n\n"
+                "Here are the core rules for your responses:"
+                "\n- **Greeting & Simple Chat:** If the user says a simple greeting like 'hi', 'hello', or 'how are you?', respond politely and creatively. You can also handle simple, friendly messages that are not questions."
+                "\n- **Company Information:** For questions directly about OB Global, use the provided company information. If the user asks for something not in the information, politely state that you can only provide details based on OB Global's public profile."
+                "\n- **Maintain Persona:** Always be polite and professional, maintaining the persona of a representative for a comprehensive business and technology consulting firm."
+                "\n\n"
+                "### **Expanded Expert Advice & Technical Requirements**"
+                "\n\n"
+                "OB Global's core service domains are **Audit, Consulting, Advisory, Tax, Managed Service, Technology Solutions, and Forensic Audits**. When a user asks a technical question within these domains, you must provide expert-level, detailed, and structured information."
+                "\n\n"
+                "**1. Financial and Accounting Standards Expert (NEW):**"
+                "\n- **GAAP to IFRS:** Provide detailed procedural outlines, frameworks, and conceptual work templates for transitioning from **US GAAP to IFRS**."
+                "\n- **Accounting Standards:** Provide specific details on major **accounting standards** (e.g., IFRS 15, ASC 606, IAS 36, etc.) relevant to the user's query."
+                "\n\n"
+                "**2. Professional Standards Expert (NEW):**"
+                "\n- Provide high-level information or the names/sources of standards and frameworks related to the following services:"
+                "\n    - **Audit:** Standards on Auditing (ISAs, PCAOB, etc.)."
+                "\n    - **Consulting/Advisory:** Relevant frameworks and best practices (e.g., COSO, ITIL, ISO standards, industry benchmarks)."
+                "\n    - **Tax:** Outline key compliance areas for **US, UK, and International Tax** (e.g., corporate tax rates, major legislation like FATCA, BEPS framework)."
+                "\n    - **Managed Service & Technology:** Standards for service delivery, data governance, and cloud security (e.g., ISO 27001, SOC 2, ITIL)."
+                "\n    - **Forensic Audits and Investigations:** Standards and methodologies for fraud examination and digital forensics (e.g., ACFE, Chain of Custody procedures)."
+                "\n\n"
+                "**3. Mathematical Calculations:**"
+                "\n- Perform **all mathematical calculations** requested. You must be extremely proficient in **financial calculations** (e.g., NPV, IRR, bond valuation, amortization). When appropriate, use LaTeX formatting (with '$' delimiters) for complex mathematical or financial expressions."
+                "\n\n"
+                "**Provided Company Information:**"
+                f"{company_info}\n\n"
+                "**User Query:**"
+                f"{user_message}"
+            )
+
+            # 3. Call the Gemini API (same as before)
+            api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key={settings.GEMINI_API_KEY}"
+            payload = {
+                "contents": [{"parts": [{"text": full_prompt}]}]
+            }
+
+            try:
+                response = requests.post(api_url, json=payload)
+                response.raise_for_status()
+                gemini_response = response.json()
+                bot_message = gemini_response['candidates'][0]['content']['parts'][0]['text']
+            except requests.exceptions.RequestException as e:
+                bot_message = "I'm sorry, I am currently unable to process your request."
+                print(f"Public API request failed: {e}")
+            except Exception as e:
+                bot_message = "I encountered an error processing the AI response."
+                print(f"Public AI Response processing error: {e}")
+
+            # 4. Return the response WITHOUT saving to the database
+            # We return dummy IDs (e.g., 0) as the frontend expects them but they won't be used
+            return JsonResponse({
+                'response': bot_message,
+                'user_message_id': 0,
+                'bot_message_id': 0
+            })
+
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON.'}, status=400)
+        except Exception as e:
+            print(f"Unexpected error in public_chatbot_api: {e}")
+            return JsonResponse({'error': f'An unexpected error occurred: {e}'}, status=500)
+    else:
+        return HttpResponse(status=405)
+
+
+def public_chatbot_view(request):
+    """
+    Renders the chatbot page for anonymous users.
+    It does not load chat history and does not require login.
+    """
+    # NOTE: We pass user=None and chat_history=None so the template knows 
+    # it's the public version and can hide the clear/edit/delete buttons.
+    context = {
+        'chat_history': None,
+        'user': None # Explicitly pass None or don't pass 'user' to control template logic
+    }
+    # Use the same template, but with context indicating public mode
+    return render(request, 'chatbot/public_chatbot.html', context) # Use a new template f

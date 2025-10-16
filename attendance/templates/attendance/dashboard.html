@@ -1,0 +1,219 @@
+{% extends 'attendance/base_attendance.html' %}
+{% load static %}
+{% load user_filters %}
+
+{% block title %}Staff Dashboard - OfficeBuddy{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Staff Dashboard</h1>
+        <div>
+            <span class="mr-2">Welcome, {{ request.user|display_name }}</span>
+        </div>
+    </div>
+
+
+    <!-- Stats Row -->
+    <div class="row">
+        <!-- Pending Leave Requests Card -->
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                Pending Leave Requests</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ pending_requests|length }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-comments fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Next Holiday Card -->
+        <div class="col-xl-4 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                Next Holiday</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                {% if upcoming_holidays %}
+                                    {{ upcoming_holidays.0.name }} ({{ upcoming_holidays.0.date|date:"M d" }})
+                                {% else %}
+                                    No upcoming holidays
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-umbrella-beach fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Upcoming Holidays -->
+    {% if upcoming_holidays %}
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="fas fa-calendar-alt mr-2"></i>Upcoming Holidays
+                    </h6>
+                    {% if user.is_superuser %}
+                    <a href="{% url 'attendance:admin_add_holiday' %}" class="btn btn-sm btn-primary">
+                        <i class="fas fa-plus fa-sm"></i> Add Holiday
+                    </a>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Holiday</th>
+                                    <th>Day</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for holiday in upcoming_holidays %}
+                                <tr>
+                                    <td>{{ holiday.date|date:"F d, Y" }}</td>
+                                    <td>{{ holiday.name }}</td>
+                                    <td>{{ holiday.date|date:"l" }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Content Row -->
+    <div class="row">
+        <!-- Clock In/Out Card -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Clock In/Out</h6>
+                </div>
+                <div class="card-body text-center">
+                    {% if can_clock_in %}
+                        <form method="post" action="{% url 'attendance:clock_in_out' %}" class="mb-4">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="check_in">
+                            <button type="submit" class="btn btn-success btn-lg btn-block py-3">
+                                <i class="fas fa-sign-in-alt fa-fw"></i> CLOCK IN
+                            </button>
+                        </form>
+                        <p class="text-muted mb-4">You are currently <span class="text-danger font-weight-bold">CLOCKED OUT</span></p>
+                    {% else %}
+                        <form method="post" action="{% url 'attendance:clock_in_out' %}" class="mb-4">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="check_out">
+                            <button type="submit" class="btn btn-danger btn-lg btn-block py-3">
+                                <i class="fas fa-sign-out-alt fa-fw"></i> CLOCK OUT
+                            </button>
+                        </form>
+                        <p class="text-muted">Last check-in: <span class="font-weight-bold">{{ last_check_in|timesince }}</span> ago</p>
+                    {% endif %}
+                    
+                    <div class="d-flex justify-content-end mt-4">
+                        <a href="{% url 'attendance:mark_absence' %}" class="btn btn-warning">
+                            <i class="fas fa-user-times fa-fw"></i> Mark Absence
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Recent Activity</h6>
+                </div>
+                <div class="card-body">
+                    {% if recent_activity %}
+                        <div class="list-group list-group-flush">
+                            {% for activity in recent_activity %}
+                                <div class="list-group-item list-group-item-action flex-column align-items-start">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">{{ activity.get_attendance_type_display }}</h6>
+                                        <small>{{ activity.timestamp|timesince }} ago</small>
+                                    </div>
+                                    <p class="mb-1">{{ activity.notes|default:"No notes" }}</p>
+                                    <small>At {{ activity.timestamp|date:"g:i A" }}</small>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No recent activity found.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pending Leave Requests -->
+    {% if pending_leave_requests %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-warning">Your Pending Leave Requests</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Type</th>
+                                    <th>Reason</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for request in pending_leave_requests %}
+                                <tr>
+                                    <td>{{ request.start_date|date:"M d, Y" }}</td>
+                                    <td>{{ request.end_date|date:"M d, Y" }}</td>
+                                    <td>{{ request.get_leave_type_display }}</td>
+                                    <td>{{ request.reason|truncatechars:30 }}</td>
+                                    <td>
+                                        <span class="badge badge-warning">{{ request.get_status_display }}</span>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'attendance:view_leave_request' request.id %}" class="btn btn-sm btn-info">
+                                            <i class="fas fa-eye"></i> View
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

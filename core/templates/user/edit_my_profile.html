@@ -1,0 +1,437 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}Edit My Profile{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="card header-card">
+        <div class="card-header-custom">
+            <div class="card-icon">
+                <i class="fas fa-user-edit"></i>
+            </div>
+            <h1 class="card-title-custom">Edit Your Profile</h1>
+        </div>
+    </div>
+    
+    <div class="row justify-content-center">
+        <div class="col-lg-12">
+            
+            {% include 'partials/messages.html' %}
+            
+            <form method="POST" enctype="multipart/form-data" class="edit-form card p-4 shadow-lg border-0">
+                {% csrf_token %}
+                
+                <h4 class="mb-4 section-heading"><i class="fas fa-image"></i> Profile Picture</h4>
+                <div class="mb-4 profile-image-upload">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="current-image-container me-4">
+                            {% if user_to_update.profile_image %}
+                                <img src="{{ user_to_update.profile_image }}" alt="Current Profile Image" class="current-profile-image">
+                            {% else %}
+                                <div class="no-image-placeholder"><i class="fas fa-camera"></i></div>
+                            {% endif %}
+                        </div>
+                        <div class="image-info">
+                            <label for="profile_image" class="form-label mb-2">Upload New Profile Image (Optional)</label>
+                            <input type="file" class="form-control" id="profile_image" name="profile_image" accept="image/*">
+                            {% if user_to_update.profile_image %}
+                                <small class="form-text text-muted mt-2">Current Image: <a href="{{ user_to_update.profile_image }}" target="_blank">View Full Size</a></small>
+                            {% else %}
+                                <small class="form-text text-muted mt-2">No profile image set. Use the field above to upload one.</small>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="form-divider">
+                <h4 class="mb-4 section-heading"><i class="fas fa-info-circle"></i> Personal Information</h4>
+
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <label for="id_first_name" class="form-label required">First Name</label>
+                        <input type="text" class="form-control" id="id_first_name" name="first_name" value="{{ user_to_update.first_name }}" required>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <label for="id_last_name" class="form-label required">Last Name</label>
+                        <input type="text" class="form-control" id="id_last_name" name="last_name" value="{{ user_to_update.last_name }}" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="row">
+    <div class="col-md-6 mb-4">
+        <label for="id_email" class="form-label required">Email Address</label>
+        
+        {% with user_role=user_to_update.role %}
+        {% if user_role == 'admin' or user_role == 'staff' %}
+            <input 
+                type="email" 
+                class="form-control" 
+                id="id_email" 
+                name="email" 
+                value="{{ user_to_update.email }}" 
+                required 
+                readonly 
+                style="background-color: #e9ecef;"
+            >
+            <small class="text-muted">Admins/Staff cannot change their email here.</small>
+        {% else %}
+            <input 
+                type="email" 
+                class="form-control" 
+                id="id_email" 
+                name="email" 
+                value="{{ user_to_update.email }}" 
+                required
+            >
+        {% endif %}
+        {% endwith %}
+
+    </div>
+    <div class="col-md-6 mb-4">
+        <label for="id_phone_number" class="form-label required">Phone Number (e.g., +25078...)</label>
+        <input type="text" class="form-control" id="id_phone_number" name="phone_number" value="{{ user_to_update.phone_number }}" required>
+    </div>
+</div>
+                    <div class="col-md-6 mb-4">
+                        <label for="id_phone_number" class="form-label required">Phone Number (e.g., +25078...)</label>
+                        <input type="text" class="form-control" id="id_phone_number" name="phone_number" value="{{ user_to_update.phone_number }}" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <label for="id_address" class="form-label required">Address</label>
+                        <input type="text" class="form-control" id="id_address" name="address" value="{{ user_to_update.address }}" required>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <label for="id_linkedin" class="form-label">LinkedIn Profile URL</label>
+                        <input type="url" class="form-control" id="id_linkedin" name="linkedin" value="{{ user_to_update.linkedin|default:'' }}">
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <label for="id_date_of_birth" class="form-label">Date of Birth</label>
+                        <input type="date" class="form-control" id="id_date_of_birth" name="date_of_birth" value="{{ user_to_update.date_of_birth|date:'Y-m-d' }}">
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <label for="id_nationality" class="form-label required">Nationality</label>
+                        <input type="text" class="form-control" id="id_nationality" name="nationality" value="{{ user_to_update.nationality }}" required>
+                    </div>
+                </div>
+
+                <hr class="form-divider">
+                
+                <h4 class="mb-4 section-heading"><i class="fas fa-lock"></i> Change Password (Optional)</h4>
+                <p class="text-info mb-4">Use the fields below **only** if you wish to change your password.</p>
+                
+                <div class="mb-4">
+                    <label for="id_current_password" class="form-label">Current Password</label>
+                    <input type="password" class="form-control" id="id_current_password" name="current_password" placeholder="Required if changing password">
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <label for="id_new_password" class="form-label">New Password (Min 9 characters)</label>
+                        <input type="password" class="form-control" id="id_new_password" name="new_password" placeholder="New password">
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <label for="id_confirm_password" class="form-label">Confirm New Password</label>
+                        <input type="password" class="form-control" id="id_confirm_password" name="confirm_password" placeholder="Confirm new password">
+                    </div>
+                </div>
+
+                <div class="d-flex flex-wrap justify-content-end gap-3 mt-4 pt-3 border-top">
+                    <a href="{% url 'view_my_profile' %}" class="btn btn-outline-secondary btn-action-lg">
+                        <i class="fas fa-arrow-left"></i> Back to Profile
+                    </a>
+                    <button type="submit" class="btn btn-primary btn-action-lg">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extra_css %}
+<style>
+/* --- Design Variables for Profile Card Look --- */
+:root {
+    --primary-color: #007bff; /* Blue */
+    --secondary-color: #17a2b8; /* Cyan/Teal */
+    --accent-color: #28a745; /* Green */
+    --text-color-dark: #212529;
+    --text-color-light: #495057;
+    --card-bg: #ffffff; /* Solid white for a clean card look */
+    --shadow-deep: 0 15px 40px rgba(0, 0, 0, 0.1);
+    --border-radius-large: 16px;
+}
+
+/* --- General Page/Container Styling --- */
+body {
+    background-image: url('{% static "images/bk.jpg" %}'); /* Assuming this is your background image */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Changed font for modern feel */
+    margin: 0;
+    padding: 0;
+}
+
+.page-container {
+    max-width: 800px; /* Reduced max-width for a compact card feel */
+    margin: 50px auto; /* Increased top/bottom margin */
+    padding: 0; /* Remove container padding since the card will hold it */
+    box-sizing: border-box;
+}
+
+/* --- Integrated Header & Card Styling (The Profile Card) --- */
+/* Remove the transparent header and integrate it into the form/card */
+.header-card {
+    display: none; /* Hide the separate header card */
+}
+
+.edit-form {
+    /* Main Card Styles */
+    background-color: var(--card-bg);
+    border: 1px solid #e9ecef;
+    border-radius: var(--border-radius-large);
+    box-shadow: var(--shadow-deep);
+    padding: 40px !important; /* Increased padding inside the card */
+    position: relative;
+    overflow: hidden;
+}
+
+/* Header Strip on the Card Top */
+.edit-form::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 8px; /* Thick primary strip */
+    background-color: var(--primary-color);
+    border-top-left-radius: var(--border-radius-large);
+    border-top-right-radius: var(--border-radius-large);
+}
+
+.card-header-custom {
+    /* Re-purposed to serve as the card's internal title block */
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #f0f0f0; /* Lighter separator */
+}
+
+.card-icon {
+    width: 50px; /* Slightly larger icon */
+    height: 50px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+}
+
+.card-title-custom {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text-color-dark);
+    margin: 0;
+}
+
+/* --- Section Headings (Clear Dividers) --- */
+.section-heading {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-color-dark); /* Darker text for professional feel */
+    border-left: 4px solid var(--secondary-color);
+    padding-left: 15px;
+    margin-bottom: 1.8rem !important;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.section-heading i {
+    color: var(--secondary-color);
+}
+
+.form-divider {
+    border-top: 1px solid #e9ecef; /* Solid light line */
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+}
+
+/* --- Form Controls --- */
+.form-label {
+    font-weight: 600;
+    color: var(--text-color-light);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    text-transform: uppercase; /* Subtle uppercase labels */
+}
+
+.form-control {
+    border-radius: 8px;
+    padding: 12px 15px;
+    border: 1px solid #ced4da;
+    transition: all 0.2s ease;
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.15);
+}
+
+.required::after {
+    content: " *";
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* --- Profile Image Styling (Focus on Prominence) --- */
+.profile-image-upload {
+    width: 100%;
+}
+
+.current-image-container {
+    flex-shrink: 0;
+    position: relative;
+    padding: 5px; /* Space for the border */
+    border-radius: 50%;
+    background: linear-gradient(45deg, var(--accent-color), var(--primary-color));
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+}
+
+.current-profile-image {
+    width: 120px; /* Larger image */
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid var(--card-bg); /* White inner border for definition */
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+.no-image-placeholder {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: var(--light-bg);
+    color: #adb5bd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    border: 3px dashed #adb5bd;
+}
+
+.image-info {
+    flex-grow: 1;
+    padding-top: 5px;
+}
+.image-info .form-control {
+    width: 100%;
+    max-width: 350px;
+}
+
+
+/* --- Button Styling --- */
+.d-flex.flex-wrap {
+    justify-content: flex-end; /* Ensure buttons are to the right */
+    gap: 15px !important;
+}
+
+.btn-action-lg {
+    padding: 12px 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    min-width: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.5);
+    transform: translateY(-1px);
+}
+.btn-outline-secondary {
+    color: var(--text-color-light);
+    border-color: #ced4da;
+}
+.btn-outline-secondary:hover {
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+/* --- Mobile Responsiveness (Clean Stack) --- */
+@media (max-width: 768px) {
+    .page-container {
+        margin: 10px;
+    }
+    .edit-form {
+        padding: 25px !important;
+        border-radius: 0; /* Full width on mobile */
+    }
+    
+    .card-title-custom {
+        font-size: 1.6rem;
+    }
+
+    .section-heading {
+        font-size: 1.2rem;
+    }
+
+    /* Stack profile image section vertically */
+    .profile-image-upload .d-flex {
+        flex-direction: column;
+        align-items: center !important;
+        text-align: center;
+    }
+
+    .current-image-container {
+        margin-right: 0 !important;
+        margin-bottom: 25px;
+    }
+
+    .image-info {
+        text-align: center;
+        width: 100%;
+    }
+    .image-info .form-control {
+        max-width: 100%;
+    }
+
+    /* Stack buttons vertically on small screens */
+    .d-flex.flex-wrap {
+        flex-direction: column;
+        gap: 10px !important;
+    }
+    .btn-action-lg {
+        width: 100%;
+        min-width: 0;
+    }
+}
+</style>
+{% endblock %}

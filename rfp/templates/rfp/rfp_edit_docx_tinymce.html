@@ -1,0 +1,876 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Edit Document" %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .editor-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 15px;
+    }
+
+    .editor-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1.5rem 0;
+        margin-bottom: 1.5rem;
+    }
+
+    .auto-save-indicator {
+        position: fixed;
+        top: 70px;
+        right: 15px;
+        left: 15px;
+        z-index: 1000;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        text-align: center;
+        max-width: 300px;
+        margin: 0 auto;
+    }
+
+    .saving {
+        background-color: #ffc107;
+        color: #000;
+    }
+
+    .saved {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .error {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    /* Mobile-optimized TinyMCE editor */
+    .tox-tinymce {
+        border: 1px solid #ccc !important;
+        border-radius: 8px !important;
+        min-height: 400px !important;
+    }
+
+    /* Loading overlay */
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.95);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        display: none;
+    }
+
+    /* Perfect preservation alert */
+    .perfect-preservation-alert {
+        border-left: 4px solid #28a745;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Mobile-optimized card */
+    .card {
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .card-body {
+        padding: 1.5rem !important;
+    }
+
+    .card-footer {
+        padding: 1.25rem 1.5rem !important;
+    }
+
+    /* Mobile-optimized buttons */
+    .btn-lg {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    /* Mobile-optimized alerts */
+    .alert {
+        border-radius: 8px;
+        padding: 1rem 1.25rem;
+        margin-bottom: 1rem;
+    }
+
+    /* Mobile toolbar adjustments */
+    .tox-toolbar {
+        flex-wrap: wrap !important;
+    }
+
+    .tox-toolbar__group {
+        margin-bottom: 4px !important;
+    }
+
+    /* Mobile dropdown adjustments */
+    .dropdown-menu {
+        border-radius: 8px;
+        border: 1px solid rgba(0,0,0,0.15);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    /* Mobile form controls */
+    textarea {
+        min-height: 300px;
+    }
+
+    /* Mobile header adjustments */
+    .editor-header h1 {
+        font-size: 1.75rem;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Mobile status messages */
+    #save-status {
+        margin: 1rem 0;
+    }
+
+    /* Mobile button group */
+    .btn-group .btn {
+        flex: 1;
+    }
+
+    /* Mobile-specific styles */
+    @media (max-width: 768px) {
+        .editor-header {
+            padding: 1rem 0;
+            margin-bottom: 1rem;
+        }
+
+        .editor-header h1 {
+            font-size: 1.5rem;
+        }
+
+        .editor-container {
+            padding: 0 10px;
+        }
+
+        .card-body {
+            padding: 1.25rem !important;
+        }
+
+        .card-footer {
+            padding: 1rem 1.25rem !important;
+        }
+
+        .auto-save-indicator {
+            top: 60px;
+            right: 10px;
+            left: 10px;
+            font-size: 0.85rem;
+            padding: 0.6rem 0.8rem;
+        }
+
+        .btn-lg {
+            padding: 0.875rem 1rem;
+            font-size: 0.95rem;
+        }
+
+        .tox-tinymce {
+            min-height: 350px !important;
+        }
+
+        /* Stack buttons vertically on mobile */
+        .flex-md-row {
+            flex-direction: column !important;
+        }
+
+        .flex-md-row .btn,
+        .flex-md-row .btn-group {
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+
+        .flex-md-row .btn:last-child,
+        .flex-md-row .btn-group:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Mobile dropdown full width */
+        .btn-group {
+            width: 100%;
+        }
+
+        .btn-group .dropdown-menu {
+            width: 100%;
+            transform: none !important;
+            position: static !important;
+        }
+
+        /* Adjust alert spacing */
+        .alert {
+            margin-bottom: 1rem;
+        }
+
+        .perfect-preservation-alert ul {
+            padding-left: 1rem;
+        }
+
+        .perfect-preservation-alert li {
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .editor-header h1 {
+            font-size: 1.35rem;
+        }
+
+        .editor-header p {
+            font-size: 0.9rem;
+        }
+
+        .card-body {
+            padding: 1rem !important;
+        }
+
+        .tox-tinymce {
+            min-height: 300px !important;
+        }
+
+        .btn-lg {
+            padding: 0.75rem 0.875rem;
+            font-size: 0.9rem;
+        }
+
+        /* Further reduce padding on very small screens */
+        .editor-container {
+            padding: 0 8px;
+        }
+
+        .auto-save-indicator {
+            right: 8px;
+            left: 8px;
+        }
+    }
+
+    /* TinyMCE mobile optimizations */
+    @media (max-width: 480px) {
+        .tox-toolbar__group {
+            padding: 2px 4px !important;
+        }
+
+        .tox-tbtn {
+            margin: 1px !important;
+            padding: 4px !important;
+        }
+
+        .tox-tbtn svg {
+            transform: scale(0.85);
+        }
+    }
+
+    /* Ensure proper scrolling on mobile */
+    .mce-content-body {
+        -webkit-overflow-scrolling: touch;
+        overflow-x: auto;
+    }
+
+    /* Mobile loading overlay */
+    .loading-overlay .spinner-border {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+
+    /* Touch-friendly elements */
+    .btn, .dropdown-item {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+    }
+
+    .dropdown-item {
+        padding: 0.75rem 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="editor-header">
+    <div class="container editor-container">
+        <h1 class="mb-2">
+            <i class="fas fa-file-word me-2"></i>
+            {% trans "Edit Document" %}
+        </h1>
+        <p class="mb-0 opacity-75">
+            <strong>{{ rfp_file.get_file_name }}</strong>
+        </p>
+    </div>
+</div>
+
+<div class="container editor-container">
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="text-center">
+            <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;"></div>
+            <h5>Saving Document...</h5>
+            <p class="text-muted">Please wait while we save your changes</p>
+        </div>
+    </div>
+
+    <div id="auto-save-indicator" class="auto-save-indicator d-none"></div>
+
+    <div class="card shadow">
+        <div class="card-body p-4">
+            <!-- Perfect Preservation Alert -->
+            <div class="alert alert-success perfect-preservation-alert">
+                <i class="fas fa-check-circle me-2"></i>
+                <strong>Perfect Preservation Guaranteed!</strong>
+                <ul class="mb-0 mt-2">
+                    <li>All images, formatting, and styling are preserved exactly as you see them</li>
+                    <li>Download as HTML for perfect quality</li>
+                    <li>Download as DOCX for basic text content (formatting may be lost)</li>
+                    <li>HTML files can be opened in any browser and look identical to the editor</li>
+                </ul>
+            </div>
+
+            <!-- DEBUG INFO - Remove in production -->
+            {% if debug %}
+            <div class="alert alert-warning">
+                <strong>Debug Info:</strong><br>
+                Text Content Length: {{ text_content|length }}<br>
+                File: {{ rfp_file.get_file_name }}<br>
+                RFP: {{ referral.proposal_title }}
+            </div>
+            {% endif %}
+
+            <!-- Save Status Messages -->
+            <div id="save-status" class="alert alert-info d-none">
+                <i class="fas fa-info-circle me-2"></i>
+                <span id="save-status-text"></span>
+            </div>
+
+            <form method="post" id="docx-form">
+                {% csrf_token %}
+                <textarea id="tinymce-editor" name="docx_content">{{ text_content|safe }}</textarea>
+            </form>
+        </div>
+
+        <div class="card-footer bg-white py-3">
+            <div class="d-flex flex-column flex-md-row gap-3">
+                <button type="button" class="btn btn-primary btn-lg flex-fill" id="manual-save-btn">
+                    <i class="fas fa-save me-2"></i>
+                    {% trans "Save Document" %}
+                </button>
+
+                <div class="btn-group">
+                    <a href="{% url 'rfp_download_file' rfp_pk=referral.pk file_pk=rfp_file.pk %}"
+                       class="btn btn-success btn-lg">
+                        <i class="fas fa-download me-2"></i>
+                        {% trans "Download HTML" %}
+                    </a>
+                    <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split"
+                            data-bs-toggle="dropdown">
+                        <span class="visually-hidden">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu" style="min-width: 280px; border-radius: 12px; border: 1px solid #dee2e6; box-shadow: 0 8px 25px rgba(0,0,0,0.15); padding: 8px 0;">
+    <li>
+        <a class="dropdown-item"
+           href="{% url 'rfp_download_file' rfp_pk=referral.pk file_pk=rfp_file.pk %}"
+           style="padding: 14px 20px; font-size: 15px; display: flex; align-items: center; gap: 12px; border-radius: 8px; margin: 2px 8px; transition: all 0.2s ease; min-height: 50px;">
+            <i class="fas fa-code" style="font-size: 16px; color: #4361ee; min-width: 20px;"></i>
+            <div style="flex: 1;">
+                <div style="font-weight: 600; color: #333; line-height: 1.2;">HTML Format</div>
+                <div style="font-size: 12px; color: #666; line-height: 1.3;">Perfect Quality</div>
+            </div>
+        </a>
+    </li>
+    <li>
+        <a class="dropdown-item"
+           href="{% url 'rfp_download_file' rfp_pk=referral.pk file_pk=rfp_file.pk %}?format=docx"
+           style="padding: 14px 20px; font-size: 15px; display: flex; align-items: center; gap: 12px; border-radius: 8px; margin: 2px 8px; transition: all 0.2s ease; min-height: 50px;">
+            <i class="fas fa-file-word" style="font-size: 16px; color: #2b579a; min-width: 20px;"></i>
+            <div style="flex: 1;">
+                <div style="font-weight: 600; color: #333; line-height: 1.2;">DOCX Format</div>
+                <div style="font-size: 12px; color: #666; line-height: 1.3;">Basic Format</div>
+            </div>
+        </a>
+    </li>
+</ul>
+                </div>
+
+                <a href="{% url 'rfp_detail' pk=referral.pk %}"
+                   class="btn btn-outline-secondary btn-lg">
+                    <i class="fas fa-arrow-left me-2"></i>
+                    {% trans "Back" %}
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert alert-info mt-3">
+        <i class="fas fa-info-circle me-2"></i>
+        <strong>Tip:</strong>
+        <ul class="mb-0 mt-2">
+            <li>Your changes are automatically saved every 30 seconds</li>
+            <li>All images and formatting are perfectly preserved in HTML format</li>
+            <li>Use HTML download for perfect quality, DOCX for basic text content</li>
+            <li>HTML files can be opened in any browser and maintain exact formatting</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.tiny.cloud/1/qkai12lo3nxp8b7gear9gbojhi7a7224ompcs53hoeyje10a/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous"></script>
+<script>
+// Global variables
+let autoSaveInterval;
+let hasUnsavedChanges = false;
+let isSaving = false;
+let editorInstance = null;
+let lastSavedContent = '';
+
+// Enhanced TinyMCE initialization - SAME interface for all screen sizes
+tinymce.init({
+    selector: '#tinymce-editor',
+    height: 500, // Consistent height for all devices
+    menubar: 'file edit view insert format tools table',
+    plugins: [
+        'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+        'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+        'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount',
+        'paste', 'autosave', 'powerpaste'
+    ],
+    toolbar: 'undo redo | formatselect | bold italic underline strikethrough | ' +
+             'forecolor backcolor | alignleft aligncenter alignright alignjustify | ' +
+             'bullist numlist outdent indent | table link image | ' +
+             'removeformat | fullscreen | code',
+    toolbar_mode: 'wrap', // Use wrap mode for better mobile responsiveness
+    toolbar_sticky: true,
+
+    // DISABLE image uploads - we'll handle images locally as base64
+    images_upload_handler: function (blobInfo, progress) {
+        return new Promise((resolve, reject) => {
+            // Convert image to base64 and keep it embedded
+            const reader = new FileReader();
+            reader.onload = function () {
+                resolve(reader.result);
+            };
+            reader.onerror = function () {
+                reject('Image conversion failed');
+            };
+            reader.readAsDataURL(blobInfo.blob());
+        });
+    },
+
+    // Enhanced content handling for better format and image preservation
+    content_style: `
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 12pt;
+            line-height: 1.6;
+            padding: 15px;
+            max-width: 800px;
+            margin: 0 auto;
+            background: #ffffff;
+            color: #000000;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            table-layout: fixed;
+        }
+        table, th, td {
+            border: 1px solid #333;
+        }
+        th, td {
+            padding: 8px 12px;
+            text-align: left;
+            word-wrap: break-word;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 1em auto;
+        }
+        p {
+            margin: 0 0 1em 0;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            margin: 1.5em 0 0.5em 0;
+            color: #000000;
+        }
+        h1 { font-size: 18pt; }
+        h2 { font-size: 16pt; }
+        h3 { font-size: 14pt; }
+        ul, ol {
+            margin: 1em 0;
+            padding-left: 2em;
+        }
+        li {
+            margin: 0.5em 0;
+        }
+        .mce-content-body {
+            min-height: 400px;
+            background: #ffffff;
+        }
+        .page-break {
+            page-break-after: always;
+        }
+    `,
+
+    // Better paste handling - ENABLE image pasting as base64
+    paste_data_images: true,
+    paste_as_text: false,
+    paste_webkit_styles: 'font-weight font-size color font-family background-color text-align',
+    paste_retain_style_properties: 'all',
+    paste_preprocess: function(plugin, args) {
+        console.log('Pasting content with images as base64');
+    },
+
+    // Format preservation with image support
+    valid_elements: '*[*]',
+    extended_valid_elements: 'img[src|alt|title|width|height|style|class],style,link[rel|type|href|media]',
+    convert_urls: false, // Keep images as base64/data URLs
+    relative_urls: false,
+    remove_script_host: false,
+
+    // Image handling configuration
+    image_caption: false, // Disable caption to keep simple HTML
+    image_advtab: false, // Disable advanced tab to avoid uploads
+    image_title: false,
+
+    // Auto-save configuration
+    autosave_interval: '30s',
+    autosave_prefix: 'tinymce-autosave-rfp-{{ rfp_file.pk }}-',
+    autosave_restore_when_empty: false,
+    autosave_retention: '1440m',
+
+    setup: function(editor) {
+        editorInstance = editor;
+
+        editor.on('init', function() {
+            console.log('TinyMCE initialized with responsive design');
+            lastSavedContent = editor.getContent();
+            console.log('Initial content length:', lastSavedContent.length);
+
+            // Count images in initial content
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = lastSavedContent;
+            const imageCount = tempDiv.querySelectorAll('img').length;
+            console.log('Initial images count:', imageCount);
+
+            setupAutoSave();
+
+            // Show initial content info
+            if (imageCount > 0) {
+                updateSaveStatus(`Document loaded successfully with ${imageCount} image(s). All content will be preserved exactly.`, 'success');
+            } else {
+                updateSaveStatus('Document loaded successfully. All formatting will be preserved.', 'info');
+            }
+        });
+
+        editor.on('change', function() {
+            const currentContent = editor.getContent();
+            if (currentContent !== lastSavedContent) {
+                markAsUnsaved();
+
+                // Count images in current content
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = currentContent;
+                const imageCount = tempDiv.querySelectorAll('img').length;
+
+                console.log('Content changed, length:', currentContent.length, 'images:', imageCount);
+
+                if (imageCount > 0) {
+                    updateSaveStatus(`Unsaved changes with ${imageCount} image(s)`, 'warning');
+                } else {
+                    updateSaveStatus('You have unsaved changes', 'warning');
+                }
+            }
+        });
+
+        // Handle any editor errors silently
+        editor.on('error', function(e) {
+            console.warn('TinyMCE minor error (can be ignored):', e);
+        });
+    }
+});
+
+// Enhanced status display
+function updateSaveStatus(message, type = 'info') {
+    const statusElement = document.getElementById('save-status');
+    const statusText = document.getElementById('save-status-text');
+
+    if (statusElement && statusText) {
+        statusText.textContent = message;
+        statusElement.className = `alert alert-${type}`;
+        statusElement.classList.remove('d-none');
+
+        // Auto-hide info messages after 5 seconds
+        if (type === 'info' || type === 'success') {
+            setTimeout(() => {
+                statusElement.classList.add('d-none');
+            }, 5000);
+        }
+    }
+}
+
+function showIndicator(message, type) {
+    const indicator = document.getElementById('auto-save-indicator');
+    indicator.textContent = message;
+    indicator.className = 'auto-save-indicator ' + type;
+    indicator.classList.remove('d-none');
+
+    if (type === 'saved') {
+        setTimeout(() => {
+            indicator.classList.add('d-none');
+        }, 3000);
+    }
+}
+
+function showLoadingOverlay(show) {
+    const overlay = document.getElementById('loading-overlay');
+    if (overlay) {
+        overlay.style.display = show ? 'flex' : 'none';
+    }
+}
+
+function markAsUnsaved() {
+    hasUnsavedChanges = true;
+    console.log('Document marked as unsaved');
+}
+
+function setupAutoSave() {
+    autoSaveInterval = setInterval(() => {
+        if (hasUnsavedChanges && !isSaving && editorInstance) {
+            console.log('Auto-save triggered');
+            autoSaveDocument();
+        }
+    }, 30000);
+}
+
+function autoSaveDocument() {
+    if (isSaving || !editorInstance) return;
+
+    isSaving = true;
+    showIndicator('Auto-saving...', 'saving');
+
+    const content = editorInstance.getContent();
+
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = content;
+    const imageCount = tempDiv.querySelectorAll('img').length;
+
+    console.log('Auto-saving content length:', content.length, 'images:', imageCount);
+
+    const formData = new FormData();
+    formData.append('docx_content', content);
+    formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+    formData.append('is_auto_save', 'true');
+
+    // FIXED: Use explicit URL instead of window.location.href
+    fetch("{% url 'rfp_edit_docx' rfp_pk=referral.pk file_pk=rfp_file.pk %}", {
+        method: 'POST',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Auto-save response:', data);
+        if (data.status === 'success') {
+            hasUnsavedChanges = false;
+            lastSavedContent = content;
+            showIndicator('✓ Auto-saved', 'saved');
+            if (imageCount > 0) {
+                updateSaveStatus(`Auto-saved with ${imageCount} image(s)`, 'success');
+            } else {
+                updateSaveStatus('Auto-saved successfully', 'success');
+            }
+        } else {
+            throw new Error(data.message || 'Auto-save failed');
+        }
+    })
+    .catch(error => {
+        console.error('Auto-save error:', error);
+        showIndicator('Auto-save failed', 'error');
+        updateSaveStatus('Auto-save failed', 'error');
+    })
+    .finally(() => {
+        isSaving = false;
+    });
+}
+
+// Enhanced manual save function
+function saveDocument() {
+    if (!editorInstance) {
+        console.error('TinyMCE editor not initialized');
+        showIndicator('Editor not ready', 'error');
+        updateSaveStatus('Editor not ready. Please refresh the page.', 'error');
+        return;
+    }
+
+    const content = editorInstance.getContent();
+
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = content;
+    const imageCount = tempDiv.querySelectorAll('img').length;
+
+    console.log('Manual save - content length:', content.length, 'images:', imageCount);
+
+    if (!content.trim()) {
+        showIndicator('Document content cannot be empty', 'error');
+        updateSaveStatus('Document content cannot be empty', 'error');
+        return;
+    }
+
+    isSaving = true;
+    showIndicator('Saving...', 'saving');
+    showLoadingOverlay(true);
+
+    if (imageCount > 0) {
+        updateSaveStatus(`Saving document with ${imageCount} image(s)...`, 'info');
+    } else {
+        updateSaveStatus('Saving document...', 'info');
+    }
+
+    document.getElementById('tinymce-editor').value = content;
+
+    const form = document.getElementById('docx-form');
+    const formData = new FormData(form);
+    formData.append('is_manual_save', 'true');
+
+    // FIXED: Use explicit URL instead of window.location.href
+    fetch("{% url 'rfp_edit_docx' rfp_pk=referral.pk file_pk=rfp_file.pk %}", {
+        method: 'POST',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Save response:', data);
+        if (data.status === 'success') {
+            hasUnsavedChanges = false;
+            lastSavedContent = content;
+            showIndicator('✓ Document Saved', 'saved');
+
+            if (imageCount > 0) {
+                updateSaveStatus(`Document saved with ${imageCount} image(s)! All formatting perfectly preserved. Redirecting...`, 'success');
+            } else {
+                updateSaveStatus('Document saved successfully! All formatting perfectly preserved. Redirecting...', 'success');
+            }
+
+            setTimeout(() => {
+                window.location.href = "{% url 'rfp_detail' pk=referral.pk %}";
+            }, 1500);
+        } else {
+            throw new Error(data.message || 'Save failed');
+        }
+    })
+    .catch(error => {
+        console.error('Save error:', error);
+        showIndicator('Save failed', 'error');
+        updateSaveStatus('Save failed: ' + error.message, 'error');
+    })
+    .finally(() => {
+        isSaving = false;
+        showLoadingOverlay(false);
+    });
+}
+
+// Manual save button event listener
+document.getElementById('manual-save-btn').addEventListener('click', function(e) {
+    e.preventDefault();
+    console.log('Manual save button clicked');
+    saveDocument();
+});
+
+document.getElementById('docx-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    console.log('Form submission intercepted');
+    saveDocument();
+});
+
+window.addEventListener('beforeunload', function(e) {
+    if (hasUnsavedChanges && !isSaving) {
+        e.preventDefault();
+        e.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
+        return e.returnValue;
+    }
+});
+
+document.addEventListener('visibilitychange', function() {
+    if (document.hidden && hasUnsavedChanges && !isSaving) {
+        console.log('Tab switched - auto-saving');
+        autoSaveDocument();
+    }
+});
+
+window.addEventListener('unload', function() {
+    if (autoSaveInterval) {
+        clearInterval(autoSaveInterval);
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, initializing TinyMCE...');
+
+    if (typeof tinymce === 'undefined') {
+        console.error('TinyMCE not loaded!');
+        showIndicator('Editor failed to load', 'error');
+        updateSaveStatus('Editor failed to load. Please refresh the page.', 'error');
+        return;
+    }
+
+    console.log('TinyMCE script loaded successfully');
+});
+
+document.addEventListener('keydown', function(e) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        console.log('Ctrl+S pressed - saving document');
+        saveDocument();
+    }
+});
+
+// Mobile-specific optimizations
+document.addEventListener('touchstart', function() {
+    // Ensure editor is focused on touch
+    if (editorInstance && !editorInstance.hasFocus()) {
+        editorInstance.focus();
+    }
+});
+
+// Adjust editor on orientation change
+window.addEventListener('orientationchange', function() {
+    setTimeout(() => {
+        if (editorInstance) {
+            // Force TinyMCE to recalculate its layout
+            editorInstance.fire('ResizeEditor');
+        }
+    }, 300);
+});
+</script>
+{% endblock %}

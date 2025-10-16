@@ -1,0 +1,97 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New RFP Submission Notification</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f4f4f4;">
+        <tr>
+            <td align="center" style="padding: 20px;">
+                <table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+
+                    <!-- Header Section (Blue Background) -->
+                    <tr>
+                        <td align="center" style="background-color: #3b82f6; padding: 30px 20px;">
+                            <h1 style="color: white; margin: 0; font-size: 28px;">OB Global</h1>
+                            <p style="color: white; font-size: 16px;">New RFP Referral Submitted</p>
+                        </td>
+                    </tr>
+
+                    <!-- Body Content -->
+                    <tr>
+                        <td style="padding: 40px 30px;">
+                            <h2 style="color: #333333; font-size: 24px; margin-top: 0;">New RFP Submitted: {{ referral.proposal_title }}</h2>
+                            <p style="color: #555555; font-size: 16px; line-height: 1.6;">
+                                Dear Administrator,
+                            </p>
+                            <p style="color: #555555; font-size: 16px; line-height: 1.6;">
+                                A new Request for Proposal referral has been submitted by a client. Please review the key details below:
+                            </p>
+
+                            <!-- RFP Data Table (Kept original structure/content) -->
+                            <table width="100%" cellpadding="10" cellspacing="0" border="0" style="border-collapse: collapse; margin: 20px 0; border: 1px solid #e0e0e0;">
+                                <tr>
+                                    <td style="padding: 10px; border: 1px solid #e0e0e0; background-color: #f9f9f9; font-weight: bold; width: 30%; color: #333;">Title:</td>
+                                    <td style="padding: 10px; border: 1px solid #e0e0e0; color: #555;">{{ referral.proposal_title }}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px; border: 1px solid #e0e0e0; background-color: #f9f9f9; font-weight: bold; color: #333;">Organization:</td>
+                                    <td style="padding: 10px; border: 1px solid #e0e0e0; color: #555;">{{ referral.organization }}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px; border: 1px solid #e0e0e0; background-color: #f9f9f9; font-weight: bold; color: #333;">Client Email:</td>
+                                    <td style="padding: 10px; border: 1px solid #e0e0e0; color: #555;">{{ referral.client.email }}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px; border: 1px solid #e0e0e0; background-color: #f9f9f9; font-weight: bold; color: #333;">Deadline:</td>
+                                    <td style="padding: 10px; border: 1px solid #e0e0e0; color: #555;">{{ referral.proposal_deadline|date:"F d, Y H:i" }}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px; border: 1px solid #e0e0e0; background-color: #f9f9f9; font-weight: bold; color: #333;">Location:</td>
+                                    <td style="padding: 10px; border: 1px solid #e0e0e0; color: #555;">{{ referral.city }}, {{ referral.state_province }}</td>
+                                </tr>
+                            </table>
+
+                            <!-- Call to Action Button -->
+                            <div style="text-align: center; margin: 30px 0;">
+                                <a href="{% comment %} You need to manually replace this with the full URL to your site {% endcomment %}
+                                    https://ob-global.onrender.com/client-portal"
+                                   style="display: inline-block; padding: 12px 25px; background-color: #3b82f6; color: #ffffff; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 16px;">
+                                    Go to Login Portal
+                                </a>
+                            </div>
+
+                            <!-- Administrator Instructions -->
+                            <p style="color: #333333; font-size: 16px; line-height: 1.6; margin-top: 30px; font-weight: bold;">
+                                Steps to Manage this RFP:
+                            </p>
+                            <ol style="color: #555555; font-size: 16px; line-height: 1.6; padding-left: 20px;">
+                                <li>Click the **Go to Login Portal** button above.</li>
+                                <li>Log in with your administrator credentials.</li>
+                                <li>Once logged in, click on the **RFP Management** button.</li>
+                                <li>Use the search bar to find the RFP by its title ({{ referral.proposal_title }}) and make any necessary changes.</li>
+                            </ol>
+
+                            <p style="color: #555555; font-size: 16px; line-height: 1.6; text-align: center; margin-top: 40px;">
+                                Thank you,<br>
+                                The OB Global Team
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Footer Section -->
+                    <tr>
+                        <td align="center" style="background-color: #f0f0f0; padding: 20px 0; font-size: 12px; color: #888888;">
+                            <p style="margin: 0;">&copy; {{ "now"|date:"Y" }} OB Global. All rights reserved.</p>
+                            <p style="margin: 5px 0 0;">This is an automated email, please do not reply.</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

@@ -1,0 +1,185 @@
+{% extends 'attendance/base_attendance.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block page_header %}{{ title }}{% endblock %}
+
+{% block breadcrumb %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url 'attendance:admin_dashboard' %}">Admin Dashboard</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{% url 'attendance:admin_manage_holidays' %}">Holidays</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            {{ title }}
+        </li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block attendance_content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-calendar-plus"></i> {{ title }}
+                </h6>
+            </div>
+            <div class="card-body">
+                <form method="post" class="needs-validation" novalidate>
+                    {% csrf_token %}
+                    
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    
+                    <div class="form-group mb-4">
+                        <label for="{{ form.name.id_for_label }}">
+                            {{ form.name.label }}
+                            <span class="text-danger">*</span>
+                        </label>
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.name.errors.0 }}
+                            </div>
+                        {% endif %}
+                        <small class="form-text text-muted">
+                            Enter the name of the holiday (e.g., Christmas Day, New Year's Day)
+                        </small>
+                    </div>
+                    
+                    <div class="form-group mb-4">
+                        <label for="{{ form.date.id_for_label }}">
+                            {{ form.date.label }}
+                            <span class="text-danger">*</span>
+                        </label>
+                        {{ form.date }}
+                        {% if form.date.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.date.errors.0 }}
+                            </div>
+                        {% endif %}
+                        <small class="form-text text-muted">
+                            Select the date of the holiday
+                        </small>
+                    </div>
+                    
+                    <div class="form-group mb-4">
+                        <label for="{{ form.description.id_for_label }}">
+                            {{ form.description.label }}
+                        </label>
+                        {{ form.description }}
+                        {% if form.description.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.description.errors.0 }}
+                            </div>
+                        {% endif %}
+                        <small class="form-text text-muted">
+                            Optional: Add a description or notes about this holiday
+                        </small>
+                    </div>
+                    
+                    <div class="form-group form-check mb-4">
+                        {{ form.is_recurring }}
+                        <label class="form-check-label" for="{{ form.is_recurring.id_for_label }}">
+                            {{ form.is_recurring.label }}
+                        </label>
+                        {% if form.is_recurring.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.is_recurring.errors.0 }}
+                            </div>
+                        {% endif %}
+                        <small class="form-text text-muted">
+                            Check if this holiday occurs on the same date every year
+                        </small>
+                    </div>
+                    
+                    <div class="form-group mt-5">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Holiday
+                        </button>
+                        <a href="{% url 'attendance:admin_manage_holidays' %}" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Cancel
+                        </a>
+                        
+                        {% if holiday %}
+                            <button type="button" 
+                                    class="btn btn-danger float-right" 
+                                    data-toggle="modal" 
+                                    data-target="#deleteHolidayModal">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        {% endif %}
+                    </div>
+                </form>
+                
+                {% if holiday %}
+                <!-- Delete Confirmation Modal -->
+                <div class="modal fade" id="deleteHolidayModal" tabindex="-1" role="dialog" aria-labelledby="deleteHolidayModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteHolidayModalLabel">Confirm Deletion</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to delete the holiday "{{ holiday.name }}" on {{ holiday.date|date:"F d, Y" }}?
+                                This action cannot be undone.
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                <form action="{% url 'attendance:admin_delete_holiday' holiday.id %}" method="post" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Add client-side form validation
+document.addEventListener('DOMContentLoaded', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.querySelectorAll('.needs-validation');
+    
+    // Loop over them and prevent submission
+    Array.prototype.slice.call(forms).forEach(function(form) {
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
+    });
+    
+    // Initialize date picker
+    if (document.getElementById('id_date')) {
+        // Set minimum date to today
+        var today = new Date().toISOString().split('T')[0];
+        document.getElementById('id_date').min = today;
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,568 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Confirm File Deletion" %}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1>{% trans "Confirm File Deletion" %}</h1>
+        <p class="subtitle">{% trans "Permanently remove file from RFP" %}</p>
+    </div>
+
+    <div class="card-section">
+        <div class="card card-danger">
+            <div class="card-header danger-header">
+                <div class="header-content">
+                    <span class="warning-icon">⚠️</span>
+                    <h2>{% trans "Delete File" %}</h2>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="warning-content">
+                    <div class="file-info-card">
+                        <div class="info-row">
+                            <span class="info-label">{% trans "File Name:" %}</span>
+                            <span class="info-value">{{ filename }}</span>
+                        </div>
+
+                    </div>
+
+                    <div class="warning-message">
+                        <p>
+                            {% trans "Are you sure you want to permanently delete this file?" %}
+                        </p>
+                    </div>
+
+                    <div class="danger-alert">
+                        <div class="alert-icon">🚨</div>
+                        <div class="alert-content">
+                            <strong>{% trans "Warning:" %}</strong>
+                            {% trans "This action cannot be undone, and the file will be permanently removed from the cloud storage." %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-section">
+                    <form method="POST" action="{% url 'rfp_delete_file' rfp_pk=referral.pk file_pk=rfp_file.pk %}" class="delete-form">
+                        {% csrf_token %}
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-danger btn-large">
+                                <span class="button-icon">🗑️</span>
+                                {% trans "Yes, Delete File" %}
+                            </button>
+                            <a href="{% url 'rfp_detail' pk=referral.pk %}" class="btn btn-secondary">
+                                <span class="button-icon">←</span>
+                                {% trans "Cancel" %}
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extra_css %}
+<style>
+/* Base Styles - Consistent with other RFP pages */
+:root {
+    --primary-color: #4361ee;
+    --primary-dark: #3a56d4;
+    --secondary-color: #7209b7;
+    --success-color: #4cc9f0;
+    --danger-color: #f72585;
+    --danger-dark: #e01e5a;
+    --warning-color: #f8961e;
+    --light-color: #f8f9fa;
+    --dark-color: #212529;
+    --gray-color: #6c757d;
+    --border-color: #dee2e6;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --radius: 8px;
+    --transition: all 0.3s ease;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-image: url('{% static "images/bk.jpg" %}');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.page-header {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.page-header h1 {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+}
+
+.subtitle {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.3rem;
+    margin: 10px 0 0 0;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+}
+
+/* Card Styles */
+.card-section {
+    margin-bottom: 30px;
+}
+
+.card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.card-danger {
+    border: 2px solid var(--danger-color);
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.danger-header {
+    background: linear-gradient(135deg, var(--danger-color), var(--danger-dark));
+    padding: 25px 30px;
+    color: white;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.warning-icon {
+    font-size: 2rem;
+}
+
+.danger-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.card-body {
+    padding: 30px;
+}
+
+/* File Information */
+.file-info-card {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+    margin-bottom: 20px;
+}
+
+.info-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    padding: 8px 0;
+}
+
+.info-row:last-child {
+    margin-bottom: 0;
+}
+
+.info-label {
+    font-weight: 600;
+    color: var(--dark-color);
+    min-width: 120px;
+    margin-right: 15px;
+}
+
+.info-value {
+    color: var(--gray-color);
+    flex: 1;
+    word-break: break-word;
+}
+
+/* Warning Content */
+.warning-content {
+    margin-bottom: 30px;
+}
+
+.warning-message {
+    background: #fff5f5;
+    padding: 20px;
+    border-radius: var(--radius);
+    border-left: 4px solid var(--danger-color);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.warning-message p {
+    margin: 0;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--dark-color);
+    font-weight: 500;
+}
+
+.danger-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 20px;
+    background: #fef7f7;
+    border: 1px solid #fed7d7;
+    border-radius: var(--radius);
+}
+
+.alert-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.alert-content {
+    flex: 1;
+}
+
+.alert-content strong {
+    color: var(--danger-color);
+}
+
+/* Action Section */
+.action-section {
+    border-top: 1px solid var(--border-color);
+    padding-top: 30px;
+}
+
+.delete-form {
+    width: 100%;
+}
+
+.form-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+/* Button Styles */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 28px;
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    text-align: center;
+    border: none;
+    font-size: 16px;
+    gap: 10px;
+    box-shadow: var(--shadow);
+    min-height: 54px;
+}
+
+.btn-danger {
+    background: var(--danger-color);
+    color: white;
+}
+
+.btn-danger:hover {
+    background: var(--danger-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(247, 37, 133, 0.3);
+}
+
+.btn-secondary {
+    background: var(--gray-color);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+}
+
+.btn-large {
+    padding: 16px 32px;
+    font-size: 1.1rem;
+}
+
+.button-icon {
+    font-size: 1.1em;
+}
+
+/* Loading state for form submission */
+.form-submitting {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.form-submitting .btn-danger {
+    position: relative;
+}
+
+.form-submitting .btn-danger::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ------------------ Mobile-Specific Styles ------------------ */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px 10px;
+    }
+
+    .page-header h1 {
+        font-size: 2rem;
+    }
+
+    .subtitle {
+        font-size: 1.1rem;
+    }
+
+    .danger-header {
+        padding: 20px;
+    }
+
+    .header-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+
+    .warning-icon {
+        font-size: 1.8rem;
+    }
+
+    .danger-header h2 {
+        font-size: 1.3rem;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .file-info-card {
+        padding: 15px;
+    }
+
+    .info-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+        margin-bottom: 15px;
+    }
+
+    .info-label {
+        min-width: auto;
+        margin-right: 0;
+        font-size: 0.9rem;
+    }
+
+    .info-value {
+        font-size: 0.95rem;
+        width: 100%;
+    }
+
+    .warning-message {
+        padding: 15px;
+    }
+
+    .warning-message p {
+        font-size: 1rem;
+    }
+
+    .danger-alert {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+        padding: 15px;
+    }
+
+    .alert-icon {
+        font-size: 1.3rem;
+    }
+
+    /* Mobile Form Actions */
+    .form-actions {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .btn {
+        width: 100%;
+        justify-content: center;
+        padding: 16px 24px;
+        min-height: 50px;
+    }
+
+    .btn-large {
+        padding: 18px 24px;
+    }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 480px) {
+    .page-header h1 {
+        font-size: 1.8rem;
+    }
+
+    .subtitle {
+        font-size: 1rem;
+    }
+
+    .container {
+        padding: 10px 8px;
+    }
+
+    .danger-header {
+        padding: 15px;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+
+    .file-info-card {
+        padding: 12px;
+    }
+
+    .warning-message {
+        padding: 12px;
+    }
+
+    .warning-message p {
+        font-size: 0.95rem;
+    }
+
+    .danger-alert {
+        padding: 12px;
+    }
+
+    .btn {
+        padding: 14px 20px;
+        min-height: 48px;
+        font-size: 15px;
+    }
+
+    .button-icon {
+        font-size: 1em;
+    }
+}
+
+/* Tablet Optimizations */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .container {
+        padding: 20px 15px;
+        max-width: 700px;
+    }
+
+    .form-actions {
+        gap: 20px;
+    }
+}
+
+/* Focus states for accessibility */
+.btn:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Enhanced touch targets for mobile */
+@media (max-width: 768px) {
+    .btn {
+        min-height: 54px;
+    }
+}
+
+/* Prevent text selection on buttons */
+.btn {
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* Smooth transitions for all interactive elements */
+.btn, .card, .warning-message, .danger-alert, .file-info-card {
+    transition: var(--transition);
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('.delete-form');
+    const deleteButton = form.querySelector('.btn-danger');
+    const cancelButton = form.querySelector('.btn-secondary');
+
+    // Form submission handling
+    form.addEventListener('submit', function() {
+        // Add loading state only to delete button
+        form.classList.add('form-submitting');
+        deleteButton.disabled = true;
+        deleteButton.innerHTML = '<span class="button-icon">⏳</span> {% trans "Deleting..." %}';
+
+        // Disable cancel button during submission
+        if (cancelButton) {
+            cancelButton.style.opacity = '0.7';
+            cancelButton.style.pointerEvents = 'none';
+        }
+    });
+
+    // Enhanced confirmation for mobile
+    if ('ontouchstart' in window) {
+        deleteButton.addEventListener('touchstart', function() {
+            this.style.transform = 'scale(0.98)';
+        });
+
+        deleteButton.addEventListener('touchend', function() {
+            this.style.transform = '';
+        });
+    }
+
+    // Handle orientation changes
+    window.addEventListener('orientationchange', function() {
+        setTimeout(() => {
+            window.scrollTo(0, 0);
+        }, 100);
+    });
+});
+</script>
+{% endblock %}

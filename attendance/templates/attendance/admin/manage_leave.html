@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Leave Request - {{ leave_request.user.get_full_name }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Manage Leave Request</h1>
+    </div>
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    Leave Request - {{ leave_request.user.get_full_name }}
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th style="width: 30%">Staff Member:</th>
+                            <td>{{ leave_request.user.get_full_name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Leave Type:</th>
+                            <td>{{ leave_request.leave_type|title }}</td>
+                        </tr>
+                        <tr>
+                            <th>Date Range:</th>
+                            <td>{{ leave_request.start_date|date:"F d, Y" }} to {{ leave_request.end_date|date:"F d, Y" }}</td>
+                        </tr>
+                        <tr>
+                            <th>Duration:</th>
+                            <td>{{ leave_request.duration_days }} day{{ leave_request.duration_days|pluralize }}</td>
+                        </tr>
+                        <tr>
+                            <th>Status:</th>
+                            <td>
+                                <span class="badge 
+                                    {% if leave_request.status == 'pending' %}badge-warning
+                                    {% elif leave_request.status == 'approved' %}badge-success
+                                    {% else %}badge-danger{% endif %}">
+                                    {{ leave_request.get_status_display }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% if leave_request.reason %}
+                        <tr>
+                            <th>Reason:</th>
+                            <td>{{ leave_request.reason }}</td>
+                        </tr>
+                        {% endif %}
+                        <tr>
+                            <th>Requested On:</th>
+                            <td>{{ leave_request.created_at|date:"F d, Y H:i" }}</td>
+                        </tr>
+                        {% if leave_request.processed_by %}
+                        <tr>
+                            <th>Processed By:</th>
+                            <td>{{ leave_request.processed_by.get_full_name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Processed On:</th>
+                            <td>{{ leave_request.processed_at|date:"F d, Y H:i" }}</td>
+                        </tr>
+                        {% if leave_request.response_notes %}
+                        <tr>
+                            <th>Admin Notes:</th>
+                            <td>{{ leave_request.response_notes|linebreaksbr }}</td>
+                        </tr>
+                        {% endif %}
+                        {% endif %}
+                    </table>
+                </div>
+
+                {% if leave_request.status == 'pending' %}
+                <div class="mt-4">
+                    <h6 class="mb-3">Process Leave Request</h6>
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        {% if messages %}
+                        <div class="mb-4">
+                            {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        
+                        <div class="form-group">
+                            <label for="response_notes">Notes (Optional):</label>
+                            <textarea class="form-control" id="response_notes" name="response_notes" rows="3" 
+                                      placeholder="Add any notes or comments for the staff member">{% if leave_request.response_notes %}{{ leave_request.response_notes }}{% endif %}</textarea>
+                            <small class="form-text text-muted">These notes will be visible to the staff member.</small>
+                        </div>
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="submit" name="action" value="reject" 
+                                    class="btn btn-danger" 
+                                    onclick="return confirm('Are you sure you want to reject this leave request?')">
+                                <i class="fas fa-times-circle"></i> Reject
+                            </button>
+                            <button type="submit" name="action" value="approve" 
+                                    class="btn btn-success"
+                                    onclick="return confirm('Are you sure you want to approve this leave request?')">
+                                <i class="fas fa-check-circle"></i> Approve
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                {% endif %}
+
+                <div class="mt-4">
+                    <a href="{% url 'attendance:admin_leave_requests' %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to Leave Requests
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Add any JavaScript needed for the page
+</script>
+{% endblock %}

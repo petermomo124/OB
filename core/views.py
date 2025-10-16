@@ -185,11 +185,28 @@ def industry_detail(request, industry_slug):
     return render(request, f'industries/{industry_slug}.html', context)
 
 
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import update_last_login  # For last_login
+from django.views.decorators.csrf import csrf_protect
+from django.contrib import messages
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
+from django.contrib.auth import get_user_model
+
+# Safely get the custom User model
+User = get_user_model()
+
+
 @csrf_protect
 def user_login(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
+
+        # 🔑 NEW: Retrieve the timezone sent from the client-side
+        # Default to 'UTC' if the client fails to send it
+        client_timezone = request.POST.get('client_timezone', 'UTC')
 
         # Validate required fields
         if not email or not password:
@@ -197,8 +214,6 @@ def user_login(request):
             return render(request, 'client_portal/login.html')
 
         # Validate email format
-        from django.core.validators import validate_email
-        from django.core.exceptions import ValidationError
         try:
             validate_email(email)
         except ValidationError:
@@ -209,24 +224,39 @@ def user_login(request):
         user = authenticate(request, email=email, password=password)
 
         if user is not None:
-            # Check if user is approved
+            # Check if user is approved (EXISTING CONDITION)
             if not user.is_approved:
                 messages.error(request, 'Your account has not been approved yet. Please contact administrator.')
                 return render(request, 'client_portal/login.html')
 
-            # Check if user is active
+            # Check if user is active (EXISTING CONDITION)
             if not user.is_active:
                 messages.error(request, 'Your account is inactive. Please contact administrator.')
                 return render(request, 'client_portal/login.html')
 
             # Login successful
             login(request, user)
+
+            # ====================================================================
+            # 🔑 TIMEZONE AND LAST LOGIN UPDATES
+            # ====================================================================
+
+            # 1. Update the user's timezone if it's different from the current stored value
+            if user.timezone != client_timezone:
+                user.timezone = client_timezone
+                # Save only the 'timezone' field for efficiency
+                user.save(update_fields=['timezone'])
+
+                # 2. Set the user's last login date correctly
+            update_last_login(None, user)
+
+            # ====================================================================
+
             return redirect('dashboard')
         else:
             messages.error(request, 'Invalid email or password.')
 
     return render(request, 'client_portal/login.html')
-
 
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -1727,3 +1757,286 @@ from django.shortcuts import render
 
 def privacy_policy(request):
     return render(request, 'privacy.html')
+
+
+
+# core/views.py (Add this function)
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+
+@login_required
+def view_my_profile(request):
+    """
+    Displays the profile of the currently logged-in user.
+    """
+    context = {
+        'user_to_view': request.user,
+    }
+    # We will use a new template: 'user/view_my_profile.html'
+    return render(request, 'user/view_my_profile.html', context)
+
+
+# core/views.py (Add this function, adjust imports as needed)
+from django.shortcuts import render, redirect
+from django.contrib.auth.hashers import make_password
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+import cloudinary.uploader
+
+
+# Assuming these are imported at the top of your file:
+# from django.contrib.auth.hashers import make_password
+# from django.contrib.auth.decorators import login_required
+# from django.shortcuts import render, redirect
+# from django.contrib import messages
+# from .models import User  # or wherever your User model is defined
+# import cloudinary.uploader # if using Cloudinary
+
+@login_required
+def edit_my_profile(request):
+    """
+    Allows the logged-in user to edit their own profile information.
+    """
+    user_to_update = request.user
+
+    if request.method == 'POST':
+        # --- Data Retrieval for User-Editable Fields ---
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        phone_number = request.POST.get('phone_number')
+        address = request.POST.get('address')
+        linkedin = request.POST.get('linkedin')
+        date_of_birth_str = request.POST.get('date_of_birth')
+        nationality = request.POST.get('nationality')
+
+        # Password Fields
+        current_password = request.POST.get('current_password')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+
+        # -----------------------------------------------------------------
+        # --- Validation: Required Fields & Format Checks (UNCHANGED) ---
+        # -----------------------------------------------------------------
+
+        # Basic Required Field Validation
+        required_fields = {
+            'first_name': first_name, 'last_name': last_name, 'email': email,
+            'phone_number': phone_number, 'address': address, 'nationality': nationality
+        }
+
+        for field, value in required_fields.items():
+            if not value:
+                messages.error(request, f'{field.replace("_", " ").title()} is required.')
+                return redirect('edit_my_profile')
+
+        # Phone Number Format Validation
+        if phone_number:
+            phone_digits = phone_number.replace('+', '').strip()
+            if not phone_number.startswith('+') or not phone_digits.isdigit() or len(phone_digits) < 9:
+                messages.error(request,
+                               'Phone number must start with "+", contain only digits after the plus sign, and be at least 9 digits long.')
+                return redirect('edit_my_profile')
+
+        # Email and Phone Number Uniqueness Validation (Requires User import)
+        if email != user_to_update.email and User.objects.filter(email=email).exists():
+            messages.error(request, 'This email is already registered.')
+            return redirect('edit_my_profile')
+        if phone_number != user_to_update.phone_number and User.objects.filter(phone_number=phone_number).exists():
+            messages.error(request, 'This phone number is already registered.')
+            return redirect('edit_my_profile')
+
+        # -----------------------------------------------------------------
+        # --- Password Field Consistency Check (The requested feature) ---
+        # -----------------------------------------------------------------
+
+        # Check if ANY password field was filled by the user.
+        password_fields_entered = bool(current_password or new_password or confirm_password)
+
+        if password_fields_entered:
+            # If the user started filling password fields, ALL three must be provided.
+            if not current_password or not new_password or not confirm_password:
+                messages.error(request,
+                               'To change your password, all three fields must be completed: Current Password, New Password, and Confirm New Password.')
+                return redirect('edit_my_profile')
+
+            # Since all three are present, proceed to the full password update validation
+            # which is now moved into this block for clarity.
+
+            # Current password verification
+            if not user_to_update.check_password(current_password):
+                messages.error(request, 'Incorrect current password.')
+                return redirect('edit_my_profile')
+
+            # New password length check
+            if len(new_password) < 9:
+                messages.error(request, 'New password must be at least 9 characters long.')
+                return redirect('edit_my_profile')
+
+            # New password match check
+            if new_password != confirm_password:
+                messages.error(request, 'New passwords do not match.')
+                return redirect('edit_my_profile')
+
+            # Update password hash (only done if all checks pass)
+            user_to_update.password = make_password(new_password)
+
+        # -----------------------------------------------------------------
+        # --- END Password Logic ---
+        # -----------------------------------------------------------------
+
+        # --- Update User Model Fields (Only the allowed fields) ---
+        user_to_update.first_name = first_name
+        user_to_update.last_name = last_name
+        user_to_update.email = email
+        user_to_update.phone_number = phone_number
+        user_to_update.address = address
+        user_to_update.nationality = nationality
+        user_to_update.linkedin = linkedin
+
+        # Handle date of birth
+        user_to_update.date_of_birth = date_of_birth_str if date_of_birth_str else None
+
+        # Handle profile image upload/clear
+        if 'profile_image' in request.FILES:
+            image_file = request.FILES['profile_image']
+            try:
+                # Requires 'cloudinary.uploader' to be imported/accessible
+                upload_result = cloudinary.uploader.upload(image_file)
+                user_to_update.profile_image = upload_result['secure_url']
+            except Exception as e:
+                messages.error(request, f'Failed to upload image: {e}')
+                return redirect('edit_my_profile')
+
+        # Optional: Check for a checkbox/hidden field to explicitly delete the image
+        # if 'clear_profile_image' in request.POST:
+        #     user_to_update.profile_image = None
+
+        user_to_update.save()
+        messages.success(request, 'Your profile has been updated successfully. 🥳')
+        return redirect('view_my_profile')
+
+    context = {
+        'user_to_update': user_to_update,
+    }
+    return render(request, 'user/edit_my_profile.html', context)
+
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+from .models import Office  # Ensure this import is correct
+from .forms import OfficeForm  # Ensure this import is correct
+from django.contrib import messages
+
+
+# ... other necessary imports (like User, make_password, etc.)
+
+# ... (Your existing views) ...
+
+# 🏢 OFFICE MANAGEMENT VIEWS
+
+@login_required
+def manage_offices(request):
+    # Security check: Only Admins/Staff should manage offices
+    if request.user.role not in ['admin', 'staff']:
+        messages.error(request, "You do not have permission to view this page.")
+        return redirect('dashboard')  # Redirect to a safe page
+
+    query = request.GET.get('q')
+
+    if query:
+        # Search by office name, location, or purpose
+        offices = Office.objects.filter(
+            Q(office_Name__icontains=query) |
+            Q(office_location__icontains=query) |
+            Q(office_purpose__icontains=query)
+        ).order_by('office_Name')
+    else:
+        offices = Office.objects.all().order_by('office_Name')
+
+    context = {
+        'offices': offices,
+        'query': query,
+    }
+    return render(request, 'manage/manage_offices.html', context)
+
+
+@login_required
+def add_office(request):
+    if request.user.role != 'admin':
+        messages.error(request, "Only Admins can add new offices.")
+        return redirect('manage_offices')
+
+    if request.method == 'POST':
+        form = OfficeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f"Office '{form.cleaned_data['office_Name']}' added successfully.")
+            return redirect('manage_offices')
+    else:
+        form = OfficeForm()
+
+    return render(request, 'manage/office_form.html', {'form': form, 'page_title': 'Add New Office'})
+
+
+@login_required
+def edit_office(request, office_id):
+    if request.user.role != 'admin':
+        messages.error(request, "Only Admins can edit offices.")
+        return redirect('manage_offices')
+
+    office = get_object_or_404(Office, id=office_id)
+
+    if request.method == 'POST':
+        form = OfficeForm(request.POST, instance=office)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f"Office '{office.office_Name}' updated successfully.")
+            return redirect('manage_offices')
+    else:
+        form = OfficeForm(instance=office)
+
+    return render(request, 'manage/office_form.html',
+                  {'form': form, 'office': office, 'page_title': f'Edit {office.office_Name}'})
+
+
+# core/views.py
+
+@login_required
+def view_office(request, office_id):
+    office = get_object_or_404(Office, id=office_id)
+
+    # ----------------------------------------------------
+    # 🔑 FIX: Create a separate link URL in the view
+    # ----------------------------------------------------
+    large_map_url = None
+    if office.google_map_url and 'maps/embed' in office.google_map_url.lower():
+        # Replace the '/embed' part with '/place' to create a standard, clickable link
+        large_map_url = office.google_map_url.replace('/embed', '/place')
+
+    context = {
+        'office': office,
+        # Pass the newly created link URL to the template
+        'large_map_url': large_map_url,
+    }
+
+    return render(request, 'manage/view_office.html', context)
+
+@login_required
+def delete_office(request, office_id):
+    if request.user.role != 'admin':
+        messages.error(request, "Only Admins can delete offices.")
+        return redirect('manage_offices')
+
+    office = get_object_or_404(Office, id=office_id)
+
+    if request.method == 'POST':
+        office_name = office.office_Name
+        office.delete()
+        messages.success(request, f"Office '{office_name}' deleted successfully.")
+        return redirect('manage_offices')
+
+    # Optional: Render a confirmation page if not a POST request
+    return render(request, 'manage/office_confirm_delete.html', {'office': office})

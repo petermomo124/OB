@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Manage Offices{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+        <h1 class="h2 mb-2 mb-md-0">Office Management</h1>
+        <a href="{% url 'add_office' %}" class="btn btn-success btn-lg">
+            <i class="fas fa-plus-circle"></i> Add New Office
+        </a>
+    </div>
+
+    {% include 'partials/messages.html' %}
+    
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <form method="GET" action="{% url 'manage_offices' %}" class="d-flex flex-column flex-md-row gap-2">
+                <input type="text" name="q" class="form-control form-control-lg" 
+                       placeholder="Search by name, location, or purpose..." value="{{ query|default:'' }}">
+                <button type="submit" class="btn btn-primary flex-shrink-0">
+                    <i class="fas fa-search"></i> Search
+                </button>
+                {% if query %}
+                    <a href="{% url 'manage_offices' %}" class="btn btn-secondary flex-shrink-0">Clear</a>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow-lg border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped mb-0">
+                    <thead class="bg-primary text-white">
+                        <tr>
+                            <th scope="col" style="width: 5%;">#</th>
+                            <th scope="col" style="width: 20%;">Office Name</th>
+                            <th scope="col" style="width: 30%;">Location</th>
+                            <th scope="col" style="width: 25%;">Purpose</th>
+                            <th scope="col" style="width: 20%;" class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for office in offices %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th> 
+                            <td class="text-truncate" style="max-width: 150px;">{{ office.office_Name }}</td>
+                            <td class="text-truncate" style="max-width: 200px;">{{ office.office_location }}</td>
+                            <td class="text-truncate" style="max-width: 150px;">{{ office.office_purpose|truncatechars:30 }}</td>
+                            <td class="text-center d-flex justify-content-center gap-1">
+                                <a href="{% url 'view_office' office.id %}" class="btn btn-sm btn-info text-white" title="View"><i class="fas fa-eye"></i></a>
+                                {% if request.user.role == 'admin' %}
+                                <a href="{% url 'edit_office' office.id %}" class="btn btn-sm btn-warning" title="Edit"><i class="fas fa-edit"></i></a>
+                                <a href="#" class="btn btn-sm btn-danger delete-trigger"
+                                   data-office-id="{{ office.id }}"
+                                   data-office-name="{{ office.office_Name }}"
+                                   title="Delete"><i class="fas fa-trash-alt"></i></a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center p-4">No offices found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteOfficeModal" tabindex="-1" aria-labelledby="deleteOfficeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteOfficeModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the office <strong id="modal-office-name"></strong>?</p>
+                <p class="text-danger">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="delete-form" method="post" action="">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Delete Office</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const deleteTriggers = document.querySelectorAll('.delete-trigger');
+        const deleteModal = new bootstrap.Modal(document.getElementById('deleteOfficeModal'));
+        const modalOfficeName = document.getElementById('modal-office-name');
+        const deleteForm = document.getElementById('delete-form');
+
+        deleteTriggers.forEach(trigger => {
+            trigger.addEventListener('click', function(e) {
+                e.preventDefault();
+                const officeId = this.getAttribute('data-office-id');
+                const officeName = this.getAttribute('data-office-name');
+
+                // Update the modal content and form action
+                modalOfficeName.textContent = officeName;
+                deleteForm.action = `/manage/offices/${officeId}/delete/`; 
+
+                // Show the modal using Bootstrap JS
+                deleteModal.show();
+            });
+        });
+    });
+</script>
+{% endblock %}

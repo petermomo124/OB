@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+
+{% block title %}Attendance History - Obllcus{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="d-flex justify-content-between align-items-center mb-6">
+        <div class="flex items-center">
+            <h1 class="text-2xl font-bold text-gray-800">My Attendance Histories</h1>
+        </div>
+        <div class="flex space-x-2">
+            <form method="post" action="{% url 'attendance:clear_history' %}" onsubmit="return confirm('Are you sure you want to clear your attendance history? This cannot be undone.');">
+                {% csrf_token %}
+                <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center">
+                    <i class="fas fa-trash mr-2"></i> Clear History
+                </button>
+            </form>
+        </div>
+    </div>
+<!-- Date Range Filter -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Filter Records</h6>
+    </div>
+    <div class="card-body">
+        <form method="get" action="{% url 'attendance:history' %}" class="form-inline">
+            <div class="form-group mr-3 mb-2">
+                <label for="start_date" class="mr-2">From:</label>
+                <input type="date" class="form-control" id="start_date" name="start_date" value="{{ start_date|date:'Y-m-d' }}" max="{{ end_date|date:'Y-m-d' }}">
+            </div>
+            <div class="form-group mr-3 mb-2">
+                <label for="end_date" class="mr-2">To:</label>
+                <input type="date" class="form-control" id="end_date" name="end_date" value="{{ end_date|date:'Y-m-d' }}" min="{{ start_date|date:'Y-m-d' }}" max="{% now 'Y-m-d' %}">
+            </div>
+            <button type="submit" class="btn btn-primary mb-2">
+                <i class="fas fa-filter"></i> Apply Filter
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Summary Card -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+        <h6 class="m-0 font-weight-bold text-primary">Attendance Summary ({{ start_date|date:'M j, Y' }} - {{ end_date|date:'M j, Y' }})</h6>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3 mb-4">
+                <div class="card border-left-primary h-100">
+                    <div class="card-body">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Total Days</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_days }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card border-left-success h-100">
+                    <div class="card-body">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Present Days</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ present_days }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card border-left-warning h-100">
+                    <div class="card-body">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                            Absent Days</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ absent_days }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card border-left-info h-100">
+                    <div class="card-body">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                            Attendance Rate</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ attendance_percentage|floatformat:1 }}%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Attendance Records -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+        <h6 class="m-0 font-weight-bold text-primary">Attendance Details</h6>
+        <div>
+            <span class="badge badge-success mr-2">Present</span>
+            <span class="badge badge-warning mr-2">Incomplete</span>
+            <span class="badge badge-danger">Absent</span>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Day</th>
+                    <th>Check In Time</th>
+                    <th>Check Out Time</th>
+                    <th>Total Hours</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for date, records in attendance_days.items %}
+                    {% if records.check_in %}
+                    <tr>
+                        <td>{{ date|date:"M d, Y" }}</td>
+                        <td>{{ date|date:"l" }}</td>
+                        <td>{{ records.check_in.timestamp|time:"h:i A" }}</td>
+                        <td>{% if records.check_out %}{{ records.check_out.timestamp|time:"h:i A" }}{% else %}-{% endif %}</td>
+                        <td>{% if records.duration %}{{ records.duration }}{% else %}-{% endif %}</td>
+                        <td>
+                            {% if records.check_out %}
+                                <span class="badge badge-success">Present</span>
+                            {% elif records.duration < 8 %}
+                                <span class="badge badge-warning">Incomplete</span>
+                            {% else %}
+                                <span class="badge badge-danger">Absent</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endif %}
+                {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center">No attendance records found</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Set min/max dates for date inputs
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('end_date').max = today;
+    
+    // Update min date of end date when start date changes
+    document.getElementById('start_date').addEventListener('change', function() {
+        document.getElementById('end_date').min = this.value;
+        if (document.getElementById('end_date').value < this.value) {
+            document.getElementById('end_date').value = this.value;
+        }
+    });
+    
+    // Initialize DataTables with responsive extension
+    $('#dataTable').DataTable({
+        "order": [[0, "desc"]],
+        "pageLength": 15,
+        "responsive": true,
+        "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+               "<'row'<'col-sm-12'tr>>" +
+               "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+        "language": {
+            "search": "_INPUT_",
+            "searchPlaceholder": "Search records...",
+            "lengthMenu": "Show _MENU_ records per page",
+            "zeroRecords": "No matching records found",
+            "info": "Showing _START_ to _END_ of _TOTAL_ entries",
+            "infoEmpty": "No records available",
+            "infoFiltered": "(filtered from _MAX_ total entries)",
+            "paginate": {
+                "first": "First",
+                "last": "Last",
+                "next": "Next",
+                "previous": "Previous"
+            }
+        },
+        "columnDefs": [
+            { "responsivePriority": 1, "targets": 0 }, // Date column
+            { "responsivePriority": 2, "targets": 1 }, // Day column
+            { "responsivePriority": 3, "targets": 5 }, // Status column
+            { "orderable": false, "targets": [1, 5] }  // Disable sorting on Day and Status columns
+        ]
+    });
+    
+    // Add custom styling for the DataTable
+    $('.dataTables_filter input').addClass('form-control form-control-sm');
+    $('.dataTables_length select').addClass('form-control form-control-sm');
+    
+    // Show success/error messages with auto-dismiss
+    setTimeout(function() {
+        $('.alert').fadeOut('slow');
+    }, 5000);
+});
+</script>
+{% endblock %}

@@ -1,0 +1,1672 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "RFP Detail" %}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+    </div>
+
+    <div class="admin-controls">
+        {# BACK BUTTON MOVED TO CARD-FOOTER, REMOVED HERE #}
+    </div>
+
+    <div class="card-section">
+        <div class="card">
+            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; padding: 25px 30px; border-bottom: 1px solid var(--border-color); background: #f8f9fa;">
+                <h2 style="margin: 0; font-size: 1.5rem; font-weight: 600; color: var(--dark-color);">{% trans "RFP Details" %}</h2>
+                {# STATUS BADGE ADDED HERE WITH INLINE STYLING #}
+                <span class="badge status-badge
+                    {% if referral.status == 'submitted' %}status-submitted
+                    {% elif referral.status == 'in_review' %}status-in-review
+                    {% elif referral.status == 'accepted' %}status-accepted
+                    {% else %}status-rejected{% endif %}"
+                    style="padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 700; color: white; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px;">
+                    {{ referral.get_status_display }}
+                </span>
+            </div>
+            <div class="card-body">
+
+                {# MODIFIED DETAIL GRID STRUCTURE (Fields arranged side-by-side on desktop) #}
+                <div class="detail-grid">
+
+                    {# RFP Title and Organization (Full Width on its own line) #}
+                    <div class="detail-item full-width">
+                        <span class="detail-label">{% trans "Proposal Title" %}</span>
+                        <span class="detail-value">{{ referral.proposal_title }}</span>
+                    </div>
+                    <div class="detail-item full-width">
+                        <span class="detail-label">{% trans "Organization Name" %}</span>
+                        <span class="detail-value">{{ referral.organization }}</span>
+                    </div>
+
+                    {# Deadline and Submitted By (Side-by-Side on Desktop) #}
+                    <div class="detail-item">
+                        <span class="detail-label">{% trans "Proposal Deadline" %}</span>
+                        <span class="detail-value">{{ referral.proposal_deadline|date:"F d, Y H:i" }} (UTC)</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">{% trans "Submitted By" %}</span>
+                        <span class="detail-value">{{ referral.client.get_full_name|default:referral.client.email }}</span>
+                    </div>
+
+                    {# Submitted On (Full Width on its own line) #}
+                    <div class="detail-item full-width">
+                        <span class="detail-label">{% trans "Submitted On" %}</span>
+                        <span class="detail-value">{{ referral.created_at|date:"F d, Y H:i" }}</span>
+                    </div>
+
+                </div>
+
+                {# LOCATION DETAILS GROUPED AND DIVIDED #}
+                <fieldset class="detail-location-group">
+                    <legend class="location-legend">{% trans "Location Details" %}</legend>
+                    <div class="location-grid">
+                        <div class="location-item">
+                            <span class="detail-label">{% trans "City" %}</span>
+                            <span class="detail-value">{{ referral.city }}</span>
+                        </div>
+                        <div class="location-item">
+                            <span class="detail-label">{% trans "State/Province" %}</span>
+                            <span class="detail-value">{{ referral.state_province }}</span>
+                        </div>
+                        <div class="location-item">
+                            <span class="detail-label">{% trans "Postal Code" %}</span>
+                            <span class="detail-value">{{ referral.postal_code }}</span>
+                        </div>
+                    </div>
+                </fieldset>
+
+                {# EDIT BUTTON #}
+                {% if is_admin or referral.client == user %}
+                <div class="card-footer" style="padding: 20px 30px; border-top: 1px solid var(--border-color); background: #f8f9fa; display: flex; flex-direction: column; gap: 10px; align-items: stretch;">
+                    <a href="{% url 'rfp_update' pk=referral.pk %}" class="btn btn-edit" style="width: 100%; display: flex; justify-content: center; align-items: center; padding: 12px 20px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 500; text-align: center; transition: all 0.3s ease; border: none; cursor: pointer; gap: 8px; background: var(--warning-color); color: white;">
+                        <span class="button-icon">✏️</span>
+                        {% trans "Edit Details" %}
+                    </a>
+                    {# BACK BUTTON ADDED HERE WITH INLINE STYLING #}
+                    <a href="{% url 'rfp_list' %}" class="button button-secondary" style="width: 100%; display: flex; align-items: center; justify-content: center; padding: 12px 24px; border-radius: var(--radius); text-decoration: none; font-weight: 600; cursor: pointer; transition: all 0.3s ease; text-align: center; border: none; font-size: 16px; gap: 8px; box-shadow: var(--shadow); background: var(--gray-color); color: white;">
+                        <span class="button-icon">←</span>
+                        {% trans "Back to List" %}
+                    </a>
+                </div>
+                {% else %}
+                {# Display the Back button alone if no Edit button is present #}
+                <div class="card-footer" style="padding: 20px 30px; border-top: 1px solid var(--border-color); background: #f8f9fa; display: flex; justify-content: center; align-items: center;">
+                    <a href="{% url 'rfp_list' %}" class="button button-secondary" style="width: 100%; max-width: 300px; display: inline-flex; align-items: center; justify-content: center; padding: 12px 24px; border-radius: var(--radius); text-decoration: none; font-weight: 600; cursor: pointer; transition: all 0.3s ease; text-align: center; border: none; font-size: 16px; gap: 8px; box-shadow: var(--shadow); background: var(--gray-color); color: white;">
+                        <span class="button-icon">←</span>
+                        {% trans "Back to List" %}
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="card-section">
+        <div class="card">
+            <div class="card-header">
+                <h2>{% trans "File Attachments" %}</h2>
+            </div>
+            <div class="card-body">
+                {# ========================================================= #}
+                {# 1. CLIENT/REFERRAL FILES SECTION #}
+                {# ========================================================= #}
+                <div class="files-section">
+                    <h3 class="section-title">{% trans "Client Uploaded Files" %}</h3>
+
+                    <div class="files-list">
+                        {% if client_files %}
+                            {% for file in client_files %}
+                            <div class="file-item">
+                                <div class="file-info">
+                                    <div class="file-icon">📎</div>
+                                    <div class="file-details">
+                                        <!-- MODIFIED: POPUP MODAL TRIGGER INSTEAD OF DROPDOWN -->
+                                        <div class="download-popup-trigger"
+                                             data-file-id="{{ file.pk }}"
+                                             data-is-html="{% if file.file_type == 'html' or file.cloudinary_url|lower|slice:'-5:' == '.html' %}true{% else %}false{% endif %}"
+                                             data-has-original-docx="{% if file.original_docx and file.original_docx.cloudinary_url %}true{% else %}false{% endif %}"
+                                             data-is-docx="{% if file.file_type != 'html' and not file.cloudinary_url|lower|slice:'-5:' == '.html' %}true{% else %}false{% endif %}"
+                                             data-html-url="{% url 'rfp_download_file' rfp_pk=referral.pk file_pk=file.pk %}"
+                                             data-original-docx-url="{% url 'rfp_download_original_docx' rfp_pk=referral.pk file_pk=file.pk %}"
+                                             data-docx-url="{% url 'rfp_download_file' rfp_pk=referral.pk file_pk=file.pk %}">
+                                            <button class="download-main-btn">
+                                                <span class="file-name">{{ file.public_id|cut:"rfp/"|cut:"/attachments/" }}</span>
+                                                <span class="dropdown-arrow">▼</span>
+                                            </button>
+                                        </div>
+                                        <div class="file-meta">
+                                            {% trans "Uploaded by" %}
+                                            <strong>
+                                                {% if file.uploaded_by.role == 'admin' %}
+                                                    {% trans "Admin" %}
+                                                {% else %}
+                                                    {{ file.uploaded_by.email }}
+                                                {% endif %}
+                                            </strong>
+                                            {% if file.file_type == 'html' or file.cloudinary_url|lower|slice:'-5:' == '.html' %}
+                                            <span class="format-badge" title="Perfect Formatting Preserved">🌟 HTML</span>
+                                            {% else %}
+                                            <span class="format-badge" title="Original DOCX File">📄 DOCX</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="file-actions">
+                                    {% if is_admin or file.uploaded_by == user %}
+                                    {# EDIT BUTTON - Only for DOCX files or HTML files with original DOCX #}
+                                    {% if file.public_id|lower|slice:'-5:' == '.docx' or file.public_id|lower|slice:'-4:' == '.doc' or file.original_docx %}
+                                    <div class="edit-dropdown">
+                                        <button class="btn btn-edit btn-sm edit-toggle">
+                                            <span class="mobile-hidden">Edit</span>
+                                            <span class="mobile-only">✏️</span>
+                                        </button>
+                                        <div class="edit-dropdown-content">
+                                            {# Perfect HTML Editing Option - Show for all editable files #}
+                                            <a href="{% url 'rfp_edit_docx' rfp_pk=referral.pk file_pk=file.pk %}"
+                                               class="edit-option">
+                                                🌟 Edit Online (Perfect Formatting)
+                                            </a>
+
+
+
+                                            <div class="edit-option">
+                                                <form action="{% url 'rfp_replace_file' rfp_pk=referral.pk file_pk=file.pk %}"
+                                                      method="post"
+                                                      enctype="multipart/form-data"
+                                                      class="replace-form"
+                                                      id="replace-form-{{ file.pk }}">
+                                                    {% csrf_token %}
+                                                    <label class="replace-label" for="replace-file-{{ file.pk }}">
+                                                        🔄 Replace File
+                                                    </label>
+                                                    <input type="file"
+                                                           name="replacement_file"
+                                                           accept=".doc,.docx"
+                                                           id="replace-file-{{ file.pk }}"
+                                                           style="display: none;"
+                                                           onchange="handleFileReplace(this, {{ file.pk }})">
+                                                </form>
+                                            </div>
+                                            {% if file.is_being_edited %}
+                                            <a href="{% url 'rfp_finish_edit' rfp_pk=referral.pk file_pk=file.pk %}"
+                                               class="edit-option">
+                                                ✅ Finish Editing
+                                            </a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    {% endif %}
+
+                                    <a href="{% url 'rfp_delete_file' rfp_pk=referral.pk file_pk=file.pk %}"
+                                       class="btn btn-delete btn-sm"
+                                       title="Delete File">
+                                        <span class="mobile-hidden">Delete</span>
+                                        <span class="mobile-only">🗑️</span>
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="empty-files">
+                                <div class="empty-icon">📁</div>
+                                <p>{% trans "The client has not attached any files yet." %}</p>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    {% if referral.client == user %}
+                    <div class="upload-section">
+                        <h4 class="upload-title">{% trans "Upload Your Files" %}</h4>
+                        <form action="{% url 'rfp_add_file' rfp_pk=referral.pk %}" method="post" enctype="multipart/form-data" class="upload-form">
+                            {% csrf_token %}
+                            <div class="file-input-wrapper">
+                                <input type="file" class="file-input" name="files_to_upload" id="files_to_upload_client" accept=".doc, .docx" multiple required>
+                                <label for="files_to_upload_client" class="file-input-label">
+                                    {# This span will be updated by JavaScript #}
+                                    <span class="file-input-text" id="client-file-name">{% trans "Choose files..." %}</span>
+                                    <span class="file-input-button">{% trans "Browse" %}</span>
+                                </label>
+                            </div>
+                            <button class="btn btn-primary upload-button" type="submit">
+                                <span class="button-icon">📤</span>
+                                {% trans "Upload Files" %}
+                            </button>
+                            <div class="file-requirements">
+                                {% trans "Max 50MB per file. Allowed types: DOC (.doc and .docx)." %}
+                            </div>
+                        </form>
+                    </div>
+                    {% endif %}
+                </div>
+
+                {# ========================================================= #}
+                {# 2. ADMIN FILES SECTION #}
+                {# Visibility: Visible to both admin AND client #}
+                {# ========================================================= #}
+                {% if is_admin or referral.client == user %}
+                <div class="files-section admin-files">
+                    <div class="section-header">
+                        <h3 class="section-title">{% trans "OB Global Admin Files" %}</h3>
+                        <span class="admin-badge">Admin</span>
+                    </div>
+
+                    <div class="files-list">
+                        {% if admin_files %}
+                            {% for file in admin_files %}
+                            <div class="file-item admin-file">
+                                <div class="file-info">
+                                    <div class="file-icon">🔒</div>
+                                    <div class="file-details">
+                                        <!-- MODIFIED: POPUP MODAL TRIGGER INSTEAD OF DROPDOWN -->
+                                        <div class="download-popup-trigger"
+                                             data-file-id="{{ file.pk }}"
+                                             data-is-html="{% if file.file_type == 'html' or file.cloudinary_url|lower|slice:'-5:' == '.html' %}true{% else %}false{% endif %}"
+                                             data-has-original-docx="{% if file.original_docx and file.original_docx.cloudinary_url %}true{% else %}false{% endif %}"
+                                             data-is-docx="{% if file.file_type != 'html' and not file.cloudinary_url|lower|slice:'-5:' == '.html' %}true{% else %}false{% endif %}"
+                                             data-html-url="{% url 'rfp_download_file' rfp_pk=referral.pk file_pk=file.pk %}"
+                                             data-original-docx-url="{% url 'rfp_download_file' rfp_pk=referral.pk file_pk=file.pk %}?format=docx"
+                                             data-docx-url="{% url 'rfp_download_file' rfp_pk=referral.pk file_pk=file.pk %}">
+                                            <button class="download-main-btn">
+                                                <span class="file-name">{{ file.public_id|cut:"rfp/"|cut:"/attachments/" }}</span>
+                                                <span class="dropdown-arrow">▼</span>
+                                            </button>
+                                        </div>
+                                        <div class="file-meta">
+                                           {% trans "Uploaded by" %}
+                                            <strong>
+                                                {% if file.uploaded_by.role == 'admin' %}
+                                                    {% trans "Admin" %}
+                                                {% else %}
+                                                    {{ file.uploaded_by.email }}
+                                                {% endif %}
+                                            </strong>
+                                            {% if file.file_type == 'html' or file.cloudinary_url|lower|slice:'-5:' == '.html' %}
+                                            <span class="format-badge" title="Perfect Formatting Preserved">🌟 HTML</span>
+                                            {% else %}
+                                            <span class="format-badge" title="Original DOCX File">📄 DOCX</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="file-actions">
+                                    {% if is_admin %}
+                                    {# EDIT BUTTON - Only for DOCX files or HTML files with original DOCX #}
+                                    {% if file.public_id|lower|slice:'-5:' == '.docx' or file.public_id|lower|slice:'-4:' == '.doc' or file.original_docx %}
+                                    <div class="edit-dropdown">
+                                        <button class="btn btn-edit btn-sm edit-toggle">
+                                            <span class="mobile-hidden">Edit</span>
+                                            <span class="mobile-only">✏️</span>
+                                        </button>
+                                        <div class="edit-dropdown-content">
+                                            {# Perfect HTML Editing Option - Show for all editable files #}
+                                            <a href="{% url 'rfp_edit_docx' rfp_pk=referral.pk file_pk=file.pk %}"
+                                               class="edit-option">
+                                                🌟 Edit Online (Perfect Formatting)
+                                            </a>
+
+
+
+                                            <div class="edit-option">
+                                                <form action="{% url 'rfp_replace_file' rfp_pk=referral.pk file_pk=file.pk %}"
+                                                      method="post"
+                                                      enctype="multipart/form-data"
+                                                      class="replace-form"
+                                                      id="replace-form-{{ file.pk }}">
+                                                    {% csrf_token %}
+                                                    <label class="replace-label" for="replace-file-{{ file.pk }}">
+                                                        🔄 Replace File
+                                                    </label>
+                                                    <input type="file"
+                                                           name="replacement_file"
+                                                           accept=".doc,.docx"
+                                                           id="replace-file-{{ file.pk }}"
+                                                           style="display: none;"
+                                                           onchange="handleFileReplace(this, {{ file.pk }})">
+                                                </form>
+                                            </div>
+                                            {% if file.is_being_edited %}
+                                            <a href="{% url 'rfp_finish_edit' rfp_pk=referral.pk file_pk=file.pk %}"
+                                               class="edit-option">
+                                                ✅ Finish Editing
+                                            </a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    {% endif %}
+
+                                    <a href="{% url 'rfp_delete_file' rfp_pk=referral.pk file_pk=file.pk %}"
+                                       class="btn btn-delete btn-sm"
+                                       title="Delete File">
+                                        <span class="mobile-hidden">Delete</span>
+                                        <span class="mobile-only">🗑️</span>
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="empty-files">
+                                <div class="empty-icon">📂</div>
+                                <p>{% trans "No admin files have been attached yet." %}</p>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    {# Admin Upload Section: ONLY visible to admins #}
+                    {% if is_admin %}
+                    <div class="upload-section">
+                        <h4 class="upload-title">{% trans "Upload New Admin Files" %}</h4>
+                        <form action="{% url 'rfp_add_file' rfp_pk=referral.pk %}" method="post" enctype="multipart/form-data" class="upload-form">
+                            {% csrf_token %}
+                            <div class="file-input-wrapper">
+                                <input type="file" class="file-input" name="files_to_upload" id="files_to_upload_admin" accept=".doc, .docx" multiple required>
+                                <label for="files_to_upload_admin" class="file-input-label">
+                                    {# This span will be updated by JavaScript #}
+                                    <span class="file-input-text" id="admin-file-name">{% trans "Choose admin files..." %}</span>
+                                    <span class="file-input-button">{% trans "Browse" %}</span>
+                                </label>
+                            </div>
+                            <button class="btn btn-primary upload-button" type="submit">
+                                <span class="button-icon">📤</span>
+                                {% trans "Upload Admin Files" %}
+                            </button>
+                            <div class="file-requirements">
+                                {% trans "Max 50MB per file. Allowed types: DOC (.doc and .docx)." %}
+                            </div>
+                        </form>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DOWNLOAD OPTIONS MODAL -->
+<div class="download-modal-overlay" id="downloadModalOverlay">
+    <div class="download-modal-container">
+        <div class="download-modal-header">
+            <h3>Download Options</h3>
+            <button class="download-modal-close" id="downloadModalClose">×</button>
+        </div>
+        <div class="download-modal-body" id="downloadModalBody">
+            <!-- Options will be populated by JavaScript -->
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        /**
+         * Updates the text of the file input label to show the selected file name(s).
+         * @param {string} inputId - The ID of the file input element.
+         * @param {string} textId - The ID of the span element to update.
+         * @param {string} defaultText - The default text to show if no files are selected.
+         */
+        function handleFileInputChange(inputId, textId, defaultText) {
+            const input = document.getElementById(inputId);
+            const textSpan = document.getElementById(textId);
+
+            if (input && textSpan) {
+                input.addEventListener('change', function() {
+                    if (this.files && this.files.length > 0) {
+                        if (this.files.length === 1) {
+                            textSpan.textContent = this.files[0].name;
+                        } else {
+                            textSpan.textContent = `${this.files.length} files selected`;
+                        }
+                    } else {
+                        textSpan.textContent = defaultText;
+                    }
+                });
+            }
+        }
+
+        /**
+         * Handle file replacement with validation and confirmation
+         */
+        window.handleFileReplace = function(fileInput, filePk) {
+            if (fileInput.files && fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const fileName = file.name;
+                const fileSize = file.size;
+                const maxSize = 50 * 1024 * 1024; // 50MB
+
+                // Validate file size
+                if (fileSize > maxSize) {
+                    alert('File size exceeds 50MB limit. Please choose a smaller file.');
+                    fileInput.value = ''; // Clear the input
+                    return;
+                }
+
+                // Validate file type
+                const fileExtension = fileName.toLowerCase().split('.').pop();
+                if (!['doc', 'docx'].includes(fileExtension)) {
+                    alert('Please select a DOC or DOCX file.');
+                    fileInput.value = ''; // Clear the input
+                    return;
+                }
+
+                // Confirm replacement
+                const confirmed = confirm(`Replace the current file with "${fileName}"?`);
+                if (confirmed) {
+                    // Show loading state
+                    const form = document.getElementById(`replace-form-${filePk}`);
+                    const label = form.querySelector('.replace-label');
+                    const originalText = label.textContent;
+                    label.textContent = '🔄 Uploading...';
+                    label.style.opacity = '0.7';
+
+                    // Disable other actions temporarily
+                    const dropdown = form.closest('.edit-dropdown-content');
+                    const options = dropdown.querySelectorAll('.edit-option');
+                    options.forEach(option => {
+                        option.style.pointerEvents = 'none';
+                        option.style.opacity = '0.5';
+                    });
+
+                    // Submit form
+                    form.submit();
+                } else {
+                    // Clear the input if user cancels
+                    fileInput.value = '';
+                }
+            }
+        }
+
+        /**
+         * Download Modal Functionality
+         */
+        function initDownloadModal() {
+            const modalOverlay = document.getElementById('downloadModalOverlay');
+            const modalBody = document.getElementById('downloadModalBody');
+            const closeBtn = document.getElementById('downloadModalClose');
+
+            // Close modal function
+            function closeModal() {
+                modalOverlay.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+
+            // Open modal function
+            function openModal(fileData) {
+                // Populate modal content based on file data
+                let modalContent = '';
+
+                // HTML Download Option - Always show for HTML files
+                if (fileData.isHtml === 'true') {
+                    modalContent += `
+                        <a href="${fileData.htmlUrl}" class="download-modal-option html-option" target="_blank">
+                            <span class="option-icon">🌟</span>
+                            <span class="option-text">
+                                <strong>HTML Format</strong>
+                                <small>Perfect Quality - Formatting Preserved</small>
+                            </span>
+                        </a>
+                    `;
+                }
+
+                // DOCX Download Option - Show if original DOCX exists OR file is not HTML
+                if (fileData.hasOriginalDocx === 'true') {
+                    modalContent += `
+                        <a href="${fileData.originalDocxUrl}" class="download-modal-option docx-option" target="_blank">
+                            <span class="option-icon">📄</span>
+                            <span class="option-text">
+                                <strong>DOCX Format</strong>
+                                <small>Original File - Editable Format</small>
+                            </span>
+                        </a>
+                    `;
+                } else if (fileData.isDocx === 'true') {
+                    modalContent += `
+                        <a href="${fileData.docxUrl}" class="download-modal-option docx-option" target="_blank">
+                            <span class="option-icon">📄</span>
+                            <span class="option-text">
+                                <strong>DOCX Format</strong>
+                                <small>Original File - Editable Format</small>
+                            </span>
+                        </a>
+                    `;
+                }
+
+                modalBody.innerHTML = modalContent;
+                modalOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            // Close modal events
+            closeBtn.addEventListener('click', closeModal);
+            modalOverlay.addEventListener('click', function(e) {
+                if (e.target === modalOverlay) {
+                    closeModal();
+                }
+            });
+
+            // Close with Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+                    closeModal();
+                }
+            });
+
+            // Set up download triggers
+            document.querySelectorAll('.download-popup-trigger').forEach(trigger => {
+                trigger.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    const fileData = {
+                        fileId: this.getAttribute('data-file-id'),
+                        isHtml: this.getAttribute('data-is-html'),
+                        hasOriginalDocx: this.getAttribute('data-has-original-docx'),
+                        isDocx: this.getAttribute('data-is-docx'),
+                        htmlUrl: this.getAttribute('data-html-url'),
+                        originalDocxUrl: this.getAttribute('data-original-docx-url'),
+                        docxUrl: this.getAttribute('data-docx-url')
+                    };
+
+                    openModal(fileData);
+                });
+            });
+        }
+
+        /**
+         * Enhanced dropdown management for edit dropdowns (keeping existing functionality)
+         */
+        function enhanceEditDropdowns() {
+            const dropdowns = document.querySelectorAll('.edit-dropdown');
+
+            // Create backdrop if it doesn't exist
+            if (!document.querySelector('.dropdown-backdrop')) {
+                const backdrop = document.createElement('div');
+                backdrop.className = 'dropdown-backdrop';
+                document.body.appendChild(backdrop);
+            }
+
+            const backdrop = document.querySelector('.dropdown-backdrop');
+
+            dropdowns.forEach(dropdown => {
+                const toggle = dropdown.querySelector('.btn-edit');
+                const content = dropdown.querySelector('.edit-dropdown-content');
+
+                if (toggle && content) {
+                    toggle.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        // Close all other dropdowns
+                        document.querySelectorAll('.edit-dropdown-content').forEach(other => {
+                            if (other !== content) {
+                                other.style.display = 'none';
+                            }
+                        });
+
+                        // Toggle current dropdown
+                        if (content.style.display === 'block') {
+                            content.style.display = 'none';
+                            backdrop.style.display = 'none';
+                        } else {
+                            content.style.display = 'block';
+                            backdrop.style.display = 'block';
+
+                            // Ensure dropdown is properly positioned on mobile
+                            if (window.innerWidth <= 767) {
+                                content.style.position = 'fixed';
+                                content.style.top = '50%';
+                                content.style.left = '50%';
+                                content.style.transform = 'translate(-50%, -50%)';
+                                content.style.zIndex = '10000';
+                            }
+                        }
+                    });
+                }
+            });
+
+            // Close dropdowns when clicking backdrop
+            backdrop.addEventListener('click', function() {
+                document.querySelectorAll('.edit-dropdown-content').forEach(content => {
+                    content.style.display = 'none';
+                });
+                backdrop.style.display = 'none';
+            });
+
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.edit-dropdown')) {
+                    document.querySelectorAll('.edit-dropdown-content').forEach(content => {
+                        content.style.display = 'none';
+                    });
+                    backdrop.style.display = 'none';
+                }
+            });
+        }
+
+        /**
+         * Fix container overflow issues on mobile
+         */
+        function fixContainerOverflow() {
+            if (window.innerWidth <= 767) {
+                document.querySelectorAll('.container, .card, .card-body, .files-section, .files-list').forEach(el => {
+                    el.style.overflow = 'visible';
+                });
+            }
+        }
+
+        // Initialize for client files
+        handleFileInputChange(
+            'files_to_upload_client',
+            'client-file-name',
+            '{% trans "Choose files..." %}'
+        );
+
+        // Initialize for admin files
+        handleFileInputChange(
+            'files_to_upload_admin',
+            'admin-file-name',
+            '{% trans "Choose admin files..." %}'
+        );
+
+        // Initialize download modal
+        initDownloadModal();
+
+        // Initialize edit dropdowns
+        enhanceEditDropdowns();
+        fixContainerOverflow();
+
+        // Re-initialize on window resize
+        window.addEventListener('resize', function() {
+            enhanceEditDropdowns();
+            fixContainerOverflow();
+        });
+    });
+</script>
+{% endblock %}
+{% block extra_css %}
+<style>
+/* Base Styles - Consistent with RFP Management */
+:root {
+    --primary-color: #4361ee;
+    --primary-dark: #3a56d4;
+    --secondary-color: #7209b7;
+    --success-color: #4cc9f0;
+    --danger-color: #f72585;
+    --warning-color: #f8961e;
+    --light-color: #f8f9fa;
+    --dark-color: #212529;
+    --gray-color: #6c757d;
+    --border-color: #dee2e6;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --radius: 8px;
+    --transition: all 0.3s ease;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-image: url('{% static "images/bk.jpg" %}');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    overflow: visible !important; /* Critical fix for dropdown visibility */
+}
+
+.page-header {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.page-header h1 {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.detail-label-header { /* New style for labels in the header */
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.subtitle {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.3rem;
+    margin: 10px 0 0 0;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+}
+
+.admin-controls {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 30px;
+}
+
+/* Button Styles */
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    text-align: center;
+    border: none;
+    font-size: 16px;
+    gap: 8px;
+    box-shadow: var(--shadow);
+}
+
+.button-secondary {
+    background: var(--gray-color);
+    color: white;
+}
+
+.button-secondary:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+}
+
+/* Card Styles */
+.card-section {
+    margin-bottom: 30px;
+}
+
+.card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+    padding: 25px 30px;
+    border-bottom: 1px solid var(--border-color);
+    background: #f8f9fa;
+}
+
+.card-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--dark-color);
+}
+
+.card-body {
+    padding: 30px;
+    overflow: visible !important; /* Critical fix for dropdown visibility */
+}
+
+.card-footer {
+    padding: 20px 30px;
+    border-top: 1px solid var(--border-color);
+    background: #f8f9fa;
+    display: flex; /* Ensure button is displayed if condition is met */
+    justify-content: flex-start;
+}
+
+/* Detail Grid (Main content details) */
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Default to single column */
+    gap: 0;
+    margin-bottom: 20px;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.detail-item.full-width {
+    grid-column: 1 / -1;
+}
+
+.detail-item:last-child:not(.full-width) {
+    border-bottom: none;
+}
+
+.detail-label {
+    font-weight: 600;
+    color: var(--dark-color);
+    min-width: 150px;
+    padding-right: 20px;
+    margin-bottom: 5px; /* Spacing between label and value on mobile/vertical */
+}
+
+.detail-value {
+    flex: 1;
+    color: var(--gray-color);
+    font-size: 1.1rem;
+    word-break: break-word;
+}
+
+/* Location Group Fieldset/Legend Styling */
+.detail-location-group {
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-top: 30px;
+}
+
+.location-legend {
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding: 0 10px;
+    width: auto;
+    float: none;
+    margin-bottom: 20px;
+}
+
+.location-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Default to single column */
+    gap: 0;
+}
+
+.location-item {
+    display: flex;
+    flex-direction: column;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.location-item:last-child {
+    border-bottom: none;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-submitted { background-color: var(--gray-color); }
+.status-in-review { background-color: var(--success-color); }
+.status-accepted { background-color: #28a745; }
+.status-rejected { background-color: var(--danger-color); }
+
+/* Files Section */
+.files-section {
+    margin-bottom: 40px;
+    overflow: visible !important; /* Critical fix for dropdown visibility */
+}
+
+.files-section:last-child {
+    margin-bottom: 0;
+}
+
+.section-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--dark-color);
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.admin-badge {
+    background: var(--primary-color);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* Files List */
+.files-list {
+    margin-bottom: 30px;
+    overflow: visible !important; /* Critical fix for dropdown visibility */
+}
+
+.file-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    margin-bottom: 15px;
+    transition: var(--transition);
+    background: white;
+    position: relative; /* For better dropdown positioning */
+}
+
+.file-item:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 2px 8px rgba(67, 97, 238, 0.15);
+}
+
+.file-item.admin-file {
+    background: #f8f9ff;
+    border-color: #e0e7ff;
+}
+
+.file-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex: 1;
+    min-width: 0;
+}
+
+.file-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.file-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.file-name {
+    font-weight: 600;
+    color: var(--primary-color);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 5px;
+    font-size: 1.1rem;
+    word-break: break-word;
+}
+
+.file-name:hover {
+    text-decoration: underline;
+}
+
+.file-meta {
+    font-size: 0.9rem;
+    color: var(--gray-color);
+}
+
+.file-actions {
+    flex-shrink: 0;
+    margin-left: 15px;
+}
+
+/* Empty State */
+.empty-files {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--gray-color);
+}
+
+.empty-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    opacity: 0.5;
+}
+
+/* Upload Section */
+.upload-section {
+    background: #f8f9fa;
+    padding: 25px;
+    border-radius: var(--radius);
+    border: 2px dashed var(--border-color);
+}
+
+.upload-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: var(--dark-color);
+}
+
+.upload-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* File Input Styling */
+.file-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.file-input {
+    position: absolute;
+    left: -9999px;
+    opacity: 0;
+}
+
+.file-input-label {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    background: white;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 0;
+    cursor: pointer;
+    transition: var(--transition);
+    overflow: hidden; /* Ensure text doesn't escape */
+}
+
+.file-input-label:hover {
+    border-color: var(--primary-color);
+}
+
+.file-input-text {
+    flex: 1;
+    padding: 15px 20px;
+    color: var(--gray-color);
+    font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+}
+
+.file-input-button {
+    background: var(--primary-color);
+    color: white;
+    padding: 15px 25px;
+    font-weight: 600;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    transition: var(--transition);
+    flex-shrink: 0;
+}
+
+.file-input-label:hover .file-input-button {
+    background: var(--primary-dark);
+}
+
+.file-requirements {
+    font-size: 0.9rem;
+    color: var(--gray-color);
+    text-align: center;
+}
+
+/* Button Styles */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    transition: var(--transition);
+    border: none;
+    cursor: pointer;
+    gap: 8px;
+}
+
+.btn-primary { background: var(--primary-color); color: white; }
+.btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
+.btn-edit { background: var(--warning-color); color: white; }
+.btn-edit:hover { background: #e6890f; transform: translateY(-1px); }
+.btn-delete { background: var(--danger-color); color: white; }
+.btn-delete:hover { background: #e01e5a; transform: translateY(-1px); }
+.btn-sm { padding: 8px 16px; font-size: 13px; }
+.upload-button { align-self: center; min-width: 200px; }
+
+/* Download Popup Trigger Styles - REPLACED DROPDOWN */
+.download-popup-trigger {
+    display: inline-block;
+}
+
+.download-popup-trigger .download-main-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.download-popup-trigger .download-main-btn:hover {
+    background-color: #f8f9fa;
+}
+
+.download-popup-trigger .file-name {
+    font-weight: 500;
+    color: #333;
+}
+
+.download-popup-trigger .dropdown-arrow {
+    font-size: 10px;
+    color: #666;
+    transition: transform 0.3s ease;
+}
+
+.download-popup-trigger:hover .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+/* Download Modal Styles */
+.download-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    padding: 20px;
+    backdrop-filter: blur(5px);
+}
+
+.download-modal-overlay.active {
+    display: flex;
+}
+
+.download-modal-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    width: 100%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow: hidden;
+    animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.download-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    border-bottom: 1px solid var(--border-color);
+    background: #f8f9fa;
+}
+
+.download-modal-header h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--dark-color);
+}
+
+.download-modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--gray-color);
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: var(--transition);
+}
+
+.download-modal-close:hover {
+    background: #e9ecef;
+    color: var(--dark-color);
+}
+
+.download-modal-body {
+    padding: 25px;
+}
+
+.download-modal-option {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    text-decoration: none;
+    color: #333;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    gap: 15px;
+    margin-bottom: 15px;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.download-modal-option:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    text-decoration: none;
+    color: #333;
+}
+
+.download-modal-option:last-child {
+    margin-bottom: 0;
+}
+
+.download-modal-option.html-option {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-color: #5a6fd8;
+}
+
+.download-modal-option.html-option:hover {
+    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+    color: white;
+}
+
+.download-modal-option.docx-option {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    border-color: #3aa0f0;
+}
+
+.download-modal-option.docx-option:hover {
+    background: linear-gradient(135deg, #3aa0f0 0%, #00d9fe 100%);
+    color: white;
+}
+
+.download-modal-option .option-icon {
+    font-size: 24px;
+    width: 30px;
+    text-align: center;
+}
+
+.download-modal-option .option-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.download-modal-option .option-text strong {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.download-modal-option .option-text small {
+    font-size: 13px;
+    opacity: 0.9;
+}
+
+/* Format badge */
+.format-badge {
+    background: var(--success-color);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    margin-left: 8px;
+    text-transform: uppercase;
+}
+
+/* Enhanced edit dropdown styles */
+.edit-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.edit-dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 200px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    z-index: 1000;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    right: 0;
+    top: 100%;
+    margin-top: 5px;
+}
+
+.edit-dropdown:hover .edit-dropdown-content {
+    display: block;
+}
+
+.edit-option {
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.edit-option:hover {
+    background-color: #f5f5f5;
+}
+
+.edit-dropdown-content .edit-option:first-child {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 4px 4px 0 0;
+}
+
+.edit-dropdown-content .edit-option:first-child:hover {
+    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+}
+
+.replace-label {
+    cursor: pointer;
+    display: block;
+    margin: 0;
+    padding: 0;
+    transition: all 0.3s ease;
+}
+
+.replace-form {
+    margin: 0;
+    padding: 0;
+}
+
+/* File type indicators */
+.file-type-indicator {
+    font-size: 0.8rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 8px;
+    background: #e9ecef;
+    color: #495057;
+}
+
+.file-type-html {
+    background: #d4edda;
+    color: #155724;
+}
+
+.file-type-docx {
+    background: #e2e3e5;
+    color: #383d41;
+}
+
+/* Utility Classes */
+.mobile-only {
+    display: none;
+}
+.mobile-hidden {
+    display: inline;
+}
+
+/* ========== CRITICAL MOBILE FIXES ========== */
+@media (max-width: 767px) {
+    .container {
+        padding: 15px 10px;
+        overflow: visible !important;
+    }
+
+    .page-header h1 {
+        font-size: 2rem;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .detail-label-header {
+        display: none;
+    }
+
+    /* Main Detail Grid: 1 column (default) */
+    .detail-item {
+        flex-direction: column;
+        gap: 5px;
+        padding: 12px 0;
+    }
+    .detail-label {
+        font-size: 0.9rem;
+        min-width: auto;
+    }
+    .detail-value {
+        font-size: 1rem;
+    }
+
+    /* Location Grid: 1 column */
+    .location-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .location-item {
+        padding: 12px 0;
+        border-bottom: 1px solid var(--border-color);
+    }
+    .location-item:last-child {
+        border-bottom: none;
+    }
+
+    .upload-section {
+        padding: 20px;
+    }
+
+    /* Ensure button is full width */
+    .btn {
+        width: 100%;
+        justify-content: center;
+        padding: 16px 20px;
+        font-size: 16px;
+        min-height: 44px;
+    }
+
+    .card-footer {
+        padding: 20px;
+    }
+
+    .mobile-only {
+        display: inline;
+    }
+    .mobile-hidden {
+        display: none;
+    }
+
+    /* Enhanced File Items for Mobile */
+    .file-item {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+        padding: 20px;
+    }
+
+    .file-info {
+        width: 100%;
+        gap: 12px;
+    }
+
+    .file-actions {
+        width: 100%;
+        margin-left: 0;
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+    }
+
+    /* Critical: Ensure last admin file dropdowns are fully visible */
+    .admin-files .file-item:last-child {
+        margin-bottom: 30px; /* Extra space at bottom */
+    }
+
+    .admin-files .file-item:last-child .edit-dropdown {
+        position: static;
+    }
+
+    /* Enhanced spacing for admin files section */
+    .admin-files {
+        margin-top: 40px;
+        padding-top: 30px;
+        border-top: 2px solid var(--border-color);
+    }
+
+    /* Mobile Modal Adjustments */
+    .download-modal-overlay {
+        padding: 10px;
+    }
+
+    .download-modal-container {
+        max-width: 100%;
+        max-height: 90vh;
+    }
+
+    .download-modal-header {
+        padding: 15px 20px;
+    }
+
+    .download-modal-body {
+        padding: 20px;
+    }
+
+    .download-modal-option {
+        padding: 18px 20px;
+        flex-direction: column;
+        text-align: center;
+        gap: 12px;
+    }
+
+    .download-modal-option .option-text {
+        align-items: center;
+    }
+}
+
+/* Tablet/Desktop (992px and up) */
+@media (min-width: 992px) {
+    .detail-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 0 30px;
+    }
+
+    .detail-item {
+        flex-direction: row;
+        align-items: center;
+        padding: 15px 0;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .detail-grid > .detail-item:not(.full-width):nth-last-child(-n+2) {
+        border-bottom: none;
+    }
+    .detail-item.full-width {
+        border-bottom: 1px solid var(--border-color);
+    }
+    .detail-grid > .detail-item.full-width:last-child {
+        border-bottom: none;
+    }
+
+    .detail-label {
+        min-width: 200px;
+        margin-bottom: 0;
+    }
+
+    .location-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0 20px;
+    }
+
+    .location-item {
+        padding: 0;
+        border-bottom: none;
+    }
+
+    .location-item .detail-label {
+        min-width: auto;
+    }
+}
+
+/* Tablet (768px to 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+    .detail-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 0 20px;
+    }
+
+    .detail-item {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px 0;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .location-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0 15px;
+    }
+
+    .location-item {
+        padding: 0;
+        border-bottom: none;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .btn-edit:hover {
+        transform: none;
+        background: var(--warning-color);
+    }
+
+    .download-popup-trigger .download-main-btn:hover {
+        background: #f8f9fa;
+        transform: none;
+    }
+
+    .edit-option:hover, .download-modal-option:hover {
+        background-color: transparent;
+        transform: none;
+    }
+}
+</style>
+{% endblock %}

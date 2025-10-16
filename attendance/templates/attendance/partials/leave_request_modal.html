@@ -1,0 +1,87 @@
+{% load widget_tweaks %}
+
+<div class="container-fluid">
+    <div id="leave-status" data-status="{{ leave_request.status }}">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h4 class="mb-0">Leave Request #{{ leave_request.id }}</h4>
+                <p class="text-muted">Submitted on {{ leave_request.created_at|date:"F j, Y" }}</p>
+                
+                <div class="d-flex mb-3">
+                    <span class="badge badge-{{ leave_request.status }}">
+                        {{ leave_request.get_status_display }}
+                    </span>
+                    {% if leave_request.reviewed_by %}
+                        <small class="text-muted ml-2">
+                            Reviewed by {{ leave_request.reviewed_by.get_full_name }} on {{ leave_request.processed_at|date:"F j, Y" }}
+                        </small>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <form id="leave-request-form" method="post" action="{% url 'attendance:update_leave_request' leave_request.id %}">
+            {% csrf_token %}
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Leave Type</label>
+                        {% if leave_request.status == 'pending' %}
+                            {{ form.leave_type|add_class:"form-control"|attr:"required" }}
+                        {% else %}
+                            <input type="text" class="form-control" value="{{ leave_request.get_leave_type_display }}" readonly>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Status</label>
+                        <input type="text" class="form-control" value="{{ leave_request.get_status_display }}" readonly>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Start Date</label>
+                        {% if leave_request.status == 'pending' %}
+                            {{ form.start_date|add_class:"form-control datepicker"|attr:"required" }}
+                        {% else %}
+                            <input type="text" class="form-control" value="{{ leave_request.start_date|date:"Y-m-d" }}" readonly>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>End Date</label>
+                        {% if leave_request.status == 'pending' %}
+                            {{ form.end_date|add_class:"form-control datepicker"|attr:"required" }}
+                        {% else %}
+                            <input type="text" class="form-control" value="{{ leave_request.end_date|date:"Y-m-d" }}" readonly>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Reason</label>
+                {% if leave_request.status == 'pending' %}
+                    {{ form.reason|add_class:"form-control"|attr:"rows=3"|attr:"required" }}
+                {% else %}
+                    <textarea class="form-control" rows="3" readonly>{{ leave_request.reason }}</textarea>
+                {% endif %}
+            </div>
+
+            {% if leave_request.status != 'pending' and leave_request.admin_notes %}
+                <div class="form-group">
+                    <label>Admin Notes</label>
+                    <div class="alert alert-{{ leave_request.status }} mb-0">
+                        {{ leave_request.admin_notes }}
+                    </div>
+                </div>
+            {% endif %}
+        </form>
+    </div>
+</div>

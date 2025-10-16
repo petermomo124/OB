@@ -1,26 +1,54 @@
 {% load static %}
 <header class="header">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <!-- Global Bar - Hidden on mobile -->
     <div class="global-bar">
         <div class="container">
-            {% if not user.is_authenticated %}
-            <div class="global-links">
-                <a href="{% url 'contact' %}" class="global-link"><i class="fas fa-envelope"></i> <span>Contact Us</span></a>
-                <span class="separator">|</span>
-                <a href="#" class="global-link"><i class="fas fa-question-circle"></i> <span>RFP</span></a>
-                <span class="separator">|</span>
-                <a href="{% url 'newsletter:subscribe' %}" class="global-link"><i class="fas fa-bell"></i> <span>Subscription</span></a>
-                <span class="separator">|</span>
-                <a href="{% url 'client_portal' %}" id="portalLink" class="global-link admin-link"><i class="fas fa-lock"></i> <span>Portal</span></a>
-            </div>
-            {% else %}
-            <div class="global-links">
-                <a href="{% url 'user_logout' %}" class="global-link"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
-            </div>
-            {% endif %}
-        </div>
+    {% comment %} Links visible to unauthenticated users (Public) {% endcomment %}
+    {% if not user.is_authenticated %}
+    <div class="global-links">
+        <a href="{% url 'public_chatbot_view' %}"
+           style="text-decoration: none; color: #1e88e5; font-weight: 600; font-size: 1.1rem; padding: 5px 10px; border-radius: 5px; transition: color 0.3s ease;"
+           onmouseover="this.style.color='#0a5eb5'" onmouseout="this.style.color='#1e88e5'">
+            🤖 Ask OB
+        </a>
+        <a href="{% url 'rfp_guide' %}" class="global-link"><i class="fas fa-question-circle"></i> <span>RFP Guide</span></a>
+<span class="separator">|</span>
+        <a href="{% url 'contact' %}" class="global-link"><i class="fas fa-envelope"></i> <span>Contact Us</span></a>
+        <span class="separator">|</span>
+        <a href="{% url 'newsletter:subscribe' %}" class="global-link"><i class="fas fa-bell"></i> <span>Subscription</span></a>
+        <span class="separator">|</span>
+        <a href="{% url 'client_portal' %}" id="portalLink" class="global-link admin-link"><i class="fas fa-lock"></i> <span>Portal</span></a>
+    </div>
+
+    {% comment %} Links visible to authenticated users (Private) {% endcomment %}
+    {% else %}
+    <div class="global-links">
+
+        {% comment %}
+        RFP Link Visibility Logic:
+        Check if the user is authenticated AND their role is 'admin' OR 'client'.
+        Note: You should replace 'rfp_list' with 'rfp_create' if you want them to go straight to the submission form.
+        I used 'rfp_list' as it's the main entry point to view existing proposals.
+        {% endcomment %}
+        {% if user.role == 'admin' or user.role == 'client' %}
+        <a href="{% url 'rfp_list' %}"
+           style="text-decoration: none; color: #1e88e5; font-weight: 600; font-size: 1.1rem; padding: 5px 10px; border-radius: 5px; transition: color 0.3s ease;"
+           onmouseover="this.style.color='#0a5eb5'"
+           onmouseout="this.style.color='#1e88e5'">
+            📄 RFP Management
+        </a>
+        <span class="separator">|</span>
+        {% endif %}
+
+        {% comment %} Links available to all authenticated users {% endcomment %}
+
+        <span class="separator">|</span>
+        <a href="{% url 'user_logout' %}" class="global-link"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
+    </div>
+    {% endif %}
+</div>
     </div>
 
     <!-- Main Header -->
@@ -239,21 +267,35 @@
        <!-- User Links - Hidden on mobile, visible on desktop -->
 <div class="global-links desktop-only">
     {% if user.role == 'admin' %}
-    <a href="{% url 'manage_users' %}" class="global-link admin-link"><i class="fas fa-users-cog"></i> <span>Manage Users</span></a>
+         <a href="{% url 'attendance:admin_dashboard' %}" class="global-link admin-link"><i class="fas fa-clipboard-check"></i> <span>Attendance Management</span></a>
+<a href="{% url 'attendance:admin_leave_requests' %}" class="global-link admin-link"><i class="fas fa-clipboard-list"></i> <span>Leave Management</span></a>
+
+    <a href="{% url 'manage_offices' %}" class="global-link admin-link"><i class="fas fa-building"></i> <span>Manage Offices</span></a>
+        <span class="separator">|</span>
+        <a href="{% url 'manage_users' %}" class="global-link admin-link"><i class="fas fa-users-cog"></i> <span>Manage Users</span></a>
     <span class="separator">|</span>
     <a href="{% url 'newsletter:admin_dashboard' %}" class="global-link admin-link"><i class="fas fa-paper-plane"></i> <span>Newsletter</span></a>
     <span class="separator">|</span>
     {% endif %}
 
     {% if request.user.is_authenticated %}
+        <!-- User links -->
+                
+                    {% if user.role == 'staff'%}
+<!-- Staff Links -->
+<a href="{% url 'attendance:dashboard' %}" class="global-link"><i class="fas fa-user-clock"></i> <span>Attendance</span></a>
+
+<a href="{% url 'attendance:my_leave_requests' %}" class="global-link"><i class="far fa-calendar-alt"></i> <span>My Leave</span></a>
+
+{% endif %}
         <a href="{% url 'chatbot_view' %}" class="global-link chatbot-link">
             <i class="fas fa-robot"></i> <span>AI Chatbot</span>
         </a>
         {% if request.user.role == 'admin' or request.user.role == 'staff' %}
             <a href="{% url 'task_list' %}" class="global-link"><i class="fas fa-tasks"></i> <span>Tasks</span></a>
             <span class="separator">|</span>
-        {% endif %}
-        <a href="#" class="global-link profile-link">
+           {% endif %}
+        <a href="{% url 'view_my_profile' %}" class="global-link profile-link">
             <div class="face-card-container">
                 {% if request.user.profile_image %}
                     <img src="{{ request.user.profile_image }}" alt="Profile Image" class="face-card-image">
@@ -286,8 +328,15 @@
             <div class="mobile-global-links">
                 <!-- Global links from top bar -->
                 {% if not user.is_authenticated %}
+                    <a href="{% url 'public_chatbot_view' %}"
+   style="text-decoration: none; color: #1e88e5; font-weight: 600; font-size: 1.1rem; padding: 5px 10px; border-radius: 5px; transition: color 0.3s ease;"
+   onmouseover="this.style.color='#0a5eb5'"
+   onmouseout="this.style.color='#1e88e5'">
+    🤖 Public Chatbot
+</a>
                 <a href="{% url 'contact' %}" class="mobile-global-link"><i class="fas fa-envelope"></i> Contact Us</a>
-                <a href="#" class="mobile-global-link"><i class="fas fa-question-circle"></i> RFP</a>
+                <a href="{% url 'rfp_guide' %}" class="global-link"><i class="fas fa-question-circle"></i> <span>RFP Guide</span></a>
+<span class="separator">|</span>
                 <a href="{% url 'newsletter:subscribe' %}" class="mobile-global-link"><i class="fas fa-bell"></i> Subscription</a>
                 <a href="{% url 'client_portal' %}" class="mobile-global-link admin-link"><i class="fas fa-lock"></i> Portal</a>
                 {% else %}
@@ -296,24 +345,46 @@
 
                 <!-- Admin links -->
                 {% if user.role == 'admin' %}
-                <a href="{% url 'manage_users' %}" class="mobile-global-link admin-link"><i class="fas fa-users-cog"></i> Manage Users</a>
+                    <a href="{% url 'attendance:admin_dashboard' %}" class="mobile-global-link admin-link"><i class="fas fa-clipboard-check"></i> <span>Attendance Management</span></a>
+
+<a href="{% url 'attendance:admin_leave_requests' %}" class="mobile-global-link admin-link"><i class="fas fa-clipboard-list"></i> <span>Leave Management</span></a>
+
+
+                    <a href="{% url 'manage_users' %}" class="mobile-global-link admin-link"><i class="fas fa-users-cog"></i> Manage Users</a>
                 <a href="{% url 'newsletter:admin_dashboard' %}" class="mobile-global-link admin-link"><i class="fas fa-paper-plane"></i> Newsletter</a>
+                    <a href="{% url 'manage_offices' %}" class="mobile-global-link admin-link"><i class="fas fa-building"></i> <span>Manage Offices</span></a>
+
                 {% endif %}
 
                 <!-- User links -->
                 {% if request.user.is_authenticated %}
-                <a href="{% url 'chatbot_view' %}" class="mobile-global-link chatbot-link">
+                    {% if user.role == 'staff'%}
+<!-- Staff Links -->
+<a href="{% url 'attendance:dashboard' %}" class="mobile-global-link admin-link"><i class="fas fa-user-clock"></i> <span>Attendance</span></a>
+
+<a href="{% url 'attendance:my_leave_requests' %}" class="mobile-global-link admin-link"><i class="far fa-calendar-alt"></i> <span>My Leave</span></a>
+
+{% endif %}
+                    {% if user.role == 'admin' or user.role == 'client' %}
+        <a href="{% url 'rfp_list' %}" class="mobile-global-link admin-link">
+            📄 RFP Management
+        </a>
+
+        {% endif %}
+                <a href="{% url 'chatbot_view' %}" class="mobile-global-link admin-link">
                     <i class="fas fa-robot"></i> AI Chatbot
                 </a>
                 {% if request.user.role == 'admin' or request.user.role == 'staff' %}
-                <a href="{% url 'task_list' %}" class="mobile-global-link"><i class="fas fa-tasks"></i> Tasks</a>
+                <a href="{% url 'task_list' %}" class="mobile-global-link admin-link"><i class="fas fa-tasks"></i> Tasks</a>
+                
                 {% endif %}
 
                 <!-- Profile link -->
-                <a href="#" class="mobile-global-link profile-link">
+                <a href="{% url 'view_my_profile' %}" class="global-link profile-link">
                     <div class="face-card-container">
                         {% if request.user.profile_image %}
                             <img src="{{ request.user.profile_image }}" alt="Profile Image" class="face-card-image">
+
                         {% else %}
                             <div class="face-card-initials">{{ request.user.first_name|first }}{{ request.user.last_name|first }}</div>
                         {% endif %}
@@ -593,8 +664,8 @@
     border-left: 2px solid #dee2e6;
 }
 
-.mobile-nav-link, 
-.mobile-dropdown-link, 
+.mobile-nav-link,
+.mobile-dropdown-link,
 .mobile-sub-dropdown-link {
     position: relative;
 }
@@ -1078,7 +1149,7 @@ body {
     .desktop-only {
         display: none !important;
     }
-    
+
     /* If using Option 1 (hiding entire container) */
     .global-links.desktop-only {
         display: none !important;
@@ -1090,7 +1161,7 @@ body {
     .desktop-only {
         display: flex !important;
     }
-    
+
     .global-links.desktop-only {
         display: flex !important;
     }
@@ -1322,11 +1393,11 @@ document.addEventListener('DOMContentLoaded', function() {
             mobileSidebar.classList.remove('active');
             mobileOverlay.classList.remove('active');
             document.body.style.overflow = '';
-            
+
             // Close all dropdowns when menu closes
             closeAllDropdowns();
         }
-        
+
         function closeAllDropdowns() {
             mobileNavItems.forEach(item => item.classList.remove('active'));
             mobileSubMenus.forEach(menu => menu.classList.remove('active'));
@@ -1341,10 +1412,10 @@ document.addEventListener('DOMContentLoaded', function() {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
                 const wasActive = item.classList.contains('active');
-                
+
                 // Close all dropdowns first
                 closeAllDropdowns();
-                
+
                 // Toggle current item if it wasn't already active
                 if (!wasActive) {
                     item.classList.add('active');
@@ -1361,7 +1432,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 e.preventDefault();
                 e.stopPropagation();
                 const wasActive = menu.classList.contains('active');
-                
+
                 // Close other sub-menus at the same level
                 const parentDropdown = menu.closest('.mobile-dropdown, .mobile-sub-dropdown');
                 if (parentDropdown) {
@@ -1372,7 +1443,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     });
                 }
-                
+
                 // Toggle current menu
                 if (!wasActive) {
                     menu.classList.add('active');
@@ -1391,7 +1462,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 e.preventDefault();
                 e.stopPropagation();
                 const wasActive = menu.classList.contains('active');
-                
+
                 // Close other sub-sub-menus at the same level
                 const parentDropdown = menu.closest('.mobile-sub-dropdown, .mobile-sub-sub-dropdown');
                 if (parentDropdown) {
@@ -1402,7 +1473,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     });
                 }
-                
+
                 // Toggle current menu
                 if (!wasActive) {
                     menu.classList.add('active');
@@ -1421,12 +1492,12 @@ document.addEventListener('DOMContentLoaded', function() {
         '.mobile-sub-dropdown-link, ' +
         '.mobile-sub-sub-dropdown-link'
     );
-    
+
     mobileLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             // Check if this link has a dropdown icon (is a toggle)
             const hasDropdownIcon = this.querySelector('.mobile-dropdown-icon');
-            
+
             // If it's not a dropdown toggle link, close the menu
             if (!hasDropdownIcon) {
                 // Small delay to allow the click to register before closing
@@ -1439,8 +1510,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Handle clicks outside the sidebar to close it
     document.addEventListener('click', function(e) {
-        if (mobileSidebar.classList.contains('active') && 
-            !e.target.closest('.mobile-sidebar') && 
+        if (mobileSidebar.classList.contains('active') &&
+            !e.target.closest('.mobile-sidebar') &&
             !e.target.closest('.hamburger')) {
             closeMobileMenu();
         }
@@ -1460,7 +1531,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Smoothly complete the animation
             loadingBar.style.transition = 'width 0.5s ease, opacity 0.3s ease';
             loadingBar.style.width = '100%';
-            
+
             setTimeout(() => {
                 loadingBar.style.opacity = '0';
                 setTimeout(() => {

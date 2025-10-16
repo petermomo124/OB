@@ -1,0 +1,124 @@
+{% load i18n %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RFP Update Notification</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;">
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f4f4f4;">
+<tr>
+<td align="center" style="padding: 20px;">
+<table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+
+                <!-- Header Section (Blue Background) -->
+                <tr>
+                    <td align="center" style="background-color: #3b82f6; padding: 30px 20px;">
+                        <h1 style="color: white; margin: 0; font-size: 28px;">OB Global</h1>
+                        <p style="color: white; font-size: 16px;">RFP Notification: {{ notification_type }}</p>
+                    </td>
+                </tr>
+
+                <!-- Body Content -->
+                <tr>
+                    <td style="padding: 40px 30px;">
+                        <h2 style="color: #333333; font-size: 24px; margin-top: 0;">
+                            {% if action == 'file_add' %}
+                                <span style="color: #10b981;">File Uploaded</span> for {{ referral.proposal_title }}
+                            {% elif action == 'file_delete' %}
+                                <span style="color: #ef4444;">File Deleted</span> from {{ referral.proposal_title }}
+                            {% elif action == 'update' %}
+                                RFP Details Updated: {{ referral.proposal_title }}
+                            {% elif action == 'delete' %}
+                                RFP Removed: {{ referral.proposal_title }}
+                            {% else %}
+                                Important Update: {{ referral.proposal_title }}
+                            {% endif %}
+                        </h2>
+                        <p style="color: #555555; font-size: 16px; line-height: 1.6;">
+                            {% if recipient_is_admin %}
+                            Dear Administrator,
+                            {% else %}
+                            Dear Client,
+                            {% endif %}
+                        </p>
+
+                        <!-- Dynamic Action Block (File/Update specific) -->
+                        <div style="margin: 25px 0; border-left: 5px solid {% if action == 'file_add' %}#10b981{% elif action == 'file_delete' %}#ef4444{% else %}#3b82f6{% endif %}; padding: 15px 20px; background-color: #f7f9fc; border-radius: 4px;">
+                            <h3 style="margin-top: 0; color: #333333; font-size: 18px;">
+                                {% if action == 'file_add' %}
+                                    Action: New File Attached
+                                {% elif action == 'file_delete' %}
+                                    Action: Document Removed
+                                {% elif action == 'delete' %}
+                                    Action: RFP Permanently Deleted
+                                {% else %}
+                                    Action: Details/Status Changed
+                                {% endif %}
+                            </h3>
+                            <p style="color: #555555; font-size: 15px; line-height: 1.5; font-style: italic;">
+                                {{ instructions }}
+                            </p>
+                        </div>
+                        <!-- End Dynamic Action Block -->
+
+                        <!-- RFP Data Table -->
+                        <table width="100%" cellpadding="10" cellspacing="0" border="0" style="border-collapse: collapse; margin: 20px 0; border: 1px solid #e0e0e0;">
+                            <tr>
+                                <td style="padding: 10px; border: 1px solid #e0e0e0; background-color: #f9f9f9; font-weight: bold; width: 30%; color: #333;">Title:</td>
+                                <td style="padding: 10px; border: 1px solid #e0e0e0; color: #555;">{{ referral.proposal_title }}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border: 1px solid #e0e0e0; background-color: #f9f9f9; font-weight: bold; color: #333;">Status:</td>
+                                <td style="padding: 10px; border: 1px solid #e0e0e0; color: #555;">{{ referral.status|capfirst }}</td>
+                            </tr>
+                            <tr>
+                            <td style="padding: 10px; border: 1px solid #e0e0e0; background-color: #f9f9f9; font-weight: bold; color: #333;">Last Edited By:</td>
+                            <td style="padding: 10px; border: 1px solid #e0e0e0; color: #555;">
+                                {# Logic: If recipient is Admin, the sender was the Client. If recipient is Client, the sender was the Admin. #}
+                                {% if recipient_is_admin %}
+                                    Client
+                                {% else %}
+                                    Admin
+                                {% endif %}
+                            </td>
+                        </tr>
+                            <tr>
+                                <td style="padding: 10px; border: 1px solid #e0e0e0; background-color: #f9f9f9; font-weight: bold; color: #333;">Deadline:</td>
+                                <td style="padding: 10px; border: 1px solid #e0e0e0; color: #555;">{{ referral.proposal_deadline|date:"F d, Y H:i" }}</td>
+                            </tr>
+                        </table>
+
+                        <!-- Call to Action Button -->
+                        <div style="text-align: center; margin: 30px 0;">
+                            <a href="{% comment %} You need to manually replace this with the full URL to your site {% endcomment %}
+                                https://ob-global.onrender.com/client-portal"
+                               style="display: inline-block; padding: 12px 25px; background-color: #3b82f6; color: #ffffff; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 16px;">
+                                View RFP in Portal
+                            </a>
+                        </div>
+
+                        <p style="color: #555555; font-size: 16px; line-height: 1.6; text-align: center; margin-top: 40px;">
+                            Thank you,<br>
+                            The OB Global Team
+                        </p>
+                    </td>
+                </tr>
+
+                <!-- Footer Section -->
+                <tr>
+                    <td align="center" style="background-color: #f0f0f0; padding: 20px 0; font-size: 12px; color: #888888;">
+                        <p style="margin: 0;">&copy; {{ "now"|date:"Y" }} OB Global. All rights reserved.</p>
+                        <p style="margin: 5px 0 0;">This is an automated email, please do not reply.</p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

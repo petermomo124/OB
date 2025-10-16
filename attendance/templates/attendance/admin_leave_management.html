@@ -1,0 +1,873 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Leave Request Management - Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Status Messages -->
+    {% if messages %}
+    <div class="row">
+        <div class="col-12">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Leave Request Management</h1>
+    </div>
+
+    <!-- Tabs -->
+    <ul class="nav nav-tabs mb-4" id="leaveTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {% if active_tab == 'pending' %}active{% endif %}" 
+                    id="pending-tab" 
+                    data-bs-toggle="tab" 
+                    data-bs-target="#pending" 
+                    type="button" 
+                    role="tab" 
+                    aria-controls="pending" 
+                    aria-selected="{% if active_tab == 'pending' %}true{% else %}false{% endif %}">
+                Pending <span class="badge bg-warning text-dark ml-1">{{ pending_count }}</span>
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {% if active_tab == 'approved' %}active{% endif %}" 
+                    id="approved-tab" 
+                    data-bs-toggle="tab" 
+                    data-bs-target="#approved" 
+                    type="button" 
+                    role="tab" 
+                    aria-controls="approved" 
+                    aria-selected="{% if active_tab == 'approved' %}true{% else %}false{% endif %}">
+                Approved <span class="badge bg-success ml-1">{{ approved_count }}</span>
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {% if active_tab == 'rejected' %}active{% endif %}" 
+                    id="rejected-tab" 
+                    data-bs-toggle="tab" 
+                    data-bs-target="#rejected" 
+                    type="button" 
+                    role="tab" 
+                    aria-controls="rejected" 
+                    aria-selected="{% if active_tab == 'rejected' %}true{% else %}false{% endif %}">
+                Rejected <span class="badge bg-danger ml-1">{{ rejected_count }}</span>
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content p-3 border border-top-0 rounded-bottom">
+        <!-- Pending Requests -->
+        <div class="tab-pane fade {% if active_tab == 'pending' %}show active{% endif %}" 
+             id="pending" 
+             role="tabpanel" 
+             aria-labelledby="pending-tab"
+             tabindex="0">
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        {% if pending_requests %}
+                            <div class="table-responsive" style="overflow-x: auto;">
+                            <table class="table table-bordered table-hover" width="100%" cellspacing="0" style="min-width: 1200px;">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>Staff Member</th>
+                                        <th>Request Date</th>
+                                        <th>Leave Type</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Duration</th>
+                                        <th>Status</th>
+                                        <th>Reason</th>
+                                        <th class="text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for req in pending_requests %}
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="me-2">
+                                                    <i class="fas fa-user-circle fa-lg text-primary"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="font-weight-bold">
+                                                        {% if req.user.get_full_name %}
+                                                            {{ req.user.get_full_name }}
+                                                        {% else %}
+                                                            {{ req.user.get_username|default:"Unknown User" }}
+                                                        {% endif %}
+                                                    </div>
+                                                    {% if req.user.email %}
+                                                    <div class="text-muted small">{{ req.user.email }}</div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>{{ req.created_at|date:"M d, Y H:i" }}</td>
+                                        <td>{{ req.get_leave_type_display }}</td>
+                                        <td>{{ req.start_date|date:"M d, Y" }}</td>
+                                        <td>{{ req.end_date|date:"M d, Y" }}</td>
+                                        <td>{{ req.duration_days }} day{{ req.duration_days|pluralize }}</td>
+                                        <td>
+                                            <span class="badge bg-warning">{{ req.get_status_display }}</span>
+                                        </td>
+                                        <td>
+                                            {% if req.reason %}
+                                                {{ req.reason|truncatewords:10 }}
+                                            {% else %}
+                                                <span class="text-muted">No reason provided</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="btn-group btn-group-sm" role="group">
+                                                <!-- View Button -->
+                                                <button type="button" 
+                                                        class="btn btn-outline-info view-leave-request"
+                                                        data-leave-id="{{ req.id }}"
+                                                        data-url="{% url 'attendance:view_leave_request' req.id %}"
+                                                        data-status="pending"
+                                                        title="View and Take Action">
+                                                    <i class="fas fa-eye"></i> View
+                                                </button>
+                                                
+                                                <!-- Delete Button -->
+                                                <button type="button" 
+                                                        class="btn btn-outline-danger delete-leave-request"
+                                                        data-leave-id="{{ req.id }}"
+                                                        title="Delete Request">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="9" class="text-center py-4">
+                                            <i class="fas fa-inbox fa-3x text-gray-300 mb-3"></i>
+                                            <p class="text-muted">No pending leave requests found.</p>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-info">No pending leave requests found.</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Approved Requests -->
+        <div class="tab-pane fade {% if active_tab == 'approved' %}show active{% endif %}" 
+             id="approved" 
+             role="tabpanel" 
+             aria-labelledby="approved-tab"
+             tabindex="0">
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        {% if approved_requests %}
+                            <div class="table-responsive" style="overflow-x: auto;">
+                            <table class="table table-bordered table-hover" width="100%" cellspacing="0" style="min-width: 1200px;">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>Staff Member</th>
+                                        <th>Request Date</th>
+                                        <th>Leave Type</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Duration</th>
+                                        <th>Status</th>
+                                        <th>Reason</th>
+                                        <th>Response Notes</th>
+                                        <th class="text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for req in approved_requests %}
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="me-2">
+                                                    <i class="fas fa-user-circle fa-lg text-primary"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="font-weight-bold">
+                                                        {% if req.user.get_full_name %}
+                                                            {{ req.user.get_full_name }}
+                                                        {% else %}
+                                                            {{ req.user.get_username|default:"Unknown User" }}
+                                                        {% endif %}
+                                                    </div>
+                                                    {% if req.user.email %}
+                                                    <div class="text-muted small">{{ req.user.email }}</div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>{{ req.created_at|date:"M d, Y H:i" }}</td>
+                                        <td>{{ req.get_leave_type_display }}</td>
+                                        <td>{{ req.start_date|date:"M d, Y" }}</td>
+                                        <td>{{ req.end_date|date:"M d, Y" }}</td>
+                                        <td>{{ req.duration_days }} day{{ req.duration_days|pluralize }}</td>
+                                        <td>
+                                            <span class="badge bg-success">{{ req.get_status_display }}</span>
+                                        </td>
+                                        <td>
+                                            {% if req.reason %}
+                                                {{ req.reason|truncatewords:10 }}
+                                            {% else %}
+                                                <span class="text-muted">No reason provided</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if req.response_notes %}
+                                                {{ req.response_notes|truncatewords:10 }}
+                                            {% else %}
+                                                <span class="text-muted">No response notes</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="btn-group btn-group-sm" role="group">
+                                                <!-- View Button -->
+                                                <button type="button" 
+                                                        class="btn btn-outline-info view-leave-request"
+                                                        data-leave-id="{{ req.id }}"
+                                                        data-url="{% url 'attendance:view_leave_request' req.id %}"
+                                                        data-status="approved"
+                                                        title="View Details">
+                                                    <i class="fas fa-eye"></i> View
+                                                </button>
+                                                
+                                                <!-- Delete Button -->
+                                                <button type="button" 
+                                                        class="btn btn-outline-danger delete-leave-request"
+                                                        data-leave-id="{{ req.id }}"
+                                                        title="Delete Request">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="10" class="text-center py-4">
+                                            <i class="fas fa-inbox fa-3x text-gray-300 mb-3"></i>
+                                            <p class="text-muted">No approved leave requests found.</p>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-info">No approved leave requests found.</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Rejected Requests -->
+        <div class="tab-pane fade {% if active_tab == 'rejected' %}show active{% endif %}" 
+             id="rejected" 
+             role="tabpanel" 
+             aria-labelledby="rejected-tab"
+             tabindex="0">
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        {% if rejected_requests %}
+                            <div class="table-responsive" style="overflow-x: auto;">
+                            <table class="table table-bordered table-hover" width="100%" cellspacing="0" style="min-width: 1200px;">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>Staff Member</th>
+                                        <th>Request Date</th>
+                                        <th>Leave Type</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Duration</th>
+                                        <th>Status</th>
+                                        <th>Reason</th>
+                                        <th>Response Notes</th>
+                                        <th class="text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for req in rejected_requests %}
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="me-2">
+                                                    <i class="fas fa-user-circle fa-lg text-primary"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="font-weight-bold">
+                                                        {% if req.user.get_full_name %}
+                                                            {{ req.user.get_full_name }}
+                                                        {% else %}
+                                                            {{ req.user.get_username|default:"Unknown User" }}
+                                                        {% endif %}
+                                                    </div>
+                                                    {% if req.user.email %}
+                                                    <div class="text-muted small">{{ req.user.email }}</div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>{{ req.created_at|date:"M d, Y H:i" }}</td>
+                                        <td>{{ req.get_leave_type_display }}</td>
+                                        <td>{{ req.start_date|date:"M d, Y" }}</td>
+                                        <td>{{ req.end_date|date:"M d, Y" }}</td>
+                                        <td>{{ req.duration_days }} day{{ req.duration_days|pluralize }}</td>
+                                        <td>
+                                            <span class="badge bg-danger">{{ req.get_status_display }}</span>
+                                        </td>
+                                        <td>
+                                            {% if req.reason %}
+                                                {{ req.reason|truncatewords:10 }}
+                                            {% else %}
+                                                <span class="text-muted">No reason provided</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if req.response_notes %}
+                                                {{ req.response_notes|truncatewords:10 }}
+                                            {% else %}
+                                                <span class="text-muted">No response notes</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="btn-group btn-group-sm" role="group">
+                                                <!-- View Button -->
+                                                <button type="button" 
+                                                        class="btn btn-outline-info view-leave-request"
+                                                        data-leave-id="{{ req.id }}"
+                                                        data-url="{% url 'attendance:view_leave_request' req.id %}"
+                                                        data-status="rejected"
+                                                        title="View Details">
+                                                    <i class="fas fa-eye"></i> View
+                                                </button>
+                                                
+                                                <!-- Delete Button -->
+                                                <button type="button" 
+                                                        class="btn btn-outline-danger delete-leave-request"
+                                                        data-leave-id="{{ req.id }}"
+                                                        title="Delete Request">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="10" class="text-center py-4">
+                                            <i class="fas fa-inbox fa-3x text-gray-300 mb-3"></i>
+                                            <p class="text-muted">No rejected leave requests found.</p>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-info">No rejected leave requests found.</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- View/Edit Leave Request Modal -->
+<div class="modal fade" id="leaveRequestModal" tabindex="-1" aria-labelledby="leaveRequestModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="leaveRequestModalLabel">Leave Request Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="leaveRequestModalBody">
+                <!-- Content will be loaded via AJAX -->
+                <div class="text-center my-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2">Loading leave request details...</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-1"></i> Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteLeaveModal" tabindex="-1" aria-labelledby="deleteLeaveModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteLeaveModalLabel">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Confirm Deletion
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this leave request? This action cannot be undone.</p>
+                <p class="text-danger"><strong>Warning:</strong> This will permanently remove the leave request.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-1"></i> Cancel
+                </button>
+                <form id="deleteLeaveForm" method="POST" style="display: inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="method" value="delete">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash-alt me-1"></i> Delete Request
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    // View Leave Request - Fixed event binding
+    $(document).on('click', '.view-leave-request', function() {
+        const leaveId = $(this).data('leave-id');
+        const url = $(this).data('url');
+        const status = $(this).data('status');
+        
+        console.log('View button clicked - Leave ID:', leaveId, 'Status:', status);
+        
+        // Show loading state
+        $('#leaveRequestModalBody').html(`
+            <div class="text-center my-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">Loading leave request details...</p>
+            </div>
+        `);
+        
+        // Show/hide action buttons based on status
+        const actionButtons = $('#modalActionButtons');
+        if (status === 'pending') {
+            actionButtons.show();
+            console.log('Showing action buttons for pending request');
+        } else {
+            actionButtons.hide();
+            console.log('Hiding action buttons for status:', status);
+        }
+        
+        // Load content via AJAX
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function(data) {
+                $('#leaveRequestModalBody').html(data);
+                console.log('Modal content loaded successfully');
+                
+                // Debug: Check if form exists after loading
+                const form = $('#leaveRequestModalBody').find('form');
+                console.log('Form found after AJAX load:', form.length);
+                if (form.length) {
+                    console.log('Form action:', form.attr('action'));
+                    console.log('Form HTML:', form.html());
+                } else {
+                    console.log('No form found in modal body. Content:', $('#leaveRequestModalBody').html());
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error loading leave request:', error);
+                $('#leaveRequestModalBody').html(`
+                    <div class="alert alert-danger">
+                        <h6>Error Loading Details</h6>
+                        <p>Failed to load leave request details. Please try again.</p>
+                        <p><small>Error: ${error}</small></p>
+                    </div>
+                `);
+            }
+        });
+        
+        // Show modal using Bootstrap 5
+        const modal = new bootstrap.Modal(document.getElementById('leaveRequestModal'));
+        modal.show();
+    });
+
+    // Delete Leave Request - Enhanced with better error handling
+    $(document).on('click', '.delete-leave-request', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const leaveId = $(this).data('leave-id');
+        const deleteUrl = "{% url 'attendance:cancel_leave_request' 0 %}".replace('0', leaveId);
+        
+        console.log('Delete button clicked - Leave ID:', leaveId, 'URL:', deleteUrl);
+        
+        // Update the form action
+        const $deleteForm = $('#deleteLeaveForm');
+        if ($deleteForm.length === 0) {
+            console.error('Delete form not found!');
+            return;
+        }
+        
+        $deleteForm.attr('action', deleteUrl);
+        
+        // Show the modal
+        const modalElement = document.getElementById('deleteLeaveModal');
+        if (!modalElement) {
+            console.error('Delete modal not found!');
+            return;
+        }
+        
+        const modal = new bootstrap.Modal(modalElement);
+        modal.show();
+    });
+    
+    // Get CSRF token from cookies
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    
+    // Handle delete form submission
+    $(document).on('submit', '#deleteLeaveForm', function(e) {
+        e.preventDefault();
+        
+        const $form = $(this);
+        const url = $form.attr('action');
+        const csrftoken = getCookie('csrftoken');
+        
+        console.log('Submitting delete form to:', url);
+        
+        // Show loading state
+        const $submitBtn = $form.find('button[type="submit"]');
+        const originalBtnText = $submitBtn.html();
+        $submitBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Deleting...');
+        
+        // Make AJAX request with CSRF token in headers
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: $form.serialize(),
+            headers: {
+                'X-CSRFToken': csrftoken,
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            success: function(response) {
+                console.log('Delete successful:', response);
+                if (response.success) {
+                    // Close the modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('deleteLeaveModal'));
+                    if (modal) modal.hide();
+                    
+                    // Show success message
+                    showToast('Success', response.message || 'Leave request deleted successfully', 'success');
+                    
+                    // Reload the page after a short delay
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500);
+                } else {
+                    showToast('Error', response.message || 'Failed to delete leave request', 'error');
+                    $submitBtn.prop('disabled', false).html(originalBtnText);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Delete error:', error);
+                let errorMsg = 'An error occurred while deleting the leave request';
+                
+                if (xhr.responseJSON && xhr.responseJSON.error) {
+                    errorMsg = xhr.responseJSON.error;
+                } else if (xhr.status === 403) {
+                    errorMsg = 'Permission denied. You do not have permission to delete this leave request.';
+                } else if (xhr.status === 404) {
+                    errorMsg = 'Leave request not found or already deleted.';
+                }
+                
+                showToast('Error', errorMsg, 'error');
+                $submitBtn.prop('disabled', false).html(originalBtnText);
+            }
+        });
+    });
+
+    // Handle Approve action in modal - IMPROVED FORM DETECTION
+    $(document).on('click', '.approve-btn', function() {
+        console.log('Approve button clicked');
+        
+        // Multiple ways to find the form
+        let form = $('#leaveRequestModalBody').find('form');
+        
+        // If no form found, try to find any form in the modal
+        if (!form.length) {
+            form = $('#leaveRequestModal form');
+            console.log('Trying alternative form selector, found:', form.length);
+        }
+        
+        // If still no form, check what's in the modal body
+        if (!form.length) {
+            console.log('Modal body content:', $('#leaveRequestModalBody').html());
+            alert('Error: No form found in the modal. The leave request details may not have loaded properly. Please try again.');
+            return;
+        }
+        
+        // Get the response notes from any textarea or input
+        let responseNotes = '';
+        const notesTextarea = $('#leaveRequestModalBody').find('textarea[name="response_notes"]');
+        const notesInput = $('#leaveRequestModalBody').find('input[name="response_notes"]');
+        
+        if (notesTextarea.length) {
+            responseNotes = notesTextarea.val() || '';
+            console.log('Found response notes textarea with value:', responseNotes);
+        } else if (notesInput.length) {
+            responseNotes = notesInput.val() || '';
+            console.log('Found response notes input with value:', responseNotes);
+        } else {
+            console.log('No response notes field found');
+        }
+        
+        // Set status to approved - try multiple ways
+        const statusField = form.find('#id_status, select[name="status"], input[name="status"]');
+        if (statusField.length) {
+            statusField.val('approved');
+            console.log('Status field found and set to approved');
+        } else {
+            // Create status field if it doesn't exist
+            form.append('<input type="hidden" name="status" value="approved">');
+            console.log('Created hidden status field with value: approved');
+        }
+        
+        // Ensure response notes are included
+        const existingNotesField = form.find('textarea[name="response_notes"], input[name="response_notes"]');
+        if (existingNotesField.length === 0 && responseNotes) {
+            form.append('<input type="hidden" name="response_notes" value="' + responseNotes + '">');
+            console.log('Added response notes as hidden field:', responseNotes);
+        }
+        
+        console.log('Form data to be submitted:', form.serialize());
+        
+        // Submit the form via the form submission handler
+        form.submit();
+    });
+
+    // Handle Reject action in modal - IMPROVED FORM DETECTION
+    $(document).on('click', '.reject-btn', function() {
+        console.log('Reject button clicked');
+        
+        // Multiple ways to find the form
+        let form = $('#leaveRequestModalBody').find('form');
+        
+        // If no form found, try to find any form in the modal
+        if (!form.length) {
+            form = $('#leaveRequestModal form');
+            console.log('Trying alternative form selector, found:', form.length);
+        }
+        
+        // If still no form, check what's in the modal body
+        if (!form.length) {
+            console.log('Modal body content:', $('#leaveRequestModalBody').html());
+            alert('Error: No form found in the modal. The leave request details may not have loaded properly. Please try again.');
+            return;
+        }
+        
+        // Get the response notes from any textarea or input
+        let responseNotes = '';
+        const notesTextarea = $('#leaveRequestModalBody').find('textarea[name="response_notes"]');
+        const notesInput = $('#leaveRequestModalBody').find('input[name="response_notes"]');
+        
+        if (notesTextarea.length) {
+            responseNotes = notesTextarea.val() || '';
+            console.log('Found response notes textarea with value:', responseNotes);
+        } else if (notesInput.length) {
+            responseNotes = notesInput.val() || '';
+            console.log('Found response notes input with value:', responseNotes);
+        } else {
+            console.log('No response notes field found');
+        }
+        
+        // Set status to rejected - try multiple ways
+        const statusField = form.find('#id_status, select[name="status"], input[name="status"]');
+        if (statusField.length) {
+            statusField.val('rejected');
+            console.log('Status field found and set to rejected');
+        } else {
+            // Create status field if it doesn't exist
+            form.append('<input type="hidden" name="status" value="rejected">');
+            console.log('Created hidden status field with value: rejected');
+        }
+        
+        // Ensure response notes are included
+        const existingNotesField = form.find('textarea[name="response_notes"], input[name="response_notes"]');
+        if (existingNotesField.length === 0 && responseNotes) {
+            form.append('<input type="hidden" name="response_notes" value="' + responseNotes + '">');
+            console.log('Added response notes as hidden field:', responseNotes);
+        }
+        
+        console.log('Form data to be submitted:', form.serialize());
+        
+        // Submit the form via the form submission handler
+        form.submit();
+    });
+
+    // Handle form submission within modal - IMPROVED
+    $(document).on('submit', '#leaveRequestModalBody form, #leaveRequestModal form', function(e) {
+        e.preventDefault();
+        const form = $(this);
+        console.log('Form submission intercepted - Form action:', form.attr('action'));
+        
+        // Ensure response notes are captured before submission
+        let responseNotes = '';
+        const notesTextarea = $('#leaveRequestModalBody').find('textarea[name="response_notes"]');
+        const notesInput = $('#leaveRequestModalBody').find('input[name="response_notes"]');
+        
+        if (notesTextarea.length) {
+            responseNotes = notesTextarea.val() || '';
+        } else if (notesInput.length) {
+            responseNotes = notesInput.val() || '';
+        }
+        
+        console.log('Final response notes to be submitted:', responseNotes);
+        console.log('Full form data:', form.serialize());
+        
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: form.serialize(),
+            success: function(data) {
+                console.log('Form submission successful, response:', data);
+                if (data.success) {
+                    // Close modal and reload page to see changes
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('leaveRequestModal'));
+                    modal.hide();
+                    location.reload();
+                } else {
+                    // Show validation errors
+                    $('#leaveRequestModalBody').html(data.html || data);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error submitting form:', error);
+                console.log('XHR response:', xhr.responseText);
+                alert('Error submitting form. Please check the console for details and try again.');
+            }
+        });
+    });
+
+    // Debug: Log all buttons to console
+    console.log('View buttons found:', $('.view-leave-request').length);
+    console.log('Delete buttons found:', $('.delete-leave-request').length);
+});
+</script>
+{% endblock %}        
+        <!-- Holidays Tab -->
+        <div class="tab-pane fade {% if active_tab == 'holidays' %}show active{% endif %}" 
+             id="holidays" 
+             role="tabpanel" 
+             aria-labelledby="holidays-tab"
+             tabindex="0">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">Holidays</h6>
+                    <a href="{% url 'attendance:add_holiday' %}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-plus fa-sm"></i> Add Holiday
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if upcoming_holidays %}
+                        <h6 class="mb-3">Upcoming Holidays</h6>
+                        <div class="table-responsive">
+                            <table class="table table-bordered" width="100%" cellspacing="0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Holiday Name</th>
+                                        <th>Day</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for holiday in upcoming_holidays %}
+                                    <tr>
+                                        <td>{{ holiday.date|date:"F d, Y" }}</td>
+                                        <td>{{ holiday.name }}</td>
+                                        <td>{{ holiday.date|date:"l" }}</td>
+                                        <td>
+                                            <a href="{% url 'attendance:edit_holiday' holiday.id %}" class="btn btn-sm btn-info" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="{% url 'attendance:delete_holiday' holiday.id %}" class="btn btn-sm btn-danger" title="Delete" onclick="return confirm('Are you sure you want to delete this holiday?')">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info">No upcoming holidays found.</div>
+                    {% endif %}
+                    
+                    {% if past_holidays %}
+                        <h6 class="mt-4 mb-3">Past Holidays</h6>
+                        <div class="table-responsive">
+                            <table class="table table-bordered" width="100%" cellspacing="0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Holiday Name</th>
+                                        <th>Day</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for holiday in past_holidays %}
+                                    <tr>
+                                        <td>{{ holiday.date|date:"F d, Y" }}</td>
+                                        <td>{{ holiday.name }}</td>
+                                        <td>{{ holiday.date|date:"l" }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>

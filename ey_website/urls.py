@@ -16,12 +16,23 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
-    path('newsletter/', include('newsletter.urls')),  # <-- Add this line
-
+    path('newsletter/', include('newsletter.urls')),
     path('ai/', include('chatbot.urls')),  # Access the chatbot via /ai/chat/
+    path('attendance/', include('attendance.urls', namespace='attendance')),  # Attendance app URLs
+    
+    # Authentication URLs (if not already included in core.urls)
+    path('accounts/login/', auth_views.LoginView.as_view(
+        template_name='client_portal/login.html',
+        extra_context={'no_cache': True}
+    ), name='login'),
+    path('accounts/logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
 
+
+
+path('rfp/', include('rfp.urls')),
 ]

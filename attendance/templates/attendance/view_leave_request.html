@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+
+{% block title %}Leave Request Details - Obllcus{% endblock %}
+
+{% block extra_css %}
+<style>
+    .leave-detail-label {
+        font-weight: 600;
+        color: #4a5568;
+    }
+    .leave-detail-value {
+        margin-bottom: 0.75rem;
+    }
+    .status-badge {
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+        border-radius: 0.25rem;
+    }
+    .badge-approved {
+        background-color: #48bb78;
+        color: white;
+    }
+    .badge-pending {
+        background-color: #ecc94b;
+        color: #744210;
+    }
+    .badge-rejected {
+        background-color: #f56565;
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block page_header %}
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Leave Request Details</h1>
+        <a href="{% url 'attendance:my_leave_requests' %}" class="btn btn-secondary btn-icon-split">
+            <span class="icon text-white-50">
+                <i class="fas fa-arrow-left"></i>
+            </span>
+            <span class="text">Back to My Requests</span>
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                <h6 class="m-0 font-weight-bold text-primary">Request #{{ leave_request.id }}</h6>
+                <span class="badge 
+                    {% if leave_request.status == 'approved' %}badge-success
+                    {% elif leave_request.status == 'rejected' %}badge-danger
+                    {% else %}badge-warning{% endif %}">
+                    {{ leave_request.get_status_display }}
+                </span>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h5 class="font-weight-bold">Leave Details</h5>
+                        <hr>
+                        <div class="mb-3">
+                            <p class="mb-1"><strong>Leave Type:</strong></p>
+                            <p>{{ leave_request.leave_type|title }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <p class="mb-1"><strong>Duration:</strong></p>
+                            <p>
+                                {{ leave_request.start_date|date:"M d, Y" }} to {{ leave_request.end_date|date:"M d, Y" }}
+                                <span class="badge badge-primary">{{ leave_request.duration_days }} day{{ leave_request.duration_days|pluralize }}</span>
+                            </p>
+                        </div>
+                        <div class="mb-3">
+                            <p class="mb-1"><strong>Reason:</strong></p>
+                            <p class="text-justify">{{ leave_request.reason|linebreaksbr }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="font-weight-bold">Request Information</h5>
+                        <hr>
+                        <div class="mb-3">
+                            <p class="mb-1"><strong>Requested On:</strong></p>
+                            <p>{{ leave_request.created_at|date:"M d, Y h:i A" }}</p>
+                        </div>
+                        
+                        {% if leave_request.status != 'pending' %}
+                        <div class="mb-3">
+                            <p class="mb-1"><strong>Status Updated:</strong></p>
+                            <p>
+                                {% if leave_request.reviewed_by %}
+                                    {{ leave_request.reviewed_by.get_full_name|default:leave_request.reviewed_by.email }}
+                                    <small class="d-block text-muted">
+                                        {{ leave_request.reviewed_at|timesince }} ago
+                                    </small>
+                                {% else %}
+                                    <span class="text-muted">System</span>
+                                    {% if leave_request.reviewed_at %}
+                                        <small class="d-block text-muted">
+                                            {{ leave_request.reviewed_at|timesince }} ago
+                                        </small>
+                                    {% endif %}
+                                {% endif %}
+                            </p>
+                        </div>
+                        {% if leave_request.response_notes %}
+                        <div class="mb-3">
+                            <p class="mb-1"><strong>Response Notes:</strong></p>
+                            <p class="text-justify">{{ leave_request.response_notes|linebreaksbr }}</p>
+                        </div>
+                        {% endif %}
+                        {% endif %}
+                        
+                        {% if leave_request.attachment %}
+                        <div class="mb-3">
+                            <p class="mb-1"><strong>Attachment:</strong></p>
+                            <a href="{{ leave_request.attachment.url }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-paperclip"></i> View Attachment
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'attendance:my_leave_requests' %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left mr-1"></i> Back to List
+                    </a>
+                    {% if leave_request.status == 'pending' %}
+                    <div>
+                        <a href="{% url 'attendance:edit_leave_request' leave_request.id %}" class="btn btn-primary">
+                            <i class="fas fa-edit mr-1"></i> Edit Request
+                        </a>
+                        <a href="{% url 'attendance:cancel_leave_request' leave_request.id %}" 
+                           class="btn btn-danger"
+                           onclick="return confirm('Are you sure you want to delete this leave request? This action cannot be undone.');">
+                            <i class="fas fa-trash mr-1"></i> Delete Request
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

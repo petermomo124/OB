@@ -1,0 +1,559 @@
+{% extends 'base.html' %}
+{% load attendance_filters %}
+{% load tz %}
+
+{% block title %}My Leave Requests - Obllcus{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="d-flex justify-content-between align-items-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-800">My Leave Requests</h1>
+        <a href="{% url 'attendance:request_leave' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center">
+            <i class="fas fa-plus mr-2"></i> Create New Request
+        </a>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteConfirmationModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Confirm Deletion</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        <strong>Warning:</strong> This action cannot be undone.
+                    </div>
+                    <p id="deleteConfirmationMessage"></p>
+                    <div id="requestDetails" class="small text-muted mt-2"></div>
+                    <input type="hidden" id="deleteRequestId">
+                    <input type="hidden" id="deleteRequestUrl">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete Request</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Leave Request History</h6>
+        </div>
+        <div class="card-body">
+            {% if leave_requests %}
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="leaveRequestsTable">
+                        <thead>
+                            <tr>
+                                <th>Request Date</th>
+                                <th>Leave Type</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Duration</th>
+                                <th>Status</th>
+                                <th>Reason</th>
+                                <th>Admin Notes</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for req in leave_requests %}
+                            <tr id="leave-request-{{ req.id }}">
+                                <td>{{ req.created_at|date:"M d, Y" }}</td>
+                                <td>{{ req.leave_type|title }}</td>
+                                <td>{{ req.start_date|date:"M d, Y" }}</td>
+                                <td>{{ req.end_date|date:"M d, Y" }}</td>
+                                <td class="text-center">
+                                    {{ req.end_date|timeuntil:req.start_date|default:"1 day" }}
+                                </td>
+                                <td class="text-center">
+                                    {% if req.status == 'approved' %}
+                                        <span class="badge bg-success">Approved</span>
+                                    {% elif req.status == 'rejected' %}
+                                        <span class="badge bg-danger">Rejected</span>
+                                    {% elif req.status == 'pending' %}
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{{ req.get_status_display|upper }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if req.reason %}
+                                        {{ req.reason|truncatechars:50 }}
+                                    {% else %}
+                                        <span class="text-muted">No reason provided</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if req.response_notes %}
+                                        {{ req.response_notes|truncatewords:10 }}
+                                    {% else %}
+                                        <span class="text-muted">-</span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-center">
+                                    <div class="d-flex gap-1 justify-content-center">
+                                        <!-- View Button -->
+                                        <a href="{% url 'attendance:view_leave_request' req.id %}" 
+                                           class="btn btn-sm btn-info"
+                                           title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        
+                                        <!-- Edit Button (only for pending requests) -->
+                                        {% if req.status == 'pending' %}
+                                        <a href="{% url 'attendance:edit_leave_request' req.id %}" 
+                                           class="btn btn-sm btn-warning"
+                                           title="Edit Request">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        {% endif %}
+                                        
+                                        <!-- Delete Button - UPDATED CLASS NAME -->
+                                        <button type="button" 
+                                                class="btn btn-sm btn-danger delete-btn-final"
+                                                data-id="{{ req.id }}"
+                                                data-url="{% url 'attendance:cancel_leave_request' req.id %}"
+                                                data-type="{{ req.leave_type|title }}"
+                                                data-start="{{ req.start_date|date:'M d, Y' }}"
+                                                data-end="{{ req.end_date|date:'M d, Y' }}"
+                                                title="Delete Request">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <h5>No leave requests found</h5>
+                    <p class="text-muted">You haven't submitted any leave requests yet.</p>
+                    <a href="{% url 'attendance:request_leave' %}" class="btn btn-primary">
+                        <i class="fas fa-plus mr-1"></i> Request Leave
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- CRITICAL: Load scripts at the bottom -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+
+<script>
+// ENHANCED DELETE FUNCTIONALITY - SOLUTION 1
+console.log('=== ENHANCED DELETE SCRIPT LOADED ===');
+
+// Global variables to track state
+let isProcessing = false;
+let currentRequestId = null;
+
+// Wait for full page load
+$(window).on('load', function() {
+    console.log('=== PAGE FULLY LOADED ===');
+
+    // Initialize after a short delay to ensure DOM is ready
+    setTimeout(initializePage, 100);
+});
+
+function initializePage() {
+    console.log('=== INITIALIZING PAGE ===');
+
+    // Count buttons
+    var deleteButtons = $('.delete-btn-final');
+    console.log('Found', deleteButtons.length, 'delete buttons');
+
+    // STEP 1: Remove ALL existing click handlers and add fresh ones
+    deleteButtons.off('click').on('click', function(e) {
+        console.log('=== MAIN DELETE CLICK HANDLER FIRED ===');
+
+        // Prevent multiple simultaneous operations
+        if (isProcessing) {
+            console.log('Another operation in progress, ignoring click');
+            return false;
+        }
+
+        // CRITICAL: Stop everything and prevent any other handlers
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        e.stopPropagation();
+
+        var $button = $(this);
+        var requestId = $button.data('id');
+        var deleteUrl = $button.data('url');
+        var leaveType = $button.data('type');
+        var startDate = $button.data('start');
+        var endDate = $button.data('end');
+
+        console.log('Processing delete for:', {requestId, deleteUrl});
+
+        // Update modal with enhanced details
+        $('#deleteRequestId').val(requestId);
+        $('#deleteRequestUrl').val(deleteUrl);
+        currentRequestId = requestId;
+
+        // Enhanced confirmation message
+        $('#deleteConfirmationMessage').html(
+            '<strong>Confirm Deletion</strong><br>' +
+            'Are you sure you want to delete this ' + leaveType + ' request?'
+        );
+
+        // Enhanced details display
+        $('#requestDetails').html(
+            '<div class="request-details-container">' +
+            '<div class="detail-row"><span class="detail-label">Request ID:</span> <span class="detail-value">' + requestId + '</span></div>' +
+            '<div class="detail-row"><span class="detail-label">Leave Type:</span> <span class="detail-value">' + leaveType + '</span></div>' +
+            '<div class="detail-row"><span class="detail-label">Date Range:</span> <span class="detail-value">' + startDate + ' to ' + endDate + '</span></div>' +
+            '</div>'
+        );
+
+        // Reset modal state
+        $('#confirmDeleteBtn')
+            .prop('disabled', false)
+            .html('<i class="fas fa-trash-alt me-2"></i>Delete Request');
+
+        // Show modal
+        var modal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
+        modal.show();
+
+        return false;
+    });
+
+    // STEP 2: Handle confirm delete with enhanced error handling
+    $('#confirmDeleteBtn').off('click').on('click', function(e) {
+        console.log('=== CONFIRM DELETE CLICKED ===');
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        // Prevent multiple clicks
+        if (isProcessing) {
+            console.log('Delete already in progress');
+            return false;
+        }
+
+        var requestId = $('#deleteRequestId').val();
+        var deleteUrl = $('#deleteRequestUrl').val();
+
+        console.log('Confirming delete:', {requestId, deleteUrl});
+
+        if (!requestId || !deleteUrl) {
+            showErrorMessage('Error: Missing required data for deletion');
+            return false;
+        }
+
+        // Set processing flag
+        isProcessing = true;
+
+        // Show loading state
+        var $btn = $(this);
+        $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2"></span> Deleting...');
+
+        // Get CSRF token
+        var csrfToken = getCSRFToken();
+
+        // Send AJAX request with enhanced error handling
+        $.ajax({
+            url: deleteUrl,
+            type: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            timeout: 10000, // 10 second timeout
+            success: function(response) {
+                console.log('Delete successful:', response);
+
+                // Reset processing flag
+                isProcessing = false;
+
+                // Hide modal
+                var modal = bootstrap.Modal.getInstance(document.getElementById('deleteConfirmationModal'));
+                if (modal) modal.hide();
+
+                // Show success message
+                showSuccessMessage('Leave request deleted successfully!');
+
+                // Enhanced row removal with animation
+                var $row = $('#leave-request-' + requestId);
+                if ($row.length) {
+                    // Add visual feedback before removal
+                    $row.addClass('deleting-row');
+
+                    setTimeout(function() {
+                        $row.fadeOut(500, function() {
+                            $(this).remove();
+
+                            // Check if table is empty
+                            var remainingRows = $('#leaveRequestsTable tbody tr').length;
+                            console.log('Rows remaining after deletion:', remainingRows);
+
+                            if (remainingRows === 0) {
+                                // Show empty state message
+                                showEmptyStateMessage();
+                            } else {
+                                // Reinitialize DataTable to refresh
+                                refreshDataTable();
+                            }
+                        });
+                    }, 300);
+                } else {
+                    // Fallback: reload the page
+                    console.log('Row not found, reloading page');
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 1000);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Delete failed:', error);
+
+                // Reset processing flag
+                isProcessing = false;
+
+                // Reset button state
+                $btn.prop('disabled', false).html('<i class="fas fa-trash-alt me-2"></i>Delete Request');
+
+                // Enhanced error handling
+                let errorMessage = 'Error deleting request: ';
+
+                if (xhr.status === 403) {
+                    errorMessage += 'You do not have permission to delete this request.';
+                } else if (xhr.status === 404) {
+                    errorMessage += 'The requested item was not found.';
+                } else if (xhr.status === 500) {
+                    errorMessage += 'Server error. Please try again later.';
+                } else if (status === 'timeout') {
+                    errorMessage += 'Request timed out. Please try again.';
+                } else {
+                    errorMessage += (xhr.responseJSON?.error || error || 'Unknown error occurred.');
+                }
+
+                showErrorMessage(errorMessage);
+            }
+        });
+
+        return false;
+    });
+
+    // STEP 3: Initialize DataTable ONLY AFTER setting up click handlers
+    initializeDataTable();
+
+    // STEP 4: Add modal event handlers for cleanup
+    $('#deleteConfirmationModal').on('hidden.bs.modal', function() {
+        // Reset modal state when closed
+        isProcessing = false;
+        currentRequestId = null;
+        $('#confirmDeleteBtn')
+            .prop('disabled', false)
+            .html('<i class="fas fa-trash-alt me-2"></i>Delete Request');
+    });
+
+    console.log('=== ALL HANDLERS SETUP COMPLETE ===');
+}
+
+// Enhanced DataTable initialization
+function initializeDataTable() {
+    if ($.fn.DataTable.isDataTable('#leaveRequestsTable')) {
+        // If already initialized, destroy first
+        $('#leaveRequestsTable').DataTable().destroy();
+    }
+
+    $('#leaveRequestsTable').DataTable({
+        order: [[0, 'desc']],
+        pageLength: 10,
+        language: {
+            search: "Search requests:",
+            lengthMenu: "Show _MENU_ entries",
+            info: "Showing _START_ to _END_ of _TOTAL_ entries",
+            paginate: {
+                previous: "Previous",
+                next: "Next"
+            }
+        },
+        drawCallback: function(settings) {
+            // Reattach event handlers after DataTable redraws
+            $('.delete-btn-final').off('click').on('click', function(e) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+
+                // Trigger the original button click
+                $(this).trigger('click');
+                return false;
+            });
+        }
+    });
+}
+
+// Refresh DataTable after changes
+function refreshDataTable() {
+    var table = $('#leaveRequestsTable').DataTable();
+    table.draw();
+}
+
+// Enhanced success message
+function showSuccessMessage(message) {
+    // Remove any existing alerts
+    $('.alert-dismissible').alert('close');
+
+    // Create enhanced alert
+    var alertHtml = '<div class="alert alert-success alert-dismissible fade show mt-3" role="alert">' +
+                    '<div class="d-flex align-items-center">' +
+                    '<i class="fas fa-check-circle me-2"></i>' +
+                    '<div>' + message + '</div>' +
+                    '</div>' +
+                    '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>' +
+                    '</div>';
+
+    // Prepend to content
+    $('.container').prepend(alertHtml);
+
+    // Auto-remove after 5 seconds
+    setTimeout(function() {
+        $('.alert-success').alert('close');
+    }, 5000);
+}
+
+// Enhanced error message
+function showErrorMessage(message) {
+    // Remove any existing alerts
+    $('.alert-dismissible').alert('close');
+
+    // Create error alert
+    var alertHtml = '<div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">' +
+                    '<div class="d-flex align-items-center">' +
+                    '<i class="fas fa-exclamation-triangle me-2"></i>' +
+                    '<div>' + message + '</div>' +
+                    '</div>' +
+                    '<button type="button" class="btn-close" data-bs-dismiss="alert"></button>' +
+                    '</div>';
+
+    // Prepend to content
+    $('.container').prepend(alertHtml);
+}
+
+// Show empty state message
+function showEmptyStateMessage() {
+    var emptyHtml = '<div class="text-center py-5" id="emptyStateMessage">' +
+                    '<i class="fas fa-inbox fa-3x text-muted mb-3"></i>' +
+                    '<h4 class="text-muted">No Leave Requests</h4>' +
+                    '<p class="text-muted">You currently have no leave requests.</p>' +
+                    '</div>';
+
+    // Add empty state after table
+    $('#leaveRequestsTable').after(emptyHtml);
+}
+
+// CSRF token function
+function getCSRFToken() {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            if (cookie.substring(0, 10) === 'csrftoken=') {
+                cookieValue = decodeURIComponent(cookie.substring(10));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// EMERGENCY BACKUP: Force clicks to work no matter what
+setTimeout(function() {
+    console.log('=== EMERGENCY CLICK ENSURER ===');
+
+    $('.delete-btn-final').each(function() {
+        var $btn = $(this);
+
+        // Force CSS to ensure clickability
+        $btn.css({
+            'pointer-events': 'auto',
+            'cursor': 'pointer',
+            'position': 'relative',
+            'z-index': '9999'
+        });
+
+        // Add one more direct click handler as backup
+        $btn.on('click', function(e) {
+            console.log('EMERGENCY BACKUP CLICK HANDLER');
+            e.stopImmediatePropagation();
+            return false;
+        });
+    });
+}, 2000);
+
+// Add CSS for enhanced UI
+$(document).ready(function() {
+    // Inject custom styles
+    $('head').append(`
+        <style>
+            .request-details-container {
+                background-color: #f8f9fa;
+                border-radius: 5px;
+                padding: 15px;
+                margin-top: 10px;
+            }
+            .detail-row {
+                display: flex;
+                margin-bottom: 8px;
+            }
+            .detail-label {
+                font-weight: 600;
+                min-width: 120px;
+            }
+            .detail-value {
+                color: #495057;
+            }
+            .deleting-row {
+                background-color: #ffe6e6 !important;
+                transition: background-color 0.3s ease;
+            }
+            #confirmDeleteBtn:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+            }
+        </style>
+    `);
+});
+</script>
+
+<style>
+/* CRITICAL CSS to ensure buttons are clickable */
+.delete-btn-final {
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    position: relative !important;
+    z-index: 100 !important;
+}
+
+.btn-sm {
+    width: 32px;
+    height: 32px;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Ensure no overlapping elements */
+.table td {
+    position: relative;
+    overflow: visible;
+}
+
+.d-flex.gap-1 {
+    position: relative;
+    z-index: 10;
+}
+</style>
+{% endblock %}

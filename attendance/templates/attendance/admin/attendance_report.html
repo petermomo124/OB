@@ -1,0 +1,157 @@
+{% extends 'attendance/base_attendance.html' %}
+{% load static %}
+
+{% block title %}Attendance Report - Admin{% endblock %}
+
+{% block page_header %}Attendance Report{% endblock %}
+
+{% block header_actions %}
+<div class="d-flex">
+    <button class="btn btn-info btn-icon-split mr-2" data-bs-toggle="modal" data-bs-target="#filterModal">
+        <span class="icon text-white-50">
+            <i class="fas fa-filter"></i>
+        </span>
+        <span class="text">Filter</span>
+    </button>
+    <button class="btn btn-success btn-icon-split" id="exportBtn">
+        <span class="icon text-white-50">
+            <i class="fas fa-file-export"></i>
+        </span>
+        <span class="text">Export</span>
+    </button>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">Attendance Summary</h6>
+            <div>
+                <span class="badge badge-primary">Total Users: {{ total_users }}</span>
+                <span class="badge badge-success">{{ start_date|date:"M d, Y" }} - {{ end_date|date:"M d, Y" }}</span>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="attendanceTable" width="100%" cellspacing="0">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Employee</th>
+                            <th class="text-center">Present Days</th>
+                            <th class="text-center">Absent Days</th>
+                            <th class="text-center">Total Days</th>
+                            <th class="text-center">Attendance %</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                            <tbody>
+                                {% for record in attendance_summary %}
+                                <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-primary">
+                                            <i class="fas fa-user text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="text-primary">{{ record.user.get_full_name|default:record.user.email }}</div>
+                                        <div class="small text-gray-500">{{ record.user.email }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <span class="badge badge-success">{{ record.present_days }}</span>
+                            </td>
+                            <td class="text-center">
+                                <span class="badge badge-danger">{{ record.absent_days }}</span>
+                            </td>
+                            <td class="text-center">
+                                <span class="font-weight-bold">{{ record.total_days }}</span>
+                            </td>
+                            <td>
+                                <div class="mb-1">
+                                    <div class="d-flex justify-content-between small mb-1">
+                                        <span class="text-muted">Progress</span>
+                                        <span class="font-weight-bold">{{ record.attendance_percentage|floatformat:1 }}%</span>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar {% if record.attendance_percentage >= 90 %}bg-success{% elif record.attendance_percentage >= 70 %}bg-info{% elif record.attendance_percentage >= 50 %}bg-warning{% else %}bg-danger{% endif %}" 
+                                             role="progressbar" 
+                                             style="width: {{ record.attendance_percentage }}%" 
+                                             aria-valuenow="{{ record.attendance_percentage }}" 
+                                             aria-valuemin="0" 
+                                             aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <a href="#" 
+                                   class="btn btn-sm btn-primary btn-circle"
+                                   data-toggle="tooltip" 
+                                   title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filter Modal -->
+<div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="get" action="">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="filterModalLabel">Filter Report</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="start_date">Start Date</label>
+                        <input type="date" class="form-control" id="start_date" name="start_date" value="{{ start_date|date:'Y-m-d' }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="end_date">End Date</label>
+                        <input type="date" class="form-control" id="end_date" name="end_date" value="{{ end_date|date:'Y-m-d' }}">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Apply Filter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Initialize tooltips
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    });
+
+    // Export to Excel
+    document.getElementById('exportBtn').addEventListener('click', function() {
+        // TableToExcel.convert(document.getElementById('attendanceTable'), {
+        //     name: 'attendance_report.xlsx',
+        //     sheet: {
+        //         name: 'Attendance Report'
+        //     }
+        // });
+        alert('Export functionality will be implemented here');
+    });
+</script>
+{% endblock %}

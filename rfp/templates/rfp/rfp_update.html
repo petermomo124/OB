@@ -1,0 +1,620 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Edit RFP Referral" %}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1>{% trans "Edit RFP" %}</h1>
+
+    </div>
+
+    <div class="card-section">
+        <div class="card">
+            <div class="card-header">
+                <h2>{% trans "Update RFP Details" %}</h2>
+                <p class="card-subtitle">{% trans "Modify the information for your Request for Proposal" %}</p>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{% url 'rfp_update' pk=referral.pk %}" enctype="multipart/form-data" class="rfp-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="_method" value="PUT">
+
+                    {# General RFP Details #}
+                    <div class="form-section">
+                        <h3 class="section-title">{% trans "General Information" %}</h3>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="proposal_title" class="form-label">
+                                    {% trans "Proposal Title" %}
+                                    <span class="required">*</span>
+                                </label>
+                                <input type="text" class="form-input" id="proposal_title" name="proposal_title"
+                                       value="{{ referral.proposal_title }}" required maxlength="255"
+                                       placeholder="{% trans 'Enter proposal title' %}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="organization" class="form-label">
+                                    {% trans "Organization Name" %}
+                                    <span class="required">*</span>
+                                </label>
+                                <input type="text" class="form-input" id="organization" name="organization"
+                                       value="{{ referral.organization }}" required maxlength="255"
+                                       placeholder="{% trans 'Enter organization name' %}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="proposal_deadline" class="form-label">
+                                    {% trans "Proposal Deadline" %}
+                                    <span class="required">*</span>
+                                </label>
+                                <input type="datetime-local" class="form-input" id="proposal_deadline" name="proposal_deadline"
+                                       value="{{ referral.proposal_deadline|date:'Y-m-d\TH:i' }}" required>
+                                <div class="form-help">{% trans "Date and time when the proposal is due" %}</div>
+                            </div>
+
+                            {% if is_admin %}
+                            <div class="form-group">
+                                <label for="status" class="form-label">
+                                    {% trans "RFP Status" %}
+                                    <span class="required">*</span>
+                                </label>
+                                <select class="form-select" id="status" name="status" required>
+                                    <option value="">{% trans "Select a status" %}</option>
+                                    {% for value, label in status_choices %}
+                                        <option value="{{ value }}" {% if referral.status == value %}selected{% endif %}>
+                                            {{ label }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                <div class="form-help admin-note">{% trans "Admin only - Update RFP status" %}</div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    {# Location Details #}
+                    <div class="form-section">
+                        <h3 class="section-title">{% trans "Location Details" %}</h3>
+
+                        <div class="location-grid">
+                            <div class="form-group">
+                                <label for="city" class="form-label">
+                                    {% trans "City" %}
+                                    <span class="required">*</span>
+                                </label>
+                                <input type="text" class="form-input" id="city" name="city"
+                                       value="{{ referral.city }}" required maxlength="100"
+                                       placeholder="{% trans 'Enter city' %}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="state_province" class="form-label">
+                                    {% trans "State/Province" %}
+                                    <span class="required">*</span>
+                                </label>
+                                <input type="text" class="form-input" id="state_province" name="state_province"
+                                       value="{{ referral.state_province }}" required maxlength="100"
+                                       placeholder="{% trans 'Enter state or province' %}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="postal_code" class="form-label">
+                                    {% trans "Postal Code" %}
+                                    <span class="required">*</span>
+                                </label>
+                                <input type="text" class="form-input" id="postal_code" name="postal_code"
+                                       value="{{ referral.postal_code }}" required maxlength="20"
+                                       placeholder="{% trans 'Enter postal code' %}">
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Form Buttons #}
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary btn-large" id="save-button">
+                            <span class="button-icon">💾</span>
+                            {% trans "Save Updates" %}
+                        </button>
+                        <a href="{% url 'rfp_detail' pk=referral.pk %}" class="btn btn-secondary" id="cancel-button">
+                            <span class="button-icon">←</span>
+                            {% trans "Cancel" %}
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extra_css %}
+<style>
+/* Base Styles - Consistent with other RFP pages */
+:root {
+    --primary-color: #4361ee;
+    --primary-dark: #3a56d4;
+    --secondary-color: #7209b7;
+    --success-color: #4cc9f0;
+    --danger-color: #f72585;
+    --warning-color: #f8961e;
+    --light-color: #f8f9fa;
+    --dark-color: #212529;
+    --gray-color: #6c757d;
+    --border-color: #dee2e6;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --radius: 8px;
+    --transition: all 0.3s ease;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-image: url('{% static "images/bk.jpg" %}');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.page-header {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.page-header h1 {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+}
+
+.subtitle {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.3rem;
+    margin: 10px 0 0 0;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+}
+
+/* Card Styles */
+.card-section {
+    margin-bottom: 30px;
+}
+
+.card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+    padding: 25px 30px;
+    border-bottom: 1px solid var(--border-color);
+    background: #f8f9fa;
+}
+
+.card-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--dark-color);
+}
+
+.card-subtitle {
+    margin: 8px 0 0 0;
+    color: var(--gray-color);
+    font-size: 1rem;
+}
+
+.card-body {
+    padding: 30px;
+}
+
+/* Form Styles */
+.rfp-form {
+    max-width: 100%;
+}
+
+.form-section {
+    margin-bottom: 40px;
+}
+
+.section-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--dark-color);
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--primary-color);
+}
+
+/* Form Grid Layout */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+}
+
+.location-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--dark-color);
+    margin-bottom: 8px;
+    font-size: 1rem;
+}
+
+.required {
+    color: var(--danger-color);
+    font-weight: bold;
+}
+
+.form-input,
+.form-select {
+    padding: 14px 16px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius);
+    font-size: 16px;
+    transition: var(--transition);
+    background: white;
+    width: 100%;
+}
+
+.form-input:focus,
+.form-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+}
+
+.form-input::placeholder {
+    color: #adb5bd;
+}
+
+.form-help {
+    font-size: 0.85rem;
+    color: var(--gray-color);
+    margin-top: 6px;
+}
+
+.admin-note {
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+    padding-top: 30px;
+    border-top: 1px solid var(--border-color);
+    margin-top: 20px;
+}
+
+/* Button Styles */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 28px;
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    text-align: center;
+    border: none;
+    font-size: 16px;
+    gap: 10px;
+    box-shadow: var(--shadow);
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(67, 97, 238, 0.3);
+}
+
+.btn-secondary {
+    background: var(--gray-color);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+}
+
+.btn-large {
+    padding: 16px 32px;
+    font-size: 1.1rem;
+}
+
+.button-icon {
+    font-size: 1.1em;
+}
+
+/* Loading state for form submission - only apply to save button */
+.form-submitting {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.form-submitting #save-button {
+    position: relative;
+}
+
+.form-submitting #save-button::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ------------------ Mobile-Specific Styles ------------------ */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px 10px;
+    }
+
+    .page-header h1 {
+        font-size: 2rem;
+    }
+
+    .subtitle {
+        font-size: 1.1rem;
+    }
+
+    .card-header {
+        padding: 20px;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .card-header h2 {
+        font-size: 1.3rem;
+    }
+
+    .card-subtitle {
+        font-size: 0.95rem;
+    }
+
+    /* Mobile Form Layout */
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .location-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .form-section {
+        margin-bottom: 30px;
+    }
+
+    .section-title {
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+    }
+
+    .form-input,
+    .form-select {
+        padding: 16px 14px;
+        font-size: 16px; /* Prevent zoom on iOS */
+    }
+
+    /* Mobile Form Actions */
+    .form-actions {
+        flex-direction: column-reverse;
+        gap: 12px;
+        padding-top: 25px;
+    }
+
+    .btn {
+        width: 100%;
+        justify-content: center;
+        padding: 16px 24px;
+    }
+
+    .btn-large {
+        padding: 18px 24px;
+    }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 480px) {
+    .page-header h1 {
+        font-size: 1.8rem;
+    }
+
+    .subtitle {
+        font-size: 1rem;
+    }
+
+    .container {
+        padding: 10px 8px;
+    }
+
+    .card-header {
+        padding: 15px;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+
+    .form-input,
+    .form-select {
+        padding: 14px 12px;
+    }
+
+    .section-title {
+        font-size: 1.1rem;
+    }
+
+    .form-label {
+        font-size: 0.95rem;
+    }
+
+    .button-icon {
+        font-size: 1em;
+    }
+}
+
+/* Tablet Optimizations */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .location-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .container {
+        padding: 20px 15px;
+    }
+}
+
+/* Large Screen Optimizations */
+@media (min-width: 1200px) {
+    .form-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+    }
+
+    .location-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 25px;
+    }
+}
+
+/* Special handling for datetime input on mobile */
+@media (max-width: 768px) {
+    input[type="datetime-local"] {
+        min-height: 50px;
+    }
+}
+
+/* Focus states for accessibility */
+.form-input:focus-visible,
+.form-select:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('.rfp-form');
+    const saveButton = document.getElementById('save-button');
+    const cancelButton = document.getElementById('cancel-button');
+
+    // Form submission handling - only for save button
+    form.addEventListener('submit', function() {
+        // Add loading state only to save button
+        form.classList.add('form-submitting');
+        saveButton.disabled = true;
+        saveButton.innerHTML = '<span class="button-icon">⏳</span> {% trans "Saving..." %}';
+
+        // Ensure cancel button doesn't have loading state but is disabled
+        if (cancelButton) {
+            cancelButton.style.opacity = '0.7';
+            cancelButton.style.pointerEvents = 'none';
+        }
+    });
+
+    // Enhanced datetime-local input for mobile
+    const deadlineInput = document.getElementById('proposal_deadline');
+    if (deadlineInput) {
+        // Set min date to today
+        const today = new Date().toISOString().slice(0, 16);
+        deadlineInput.min = today;
+
+        // Add touch-friendly date picker hint for mobile
+        if ('ontouchstart' in window) {
+            deadlineInput.addEventListener('focus', function() {
+                this.type = 'datetime-local';
+            });
+        }
+    }
+
+    // Auto-save functionality (optional)
+    let autoSaveTimeout;
+    const inputs = form.querySelectorAll('input, select, textarea');
+
+    inputs.forEach(input => {
+        input.addEventListener('input', function() {
+            clearTimeout(autoSaveTimeout);
+            autoSaveTimeout = setTimeout(() => {
+                // Optional: Add auto-save functionality here
+                console.log('Form changes detected - ready for auto-save');
+            }, 2000);
+        });
+    });
+
+    // Handle orientation changes
+    window.addEventListener('orientationchange', function() {
+        // Small delay to ensure CSS has applied
+        setTimeout(() => {
+            window.scrollTo(0, 0);
+        }, 100);
+    });
+});
+</script>
+{% endblock %}

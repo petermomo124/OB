@@ -1,0 +1,190 @@
+{% extends 'attendance/base_attendance.html' %}
+
+{% block title %}Manage Holidays{% endblock %}
+
+{% block page_header %}Manage Holidays{% endblock %}
+
+{% block header_actions %}
+<a href="{% url 'attendance:admin_add_holiday' %}" class="btn btn-success btn-icon-split">
+    <span class="icon text-white-50">
+        <i class="fas fa-plus"></i>
+    </span>
+    <span class="text">Add Holiday</span>
+</a>
+{% endblock %}
+
+{% block attendance_content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    Holidays for {{ current_year }}
+                </h6>
+                <div class="dropdown no-arrow">
+                    <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" id="yearDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-calendar-alt"></i> {{ current_year }}
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="yearDropdown">
+                        {% for year in years %}
+                            <a class="dropdown-item {% if year == current_year %}active{% endif %}" 
+                               href="?year={{ year }}">
+                                {{ year }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                {% if holidays %}
+                    <div class="table-responsive">
+                        <table class="table table-bordered" width="100%" cellspacing="0">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Holiday Name</th>
+                                    <th>Recurring</th>
+                                    <th>Day of Week</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for holiday in holidays %}
+                                <tr>
+                                    <td>{{ holiday.date|date:"F d, Y" }}</td>
+                                    <td>
+                                        <strong>{{ holiday.name }}</strong>
+                                        {% if holiday.description %}
+                                            <p class="text-muted small mb-0">{{ holiday.description }}</p>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-center">
+                                        {% if holiday.is_recurring %}
+                                            <span class="badge badge-success">
+                                                <i class="fas fa-sync-alt"></i> Yearly
+                                            </span>
+                                        {% else %}
+                                            <span class="badge badge-secondary">
+                                                <i class="fas fa-calendar-day"></i> One-time
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ holiday.date|date:"l" }}</td>
+                                    <td class="text-center">
+                                        <div class="btn-group" role="group">
+                                            <a href="{% url 'attendance:admin_edit_holiday' holiday.id %}" 
+                                               class="btn btn-sm btn-primary" 
+                                               title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <button type="button" 
+                                                    class="btn btn-sm btn-danger" 
+                                                    title="Delete"
+                                                    data-toggle="modal" 
+                                                    data-target="#deleteHolidayModal{{ holiday.id }}">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                        
+                                        <!-- Delete Confirmation Modal -->
+                                        <div class="modal fade" id="deleteHolidayModal{{ holiday.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteHolidayModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="deleteHolidayModalLabel">Confirm Deletion</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Are you sure you want to delete the holiday "{{ holiday.name }}" on {{ holiday.date|date:"F d, Y" }}?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                        <form action="{% url 'attendance:admin_delete_holiday' holiday.id %}" method="post" class="d-inline">
+                                                            {% csrf_token %}
+                                                            <button type="submit" class="btn btn-danger">
+                                                                <i class="fas fa-trash"></i> Delete
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-calendar-times fa-4x text-muted mb-3"></i>
+                        <h5>No holidays found for {{ current_year }}</h5>
+                        <p class="text-muted">Add a new holiday to get started</p>
+                        <a href="{% url 'attendance:admin_add_holiday' %}" class="btn btn-primary mt-2">
+                            <i class="fas fa-plus"></i> Add Holiday
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+            
+            {% if holidays.has_other_pages %}
+            <div class="card-footer">
+                <nav aria-label="Holidays pagination">
+                    <ul class="pagination justify-content-center mb-0">
+                        {% if holidays.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ holidays.previous_page_number }}&year={{ current_year }}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                        
+                        {% for i in holidays.paginator.page_range %}
+                            {% if holidays.number == i %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ i }} <span class="sr-only">(current)</span></span>
+                                </li>
+                            {% else %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ i }}&year={{ current_year }}">{{ i }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if holidays.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ holidays.next_page_number }}&year={{ current_year }}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Add any JavaScript needed for the page
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize any plugins or event listeners
+    
+    // Confirm before deleting a holiday
+    document.querySelectorAll('.delete-holiday').forEach(button => {
+        button.addEventListener('click', function(e) {
+            if (!confirm('Are you sure you want to delete this holiday?')) {
+                e.preventDefault();
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

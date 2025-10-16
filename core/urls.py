@@ -72,7 +72,16 @@ urlpatterns = [
     path('client-portal/', views.user_login, name='client_portal'),
     # Subscription
     path('subscribe/', views.subscribe_redirect, name='subscribe'), # Replaces the old static view
-    
-    # RFP
-    path('rfp/', TemplateView.as_view(template_name='rfp/request.html'), name='request_proposal'),
+
+    path('profile/', views.view_my_profile, name='view_my_profile'),
+    path('profile/edit/', views.edit_my_profile, name='edit_my_profile'),
+
+
+# 🏢 NEW OFFICE MANAGEMENT URLS
+    path('manage/offices/', views.manage_offices, name='manage_offices'),
+    path('manage/offices/add/', views.add_office, name='add_office'),
+    path('manage/offices/<int:office_id>/view/', views.view_office, name='view_office'),
+    path('manage/offices/<int:office_id>/edit/', views.edit_office, name='edit_office'),
+    path('manage/offices/<int:office_id>/delete/', views.delete_office, name='delete_office'),
+
 ]
