@@ -1,0 +1,659 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Display Messages -->
+    {% if messages %}
+    <div class="mb-4">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            <i class="fas
+                {% if message.tags == 'success' %}fa-check-circle
+                {% elif message.tags == 'error' %}fa-exclamation-circle
+                {% elif message.tags == 'warning' %}fa-exclamation-triangle
+                {% else %}fa-info-circle{% endif %}
+            "></i>
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h2 class="card-title mb-0">
+                        <i class="fas fa-clipboard-list me-2"></i>
+                        {% if field_job %}Edit{% else %}Create{% endif %} Field Job
+                    </h2>
+                    <span class="badge bg-info fs-6">
+                        <i class="fas fa-users me-1"></i>
+                        Available Staff: {{ staff_count }}
+                    </span>
+                </div>
+                <div class="card-body">
+                    <form method="post" id="fieldJobForm" novalidate>
+                        {% csrf_token %}
+
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                {% for error in form.non_field_errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <!-- Basic Information Section -->
+                        <div class="mb-4">
+                            <h5 class="border-bottom pb-2 mb-3">
+                                <i class="fas fa-info-circle me-2 text-primary"></i>
+                                Basic Information
+                            </h5>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="{{ form.category.id_for_label }}" class="form-label">
+                                            <i class="fas fa-tag me-1 text-muted"></i>Category *
+                                        </label>
+                                        {{ form.category }}
+                                        {% if form.category.errors %}
+                                            <div class="text-danger small mt-1">
+                                                <i class="fas fa-exclamation-circle me-1"></i>
+                                                {{ form.category.errors }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="{{ form.date_of_job.id_for_label }}" class="form-label">
+                                            <i class="fas fa-calendar me-1 text-muted"></i>Date & Time of Job *
+                                        </label>
+                                        {{ form.date_of_job }}
+                                        {% if form.date_of_job.errors %}
+                                            <div class="text-danger small mt-1">
+                                                <i class="fas fa-exclamation-circle me-1"></i>
+                                                {{ form.date_of_job.errors }}
+                                            </div>
+                                        {% endif %}
+                                        <div class="form-text">
+                                            <i class="fas fa-info-circle me-1"></i>
+                                            Job must be scheduled for a future date and time
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="{{ form.site_address.id_for_label }}" class="form-label">
+                                    <i class="fas fa-map-marker-alt me-1 text-muted"></i>Site Address *
+                                </label>
+                                {{ form.site_address }}
+                                {% if form.site_address.errors %}
+                                    <div class="text-danger small mt-1">
+                                        <i class="fas fa-exclamation-circle me-1"></i>
+                                        {{ form.site_address.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="{{ form.summary_of_work.id_for_label }}" class="form-label">
+                                    <i class="fas fa-file-alt me-1 text-muted"></i>Summary of Work *
+                                </label>
+                                {{ form.summary_of_work }}
+                                {% if form.summary_of_job.errors %}
+                                    <div class="text-danger small mt-1">
+                                        <i class="fas fa-exclamation-circle me-1"></i>
+                                        {{ form.summary_of_work.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Client Information Section -->
+                        <div class="mb-4">
+                            <h5 class="border-bottom pb-2 mb-3">
+                                <i class="fas fa-building me-2 text-primary"></i>
+                                Client Information
+                            </h5>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="{{ form.client_name.id_for_label }}" class="form-label">
+                                            <i class="fas fa-user-tie me-1 text-muted"></i>Client Name *
+                                        </label>
+                                        {{ form.client_name }}
+                                        {% if form.client_name.errors %}
+                                            <div class="text-danger small mt-1">
+                                                <i class="fas fa-exclamation-circle me-1"></i>
+                                                {{ form.client_name.errors }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="{{ form.poc_name.id_for_label }}" class="form-label">
+                                            <i class="fas fa-user me-1 text-muted"></i>POC Name *
+                                        </label>
+                                        {{ form.poc_name }}
+                                        {% if form.poc_name.errors %}
+                                            <div class="text-danger small mt-1">
+                                                <i class="fas fa-exclamation-circle me-1"></i>
+                                                {{ form.poc_name.errors }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="{{ form.poc_email.id_for_label }}" class="form-label">
+                                    <i class="fas fa-envelope me-1 text-muted"></i>POC Email *
+                                </label>
+                                {{ form.poc_email }}
+                                {% if form.poc_email.errors %}
+                                    <div class="text-danger small mt-1">
+                                        <i class="fas fa-exclamation-circle me-1"></i>
+                                        {{ form.poc_email.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Staff Selection Section -->
+                        <div class="mb-4">
+                            <h5 class="border-bottom pb-2 mb-3">
+                                <i class="fas fa-users me-2 text-primary"></i>
+                                Staff Assignment
+                            </h5>
+
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                <strong>Note:</strong> Selected staff will receive email notifications and POC approval codes will be sent to the client.
+                            </div>
+
+                            <!-- Search and Controls -->
+                            <div class="row align-items-end mb-3">
+                                <div class="col-md-8">
+                                    <label for="staff_search" class="form-label">Search Staff</label>
+                                    <input type="text" id="staff_search" class="form-control" placeholder="Type staff name or email to search...">
+                                    <div class="form-text">Start typing to filter staff members</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="d-grid">
+                                        <button type="button" id="clear_search" class="btn btn-outline-secondary">
+                                            <i class="fas fa-times me-1"></i>Clear Search
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Selection Stats -->
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="text-muted small" id="selection_stats">
+                                    <span id="selected_count">0</span> of <span id="total_count">{{ staff_count }}</span> staff selected
+                                </span>
+                                <span class="text-muted small" id="visible_stats">
+                                    <span id="visible_count">{{ staff_count }}</span> staff visible
+                                </span>
+                            </div>
+
+                            <!-- Staff Checkboxes Container -->
+                            <div id="staff_checkboxes_container" class="border rounded p-3 bg-light" style="max-height: 400px; overflow-y: auto;">
+                                {% for checkbox in form.staff_members %}
+                                    <div class="form-check staff-checkbox-item mb-2" data-staff-name="{{ checkbox.choice_label|lower }}">
+                                        {{ checkbox.tag }}
+                                        <label class="form-check-label staff-name" for="{{ checkbox.id_for_label }}">
+                                            {{ checkbox.choice_label }}
+                                        </label>
+                                    </div>
+                                {% empty %}
+                                    <div class="text-center text-muted py-3">
+                                        <i class="fas fa-users fa-2x mb-2"></i>
+                                        <p>No staff members available.</p>
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+                            {% if form.staff_members.errors %}
+                                <div class="text-danger small mt-2">
+                                    <i class="fas fa-exclamation-circle me-1"></i>
+                                    {{ form.staff_members.errors }}
+                                </div>
+                            {% endif %}
+
+                            <div class="form-text mt-2">
+                                <i class="fas fa-exclamation-circle me-1"></i>
+                                Select at least one staff member to assign to this field job
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="d-flex justify-content-between align-items-center border-top pt-4">
+                            <a href="{% url 'fieldwork:field_job_list' %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-1"></i>Back to List
+                            </a>
+                            <div>
+                                <button type="reset" class="btn btn-outline-danger me-2">
+                                    <i class="fas fa-undo me-1"></i>Reset Form
+                                </button>
+                                <button type="submit" class="btn btn-primary" id="submitBtn">
+                                    <i class="fas fa-{% if field_job %}save{% else %}plus{% endif %} me-1"></i>
+                                    {% if field_job %}Update{% else %}Create{% endif %} Field Job
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const staffSearch = document.getElementById('staff_search');
+    const clearSearchBtn = document.getElementById('clear_search');
+    const staffCheckboxesContainer = document.getElementById('staff_checkboxes_container');
+    const staffCheckboxItems = document.querySelectorAll('.staff-checkbox-item');
+    const selectedCountEl = document.getElementById('selected_count');
+    const visibleCountEl = document.getElementById('visible_count');
+    const totalCountEl = document.getElementById('total_count');
+    const form = document.getElementById('fieldJobForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const dateOfJobInput = document.getElementById('id_date_of_job');
+
+    // Store all staff items for reset functionality
+    const allStaffItems = Array.from(staffCheckboxItems);
+    let visibleItems = allStaffItems;
+
+    // Set minimum datetime for the date picker (current datetime)
+    function setMinDateTime() {
+        const now = new Date();
+        // Format: YYYY-MM-DDTHH:MM
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+
+        const minDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+
+        if (dateOfJobInput) {
+            dateOfJobInput.setAttribute('min', minDateTime);
+
+            // If no value is set, set it to the minimum allowed (current time)
+            if (!dateOfJobInput.value) {
+                dateOfJobInput.value = minDateTime;
+            }
+        }
+    }
+
+    // Validate date and time on form submission
+    function validateDateTime() {
+        if (!dateOfJobInput || !dateOfJobInput.value) {
+            return { isValid: false, message: 'Please select a date and time for the job.' };
+        }
+
+        const selectedDateTime = new Date(dateOfJobInput.value);
+        const now = new Date();
+
+        if (selectedDateTime < now) {
+            return {
+                isValid: false,
+                message: 'Job date and time cannot be in the past. Please select a future date and time.'
+            };
+        }
+
+        // Additional validation: cannot be more than 1 year in the future
+        const oneYearFromNow = new Date();
+        oneYearFromNow.setFullYear(now.getFullYear() + 1);
+
+        if (selectedDateTime > oneYearFromNow) {
+            return {
+                isValid: false,
+                message: 'Job date cannot be more than 1 year in the future.'
+            };
+        }
+
+        return { isValid: true };
+    }
+
+    // Real-time date validation
+    if (dateOfJobInput) {
+        dateOfJobInput.addEventListener('change', function() {
+            const validation = validateDateTime();
+            if (!validation.isValid) {
+                showAlert(validation.message, 'warning');
+                // Reset to minimum allowed datetime
+                setMinDateTime();
+            }
+        });
+
+        dateOfJobInput.addEventListener('input', function() {
+            const validation = validateDateTime();
+            const dateTimeGroup = this.closest('.mb-3');
+            const errorElement = dateTimeGroup.querySelector('.datetime-error');
+
+            if (errorElement) {
+                errorElement.remove();
+            }
+
+            if (!validation.isValid) {
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'text-danger small mt-1 datetime-error';
+                errorDiv.innerHTML = `<i class="fas fa-exclamation-circle me-1"></i>${validation.message}`;
+                dateTimeGroup.appendChild(errorDiv);
+            }
+        });
+    }
+
+    // Initialize counts
+    function updateCounts() {
+        const selectedCount = staffCheckboxesContainer.querySelectorAll('input[type="checkbox"]:not(#select_all_staff):checked').length;
+        const visibleCount = visibleItems.filter(item => item.style.display !== 'none').length;
+
+        selectedCountEl.textContent = selectedCount;
+        visibleCountEl.textContent = visibleCount;
+        totalCountEl.textContent = allStaffItems.length;
+
+        // Update submit button state
+        submitBtn.disabled = selectedCount === 0;
+        if (submitBtn.disabled) {
+            submitBtn.title = 'Please select at least one staff member';
+        } else {
+            submitBtn.title = '';
+        }
+    }
+
+    // Search functionality
+    function performSearch() {
+        const query = staffSearch.value.trim().toLowerCase();
+        visibleItems = [];
+
+        allStaffItems.forEach(item => {
+            const staffName = item.getAttribute('data-staff-name');
+            const staffLabel = item.querySelector('.staff-name').textContent.toLowerCase();
+
+            if (query.length === 0 || staffName.includes(query) || staffLabel.includes(query)) {
+                item.style.display = 'block';
+                visibleItems.push(item);
+            } else {
+                item.style.display = 'none';
+            }
+        });
+
+        updateCounts();
+    }
+
+    staffSearch.addEventListener('input', performSearch);
+
+    // Clear search functionality
+    clearSearchBtn.addEventListener('click', function() {
+        staffSearch.value = '';
+        performSearch();
+        staffSearch.focus();
+    });
+
+    // Select All / Deselect All functionality
+    const selectAllContainer = document.createElement('div');
+    selectAllContainer.className = 'mb-3 p-2 bg-white rounded border';
+    selectAllContainer.innerHTML = `
+        <div class="form-check">
+            <input type="checkbox" id="select_all_staff" class="form-check-input">
+            <label class="form-check-label fw-bold text-primary" for="select_all_staff">
+                <i class="fas fa-check-double me-1"></i>Select All / Deselect All Visible Staff
+            </label>
+        </div>
+    `;
+
+    staffCheckboxesContainer.insertBefore(selectAllContainer, staffCheckboxesContainer.firstChild);
+
+    // Select All functionality
+    const selectAllCheckbox = document.getElementById('select_all_staff');
+    selectAllCheckbox.addEventListener('change', function() {
+        const visibleCheckboxes = visibleItems
+            .filter(item => item.style.display !== 'none')
+            .map(item => item.querySelector('input[type="checkbox"]'));
+
+        visibleCheckboxes.forEach(checkbox => {
+            if (checkbox) {
+                checkbox.checked = this.checked;
+            }
+        });
+        updateCounts();
+    });
+
+    // Update Select All checkbox state when individual checkboxes change
+    staffCheckboxesContainer.addEventListener('change', function(e) {
+        if (e.target.type === 'checkbox' && e.target.id !== 'select_all_staff') {
+            const visibleCheckboxes = visibleItems
+                .filter(item => item.style.display !== 'none')
+                .map(item => item.querySelector('input[type="checkbox"]'))
+                .filter(checkbox => checkbox !== null);
+
+            const checkedVisibleCheckboxes = visibleCheckboxes.filter(checkbox => checkbox.checked);
+
+            selectAllCheckbox.checked = checkedVisibleCheckboxes.length === visibleCheckboxes.length;
+            selectAllCheckbox.indeterminate = checkedVisibleCheckboxes.length > 0 && checkedVisibleCheckboxes.length < visibleCheckboxes.length;
+
+            updateCounts();
+        }
+    });
+
+    // Form validation
+    form.addEventListener('submit', function(e) {
+        // Validate staff selection
+        const checkedCheckboxes = staffCheckboxesContainer.querySelectorAll('input[type="checkbox"]:not(#select_all_staff):checked');
+
+        if (checkedCheckboxes.length === 0) {
+            e.preventDefault();
+            showAlert('Please select at least one staff member to assign to this field job.', 'warning');
+            return false;
+        }
+
+        // Validate date and time
+        const dateTimeValidation = validateDateTime();
+        if (!dateTimeValidation.isValid) {
+            e.preventDefault();
+            showAlert(dateTimeValidation.message, 'warning');
+            dateOfJobInput.focus();
+            return false;
+        }
+    });
+
+    // Reset form handler
+    form.addEventListener('reset', function() {
+        setTimeout(() => {
+            performSearch();
+            updateCounts();
+            // Reset Select All checkbox
+            selectAllCheckbox.checked = false;
+            selectAllCheckbox.indeterminate = false;
+            // Reset datetime to current
+            setMinDateTime();
+        }, 100);
+    });
+
+    // Alert function
+    function showAlert(message, type = 'info') {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+        alertDiv.innerHTML = `
+            <i class="fas fa-${type === 'warning' ? 'exclamation-triangle' : 'info-circle'} me-2"></i>
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+
+        // Insert at the top of the card body
+        const cardBody = document.querySelector('.card-body');
+        cardBody.insertBefore(alertDiv, cardBody.firstChild);
+
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            if (alertDiv.parentNode) {
+                alertDiv.remove();
+            }
+        }, 5000);
+    }
+
+    // Initialize counts and Select All state
+    function initializeSelectAllState() {
+        const visibleCheckboxes = visibleItems
+            .filter(item => item.style.display !== 'none')
+            .map(item => item.querySelector('input[type="checkbox"]'))
+            .filter(checkbox => checkbox !== null);
+
+        const checkedVisibleCheckboxes = visibleCheckboxes.filter(checkbox => checkbox.checked);
+
+        if (checkedVisibleCheckboxes.length === visibleCheckboxes.length) {
+            selectAllCheckbox.checked = true;
+            selectAllCheckbox.indeterminate = false;
+        } else if (checkedVisibleCheckboxes.length > 0) {
+            selectAllCheckbox.checked = false;
+            selectAllCheckbox.indeterminate = true;
+        } else {
+            selectAllCheckbox.checked = false;
+            selectAllCheckbox.indeterminate = false;
+        }
+
+        updateCounts();
+    }
+
+    // Initialize datetime picker
+    setMinDateTime();
+
+    // Call initialization
+    setTimeout(initializeSelectAllState, 100);
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        // Ctrl + / to focus search
+        if (e.ctrlKey && e.key === '/') {
+            e.preventDefault();
+            staffSearch.focus();
+        }
+    });
+});
+</script>
+
+<style>
+.form-label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #495057;
+}
+
+.form-text {
+    font-size: 0.875rem;
+}
+
+.alert {
+    border-radius: 0.5rem;
+    border: none;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border-radius: 0.75rem;
+}
+
+.card-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-bottom: none;
+    border-radius: 0.75rem 0.75rem 0 0 !important;
+}
+
+.card-header .card-title {
+    color: white;
+}
+
+.staff-checkbox-item {
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.staff-checkbox-item:hover {
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+}
+
+.staff-checkbox-item:has(input:checked) {
+    background-color: #e7f1ff;
+    border-color: #0d6efd;
+}
+
+.form-check-input:checked {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+#staff_checkboxes_container {
+    background-color: #f8f9fa;
+    border-radius: 0.5rem;
+}
+
+#staff_checkboxes_container::-webkit-scrollbar {
+    width: 8px;
+}
+
+#staff_checkboxes_container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+#staff_checkboxes_container::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+#staff_checkboxes_container::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+.btn {
+    border-radius: 0.5rem;
+    font-weight: 500;
+}
+
+.badge {
+    font-size: 0.75rem;
+    border-radius: 0.5rem;
+}
+
+/* Date time input styling */
+input[type="datetime-local"] {
+    font-family: inherit;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .card-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+
+    .btn-group {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    input[type="datetime-local"] {
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+}
+</style>
+{% endblock %}

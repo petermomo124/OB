@@ -1,0 +1,120 @@
+{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Field Job Updated</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;">
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f4f4f4;">
+<tr>
+<td align="center" style="padding: 20px;">
+<table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+
+                <!-- Header Section (Amber Background for Updates) -->
+                <tr>
+                    <td align="center" style="background-color: #f59e0b; padding: 30px 20px;">
+                        <h1 style="color: white; margin: 0; font-size: 28px;">OB Global</h1>
+                        <p style="color: white; font-size: 16px;">Field Job Updated</p>
+                    </td>
+                </tr>
+
+                <!-- Body Content -->
+                <tr>
+                    <td style="padding: 40px 30px;">
+                        <h2 style="color: #333333; font-size: 24px; margin-top: 0;">
+                            <span style="color: #f59e0b;">Field Job Updated</span> - {{ field_job.client_name }}
+                        </h2>
+
+                        <p style="color: #555555; font-size: 16px; line-height: 1.6;">
+                            Dear {{ staff_name }},
+                        </p>
+
+                        <p style="color: #555555; font-size: 16px; line-height: 1.6;">
+                            Your field job assignment has been updated. Please review the updated details below.
+                        </p>
+
+                        <!-- Assignment Details Table -->
+                        <table width="100%" cellpadding="10" cellspacing="0" border="0" style="border-collapse: collapse; margin: 20px 0; border: 1px solid #e0e0e0;">
+                            <tr>
+                                <td style="padding: 12px 15px; border: 1px solid #e0e0e0; background-color: #f9f9f9; font-weight: bold; width: 30%; color: #333;">Client:</td>
+                                <td style="padding: 12px 15px; border: 1px solid #e0e0e0; color: #555;">{{ field_job.client_name }}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 15px; border: 1px solid #e0e0e0; background-color: #f9f9f9; font-weight: bold; color: #333;">Category:</td>
+                                <td style="padding: 12px 15px; border: 1px solid #e0e0e0; color: #555;">{{ field_job.category }}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 15px; border: 1px solid #e0e0e0; background-color: #f9f9f9; font-weight: bold; color: #333;">Date & Time of Job:</td>
+                                <td style="padding: 12px 15px; border: 1px solid #e0e0e0; color: #555;">{{ formatted_datetime }}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 15px; border: 1px solid #e0e0e0; background-color: #f9f9f9; font-weight: bold; color: #333;">Site Address:</td>
+                                <td style="padding: 12px 15px; border: 1px solid #e0e0e0; color: #555;">{{ field_job.site_address }}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 15px; border: 1px solid #e0e0e0; background-color: #f9f9f9; font-weight: bold; color: #333;">POC Name:</td>
+                                <td style="padding: 12px 15px; border: 1px solid #e0e0e0; color: #555;">{{ field_job.poc_name }}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 15px; border: 1px solid #e0e0e0; background-color: #f9f9f9; font-weight: bold; color: #333;">POC Email:</td>
+                                <td style="padding: 12px 15px; border: 1px solid #e0e0e0; color: #555;">{{ field_job.poc_email }}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px 15px; border: 1px solid #e0e0e0; background-color: #f9f9f9; font-weight: bold; color: #333;">Work Summary:</td>
+                                <td style="padding: 12px 15px; border: 1px solid #e0e0e0; color: #555;">{{ field_job.summary_of_work }}</td>
+                            </tr>
+                        </table>
+
+                        <!-- Next Steps Section -->
+                        <div style="margin: 25px 0; border-left: 5px solid #f59e0b; padding: 15px 20px; background-color: #f7f9fc; border-radius: 4px;">
+                            <h3 style="margin-top: 0; color: #333333; font-size: 18px;">
+                                Next Steps & Requirements
+                            </h3>
+                            <ul style="color: #555555; font-size: 15px; line-height: 1.5;">
+                                <li><strong>Review updated job details</strong> - Ensure you understand any changes to the scope of work</li>
+                                <li><strong>Contact POC</strong> - Reach out to {{ field_job.poc_name }} if you have questions about the updates</li>
+                                <li><strong>Check-in on site</strong> - Use the system to check in when you arrive</li>
+                                <li><strong>Get approval code</strong> - Request the unique approval code from {{ field_job.poc_name }} upon completion</li>
+                                <li><strong>Submit field report</strong> - Complete your report with location data</li>
+                            </ul>
+                        </div>
+
+                        <!-- Update Notice -->
+                        <div style="background-color: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 15px; margin: 20px 0;">
+                            <h4 style="color: #92400e; margin-top: 0; font-size: 16px;">🔄 Update Notice:</h4>
+                            <p style="color: #92400e; font-size: 14px; line-height: 1.5; margin-bottom: 0;">
+                                This field job has been recently updated. Please review all details above as some information may have changed.
+                            </p>
+                        </div>
+
+                        <!-- Call to Action Button -->
+                        <div style="text-align: center; margin: 30px 0;">
+                            <a href="https://ob-global.onrender.com/client-portal/"
+                               style="display: inline-block; padding: 12px 25px; background-color: #f59e0b; color: #ffffff; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 16px;">
+                                Login to View Your Updated Field Jobs
+                            </a>
+                        </div>
+
+                        <p style="color: #555555; font-size: 16px; line-height: 1.6; text-align: center; margin-top: 40px;">
+                            Safe travels and successful completion,<br>
+                            The OB Global Team
+                        </p>
+                    </td>
+                </tr>
+
+                <!-- Footer Section -->
+                <tr>
+                    <td align="center" style="background-color: #f0f0f0; padding: 20px 0; font-size: 12px; color: #888888;">
+                        <p style="margin: 0;">&copy; {{ "now"|date:"Y" }} OB Global. All rights reserved.</p>
+                        <p style="margin: 5px 0 0;">This is an automated email, please do not reply.</p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,1573 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "My Field Job Assignments" %}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1>{% trans "My Field Job Assignments" %}</h1>
+        <p class="subtitle">{% trans "View and manage your assigned field jobs" %}</p>
+    </div>
+
+    <div class="admin-controls">
+        <div class="search-form">
+            <div class="search-input-wrapper">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="{% trans "Search assignments by client name or category..." %}">
+                <button type="button" id="clearSearchButton" class="button button-clear">
+                    <span class="mobile-hidden">{% trans "Clear" %}</span>
+                    <span class="mobile-only">✕</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="assignments-grid">
+        {% for assignment in assignments %}
+        {% with field_report=assignment.field_report %}
+
+        <div class="assignment-card rfp-card"
+             data-assignment-id="{{ assignment.id }}"
+             data-client="{{ assignment.field_job.client_name|lower }}"
+             data-category="{{ assignment.field_job.category|lower }}">
+            <div class="card-header">
+                <h3 class="card-title">{{ assignment.field_job.client_name }}</h3>
+                <span class="badge status-badge status-submitted">{{ assignment.field_job.category }}</span>
+            </div>
+            <div class="card-body">
+                <div class="assignment-details-grid">
+                    <div class="detail-item">
+                        <span class="detail-label">Date & Time:</span>
+                        <span class="detail-value">{{ assignment.field_job.date_of_job|date:"M d, Y H:i" }}</span>
+                    </div>
+
+                    <div class="detail-item">
+                        <span class="detail-label">POC Name:</span>
+                        <span class="detail-value">{{ assignment.field_job.poc_name }}</span>
+                    </div>
+
+                    <div class="detail-item full-width">
+                        <span class="detail-label">Site Address:</span>
+                        <span class="detail-value">{{ assignment.field_job.site_address }}</span>
+                    </div>
+
+                    <div class="detail-item full-width">
+                        <span class="detail-label">Work Summary:</span>
+                        <span class="detail-value summary-text">{{ assignment.field_job.summary_of_work|truncatewords:30 }}</span>
+                    </div>
+
+                    {# New Status Indicators #}
+                    <div class="detail-item full-width">
+                        <span class="detail-label">Time Status:</span>
+                        <div class="status-summary">
+                            {% if field_report %}
+                                {% if field_report.check_in_time %}
+                                    <p class="status-check-in status-ok" data-check-in-time="{{ field_report.check_in_time|date:'c' }}">
+                                        <i class="fas fa-check-circle"></i> Checked In: {{ field_report.check_in_time|date:"H:i" }}
+                                    </p>
+                                {% else %}
+                                    <p class="status-check-in status-pending" data-check-in-time="">
+                                        <i class="fas fa-clock"></i> Not Checked In
+                                    </p>
+                                {% endif %}
+                                {% if field_report.check_out_time %}
+                                    <p class="status-check-out status-ok" data-check-out-time="{{ field_report.check_out_time|date:'c' }}">
+                                        <i class="fas fa-check-circle"></i> Checked Out: {{ field_report.check_out_time|date:"H:i" }}
+                                    </p>
+                                {% else %}
+                                    <p class="status-check-out status-pending" data-check-out-time="">
+                                        <i class="fas fa-clock"></i> Not Checked Out
+                                    </p>
+                                {% endif %}
+                            {% else %}
+                                <p class="status-check-in status-pending" data-check-in-time=""><i class="fas fa-clock"></i> Not Checked In</p>
+                                <p class="status-check-out status-pending" data-check-out-time=""><i class="fas fa-clock"></i> Not Checked Out</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {# End New Status Indicators #}
+
+                    {% if field_report and field_report.submitted_at %}
+                    <div class="detail-item full-width">
+                        <span class="detail-label">Report Status:</span>
+                        <div class="status-submitted-badge">
+                            <span class="status-icon">✓</span>
+                            <span class="status-text">Report Submitted</span>
+                            <span class="status-date">{{ assignment.field_report.submitted_at|date:"M d, Y" }}</span>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card-footer">
+                {% if field_report and field_report.submitted_at %}
+                    <a href="{% url 'fieldwork:field_report_detail' assignment.field_report.id %}" class="btn btn-view">
+                        <span class="mobile-hidden">View Report</span>
+                        <span class="mobile-only">👁️</span>
+                    </a>
+                {% else %}
+                    <button type="button"
+                            class="btn btn-success check-in-btn"
+                            data-assignment-id="{{ assignment.id }}"
+                            {% if field_report and field_report.check_in_time %}disabled{% endif %}>
+                        <span class="mobile-hidden">Check In</span>
+                        <span class="mobile-only">▶️</span>
+                    </button>
+
+                    <button type="button"
+                            class="btn btn-warning check-out-btn"
+                            data-assignment-id="{{ assignment.id }}"
+                            {% if not field_report or not field_report.check_in_time or field_report.check_out_time %}disabled{% endif %}>
+                        <span class="mobile-hidden">Check Out</span>
+                        <span class="mobile-only">⏸️</span>
+                    </button>
+
+                    <a href="{% url 'fieldwork:field_report_create' assignment.id %}"
+                       class="btn btn-primary submit-report-btn"
+                       data-assignment-id="{{ assignment.id }}"
+                       data-is-checked-out="{% if field_report and field_report.check_out_time %}true{% else %}false{% endif %}"
+                       {% if not field_report or not field_report.check_out_time %}disabled{% endif %}>
+                        <span class="mobile-hidden">Submit Report</span>
+                        <span class="mobile-only">📝</span>
+                    </a>
+                {% endif %}
+
+                <button type="button" class="btn btn-info view-job-details" data-job-id="{{ assignment.field_job.id }}">
+                    <span class="mobile-hidden">Details</span>
+                    <span class="mobile-only">ℹ️</span>
+                </button>
+            </div>
+        </div>
+        {% endwith %}
+        {% empty %}
+        <div class="empty-state">
+            <div class="empty-icon">📋</div>
+            <h3>{% trans "No Field Job Assignments" %}</h3>
+            <p>{% trans "You don't have any field job assignments at the moment. Check back later for new assignments." %}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div id="jobModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Field Job Details</h2>
+            <span class="close">&times;</span>
+        </div>
+        <div class="modal-body" id="jobModalBody">
+            </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Base Styles */
+:root {
+    --primary-color: #4361ee;
+    --primary-dark: #3a56d4;
+    --secondary-color: #7209b7;
+    --success-color: #28a745;
+    --danger-color: #f72585;
+    --warning-color: #ffc107;
+    --light-color: #f8f9fa;
+    --dark-color: #212529;
+    --gray-color: #6c757d;
+    --border-color: #dee2e6;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --radius: 8px;
+    --transition: all 0.3s ease;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-image: url('{% static "images/bk.jpg" %}');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.page-header {
+    margin-bottom: 30px;
+    text-align: center;
+    width: 100%;
+}
+
+h1 {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.3;
+    width: 100%;
+}
+
+.subtitle {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.1rem;
+    max-width: 100%;
+    margin: 0 auto;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.4;
+    padding: 0 10px;
+}
+
+.admin-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    gap: 20px;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.search-form {
+    flex: 1;
+    min-width: 300px;
+    width: 100%;
+}
+
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    width: 100%;
+}
+
+.search-icon {
+    padding: 0 15px;
+    color: var(--gray-color);
+    flex-shrink: 0;
+}
+
+.search-form input {
+    flex: 1;
+    padding: 12px 0;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    background: transparent;
+    min-width: 0;
+    width: 100%;
+}
+
+.search-form input::placeholder {
+    color: var(--gray-color);
+}
+
+/* Button Styles */
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    text-align: center;
+    border: none;
+    font-size: 16px;
+    gap: 8px;
+    box-shadow: var(--shadow);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.button-primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+.button-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.button-clear {
+    background: white;
+    color: var(--gray-color);
+    padding: 12px 16px;
+    border-left: 1px solid var(--border-color);
+    border-radius: 0;
+    flex-shrink: 0;
+}
+
+.button-clear:hover {
+    background: #f8f9fa;
+    color: var(--danger-color);
+}
+
+/* Assignments Grid */
+.assignments-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 20px;
+    width: 100%;
+}
+
+/* Card Styles */
+.rfp-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: var(--transition);
+    height: fit-content;
+    width: 100%;
+}
+
+.rfp-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+    background: #f8f9fa;
+    width: 100%;
+    gap: 10px;
+}
+
+.card-title {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    flex: 1;
+    margin-right: 15px;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    min-width: 0;
+}
+
+.card-body {
+    padding: 20px;
+    width: 100%;
+}
+
+.card-footer {
+    display: flex;
+    padding: 15px 20px;
+    background: #f8f9fa;
+    border-top: 1px solid var(--border-color);
+    gap: 10px;
+    flex-wrap: nowrap;
+    justify-content: center;
+    width: 100%;
+}
+
+.card-footer .btn {
+    flex: 1;
+    padding: 8px;
+    min-width: 70px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+/* Assignment Details Grid */
+.assignment-details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    width: 100%;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+    width: 100%;
+}
+
+.detail-item.full-width {
+    grid-column: 1 / -1;
+}
+
+.detail-label {
+    font-weight: 600;
+    color: var(--gray-color);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.3;
+}
+
+.detail-value {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    width: 100%;
+}
+
+.summary-text {
+    line-height: 1.5;
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 4px;
+    border-left: 3px solid var(--primary-color);
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    width: 100%;
+}
+
+/* Button Styles */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    transition: var(--transition);
+    border: 1px solid transparent;
+    cursor: pointer;
+    gap: 4px;
+    white-space: nowrap;
+    min-width: 70px;
+    flex-shrink: 0;
+    height: 32px;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: var(--primary-dark);
+    color: white;
+    border-color: var(--primary-dark);
+    transform: translateY(-1px);
+}
+
+.btn-view {
+    background: rgba(23, 162, 184, 0.15);
+    color: #17a2b8;
+    border-color: rgba(23, 162, 184, 0.3);
+}
+
+.btn-view:hover:not(:disabled) {
+    background: #17a2b8;
+    color: white;
+    border-color: #17a2b8;
+}
+
+.btn-info {
+    background: rgba(108, 117, 125, 0.15);
+    color: #6c757d;
+    border-color: rgba(108, 117, 125, 0.3);
+}
+
+.btn-info:hover:not(:disabled) {
+    background: #6c757d;
+    color: white;
+    border-color: #6c757d;
+}
+
+/* Check-in/Check-out Button Styles */
+.btn-success {
+    background: var(--success-color);
+    color: white;
+    border-color: var(--success-color);
+}
+
+.btn-success:hover:not(:disabled) {
+    background: #1e7e34;
+    border-color: #1e7e34;
+    transform: translateY(-1px);
+}
+
+.btn-warning {
+    background: var(--warning-color);
+    color: #212529;
+    border-color: var(--warning-color);
+}
+
+.btn-warning:hover:not(:disabled) {
+    background: #d39e00;
+    border-color: #d39e00;
+    transform: translateY(-1px);
+}
+
+.btn:disabled {
+    background: #e9ecef !important;
+    color: #6c757d !important;
+    border-color: #ced4da !important;
+    opacity: 0.8;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+.submit-report-btn:disabled {
+    background: var(--gray-color);
+    color: white !important;
+    border-color: var(--gray-color);
+    opacity: 0.6;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    color: white;
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    flex-shrink: 0;
+}
+
+.status-submitted {
+    background-color: var(--primary-color);
+}
+
+.status-submitted-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(40, 167, 69, 0.1);
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(40, 167, 69, 0.2);
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    width: 100%;
+}
+
+.status-icon {
+    color: #28a745;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.status-text {
+    color: #28a745;
+    font-weight: 600;
+    flex: 1;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.status-date {
+    color: #6c757d;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+}
+
+/* Status Summary Styles */
+.status-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 5px 0;
+    width: 100%;
+}
+
+.status-summary p {
+    margin: 0;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.4;
+    width: 100%;
+}
+
+.status-ok {
+    color: var(--success-color);
+}
+
+.status-pending {
+    color: var(--warning-color);
+}
+
+.status-pending i {
+    color: var(--warning-color);
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    grid-column: 1 / -1;
+    width: 100%;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+}
+
+.empty-state h3 {
+    color: var(--dark-color);
+    margin-bottom: 15px;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.empty-state p {
+    color: var(--gray-color);
+    max-width: 400px;
+    margin: 0 auto;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    backdrop-filter: blur(2px);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 2% auto;
+    padding: 0;
+    border-radius: var(--radius);
+    width: 95%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    animation: modalSlideIn 0.3s ease;
+    position: relative;
+}
+
+@keyframes modalSlideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: var(--radius) var(--radius) 0 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    width: 100%;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.3;
+    flex: 1;
+    min-width: 0;
+}
+
+.close {
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: var(--transition);
+    background: none;
+    border: none;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.close:hover {
+    color: #ff6b6b;
+    background: rgba(255,255,255,0.15);
+    transform: scale(1.1);
+}
+
+.modal-body {
+    padding: 25px;
+    background: white;
+    width: 100%;
+}
+
+/* Job Details Grid in Modal */
+.job-details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    width: 100%;
+}
+
+.job-details-grid .detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+}
+
+.job-details-grid .detail-item.full-width {
+    grid-column: 1 / -1;
+}
+
+.job-details-grid label {
+    font-weight: 600;
+    color: var(--gray-color);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.job-details-grid .detail-value {
+    font-size: 1rem;
+    line-height: 1.4;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    width: 100%;
+}
+
+.address-text {
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.summary-content {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 6px;
+    border-left: 4px solid var(--primary-color);
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    width: 100%;
+}
+
+.summary-content p {
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* Loading and Error States */
+.loading-state {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 2s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.error-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--danger-color);
+}
+
+.error-state p {
+    margin: 0;
+    font-weight: 500;
+    word-wrap: break-word;
+}
+
+/* Utility Classes */
+.mobile-hidden {
+    display: inline;
+}
+
+.mobile-only {
+    display: none;
+}
+
+/* Text wrapping improvements */
+.text-container {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    width: 100%;
+}
+
+.client-name, .site-address, .poc-name, .work-summary {
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    white-space: normal !important;
+    line-height: 1.4 !important;
+}
+
+.break-anywhere {
+    word-break: break-all !important;
+    overflow-wrap: anywhere !important;
+}
+
+/* ------------------ Mobile-Specific Styles ------------------ */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px 10px;
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    h1 {
+        font-size: 2rem;
+        word-wrap: break-word;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        line-height: 1.2;
+        padding: 0 5px;
+    }
+
+    .subtitle {
+        font-size: 1rem;
+        word-wrap: break-word;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        line-height: 1.3;
+        padding: 0 5px;
+    }
+
+    .admin-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+        margin-bottom: 20px;
+        width: 100%;
+    }
+
+    .search-form {
+        min-width: 100%;
+    }
+
+    .button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .mobile-hidden {
+        display: none;
+    }
+
+    .mobile-only {
+        display: inline;
+    }
+
+    /* Grid Layout for Mobile */
+    .assignments-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        width: 100%;
+    }
+
+    /* Assignment Details Grid for Mobile */
+    .assignment-details-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    /* Card Styles for Mobile */
+    .card-title {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+        word-break: break-word;
+        line-height: 1.3;
+        max-width: 100%;
+        font-size: 1.1rem;
+    }
+
+    .card-value {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+        word-break: break-word;
+        line-height: 1.4;
+        font-size: 0.9rem;
+    }
+
+    .card-row {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .card-label {
+        width: 100%;
+        font-size: 0.9rem;
+    }
+
+    .card-footer {
+        flex-direction: row;
+        gap: 6px;
+        padding: 12px 15px;
+    }
+
+    .card-footer .btn {
+        min-width: 60px;
+        padding: 6px;
+        font-size: 11px;
+    }
+
+    .btn {
+        min-width: 45px;
+        padding: 4px 6px;
+        font-size: 11px;
+        height: 26px;
+    }
+
+    /* Card Header for Mobile */
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 15px;
+    }
+
+    .card-title {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        width: 100%;
+    }
+
+    /* Status Summary for Mobile */
+    .status-summary p {
+        font-size: 0.85rem;
+        flex-wrap: wrap;
+    }
+
+    /* Modal for Mobile */
+    .modal-content {
+        width: 95%;
+        margin: 5% auto;
+        max-height: 85vh;
+    }
+
+    .job-details-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .modal-header {
+        padding: 15px 20px;
+    }
+
+    .modal-header h2 {
+        font-size: 1.3rem;
+    }
+
+    .modal-body {
+        padding: 20px;
+    }
+
+    .close {
+        font-size: 24px;
+        width: 28px;
+        height: 28px;
+    }
+}
+
+/* For very small screens */
+@media (max-width: 480px) {
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 12px;
+    }
+
+    .card-title {
+        margin-right: 0;
+        margin-bottom: 8px;
+        font-size: 1rem;
+        width: 100%;
+    }
+
+    .card-row {
+        flex-direction: column;
+        gap: 3px;
+    }
+
+    .card-label {
+        width: 100%;
+        margin-bottom: 3px;
+        font-size: 0.85rem;
+    }
+
+    .card-value {
+        font-size: 0.85rem;
+    }
+
+    .btn {
+        min-width: 40px;
+        font-size: 10px;
+        padding: 3px 5px;
+        height: 24px;
+    }
+
+    .assignment-details-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .status-summary p {
+        font-size: 0.8rem;
+    }
+
+    .status-submitted-badge {
+        flex-direction: column;
+        gap: 5px;
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    .subtitle {
+        font-size: 0.9rem;
+    }
+
+    .modal-content {
+        margin: 2% auto;
+        width: 98%;
+    }
+
+    .modal-header {
+        padding: 12px 15px;
+    }
+
+    .modal-header h2 {
+        font-size: 1.2rem;
+    }
+
+    .modal-body {
+        padding: 15px;
+    }
+}
+
+/* Additional responsive improvements */
+@media (max-width: 1024px) and (min-width: 769px) {
+    .assignments-grid {
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    }
+
+    .btn {
+        padding: 6px 8px;
+        font-size: 11px;
+        min-width: 60px;
+        height: 28px;
+    }
+
+    .status-badge {
+        font-size: 10px;
+        padding: 3px 6px;
+    }
+}
+
+/* Large screens */
+@media (min-width: 1400px) {
+    .assignments-grid {
+        grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+    }
+}
+
+/* Improved mobile card layout for better spacing */
+@media (max-width: 768px) {
+    .rfp-card {
+        margin-bottom: 15px;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+
+    .card-row {
+        margin-bottom: 10px;
+    }
+
+    .card-label {
+        width: 110px;
+        font-size: 13px;
+    }
+
+    .card-value {
+        font-size: 14px;
+    }
+}
+
+/* Ensure proper text wrapping on very small screens */
+@media (max-width: 360px) {
+    .card-label {
+        width: 100px;
+        font-size: 12px;
+    }
+
+    .card-footer .btn {
+        min-width: 55px;
+        font-size: 10px;
+        padding: 5px;
+    }
+
+    .card-title {
+        font-size: 0.95rem;
+    }
+
+    .action-buttons .btn {
+        min-width: 40px;
+        font-size: 9px;
+        padding: 2px 4px;
+    }
+
+    h1 {
+        font-size: 1.6rem;
+    }
+
+    .subtitle {
+        font-size: 0.85rem;
+    }
+}
+
+/* Emergency text wrapping for extremely long content */
+.break-anywhere {
+    word-break: break-all !important;
+    overflow-wrap: anywhere !important;
+}
+
+/* Specific fixes for problematic text containers */
+.client-name-container,
+.site-address-container,
+.poc-name-container,
+.work-summary-container {
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    white-space: normal !important;
+    line-height: 1.4 !important;
+    width: 100% !important;
+}
+
+/* Button container improvements */
+.button-container {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+/* Ensure all images are responsive */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Focus styles for accessibility */
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+    .button,
+    .btn,
+    .card-footer {
+        display: none !important;
+    }
+
+    .rfp-card {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const clearButton = document.getElementById('clearSearchButton');
+    const assignmentCards = document.querySelectorAll('.assignment-card');
+    const modal = document.getElementById('jobModal');
+    const closeBtn = document.querySelector('.close');
+    const viewJobButtons = document.querySelectorAll('.view-job-details');
+    // New button selectors
+    const checkInButtons = document.querySelectorAll('.check-in-btn');
+    const checkOutButtons = document.querySelectorAll('.check-out-btn');
+    const submitReportButtons = document.querySelectorAll('.submit-report-btn');
+
+
+    // Helper function to get CSRF token (required for POST requests in Django)
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    const csrftoken = getCookie('csrftoken');
+
+
+    // Helper function to update card UI after check-in/out
+    function updateAssignmentCardUI(assignmentCard, action, timeString) {
+        const checkInBtn = assignmentCard.querySelector('.check-in-btn');
+        const checkOutBtn = assignmentCard.querySelector('.check-out-btn');
+        const submitBtn = assignmentCard.querySelector('.submit-report-btn');
+        const statusCheckIn = assignmentCard.querySelector('.status-check-in');
+        const statusCheckOut = assignmentCard.querySelector('.status-check-out');
+
+        const localTime = new Date(timeString).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        if (action === 'check-in') {
+            // Update Check-In state
+            checkInBtn.disabled = true;
+
+            // Enable Check-Out button
+            checkOutBtn.disabled = false;
+
+            // Update Status text
+            statusCheckIn.innerHTML = `<i class="fas fa-check-circle"></i> Checked In: ${localTime}`;
+            statusCheckIn.classList.remove('status-pending');
+            statusCheckIn.classList.add('status-ok');
+            statusCheckIn.setAttribute('data-check-in-time', timeString);
+
+        } else if (action === 'check-out') {
+            // Update Check-Out state
+            checkOutBtn.disabled = true;
+
+            // Enable Submit button
+            submitBtn.disabled = false;
+            submitBtn.setAttribute('data-is-checked-out', 'true');
+
+            // Update Status text
+            statusCheckOut.innerHTML = `<i class="fas fa-check-circle"></i> Checked Out: ${localTime}`;
+            statusCheckOut.classList.remove('status-pending');
+            statusCheckOut.classList.add('status-ok');
+            statusCheckOut.setAttribute('data-check-out-time', timeString);
+        }
+    }
+
+
+    // Check In functionality
+    checkInButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const assignmentId = this.getAttribute('data-assignment-id');
+            const button = this;
+            const assignmentCard = button.closest('.assignment-card');
+
+            // Use a loading indicator (assuming you include Font Awesome or similar)
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            button.disabled = true;
+
+            fetch(`{% url 'fieldwork:check_in' 0 %}`.replace('0', assignmentId), {
+                method: 'POST',
+                headers: {'X-CSRFToken': csrftoken, 'Content-Type': 'application/json'},
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Successfully Checked In!');
+                    updateAssignmentCardUI(assignmentCard, 'check-in', data.check_in_time);
+                } else {
+                    alert('Error checking in: ' + data.error);
+                    // Re-enable button on error
+                    button.innerHTML = '<span class="mobile-hidden">Check In</span><span class="mobile-only">▶️</span>';
+                    button.disabled = false;
+                }
+            })
+            .catch(error => {
+                console.error('Check-in error:', error);
+                alert('Error checking in. Please try again.');
+                button.innerHTML = '<span class="mobile-hidden">Check In</span><span class="mobile-only">▶️</span>';
+                button.disabled = false;
+            });
+        });
+    });
+
+    // Check Out functionality
+    checkOutButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const assignmentId = this.getAttribute('data-assignment-id');
+            const button = this;
+            const assignmentCard = button.closest('.assignment-card');
+
+            // Use a loading indicator
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            button.disabled = true;
+
+            fetch(`{% url 'fieldwork:check_out' 0 %}`.replace('0', assignmentId), {
+                method: 'POST',
+                headers: {'X-CSRFToken': csrftoken, 'Content-Type': 'application/json'},
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Successfully Checked Out!');
+                    updateAssignmentCardUI(assignmentCard, 'check-out', data.check_out_time);
+                } else {
+                    alert('Error checking out: ' + data.error);
+                    // Re-enable button on error, but only if it was enabled to begin with
+                    const checkInTime = assignmentCard.querySelector('.status-check-in').getAttribute('data-check-in-time');
+                    if (checkInTime) {
+                         button.innerHTML = '<span class="mobile-hidden">Check Out</span><span class="mobile-only">⏸️</span>';
+                         button.disabled = false;
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Check-out error:', error);
+                alert('Error checking out. Please try again.');
+                const checkInTime = assignmentCard.querySelector('.status-check-in').getAttribute('data-check-in-time');
+                if (checkInTime) {
+                     button.innerHTML = '<span class="mobile-hidden">Check Out</span><span class="mobile-only">⏸️</span>';
+                     button.disabled = false;
+                }
+            });
+        });
+    });
+
+    // Submit Report Button validation
+    submitReportButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            const isCheckedOut = this.getAttribute('data-is-checked-out') === 'true';
+            if (!isCheckedOut) {
+                e.preventDefault();
+                alert('You must check out before submitting the field report.');
+                // Optional: visually shake the button or status
+            }
+            // If checked out, the link will proceed to the report form page, where the check is re-validated by the Django view.
+        });
+    });
+
+    // Search functionality (Kept the same)
+    if (searchInput) {
+        function filterAssignments() {
+            const filterText = searchInput.value.toLowerCase().trim();
+
+            assignmentCards.forEach(card => {
+                const client = card.getAttribute('data-client');
+                const category = card.getAttribute('data-category');
+
+                if (client.includes(filterText) || category.includes(filterText)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        searchInput.addEventListener('keyup', filterAssignments);
+        searchInput.addEventListener('change', filterAssignments);
+
+        if (clearButton) {
+            clearButton.addEventListener('click', function() {
+                searchInput.value = '';
+                filterAssignments();
+            });
+        }
+    }
+
+    // Modal functionality for job details (Kept the same)
+    viewJobButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const jobId = this.getAttribute('data-job-id');
+            showJobDetails(jobId);
+        });
+    });
+
+    closeBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
+    });
+
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+
+    // Function to fetch job data from the server (Kept the same)
+    async function fetchJobData(jobId) {
+        try {
+            const response = await fetch(`/fieldwork/api/job-details/${jobId}/`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch job details');
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Error fetching job data:', error);
+            throw error;
+        }
+    }
+
+    async function showJobDetails(jobId) {
+        const modalBody = document.getElementById('jobModalBody');
+        modalBody.innerHTML = `
+            <div class="loading-state">
+                <div class="spinner"></div>
+                <p>Loading job details...</p>
+            </div>
+        `;
+        modal.style.display = 'block';
+
+        try {
+            const jobData = await fetchJobData(jobId);
+
+            modalBody.innerHTML = `
+                <div class="job-details-grid">
+                    <div class="detail-item">
+                        <label>Client Name:</label>
+                        <span class="detail-value">${jobData.client_name}</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Category:</label>
+                        <span class="badge status-badge status-submitted detail-value">${jobData.category}</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Date of Job:</label>
+                        <span class="detail-value">${new Date(jobData.date_of_job).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} at ${new Date(jobData.date_of_job).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}</span>
+                    </div>
+                    <div class="detail-item full-width">
+                        <label>Site Address:</label>
+                        <span class="detail-value address-text">${jobData.site_address}</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>POC Name:</label>
+                        <span class="detail-value">${jobData.poc_name}</span>
+                    </div>
+                    <div class="detail-item full-width">
+                        <label>Summary of Work:</label>
+                        <div class="summary-content">
+                            <p>${jobData.summary_of_work}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+        } catch (error) {
+            console.error('Error showing job details:', error);
+            modalBody.innerHTML = `
+                <div class="error-state">
+                    <p>Unable to load job details. Please try again later.</p>
+                </div>
+            `;
+        }
+    }
+});
+</script>
+{% endblock %}

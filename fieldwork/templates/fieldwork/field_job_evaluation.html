@@ -1,0 +1,1558 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Field Job Evaluation" %}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1>{% trans "Field Job Evaluation" %}</h1>
+        <p class="subtitle">{% trans "Review submitted reports for" %} {{ field_job.client_name }}</p>
+    </div>
+
+    <!-- Back to Field Jobs -->
+    <div class="mb-4">
+        <a href="{% url 'fieldwork:field_job_list' %}" class="button button-primary">
+            ← {% trans "Back to Field Jobs" %}
+        </a>
+    </div>
+
+    <!-- Search Bar at the Top -->
+    <div class="admin-controls">
+        <div class="search-form">
+            <form method="GET" class="search-input-wrapper">
+                <span class="search-icon">🔍</span>
+                <input type="text" name="search" value="{{ search_query }}" placeholder="{% trans "Search by staff name or work summary..." %}">
+                <button type="submit" class="button button-primary">
+                    <span class="mobile-hidden">{% trans "Search" %}</span>
+                    <span class="mobile-only">🔍</span>
+                </button>
+                {% if search_query %}
+                <a href="{% url 'fieldwork:field_job_evaluation' field_job.pk %}" class="button button-clear">
+                    <span class="mobile-hidden">{% trans "Clear" %}</span>
+                    <span class="mobile-only">✕</span>
+                </a>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+
+    <!-- Grid Layout -->
+    <div class="evaluation-grid">
+        <!-- Job Summary Card -->
+        <div class="grid-item summary-card">
+            <div class="rfp-card">
+                <div class="card-header">
+                    <h3 class="card-title">{{ field_job.client_name }}</h3>
+                    <span class="badge status-badge status-submitted">{{ field_job.category }}</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-row">
+                        <span class="card-label">Date:</span>
+                        <span class="card-value">{{ field_job.date_of_job|date:"M d, Y H:i" }}</span>
+                    </div>
+                    <div class="card-row">
+                        <span class="card-label">Site Address:</span>
+                        <span class="card-value">{{ field_job.site_address }}</span>
+                    </div>
+                    <div class="card-row">
+                        <span class="card-label">POC Name:</span>
+                        <span class="card-value">{{ field_job.poc_name }}</span>
+                    </div>
+                    <div class="card-row">
+                        <span class="card-label">Total Staff Assigned:</span>
+                        <span class="card-value">{{ assignments_with_reports.count }}</span>
+                    </div>
+                    <div class="card-row">
+                        <span class="card-label">Reports Submitted:</span>
+                        <span class="card-value">
+                            {{ assignments_with_reports|length }} of {{ assignments_with_reports.count }}
+                        </span>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'fieldwork:field_job_edit' field_job.pk %}" class="btn btn-edit">
+                        <span class="mobile-hidden">Edit Job</span>
+                        <span class="mobile-only">✏️</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports Grid -->
+        <div class="grid-item reports-grid">
+            {% if assignments_with_reports %}
+                {% for assignment in assignments_with_reports %}
+                <div class="report-card rfp-card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            {{ assignment.staff.get_full_name }}
+                            {% if assignment.field_report %}
+                                <span class="badge status-badge status-submitted">Report Submitted</span>
+                            {% else %}
+                                <span class="badge no-report-badge">No Report</span>
+                            {% endif %}
+                        </h3>
+                    </div>
+
+                    <div class="card-body">
+                        {% if assignment.field_report %}
+                            <!-- Report Details Grid -->
+                            <div class="report-details-grid">
+                                <div class="detail-item">
+                                    <span class="detail-label">Check-in Time:</span>
+                                    <span class="detail-value">
+                                        {% if assignment.field_report.check_in_time %}
+                                            {{ assignment.field_report.check_in_time|date:"M d, Y H:i" }}
+                                        {% else %}
+                                            <span class="no-data">Not checked in</span>
+                                        {% endif %}
+                                    </span>
+                                </div>
+
+                                <div class="detail-item">
+                                    <span class="detail-label">Check-out Time:</span>
+                                    <span class="detail-value">
+                                        {% if assignment.field_report.check_out_time %}
+                                            {{ assignment.field_report.check_out_time|date:"M d, Y H:i" }}
+                                        {% else %}
+                                            <span class="no-data">Not checked out</span>
+                                        {% endif %}
+                                    </span>
+                                </div>
+
+                                <div class="detail-item">
+                                    <span class="detail-label">Hours Worked:</span>
+                                    <span class="detail-value">
+                                        {% if assignment.field_report.hours_worked %}
+                                            {{ assignment.field_report.hours_worked }} hours
+                                        {% else %}
+                                            <span class="no-data">Not calculated</span>
+                                        {% endif %}
+                                    </span>
+                                </div>
+
+                                <div class="detail-item">
+                                    <span class="detail-label">Site Visit Complete:</span>
+                                    <span class="detail-value">
+                                        {% if assignment.field_report.site_visit_complete %}
+                                            <span class="status-yes">✓ Yes</span>
+                                        {% else %}
+                                            <span class="status-no">✗ No</span>
+                                        {% endif %}
+                                    </span>
+                                </div>
+
+                                <div class="detail-item">
+                                    <span class="detail-label">Revisit Required:</span>
+                                    <span class="detail-value">
+                                        {% if assignment.field_report.revisit_required %}
+                                            <span class="status-yes">✓ Yes</span>
+                                        {% else %}
+                                            <span class="status-no">✗ No</span>
+                                        {% endif %}
+                                    </span>
+                                </div>
+
+                                {% if assignment.field_report.summary_of_work_performed %}
+                                <div class="detail-item full-width">
+                                    <span class="detail-label">Work Summary:</span>
+                                    <span class="detail-value summary-text">{{ assignment.field_report.summary_of_work_performed }}</span>
+                                </div>
+                                {% endif %}
+
+                                {% if assignment.field_report.fe_signature %}
+                                <div class="detail-item">
+                                    <span class="detail-label">Signature:</span>
+                                    <span class="detail-value">{{ assignment.field_report.fe_signature }}</span>
+                                </div>
+                                {% endif %}
+
+                                {% if assignment.field_report.submission_location_address %}
+                                <div class="detail-item full-width">
+                                    <span class="detail-label">Submission Location:</span>
+                                    <span class="detail-value location-data">{{ assignment.field_report.submission_location_address }}</span>
+                                    <small class="location-coords">
+                                        (Lat: {{ assignment.field_report.submission_location_lat|default:"N/A" }},
+                                        Lng: {{ assignment.field_report.submission_location_lng|default:"N/A" }})
+                                    </small>
+                                </div>
+                                {% endif %}
+
+                                <div class="detail-item full-width">
+                                    <span class="detail-label">Submitted At:</span>
+                                    <span class="detail-value">
+                                        {{ assignment.field_report.submitted_at|date:"M d, Y H:i"|default:"Not submitted" }}
+                                    </span>
+                                </div>
+                            </div>
+
+                        {% else %}
+                            <div class="no-report-message">
+                                <span class="no-data">No field report submitted yet</span>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="card-footer">
+                        {% if assignment.field_report %}
+                            <!-- Action Buttons -->
+                            <div class="action-buttons">
+                                <a href="{% url 'fieldwork:field_report_detail' assignment.field_report.id %}" class="btn btn-view">
+                                    <span class="mobile-hidden">View</span>
+                                    <span class="mobile-only">👁️</span>
+                                </a>
+                                <button type="button" class="btn btn-edit" onclick="openEditModal({{ assignment.field_report.id }})">
+                                    <span class="mobile-hidden">Edit</span>
+                                    <span class="mobile-only">✏️</span>
+                                </button>
+                                <button type="button" class="btn btn-delete" onclick="confirmDelete({{ assignment.field_report.id }}, '{{ assignment.staff.get_full_name }}')">
+                                    <span class="mobile-hidden">Delete</span>
+                                    <span class="mobile-only">🗑️</span>
+                                </button>
+                            </div>
+                        {% else %}
+                            <span class="no-data italic">
+                                Waiting for staff to submit report
+                            </span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">📋</div>
+                    <h3>{% trans "No staff assignments found." %}</h3>
+                    <p>{% trans "No staff members are assigned to this field job or match your search criteria." %}</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Edit Field Report</h3>
+            <span class="close" onclick="closeEditModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <form id="editReportForm" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="report_id" id="editReportId">
+
+                <div class="form-group">
+                    <label for="editSummary">Summary of Work Performed *</label>
+                    <textarea id="editSummary" name="summary" rows="4" required></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editSiteVisitComplete" class="checkbox-label">
+                            <input type="checkbox" id="editSiteVisitComplete" name="site_visit_complete">
+                            Site Visit Complete
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="editRevisitRequired" class="checkbox-label">
+                            <input type="checkbox" id="editRevisitRequired" name="revisit_required">
+                            Revisit Required
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editHoursWorked">Hours Worked *</label>
+                        <input type="number" id="editHoursWorked" name="hours_worked" step="0.01" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editFESignature">FE Signature *</label>
+                        <input type="text" id="editFESignature" name="fe_signature" required>
+                    </div>
+                </div>
+
+                <div class="location-info">
+                    <h4>Location Information (Read-only)</h4>
+                    <div class="readonly-field">
+                        <label>Submission Address:</label>
+                        <span id="displayLocationAddress" class="readonly-value"></span>
+                    </div>
+                    <div class="readonly-field">
+                        <label>Coordinates:</label>
+                        <span id="displayLocationCoords" class="readonly-value"></span>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-cancel" onclick="closeEditModal()">Cancel</button>
+            <button type="button" class="btn btn-save" onclick="saveReportChanges()">Save Changes</button>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Delete Field Report</h3>
+            <span class="close" onclick="closeDeleteModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p>Are you sure you want to delete the field report for <strong id="deleteStaffName"></strong>?</p>
+            <p class="warning-text">This action cannot be undone.</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+            <button type="button" class="btn btn-delete-confirm" onclick="deleteReport()">Delete Report</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Base Styles */
+:root {
+    --primary-color: #4361ee;
+    --primary-dark: #3a56d4;
+    --secondary-color: #7209b7;
+    --success-color: #4cc9f0;
+    --danger-color: #f72585;
+    --warning-color: #f8961e;
+    --light-color: #f8f9fa;
+    --dark-color: #212529;
+    --gray-color: #6c757d;
+    --border-color: #dee2e6;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --radius: 8px;
+    --transition: all 0.3s ease;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-image: url('{% static "images/bk.jpg" %}');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.page-header {
+    margin-bottom: 30px;
+    text-align: center;
+    width: 100%;
+}
+
+h1 {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.3;
+    width: 100%;
+}
+
+.subtitle {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.1rem;
+    max-width: 100%;
+    margin: 0 auto;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.4;
+    padding: 0 10px;
+}
+
+.admin-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    gap: 20px;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.search-form {
+    flex: 1;
+    min-width: 300px;
+    width: 100%;
+}
+
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    width: 100%;
+}
+
+.search-icon {
+    padding: 0 15px;
+    color: var(--gray-color);
+    flex-shrink: 0;
+}
+
+.search-form input {
+    flex: 1;
+    padding: 12px 0;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    background: transparent;
+    min-width: 0;
+    width: 100%;
+}
+
+.search-form input::placeholder {
+    color: var(--gray-color);
+}
+
+/* Button Styles */
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    text-align: center;
+    border: none;
+    font-size: 16px;
+    gap: 8px;
+    box-shadow: var(--shadow);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.button-primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+.button-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.button-clear {
+    background: white;
+    color: var(--gray-color);
+    padding: 12px 16px;
+    border-left: 1px solid var(--border-color);
+    border-radius: 0;
+    flex-shrink: 0;
+}
+
+.button-clear:hover {
+    background: #f8f9fa;
+    color: var(--danger-color);
+}
+
+/* Grid Layout */
+.evaluation-grid {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 30px;
+    align-items: start;
+    width: 100%;
+}
+
+.grid-item.summary-card {
+    position: sticky;
+    top: 20px;
+}
+
+.grid-item.reports-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 20px;
+    align-items: start;
+    width: 100%;
+}
+
+/* Card Styles */
+.rfp-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: var(--transition);
+    height: fit-content;
+    width: 100%;
+}
+
+.rfp-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+    background: #f8f9fa;
+    width: 100%;
+    gap: 10px;
+}
+
+.card-title {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    flex: 1;
+    margin-right: 15px;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    min-width: 0;
+}
+
+.card-body {
+    padding: 20px;
+    width: 100%;
+}
+
+.card-row {
+    display: flex;
+    margin-bottom: 12px;
+    width: 100%;
+    gap: 10px;
+}
+
+.card-label {
+    font-weight: 600;
+    width: 140px;
+    color: var(--gray-color);
+    flex-shrink: 0;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.4;
+}
+
+.card-value {
+    flex: 1;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+}
+
+.card-footer {
+    display: flex;
+    padding: 15px 20px;
+    background: #f8f9fa;
+    border-top: 1px solid var(--border-color);
+    gap: 10px;
+    flex-wrap: nowrap;
+    justify-content: center;
+    width: 100%;
+}
+
+.card-footer .btn {
+    flex: 1;
+    padding: 8px;
+    min-width: 70px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+/* Report Details Grid */
+.report-details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    width: 100%;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+    width: 100%;
+}
+
+.detail-item.full-width {
+    grid-column: 1 / -1;
+}
+
+.detail-label {
+    font-weight: 600;
+    color: var(--gray-color);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.3;
+}
+
+.detail-value {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    width: 100%;
+}
+
+.summary-text {
+    line-height: 1.5;
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 4px;
+    border-left: 3px solid var(--primary-color);
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    width: 100%;
+}
+
+.location-data {
+    font-weight: 500;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.location-coords {
+    font-size: 0.8rem;
+    color: var(--gray-color);
+    margin-top: 2px;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Button Styles */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    transition: var(--transition);
+    border: 1px solid transparent;
+    cursor: pointer;
+    gap: 4px;
+    white-space: nowrap;
+    min-width: 70px;
+    flex-shrink: 0;
+    height: 32px;
+}
+
+.btn-view {
+    background: rgba(23, 162, 184, 0.15);
+    color: #17a2b8;
+    border-color: rgba(23, 162, 184, 0.3);
+}
+
+.btn-view:hover {
+    background: #17a2b8;
+    color: white;
+    border-color: #17a2b8;
+}
+
+.btn-edit {
+    background: rgba(255, 193, 7, 0.15);
+    color: #ffc107;
+    border-color: rgba(255, 193, 7, 0.3);
+}
+
+.btn-edit:hover {
+    background: #ffc107;
+    color: white;
+    border-color: #ffc107;
+}
+
+.btn-delete {
+    background: rgba(220, 53, 69, 0.15);
+    color: #dc3545;
+    border-color: rgba(220, 53, 69, 0.3);
+}
+
+.btn-delete:hover {
+    background: #dc3545;
+    color: white;
+    border-color: #dc3545;
+}
+
+/* Action Buttons Container */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    justify-content: center;
+}
+
+.action-buttons .btn {
+    flex: 1;
+    min-width: 60px;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    color: white;
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    flex-shrink: 0;
+}
+
+.status-submitted {
+    background-color: var(--primary-color);
+}
+
+.no-report-badge {
+    background-color: #6c757d;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+}
+
+/* Status Indicators */
+.status-yes {
+    color: #28a745;
+    font-weight: 600;
+    word-wrap: break-word;
+}
+
+.status-no {
+    color: #dc3545;
+    font-weight: 600;
+    word-wrap: break-word;
+}
+
+.no-data {
+    color: #6c757d;
+    font-style: italic;
+    word-wrap: break-word;
+}
+
+.italic {
+    font-style: italic;
+}
+
+.no-report-message {
+    text-align: center;
+    padding: 30px 20px;
+    width: 100%;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    grid-column: 1 / -1;
+    width: 100%;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+}
+
+.empty-state h3 {
+    color: var(--dark-color);
+    margin-bottom: 15px;
+    word-wrap: break-word;
+}
+
+.empty-state p {
+    color: var(--gray-color);
+    max-width: 400px;
+    margin: 0 auto;
+    word-wrap: break-word;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 5% auto;
+    border-radius: var(--radius);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+    background: #f8f9fa;
+    width: 100%;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: var(--dark-color);
+    word-wrap: break-word;
+}
+
+.close {
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    color: var(--gray-color);
+    transition: var(--transition);
+    flex-shrink: 0;
+}
+
+.close:hover {
+    color: var(--danger-color);
+}
+
+.modal-body {
+    padding: 20px;
+    width: 100%;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 20px;
+    border-top: 1px solid var(--border-color);
+    background: #f8f9fa;
+    width: 100%;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    width: 100%;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: var(--dark-color);
+    word-wrap: break-word;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 14px;
+    transition: var(--transition);
+    min-width: 0;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="number"]:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-weight: normal;
+    word-wrap: break-word;
+}
+
+.checkbox-label input[type="checkbox"] {
+    margin: 0;
+}
+
+/* Location Info Section */
+.location-info {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    border-left: 3px solid var(--primary-color);
+    width: 100%;
+}
+
+.location-info h4 {
+    margin: 0 0 10px 0;
+    color: var(--dark-color);
+    font-size: 14px;
+    word-wrap: break-word;
+}
+
+.readonly-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.readonly-field label {
+    font-weight: 600;
+    font-size: 12px;
+    color: var(--gray-color);
+    margin-bottom: 2px;
+    word-wrap: break-word;
+}
+
+.readonly-value {
+    font-size: 13px;
+    color: var(--dark-color);
+    background: white;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    width: 100%;
+}
+
+.warning-text {
+    color: var(--danger-color);
+    font-weight: 600;
+    font-size: 14px;
+    margin-top: 10px;
+    word-wrap: break-word;
+}
+
+.btn-cancel {
+    background: #6c757d;
+    color: white;
+    border: none;
+}
+
+.btn-cancel:hover {
+    background: #5a6268;
+}
+
+.btn-save {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+}
+
+.btn-save:hover {
+    background: var(--primary-dark);
+}
+
+.btn-delete-confirm {
+    background: var(--danger-color);
+    color: white;
+    border: none;
+}
+
+.btn-delete-confirm:hover {
+    background: #c82333;
+}
+
+/* Utility Classes */
+.mobile-hidden {
+    display: inline;
+}
+
+.mobile-only {
+    display: none;
+}
+
+/* Text wrapping improvements for all elements */
+.text-container {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    width: 100%;
+}
+
+/* Force text wrapping in specific problematic areas */
+.client-name, .site-address, .poc-name, .work-summary {
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    white-space: normal !important;
+    line-height: 1.4 !important;
+}
+
+/* ------------------ Mobile-Specific Styles ------------------ */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px 10px;
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    h1 {
+        font-size: 2rem;
+        word-wrap: break-word;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        line-height: 1.2;
+        padding: 0 5px;
+    }
+
+    .subtitle {
+        font-size: 1rem;
+        word-wrap: break-word;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        line-height: 1.3;
+        padding: 0 5px;
+    }
+
+    .admin-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+        margin-bottom: 20px;
+        width: 100%;
+    }
+
+    .search-form {
+        min-width: 100%;
+    }
+
+    .button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .mobile-hidden {
+        display: none;
+    }
+
+    .mobile-only {
+        display: inline;
+    }
+
+    /* Grid Layout for Mobile */
+    .evaluation-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        width: 100%;
+    }
+
+    .grid-item.summary-card {
+        position: static;
+    }
+
+    .grid-item.reports-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        width: 100%;
+    }
+
+    /* Report Details Grid for Mobile */
+    .report-details-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    /* Card Styles for Mobile */
+    .card-title {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+        word-break: break-word;
+        line-height: 1.3;
+        max-width: 100%;
+        font-size: 1.1rem;
+    }
+
+    .card-value {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+        word-break: break-word;
+        line-height: 1.4;
+        font-size: 0.9rem;
+    }
+
+    .card-row {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .card-label {
+        width: 100%;
+        font-size: 0.9rem;
+    }
+
+    .card-footer {
+        flex-direction: row;
+        gap: 6px;
+        padding: 12px 15px;
+    }
+
+    .card-footer .btn {
+        min-width: 60px;
+        padding: 6px;
+        font-size: 11px;
+    }
+
+    .btn {
+        min-width: 45px;
+        padding: 4px 6px;
+        font-size: 11px;
+        height: 26px;
+    }
+
+    /* Report Card Header for Mobile */
+    .report-card .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 15px;
+    }
+
+    .report-card .card-title {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        width: 100%;
+    }
+
+    /* Action Buttons for Mobile */
+    .action-buttons {
+        gap: 6px;
+        width: 100%;
+    }
+
+    .action-buttons .btn {
+        min-width: 50px;
+        font-size: 10px;
+        padding: 4px 6px;
+    }
+
+    /* Modal for Mobile */
+    .modal-content {
+        width: 95%;
+        margin: 10% auto;
+        max-height: 85vh;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .modal-footer {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .modal-footer .btn {
+        width: 100%;
+    }
+}
+
+/* For very small screens */
+@media (max-width: 480px) {
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px;
+    }
+
+    .card-title {
+        margin-right: 0;
+        margin-bottom: 8px;
+        font-size: 1rem;
+        width: 100%;
+    }
+
+    .card-row {
+        flex-direction: column;
+        gap: 3px;
+    }
+
+    .card-label {
+        width: 100%;
+        margin-bottom: 3px;
+        font-size: 0.85rem;
+    }
+
+    .card-value {
+        font-size: 0.85rem;
+    }
+
+    .btn {
+        min-width: 40px;
+        font-size: 10px;
+        padding: 3px 5px;
+        height: 24px;
+    }
+
+    .report-details-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .action-buttons .btn {
+        min-width: 45px;
+        font-size: 9px;
+        padding: 3px 4px;
+    }
+
+    .detail-label {
+        font-size: 0.8rem;
+    }
+
+    .detail-value {
+        font-size: 0.85rem;
+    }
+}
+
+/* Additional responsive improvements */
+@media (max-width: 1024px) and (min-width: 769px) {
+    .evaluation-grid {
+        grid-template-columns: 300px 1fr;
+    }
+
+    .grid-item.reports-grid {
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    }
+
+    .btn {
+        padding: 6px 8px;
+        font-size: 11px;
+        min-width: 60px;
+        height: 28px;
+    }
+
+    .status-badge {
+        font-size: 10px;
+        padding: 3px 6px;
+    }
+}
+
+/* Large screens */
+@media (min-width: 1400px) {
+    .grid-item.reports-grid {
+        grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+    }
+}
+
+/* Improved mobile card layout for better spacing */
+@media (max-width: 768px) {
+    .rfp-card {
+        margin-bottom: 15px;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+
+    .card-row {
+        margin-bottom: 10px;
+    }
+
+    .card-label {
+        width: 110px;
+        font-size: 13px;
+    }
+
+    .card-value {
+        font-size: 14px;
+    }
+}
+
+/* Ensure proper text wrapping on very small screens */
+@media (max-width: 360px) {
+    .card-label {
+        width: 100px;
+        font-size: 12px;
+    }
+
+    .card-footer .btn {
+        min-width: 55px;
+        font-size: 10px;
+        padding: 5px;
+    }
+
+    .card-title {
+        font-size: 0.95rem;
+    }
+
+    .action-buttons .btn {
+        min-width: 40px;
+        font-size: 9px;
+        padding: 2px 4px;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    .subtitle {
+        font-size: 0.9rem;
+    }
+}
+
+/* Emergency text wrapping for extremely long content */
+.break-anywhere {
+    word-break: break-all !important;
+    overflow-wrap: anywhere !important;
+}
+
+/* Specific fixes for your problematic text examples */
+.client-name-container,
+.site-address-container,
+.poc-name-container {
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    white-space: normal !important;
+    line-height: 1.4 !important;
+    width: 100% !important;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Modal management
+let currentReportId = null;
+let currentStaffName = null;
+
+function openEditModal(reportId) {
+    currentReportId = reportId;
+
+    // Fetch report data and populate the form
+    fetch(`/fieldwork/api/report/${reportId}/`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('editReportId').value = reportId;
+                document.getElementById('editSummary').value = data.report.summary_of_work_performed || '';
+                document.getElementById('editSiteVisitComplete').checked = data.report.site_visit_complete;
+                document.getElementById('editRevisitRequired').checked = data.report.revisit_required;
+                document.getElementById('editHoursWorked').value = data.report.hours_worked || '';
+                document.getElementById('editFESignature').value = data.report.fe_signature || '';
+
+                // Display location information (read-only)
+                document.getElementById('displayLocationAddress').textContent =
+                    data.report.submission_location_address || 'Not available';
+                document.getElementById('displayLocationCoords').textContent =
+                    `Lat: ${data.report.submission_location_lat || 'N/A'}, Lng: ${data.report.submission_location_lng || 'N/A'}`;
+
+                document.getElementById('editModal').style.display = 'block';
+            } else {
+                alert('Error loading report data: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error loading report data');
+        });
+}
+
+function closeEditModal() {
+    document.getElementById('editModal').style.display = 'none';
+    currentReportId = null;
+}
+
+function confirmDelete(reportId, staffName) {
+    currentReportId = reportId;
+    currentStaffName = staffName;
+    document.getElementById('deleteStaffName').textContent = staffName;
+    document.getElementById('deleteModal').style.display = 'block';
+}
+
+function closeDeleteModal() {
+    document.getElementById('deleteModal').style.display = 'none';
+    currentReportId = null;
+    currentStaffName = null;
+}
+
+function saveReportChanges() {
+    const form = document.getElementById('editReportForm');
+    const formData = new FormData(form);
+
+    fetch(`/fieldwork/api/report/${currentReportId}/update/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Report updated successfully!');
+            closeEditModal();
+            location.reload(); // Reload to show changes
+        } else {
+            alert('Error updating report: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error updating report');
+    });
+}
+
+function deleteReport() {
+    fetch(`/fieldwork/api/report/${currentReportId}/delete/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Report deleted successfully!');
+            closeDeleteModal();
+            location.reload(); // Reload to show changes
+        } else {
+            alert('Error deleting report: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error deleting report');
+    });
+}
+
+// Close modals when clicking outside
+window.onclick = function(event) {
+    const editModal = document.getElementById('editModal');
+    const deleteModal = document.getElementById('deleteModal');
+
+    if (event.target === editModal) {
+        closeEditModal();
+    }
+    if (event.target === deleteModal) {
+        closeDeleteModal();
+    }
+}
+
+// Utility function to get CSRF token
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+</script>
+{% endblock %}

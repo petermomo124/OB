@@ -49,13 +49,14 @@ INSTALLED_APPS = [
     'chatbot',
     'attendance',  # Attendance management app
     'rfp',  # <-- Add this back
+    'fieldwork',
 
 ]
 
-# Cloudinary Configuration
-CLOUDINARY_CLOUD_NAME = 'dpupwwixw'
-CLOUDINARY_API_KEY = '455943441687337'
-CLOUDINARY_API_SECRET = '45L4allKMFrnzOaGYOYt6NXYAFk'
+# Cloudinary Configuration: Fetch credentials from environment variables
+CLOUDINARY_CLOUD_NAME = os.environ.get('CLOUDINARY_CLOUD_NAME')
+CLOUDINARY_API_KEY = os.environ.get('CLOUDINARY_API_KEY')
+CLOUDINARY_API_SECRET = os.environ.get('CLOUDINARY_API_SECRET')
 
 # Cloudinary storage settings
 CLOUDINARY_STORAGE = {
@@ -64,7 +65,6 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': CLOUDINARY_API_SECRET,
 }
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -103,22 +103,33 @@ WSGI_APPLICATION = 'ey_website.wsgi.application'
 import pymysql
 pymysql.install_as_MySQLdb()
 
+
+# Define environment variables first
+DB_NAME = os.environ.get('DB_NAME')
+DB_USER = os.environ.get('DB_USER')
+DB_PASSWORD = os.environ.get('DB_PASSWORD')
+DB_HOST = os.environ.get('DB_HOST')
+DB_PORT = int(os.environ.get('DB_PORT', 4000)) # Default to 4000 if not set
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'test',
-        'USER': 'JmKhKqoAam5FV5E.root',
-        'PASSWORD': '3130TGcNFxkHKrDj',
-        'HOST': 'gateway01.eu-central-1.prod.aws.tidbcloud.com',
-        'PORT': '4000',
+        # Fetching database credentials
+        'NAME': DB_NAME,
+        'USER': DB_USER,
+        'PASSWORD': DB_PASSWORD,
+        'HOST': DB_HOST,
+        'PORT': DB_PORT,
+        # ADD THIS LINE for persistent connections to prevent connection loss (Error 2013)
+        'CONN_MAX_AGE': 48000, # Keep connections open for up to 10 minutes (600 seconds)
         'OPTIONS': {
             'ssl': {
-                'ca': os.path.join(BASE_DIR, 'cert', 'isrgrootx1.pem'),
-                'ssl_mode': 'VERIFY_IDENTITY'
+                'ca': os.path.join(BASE_DIR, 'cert', 'isrgrootx1.pem')
             }
         }
     }
 }
+
 
 
 # Password validation
@@ -192,20 +203,34 @@ LOGGING = {
     },
 }
 # settings.py
-
-# ... other settings
-# Email Configuration
+# Email Configuration - FIXED VERSION
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 465       # MODIFIED: Changed from 587
-EMAIL_USE_TLS = False  # MODIFIED: Changed from True
-EMAIL_USE_SSL = True   # ADDED: Must be True for port 465
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
 
-# MODIFIED: Fetch sensitive credentials from environment variables (Render/production setting)
+# Fetch sensitive credentials from environment variables
 EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
 
-GEMINI_API_KEY = 'AIzaSyBlxToNTAEUXmZtqgCV9XsZww6gu9QqB7Y'
+# Critical settings that were missing
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+SERVER_EMAIL = EMAIL_HOST_USER
+EMAIL_TIMEOUT = 30  # Prevent hanging
+
+# Development email handling
+if DEBUG:
+    # Optional: Print emails to console instead of sending
+    # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+    # OR keep real emails but add debugging
+    import logging
+
+    logger = logging.getLogger('django.mail')
+    logger.setLevel(logging.DEBUG)
+# Fetch Gemini API Key
+GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY')
 
 # SET THESE TO PREVENT TIMEOUTS/CONNECTION RESETS ON LARGE FILE UPLOADS
 # Django's default limit for request body size is often too small (2.5MB).

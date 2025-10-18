@@ -1,0 +1,120 @@
+{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Field Job Approval Request</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;">
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f4f4f4;">
+<tr>
+<td align="center" style="padding: 20px;">
+<table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+
+                <!-- Header Section (Blue Background) -->
+                <tr>
+                    <td align="center" style="background-color: #3b82f6; padding: 30px 20px;">
+                        <h1 style="color: white; margin: 0; font-size: 28px;">OB Global</h1>
+                        <p style="color: white; font-size: 16px;">Field Job Approval Request</p>
+                    </td>
+                </tr>
+
+                <!-- Body Content -->
+                <tr>
+                    <td style="padding: 40px 30px;">
+                        <h2 style="color: #333333; font-size: 24px; margin-top: 0;">
+                            <span style="color: #10b981;">Field Job Scheduled</span> for {{ field_job.client_name }}
+                        </h2>
+
+                        <p style="color: #555555; font-size: 16px; line-height: 1.6;">
+                            Dear {{ field_job.poc_name }},
+                        </p>
+
+                        <p style="color: #555555; font-size: 16px; line-height: 1.6;">
+                            A field job has been scheduled for your organization. Please review the details below and use the provided approval code when the field engineer completes the job.
+                        </p>
+
+                        <!-- Job Details Table -->
+                        <table width="100%" cellpadding="10" cellspacing="0" border="0" style="border-collapse: collapse; margin: 20px 0; border: 1px solid #e0e0e0;">
+                            <tr>
+                                <td style="padding: 10px; border: 1px solid #e0e0e0; background-color: #f9f9f9; font-weight: bold; width: 30%; color: #333;">Client:</td>
+                                <td style="padding: 10px; border: 1px solid #e0e0e0; color: #555;">{{ field_job.client_name }}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border: 1px solid #e0e0e0; background-color: #f9f9f9; font-weight: bold; color: #333;">Category:</td>
+                                <td style="padding: 10px; border: 1px solid #e0e0e0; color: #555;">{{ field_job.category }}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border: 1px solid #e0e0e0; background-color: #f9f9f9; font-weight: bold; color: #333;">Date & Time of Job:</td>
+                                <td style="padding: 10px; border: 1px solid #e0e0e0; color: #555;">{{ formatted_datetime }}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border: 1px solid #e0e0e0; background-color: #f9f9f9; font-weight: bold; color: #333;">Site Address:</td>
+                                <td style="padding: 10px; border: 1px solid #e0e0e0; color: #555;">{{ field_job.site_address }}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border: 1px solid #e0e0e0; background-color: #f9f9f9; font-weight: bold; color: #333;">Field Engineer:</td>
+                                <td style="padding: 10px; border: 1px solid #e0e0e0; color: #555;">
+                                    {{ staff_name }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border: 1px solid #e0e0e0; background-color: #f9f9f9; font-weight: bold; color: #333;">Work Summary:</td>
+                                <td style="padding: 10px; border: 1px solid #e0e0e0; color: #555;">{{ field_job.summary_of_work }}</td>
+                            </tr>
+                        </table>
+
+                        <!-- Approval Code Section -->
+                        <div style="margin: 25px 0; border-left: 5px solid #10b981; padding: 15px 20px; background-color: #f7f9fc; border-radius: 4px;">
+                            <h3 style="margin-top: 0; color: #333333; font-size: 18px;">
+                                Approval Code Required
+                            </h3>
+                            <p style="color: #555555; font-size: 15px; line-height: 1.5; font-style: italic;">
+                                Please provide the following approval code to the field engineer when they complete the job:
+                            </p>
+
+                            <!-- Approval Code Display -->
+                            <div style="text-align: center; margin: 20px 0;">
+                                <div style="display: inline-block; padding: 15px 30px; background-color: #10b981; color: white; font-size: 24px; font-weight: bold; border-radius: 8px; font-family: 'Courier New', monospace; letter-spacing: 2px;">
+                                    {{ assignment.poc_approval_code }}
+                                </div>
+                            </div>
+
+                            <p style="color: #555555; font-size: 14px; line-height: 1.5; text-align: center;">
+                                <strong>Important:</strong> This code is unique to {{ staff_name }} and this job assignment.
+                            </p>
+                        </div>
+
+                        <!-- Important Instructions -->
+                        <div style="background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 15px; margin: 20px 0;">
+                            <h4 style="color: #856404; margin-top: 0; font-size: 16px;">📋 Important Instructions:</h4>
+                            <ul style="color: #856404; font-size: 14px; line-height: 1.5; margin-bottom: 0;">
+                                <li>This approval code is required for {{ staff_name }} to submit their report</li>
+                                <li>Each field engineer has a unique approval code</li>
+                                <li>Please verify the field engineer's identity before providing the code</li>
+                                <li>The code should only be provided after satisfactory completion of the job</li>
+                            </ul>
+                        </div>
+
+                        <p style="color: #555555; font-size: 16px; line-height: 1.6; text-align: center; margin-top: 40px;">
+                            Thank you for your cooperation,<br>
+                            The OB Global Team
+                        </p>
+                    </td>
+                </tr>
+
+                <!-- Footer Section -->
+                <tr>
+                    <td align="center" style="background-color: #f0f0f0; padding: 20px 0; font-size: 12px; color: #888888;">
+                        <p style="margin: 0;">&copy; {{ "now"|date:"Y" }} OB Global. All rights reserved.</p>
+                        <p style="margin: 5px 0 0;">This is an automated email, please do not reply.</p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,1674 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Field Job Management" %}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1>{% trans "Manage Field Jobs" %}</h1>
+        <p class="subtitle">{% trans "Create, view, and manage your field job assignments" %}</p>
+    </div>
+
+    <div class="admin-controls">
+        {% if field_jobs %}
+        <div class="search-form">
+            <div class="search-input-wrapper">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="{% trans "Search field jobs by Client, POC, or Category..." %}">
+                <button type="button" id="clearSearchButton" class="button button-clear">
+                    <span class="mobile-hidden">{% trans "Clear" %}</span>
+                    <span class="mobile-only">✕</span>
+                </button>
+            </div>
+        </div>
+        {% endif %}
+
+        <a href="{% url 'fieldwork:field_job_create' %}" class="button button-primary">
+            <span class="button-icon">+</span>
+            {% trans "Create New Field Job" %}
+        </a>
+    </div>
+
+    {% if field_jobs %}
+    <div class="table-container">
+        <div class="table-responsive">
+            <table class="rfp-table">
+                <thead>
+                    <tr>
+                        <th>{% trans "Client Name" %}</th>
+                        <th>{% trans "Category" %}</th>
+                        <th>{% trans "Date of Job" %}</th>
+                        <th>{% trans "Site Address" %}</th>
+                        <th>{% trans "POC Name" %}</th>
+                        <th>{% trans "Assigned Staff" %}</th>
+                        <th>{% trans "Actions" %}</th>
+                    </tr>
+                </thead>
+                <tbody id="fieldJobTableBody">
+                    {% for job in field_jobs %}
+                    <tr data-job-id="{{ job.id }}">
+                        <td class="truncate" data-label="Client">{{ job.client_name }}</td>
+                        <td class="truncate" data-label="Category">
+                            <span class="badge status-badge status-submitted">{{ job.category }}</span>
+                        </td>
+                        <td data-label="Date">{{ job.date_of_job|date:"M d, Y H:i" }}</td>
+                        <td class="truncate" data-label="Site Address">{{ job.site_address|truncatewords:8 }}</td>
+                        <td class="truncate" data-label="POC">{{ job.poc_name }}</td>
+                        <td data-label="Staff">
+                            {% for assignment in job.assignments.all %}
+                                <span class="badge staff-badge">{{ assignment.staff.get_full_name }}</span>
+                            {% endfor %}
+                        </td>
+                        <td class="actions" data-label="Actions">
+                            <!-- View Button with Popup -->
+                            <button type="button" class="btn btn-view view-job-btn"
+                                    data-job-id="{{ job.id }}"
+                                    title="View Details">
+                                <span class="mobile-hidden">View</span>
+                                <span class="mobile-only">👁️</span>
+                            </button>
+<!-- Evaluate Button - ADD THIS -->
+    <a href="{% url 'fieldwork:field_job_evaluation' job.pk %}" class="btn btn-evaluate" title="Evaluate Reports">
+        <span class="mobile-hidden">Evaluate</span>
+        <span class="mobile-only">📊</span>
+    </a>
+                            <!-- Edit Button -->
+                            <a href="{% url 'fieldwork:field_job_edit' job.pk %}" class="btn btn-edit" title="Edit">
+                                <span class="mobile-hidden">Edit</span>
+                                <span class="mobile-only">✏️</span>
+                            </a>
+
+                            <!-- Delete Button -->
+                            <a href="{% url 'fieldwork:field_job_delete' job.pk %}" class="btn btn-delete" title="Delete">
+                                <span class="mobile-hidden">Delete</span>
+                                <span class="mobile-only">🗑️</span>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="mobile-card-view">
+        {% for job in field_jobs %}
+        <div class="rfp-card" data-job-id="{{ job.id }}">
+            <div class="card-header">
+                <h3 class="card-title">{{ job.client_name }}</h3>
+                <span class="badge status-badge status-submitted">{{ job.category }}</span>
+            </div>
+            <div class="card-body">
+                <div class="card-row">
+                    <span class="card-label">Date:</span>
+                    <span class="card-value">{{ job.date_of_job|date:"M d, Y" }}</span>
+                </div>
+                <div class="card-row">
+                    <span class="card-label">Site Address:</span>
+                    <span class="card-value">{{ job.site_address|truncatewords:12 }}</span>
+                </div>
+                <div class="card-row">
+                    <span class="card-label">POC Name:</span>
+                    <span class="card-value">{{ job.poc_name }}</span>
+                </div>
+                <div class="card-row">
+                    <span class="card-label">Assigned Staff:</span>
+                    <span class="card-value">
+                        {% for assignment in job.assignments.all %}
+                            {{ assignment.staff.get_full_name }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </span>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="button" class="btn btn-view view-job-btn" data-job-id="{{ job.id }}">
+                    <span class="mobile-hidden">View</span>
+                    <span class="mobile-only">👁️</span>
+                </button>
+
+                <a href="{% url 'fieldwork:field_job_evaluation' job.pk %}" class="btn btn-evaluate">
+        <span class="mobile-hidden">Evaluate</span>
+        <span class="mobile-only">📊</span>
+    </a>
+                <a href="{% url 'fieldwork:field_job_edit' job.pk %}" class="btn btn-edit">
+                    <span class="mobile-hidden">Edit</span>
+                    <span class="mobile-only">✏️</span>
+                </a>
+                <a href="{% url 'fieldwork:field_job_delete' job.pk %}" class="btn btn-delete">
+                    <span class="mobile-hidden">Delete</span>
+                    <span class="mobile-only">🗑️</span>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">📋</div>
+        <h3>{% trans "No Field Jobs found." %}</h3>
+        <p>{% trans "Use the 'Create New Field Job' button above to start a new field job assignment." %}</p>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Job Details Modal -->
+<div id="jobModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Field Job Details</h2>
+            <span class="close">&times;</span>
+        </div>
+        <div class="modal-body" id="jobModalBody">
+            <!-- Content will be loaded here via JavaScript -->
+        </div>
+    </div>
+</div>
+
+<!-- Toast Notification for Copy Actions -->
+<div id="toast" class="toast">
+    <span id="toastMessage"></span>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const tableBody = document.getElementById('fieldJobTableBody');
+        const clearButton = document.getElementById('clearSearchButton');
+        const mobileCards = document.querySelectorAll('.rfp-card');
+        const modal = document.getElementById('jobModal');
+        const closeBtn = document.querySelector('.close');
+        const viewJobButtons = document.querySelectorAll('.view-job-btn');
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toastMessage');
+
+        // Search functionality
+        if (tableBody) {
+            const rows = tableBody.querySelectorAll('tr');
+
+            function filterTable() {
+                const filterText = searchInput.value.toLowerCase().trim();
+
+                rows.forEach(row => {
+                    const rowText = row.textContent.toLowerCase();
+                    if (rowText.includes(filterText)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+
+                mobileCards.forEach(card => {
+                    const cardText = card.textContent.toLowerCase();
+                    if (cardText.includes(filterText)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+
+            if (searchInput) {
+                searchInput.addEventListener('keyup', filterTable);
+                searchInput.addEventListener('change', filterTable);
+            }
+
+            if (clearButton) {
+                clearButton.addEventListener('click', function() {
+                    searchInput.value = '';
+                    filterTable();
+                });
+            }
+        }
+
+        // Modal functionality
+        viewJobButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const jobId = this.getAttribute('data-job-id');
+                showJobDetails(jobId);
+            });
+        });
+
+        closeBtn.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // Toast notification function
+        function showToast(message, type = 'success') {
+            toastMessage.textContent = message;
+            toast.className = `toast toast-${type} toast-show`;
+            setTimeout(() => {
+                toast.className = 'toast';
+            }, 3000);
+        }
+
+        // Copy to clipboard function
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Approval code copied to clipboard!', 'success');
+            }).catch(() => {
+                showToast('Failed to copy code', 'error');
+            });
+        }
+
+        // Function to fetch real job data from the server
+        async function fetchJobData(jobId) {
+            try {
+                const response = await fetch(`/fieldwork/api/job-details/${jobId}/`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch job details');
+                }
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error fetching job data:', error);
+                throw error;
+            }
+        }
+
+        async function showJobDetails(jobId) {
+            // Create a loading state
+            const modalBody = document.getElementById('jobModalBody');
+            modalBody.innerHTML = `
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>Loading job details...</p>
+                </div>
+            `;
+            modal.style.display = 'block';
+
+            try {
+                // Fetch real data from the server
+                const jobData = await fetchJobData(jobId);
+
+                const modalBody = document.getElementById('jobModalBody');
+                modalBody.innerHTML = `
+                    <div class="job-details-grid">
+                        <div class="detail-item">
+                            <label>Client Name:</label>
+                            <span class="detail-value">${jobData.client_name}</span>
+                        </div>
+                        <div class="detail-item">
+                            <label>Category:</label>
+                            <span class="badge status-badge status-submitted detail-value">${jobData.category}</span>
+                        </div>
+                        <div class="detail-item">
+                            <label>Date of Job:</label>
+                            <span class="detail-value">${new Date(jobData.date_of_job).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} at ${new Date(jobData.date_of_job).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}</span>
+                        </div>
+                        <div class="detail-item full-width">
+                            <label>Site Address:</label>
+                            <span class="detail-value address-text">${jobData.site_address}</span>
+                        </div>
+                        <div class="detail-item">
+                            <label>POC Name:</label>
+                            <span class="detail-value">${jobData.poc_name}</span>
+                        </div>
+
+                        <!-- Approval Codes Section -->
+                        <div class="detail-item full-width">
+                            <label>Approval Codes:</label>
+                            <div class="approval-codes-container">
+                                ${jobData.assignments.map(assignment => `
+                                    <div class="approval-code-item">
+                                        <div class="staff-code-pair">
+                                            <span class="staff-name">${assignment.staff_name}</span>
+                                            <div class="code-container">
+                                                <code class="approval-code-text">${assignment.approval_code}</code>
+                                                <button class="btn-copy" data-code="${assignment.approval_code}" title="Copy code">
+                                                    <span class="copy-icon">📋</span>
+                                                    <span class="copy-text">Copy</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <div class="approval-codes-note">
+                                <small>Each staff member has a unique approval code for this job</small>
+                            </div>
+                        </div>
+
+                        <div class="detail-item full-width">
+                            <label>Summary of Work:</label>
+                            <div class="summary-content">
+                                <p>${jobData.summary_of_work}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <a href="/fieldwork/edit/${jobData.id}/" class="btn btn-edit">Edit Job</a>
+                        <a href="/fieldwork/delete/${jobData.id}/" class="btn btn-delete">Delete Job</a>
+                    </div>
+                `;
+
+                // Attach copy event listeners to the real buttons
+                modalBody.querySelectorAll('.btn-copy').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const code = this.getAttribute('data-code');
+                        copyToClipboard(code);
+                    });
+                });
+
+            } catch (error) {
+                // Fallback to mock data if API fails
+                console.error('Using fallback data due to error:', error);
+                showFallbackJobDetails(jobId);
+            }
+        }
+
+        // Fallback function that uses the real data from the page (not mock codes)
+        function showFallbackJobDetails(jobId) {
+            const row = document.querySelector(`tr[data-job-id="${jobId}"]`);
+            if (row) {
+                const clientName = row.cells[0].textContent;
+                const category = row.cells[1].querySelector('.badge').textContent;
+                const date = row.cells[2].textContent;
+                const siteAddress = row.cells[3].textContent;
+                const pocName = row.cells[4].textContent;
+
+                // Get assignments from the page (this would need server-side rendering of actual codes)
+                const assignments = [];
+                const staffBadges = row.cells[5].querySelectorAll('.staff-badge');
+
+                // Note: This fallback can't show real codes without server-side rendering
+                // For now, we'll show a message that codes are available in email
+                staffBadges.forEach((badge, index) => {
+                    assignments.push({
+                        staff_name: badge.textContent,
+                        approval_code: 'Check POC email for code' // Placeholder
+                    });
+                });
+
+                const modalBody = document.getElementById('jobModalBody');
+                modalBody.innerHTML = `
+                    <div class="job-details-grid">
+                        <div class="detail-item">
+                            <label>Client Name:</label>
+                            <span class="detail-value">${clientName}</span>
+                        </div>
+                        <div class="detail-item">
+                            <label>Category:</label>
+                            <span class="badge status-badge status-submitted detail-value">${category}</span>
+                        </div>
+                        <div class="detail-item">
+                            <label>Date of Job:</label>
+                            <span class="detail-value">${date}</span>
+                        </div>
+                        <div class="detail-item full-width">
+                            <label>Site Address:</label>
+                            <span class="detail-value address-text">${siteAddress}</span>
+                        </div>
+                        <div class="detail-item">
+                            <label>POC Name:</label>
+                            <span class="detail-value">${pocName}</span>
+                        </div>
+
+                        <!-- Approval Codes Section -->
+                        <div class="detail-item full-width">
+                            <label>Approval Codes:</label>
+                            <div class="approval-codes-container">
+                                ${assignments.map(assignment => `
+                                    <div class="approval-code-item">
+                                        <div class="staff-code-pair">
+                                            <span class="staff-name">${assignment.staff_name}</span>
+                                            <div class="code-container">
+                                                <code class="approval-code-text">${assignment.approval_code}</code>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <div class="approval-codes-note">
+                                <small>Approval codes are sent to the POC via email. Please check the email sent to ${pocName}.</small>
+                            </div>
+                        </div>
+
+                        <div class="detail-item full-width">
+                            <label>Summary of Work:</label>
+                            <div class="summary-content">
+                                <p>Complete job details including work summary would be displayed here. Approval codes are available in the POC email.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <a href="/fieldwork/edit/${jobId}/" class="btn btn-edit">Edit Job</a>
+                        <a href="/fieldwork/delete/${jobId}/" class="btn btn-delete">Delete Job</a>
+                    </div>
+                `;
+            }
+        }
+
+        // Make copyToClipboard available globally for inline onclick handlers
+        window.copyToClipboard = copyToClipboard;
+    });
+</script>
+{% endblock %}
+{% block extra_css %}
+<style>
+/* Base Styles */
+:root {
+    --primary-color: #4361ee;
+    --primary-dark: #3a56d4;
+    --secondary-color: #7209b7;
+    --success-color: #4cc9f0;
+    --danger-color: #f72585;
+    --warning-color: #f8961e;
+    --light-color: #f8f9fa;
+    --dark-color: #212529;
+    --gray-color: #6c757d;
+    --border-color: #dee2e6;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --radius: 8px;
+    --transition: all 0.3s ease;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-image: url('{% static "images/bk.jpg" %}');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container {
+    max-width: 1400px; /* INCREASED from 1200px to 1400px */
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.page-header {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+h1 {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+}
+
+.subtitle {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+}
+
+.btn-evaluate {
+    background: rgba(255, 193, 7, 0.15);
+    color: #ffc107;
+    border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.btn-evaluate:hover {
+    background: #ffc107;
+    color: white;
+    border-color: #ffc107;
+}
+
+.admin-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.search-form {
+    flex: 1;
+    min-width: 300px;
+}
+
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.search-icon {
+    padding: 0 15px;
+    color: var(--gray-color);
+}
+
+.search-form input {
+    flex: 1;
+    padding: 12px 0;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    background: transparent;
+}
+
+.search-form input::placeholder {
+    color: var(--gray-color);
+}
+
+/* Button Styles */
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    text-align: center;
+    border: none;
+    font-size: 16px;
+    gap: 8px;
+    box-shadow: var(--shadow);
+}
+
+.button-primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+.button-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.button-clear {
+    background: white;
+    color: var(--gray-color);
+    padding: 12px 16px;
+    border-left: 1px solid var(--border-color);
+    border-radius: 0;
+}
+
+.button-clear:hover {
+    background: #f8f9fa;
+    color: var(--danger-color);
+}
+
+/* Table and Card Container */
+.table-container {
+    display: block;
+}
+
+.mobile-card-view {
+    display: none;
+}
+
+/* MODIFIED: Table responsive with proper horizontal scroll */
+.table-responsive {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow-x: auto;
+    margin-bottom: 30px;
+    max-width: 100%;
+}
+
+/* Custom scrollbar for table */
+.table-responsive::-webkit-scrollbar {
+    height: 8px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+.rfp-table {
+    width: 100%;
+    min-width: 1200px; /* INCREASED from 1000px to 1200px */
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.rfp-table th, .rfp-table td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: top;
+}
+
+.rfp-table th {
+    background: #f8f9fa;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    color: var(--dark-color);
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* MODIFIED: Completely redistributed column widths for better button visibility */
+.rfp-table th:nth-child(1),
+.rfp-table td:nth-child(1) {
+    width: 12%; /* REDUCED from 14% */
+    min-width: 120px; /* REDUCED from 140px */
+    max-width: 120px; /* REDUCED from 140px */
+}
+
+.rfp-table th:nth-child(2),
+.rfp-table td:nth-child(2) {
+    width: 10%;
+    min-width: 100px;
+    max-width: 100px;
+}
+
+.rfp-table th:nth-child(3),
+.rfp-table td:nth-child(3) {
+    width: 10%; /* REDUCED from 12% */
+    min-width: 110px; /* REDUCED from 130px */
+    max-width: 110px; /* REDUCED from 130px */
+}
+
+.rfp-table th:nth-child(4),
+.rfp-table td:nth-child(4) {
+    width: 15%; /* REDUCED from 20% */
+    min-width: 150px; /* REDUCED from 180px */
+    max-width: 150px; /* REDUCED from 180px */
+}
+
+.rfp-table th:nth-child(5),
+.rfp-table td:nth-child(5) {
+    width: 10%; /* REDUCED from 12% */
+    min-width: 110px; /* REDUCED from 130px */
+    max-width: 110px; /* REDUCED from 130px */
+}
+
+.rfp-table th:nth-child(6),
+.rfp-table td:nth-child(6) {
+    width: 13%; /* REDUCED from 16% */
+    min-width: 140px; /* REDUCED from 160px */
+    max-width: 140px; /* REDUCED from 160px */
+}
+
+/* MODIFIED: Significantly increased actions column width */
+.rfp-table th:nth-child(7),
+.rfp-table td:nth-child(7) {
+    width: 30%; /* INCREASED from 16% to 30% */
+    min-width: 300px; /* INCREASED from 160px to 300px */
+    max-width: 300px; /* INCREASED from 160px to 300px */
+}
+
+/* Force truncation on all table cells that need it */
+.rfp-table td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: break-word;
+    word-break: break-word;
+    line-height: 1.4;
+}
+
+/* Specific handling for staff badges column */
+.rfp-table td:nth-child(6) {
+    white-space: normal;
+    overflow: visible;
+}
+
+.rfp-table td:nth-child(6) .staff-badge {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    max-width: 90px;
+    vertical-align: middle;
+}
+
+/* MODIFIED: Actions column with proper spacing */
+.rfp-table td:nth-child(7) {
+    white-space: nowrap;
+    overflow: visible;
+    text-overflow: clip;
+    min-width: 300px;
+}
+
+/* Ensure truncation works for all content cells */
+.rfp-table td:nth-child(1),
+.rfp-table td:nth-child(2),
+.rfp-table td:nth-child(3),
+.rfp-table td:nth-child(4),
+.rfp-table td:nth-child(5) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* MODIFIED: Actions container with much better spacing */
+.actions {
+    display: flex;
+    gap: 10px; /* INCREASED from 6px to 10px */
+    white-space: nowrap;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    min-width: 280px;
+    padding: 4px 0;
+}
+
+/* MODIFIED: Button styles for much better visibility and spacing */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px; /* INCREASED padding */
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    transition: var(--transition);
+    border: 1px solid transparent;
+    cursor: pointer;
+    gap: 4px;
+    white-space: nowrap;
+    min-width: 70px; /* INCREASED from 50px to 70px */
+    flex-shrink: 0;
+    height: 32px; /* INCREASED from 28px to 32px */
+}
+
+.btn-view {
+    background: rgba(23, 162, 184, 0.15);
+    color: #17a2b8;
+    border-color: rgba(23, 162, 184, 0.3);
+}
+
+.btn-view:hover {
+    background: #17a2b8;
+    color: white;
+    border-color: #17a2b8;
+}
+
+.btn-edit {
+    background: rgba(40, 167, 69, 0.15);
+    color: #28a745;
+    border-color: rgba(40, 167, 69, 0.3);
+}
+
+.btn-edit:hover {
+    background: #28a745;
+    color: white;
+    border-color: #28a745;
+}
+
+.btn-delete {
+    background: rgba(220, 53, 69, 0.15);
+    color: #dc3545;
+    border-color: rgba(220, 53, 69, 0.3);
+}
+
+.btn-delete:hover {
+    background: #dc3545;
+    color: white;
+    border-color: #dc3545;
+}
+
+.btn-copy {
+    background: rgba(108, 117, 125, 0.15);
+    color: #6c757d;
+    border: 1px solid #dee2e6;
+    padding: 4px 8px;
+    font-size: 11px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    height: 26px;
+}
+
+.btn-copy:hover {
+    background: #6c757d;
+    color: white;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    color: white;
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.status-submitted { background-color: var(--primary-color); }
+.staff-badge {
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 3px 6px;
+    border-radius: 10px;
+    font-size: 10px;
+    margin: 1px;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 90px;
+}
+
+/* Mobile Card Styles */
+.rfp-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.rfp-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+    background: #f8f9fa;
+}
+
+.card-title {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    flex: 1;
+    margin-right: 15px;
+    word-wrap: break-word;
+    word-break: break-word;
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.card-row {
+    display: flex;
+    margin-bottom: 12px;
+}
+
+.card-label {
+    font-weight: 600;
+    width: 120px;
+    color: var(--gray-color);
+    flex-shrink: 0;
+}
+
+.card-value {
+    flex: 1;
+    word-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-footer {
+    display: flex;
+    padding: 15px 20px;
+    background: #f8f9fa;
+    border-top: 1px solid var(--border-color);
+    gap: 10px;
+    flex-wrap: nowrap;
+    justify-content: center;
+}
+
+.card-footer .btn {
+    flex: 1;
+    padding: 8px;
+    min-width: 70px;
+    font-size: 12px;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.empty-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+}
+
+.empty-state h3 {
+    color: var(--dark-color);
+    margin-bottom: 15px;
+}
+
+.empty-state p {
+    color: var(--gray-color);
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+/* Modal Styles - Full text display */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    backdrop-filter: blur(2px);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 2% auto;
+    padding: 0;
+    border-radius: var(--radius);
+    width: 95%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    animation: modalSlideIn 0.3s ease;
+    position: relative;
+}
+
+@keyframes modalSlideIn {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: var(--radius) var(--radius) 0 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    word-wrap: break-word;
+    word-break: break-word;
+    line-height: 1.3;
+}
+
+.close {
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: var(--transition);
+    background: none;
+    border: none;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.close:hover {
+    color: #ff6b6b;
+    background: rgba(255,255,255,0.15);
+    transform: scale(1.1);
+}
+
+.modal-body {
+    padding: 25px;
+    background: white;
+}
+
+.job-details-grid {
+    display: grid;
+    gap: 18px;
+    width: 100%;
+}
+
+.detail-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.detail-item:last-child {
+    border-bottom: none;
+}
+
+.detail-item label {
+    font-weight: 600;
+    color: var(--gray-color);
+    min-width: 150px;
+    margin: 0;
+    flex-shrink: 0;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Modal text handling - full content display */
+.detail-value {
+    flex: 1;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.6;
+    font-size: 14px;
+    white-space: normal;
+    min-width: 0;
+    color: var(--dark-color);
+}
+
+.detail-item.full-width {
+    grid-column: 1 / -1;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+}
+
+.detail-item.full-width label {
+    min-width: auto;
+    margin-bottom: 5px;
+}
+
+.address-text {
+    line-height: 1.6;
+    white-space: normal;
+    word-wrap: break-word;
+    word-break: break-word;
+    padding: 8px 0;
+}
+
+/* Approval Codes Styles */
+.approval-codes-container {
+    background: #f8f9fa;
+    border-radius: var(--radius);
+    padding: 18px;
+    border: 1px solid var(--border-color);
+    margin-top: 5px;
+}
+
+.approval-code-item {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.approval-code-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.staff-code-pair {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.staff-name {
+    font-weight: 600;
+    color: var(--dark-color);
+    flex: 1;
+    min-width: 130px;
+    word-wrap: break-word;
+    word-break: break-word;
+    font-size: 14px;
+}
+
+.code-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 2;
+    min-width: 220px;
+}
+
+.approval-code-text {
+    background: white;
+    padding: 10px 14px;
+    border-radius: 6px;
+    border: 1px solid #dee2e6;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    flex: 1;
+    word-break: break-all;
+    word-wrap: break-word;
+    color: var(--dark-color);
+    white-space: normal;
+    line-height: 1.4;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.approval-codes-note {
+    margin-top: 12px;
+    text-align: center;
+    color: var(--gray-color);
+    font-size: 13px;
+    font-style: italic;
+    padding: 8px;
+    background: rgba(0,0,0,0.02);
+    border-radius: 4px;
+}
+
+.copy-icon {
+    font-size: 14px;
+}
+
+.copy-text {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.staff-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.summary-content {
+    background: #f8f9fa;
+    padding: 18px;
+    border-radius: var(--radius);
+    border-left: 4px solid var(--primary-color);
+    line-height: 1.6;
+    word-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
+    margin-top: 5px;
+}
+
+.summary-content p {
+    margin: 0;
+    white-space: normal;
+    word-wrap: break-word;
+    word-break: break-word;
+    line-height: 1.6;
+    color: var(--dark-color);
+}
+
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid var(--border-color);
+    flex-wrap: wrap;
+}
+
+.modal-actions .btn {
+    min-width: 110px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.modal-actions .btn-edit {
+    background: var(--primary-color);
+    color: white;
+}
+
+.modal-actions .btn-edit:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+}
+
+.modal-actions .btn-delete {
+    background: var(--danger-color);
+    color: white;
+}
+
+.modal-actions .btn-delete:hover {
+    background: #e02d6b;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(247, 37, 133, 0.3);
+}
+
+/* Loading State */
+.loading-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--gray-color);
+}
+
+.spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+   100% { transform: rotate(360deg); }
+}
+
+.loading-state p {
+    font-size: 16px;
+    margin: 0;
+    font-weight: 500;
+}
+
+/* Toast Notification */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--success-color);
+    color: white;
+    padding: 14px 24px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    z-index: 1001;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    max-width: 350px;
+    word-wrap: break-word;
+}
+
+.toast-show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.toast-error {
+    background: var(--danger-color);
+}
+
+/* Utility Classes */
+.mobile-hidden {
+    display: inline;
+}
+
+.mobile-only {
+    display: none;
+}
+
+/* ------------------ Mobile-Specific Styles ------------------ */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px 10px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .admin-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .search-form {
+        min-width: 100%;
+    }
+
+    .button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .mobile-hidden {
+        display: none;
+    }
+
+    .mobile-only {
+        display: inline;
+    }
+
+    /* Hide table on mobile, show cards */
+    .table-container {
+        display: none;
+    }
+
+    .mobile-card-view {
+        display: block;
+    }
+
+    /* FIXED: Client name display on mobile cards */
+    .card-title {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+        word-break: break-word;
+        line-height: 1.3;
+        max-width: 100%;
+    }
+
+    /* FIXED: Date/time display on mobile cards */
+    .card-value {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+        word-break: break-word;
+        line-height: 1.4;
+    }
+
+    .card-footer {
+        flex-direction: row;
+        gap: 6px;
+    }
+
+    .card-footer .btn {
+        min-width: 60px;
+        padding: 6px;
+        font-size: 11px;
+    }
+
+    .modal-content {
+        width: 95%;
+        margin: 5% auto;
+        max-height: 85vh;
+    }
+
+    .modal-body {
+        padding: 20px 15px;
+    }
+
+    .detail-item {
+        flex-direction: column;
+        gap: 6px;
+        align-items: stretch;
+        padding: 8px 0;
+    }
+
+    .detail-item label {
+        min-width: auto;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .detail-value {
+        font-size: 14px;
+    }
+
+    .staff-code-pair {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .code-container {
+        min-width: auto;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .approval-code-text {
+        font-size: 13px;
+        padding: 8px 12px;
+        text-align: center;
+    }
+
+    .btn-copy {
+        align-self: stretch;
+        justify-content: center;
+        padding: 8px;
+    }
+
+    .modal-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .modal-actions .btn {
+        width: 100%;
+        text-align: center;
+        min-width: auto;
+    }
+
+    .toast {
+        bottom: 10px;
+        right: 10px;
+        left: 10px;
+        text-align: center;
+        max-width: none;
+    }
+
+    /* Ensure table buttons stay on one line on mobile */
+    .actions {
+        gap: 4px;
+    }
+
+    .btn {
+        min-width: 45px;
+        padding: 4px 6px;
+        font-size: 11px;
+        height: 26px;
+    }
+}
+
+/* For very small screens */
+@media (max-width: 480px) {
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .card-title {
+        margin-right: 0;
+        margin-bottom: 8px;
+        font-size: 1.1rem;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+        word-break: break-word;
+    }
+
+    .card-row {
+        flex-direction: column;
+    }
+
+    .card-label {
+        width: 100%;
+        margin-bottom: 3px;
+    }
+
+    .card-value {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+        word-break: break-word;
+    }
+
+    .actions {
+        justify-content: center;
+        gap: 3px;
+    }
+
+    .btn {
+        min-width: 40px;
+        font-size: 10px;
+        padding: 3px 5px;
+        height: 24px;
+    }
+
+    .modal-header h2 {
+        font-size: 1.3rem;
+    }
+
+    .modal-body {
+        padding: 15px 12px;
+    }
+
+    .job-details-grid {
+        gap: 12px;
+    }
+
+    .staff-badge {
+        max-width: 80px;
+        font-size: 9px;
+        padding: 2px 5px;
+    }
+}
+
+/* Additional responsive improvements for table on medium screens */
+@media (max-width: 1024px) and (min-width: 769px) {
+    .rfp-table {
+        min-width: 1100px;
+    }
+
+    .rfp-table th, .rfp-table td {
+        padding: 12px 8px;
+    }
+
+    .btn {
+        padding: 6px 8px;
+        font-size: 11px;
+        min-width: 60px;
+        height: 28px;
+    }
+
+    .status-badge {
+        font-size: 10px;
+        padding: 3px 6px;
+    }
+
+    .staff-badge {
+        font-size: 9px;
+        padding: 2px 4px;
+        max-width: 85px;
+    }
+}
+
+/* Improve modal scrolling on mobile */
+@media (max-width: 768px) {
+    .modal-content {
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+}
+
+/* Prevent horizontal overflow */
+.modal-content,
+.modal-body,
+.job-details-grid,
+.table-responsive {
+    overflow-x: hidden;
+}
+
+/* Smooth scrolling for modal */
+.modal-content {
+    scroll-behavior: smooth;
+}
+
+/* NEW: Improved mobile card layout for better spacing */
+@media (max-width: 768px) {
+    .rfp-card {
+        margin-bottom: 15px;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+
+    .card-row {
+        margin-bottom: 10px;
+    }
+
+    .card-label {
+        width: 110px;
+        font-size: 13px;
+    }
+
+    .card-value {
+        font-size: 14px;
+    }
+}
+
+/* NEW: Ensure proper text wrapping on very small screens */
+@media (max-width: 360px) {
+    .card-label {
+        width: 100px;
+    }
+
+    .card-footer .btn {
+        min-width: 55px;
+        font-size: 10px;
+        padding: 5px;
+    }
+
+    .card-title {
+        font-size: 1rem;
+    }
+}
+</style>
+{% endblock %}

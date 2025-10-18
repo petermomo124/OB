@@ -1,0 +1,1308 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}
+    {% if field_report.submitted_at %}{% trans "View Submitted Field Report" %} - {{ assignment.field_job.client_name }}{% else %}{% trans "Create Field Report" %} - {{ assignment.field_job.client_name }}{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-3">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white position-relative">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h2 class="card-title mb-0 h4">
+                                <i class="fas fa-clipboard-check me-2"></i>
+                                {% if field_report.submitted_at %}
+                                    Submitted Field Report
+                                {% else %}
+                                    Field Report - {{ assignment.field_job.client_name }}
+                                {% endif %}
+                            </h2>
+                            <small class="opacity-75">
+                                {% if field_report.submitted_at %}
+                                    View final submission details
+                                {% else %}
+                                    Complete your field work report
+                                {% endif %}
+                            </small>
+                        </div>
+                        <a href="{% url 'fieldwork:staff_field_jobs' %}" class="btn btn-light btn-sm" id="cancelBtn">
+                            <i class="fas fa-arrow-left me-1"></i>
+                            {% trans "Back to Jobs" %}
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    {% if messages %}
+                    <div class="messages-container mb-4">
+                        {% for message in messages %}
+                        <div class="alert alert-dismissible {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    {% if field_report and field_report.submitted_at %}
+                        <div class="alert alert-success text-center">
+                            <i class="fas fa-check-circle fa-2x mb-3 d-block"></i>
+                            <h4>Report Already Submitted</h4>
+                            <p class="mb-3">This field report has been completed and submitted on **{{ field_report.submitted_at|date:"M d, Y" }}**.</p>
+                            <a href="{% url 'fieldwork:field_report_detail' field_report.id %}" class="btn btn-primary">
+                                <i class="fas fa-eye me-2"></i>{% trans "View Submitted Report" %}
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div class="text-center flex-fill">
+                                    <div class="step-indicator {% if field_report.check_in_time %}step-completed{% else %}step-pending{% endif %}" id="stepInIndicator">
+                                        <i class="fas {% if field_report.check_in_time %}fa-check{% else %}fa-sign-in-alt{% endif %}"></i>
+                                    </div>
+                                    <small class="d-block mt-1">{% trans "Check In" %}</small>
+                                </div>
+                                <div class="step-connector {% if field_report.check_in_time %}step-completed{% endif %}" id="connectorIn"></div>
+                                <div class="text-center flex-fill">
+                                    <div class="step-indicator {% if field_report.check_out_time %}step-completed{% else %}step-pending{% endif %}" id="stepOutIndicator">
+                                        <i class="fas {% if field_report.check_out_time %}fa-check{% else %}fa-sign-out-alt{% endif %}"></i>
+                                    </div>
+                                    <small class="d-block mt-1">{% trans "Check Out" %}</small>
+                                </div>
+                                <div class="step-connector {% if field_report.check_out_time %}step-completed{% endif %}" id="connectorOut"></div>
+                                <div class="text-center flex-fill">
+                                    <div class="step-indicator step-pending" id="stepSubmitIndicator">
+                                        <i class="fas fa-file-alt"></i>
+                                    </div>
+                                    <small class="d-block mt-1">{% trans "Submit" %}</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-map-marker-alt fa-lg me-3"></i>
+                                <div>
+                                    <strong class="d-block">{% trans "Location Detection Required" %}</strong>
+                                    <small>{% trans "We need your current location to enable Check-In and finalize the report submission. Please allow location access." %}</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-warning mb-3" id="locationStatus">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-sync fa-spin me-2"></i>
+                                <span>{% trans "Starting location detection..." %}</span>
+                            </div>
+                        </div>
+
+                        <div class="card mb-4 border-0 shadow-sm">
+                            <div class="card-header bg-light">
+                                <h6 class="mb-0"><i class="fas fa-crosshairs me-2"></i>{% trans "Location Information" %}</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-12 col-md-6">
+                                        <label class="form-label fw-bold text-muted small">{% trans "Coordinates" %}</label>
+                                        <div id="coordinates" class="p-2 bg-light rounded">{% trans "Waiting for location..." %}</div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <label class="form-label fw-bold text-muted small">{% trans "Address" %}</label>
+                                        <div id="address" class="p-2 bg-light rounded">{% trans "Waiting for location..." %}</div>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <div id="locationSource" class="text-muted small">
+                                        <i class="fas fa-satellite me-1"></i>{% trans "GPS location pending..." %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-12 col-md-6">
+                                <div class="d-grid">
+                                    <button type="button" id="checkInBtn" class="btn btn-success btn-lg py-3"
+                                            data-assignment-id="{{ assignment.id }}"
+                                            {% if field_report.check_in_time %}disabled{% else %}disabled{% endif %}>
+                                        <i class="fas fa-sign-in-alt me-2"></i>
+                                        <span id="checkInText">
+                                            {% if field_report.check_in_time %}
+                                                {% trans "Checked In" %}
+                                            {% else %}
+                                                {% trans "Check In" %}
+                                            {% endif %}
+                                        </span>
+                                    </button>
+                                </div>
+                                <small id="checkInTimeDisplay" class="form-text text-muted mt-2 text-center d-block">
+                                    {% if field_report.check_in_time %}
+                                        <i class="fas fa-clock me-1"></i>{% trans "Checked in at:" %} {{ field_report.check_in_time|date:"M d, Y H:i" }}
+                                    {% endif %}
+                                </small>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="d-grid">
+                                    <button type="button" id="checkOutBtn" class="btn btn-warning btn-lg py-3"
+                                            data-assignment-id="{{ assignment.id }}"
+                                            {% if field_report.check_out_time %}disabled{% else %}disabled{% endif %}>
+                                        <i class="fas fa-sign-out-alt me-2"></i>
+                                        <span id="checkOutText">
+                                            {% if field_report.check_out_time %}
+                                                {% trans "Checked Out" %}
+                                            {% else %}
+                                                {% trans "Check Out" %}
+                                            {% endif %}
+                                        </span>
+                                    </button>
+                                </div>
+                                <small id="checkOutTimeDisplay" class="form-text text-muted mt-2 text-center d-block">
+                                    {% if field_report.check_out_time %}
+                                        <i class="fas fa-clock me-1"></i>{% trans "Checked out at:" %} {{ field_report.check_out_time|date:"M d, Y H:i" }}
+                                    {% endif %}
+                                </small>
+                            </div>
+                        </div>
+
+                        <form method="post" id="fieldReportForm" novalidate>
+                            {% csrf_token %}
+
+                            <input type="hidden" name="navigation_check" id="navigation_check" value="false">
+                            <input type="hidden" name="submission_lat" id="submission_lat">
+                            <input type="hidden" name="submission_lng" id="submission_lng">
+                            <input type="hidden" name="submission_address" id="submission_address">
+
+                            <div class="card mb-4 border-0 shadow-sm">
+                                <div class="card-header bg-light">
+                                    <h6 class="mb-0"><i class="fas fa-tasks me-2"></i>{% trans "Work Details" %}</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label for="{{ form.summary_of_work_performed.id_for_label }}" class="form-label fw-bold">
+                                            {% trans "Summary of Work Performed" %} <span class="text-danger">*</span>
+                                        </label>
+                                        {{ form.summary_of_work_performed }}
+                                        {% if form.summary_of_work_performed.errors %}
+                                            <div class="text-danger small mt-1">{{ form.summary_of_work_performed.errors }}</div>
+                                        {% endif %}
+                                        <div class="form-text">{% trans "Describe the work you performed at the site." %}</div>
+                                    </div>
+
+                                    <div class="row g-3">
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-check form-switch">
+                                                {{ form.site_visit_complete }}
+                                                <label for="{{ form.site_visit_complete.id_for_label }}" class="form-check-label fw-bold">
+                                                    {% trans "Site Visit Complete" %}
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="form-check form-switch">
+                                                {{ form.revisit_required }}
+                                                <label for="{{ form.revisit_required.id_for_label }}" class="form-check-label fw-bold">
+                                                    {% trans "Revisit Required" %}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card mb-4 border-0 shadow-sm">
+                                <div class="card-header bg-light">
+                                    <h6 class="mb-0"><i class="fas fa-file-signature me-2"></i>{% trans "Time & Signature" %}</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row g-3">
+                                        <div class="col-12 col-md-6">
+                                            <div class="mb-3">
+                                                <label for="{{ form.hours_worked.id_for_label }}" class="form-label fw-bold">
+                                                    {% trans "Hours Worked" %} <span class="text-danger">*</span>
+                                                </label>
+                                                {{ form.hours_worked }}
+                                                {% if form.hours_worked.errors %}
+                                                    <div class="text-danger small mt-1">{{ form.hours_worked.errors }}</div>
+                                                {% endif %}
+                                                <div class="form-text">{% trans "Total hours spent on this job." %}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <div class="mb-3">
+                                                <label for="{{ form.fe_signature.id_for_label }}" class="form-label fw-bold">
+                                                    {% trans "FE Signature" %} <span class="text-danger">*</span>
+                                                </label>
+                                                {{ form.fe_signature }}
+                                                {% if form.fe_signature.errors %}
+                                                    <div class="text-danger small mt-1">{{ form.fe_signature.errors }}</div>
+                                                {% endif %}
+                                                <div class="form-text">{% trans "Your full name as signature." %}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card mb-4 border-0 shadow-sm">
+                                <div class="card-header bg-light">
+                                    <h6 class="mb-0"><i class="fas fa-user-check me-2"></i>{% trans "POC Approval" %}</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label for="id_poc_signature" class="form-label fw-bold">
+                                            {% trans "POC Approval Signature" %} <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" name="poc_signature" maxlength="255" class="form-control form-control-lg"
+                                               placeholder="{% trans "Enter POC approval code" %}" required id="id_poc_signature">
+                                        <div class="form-text">
+                                            <i class="fas fa-info-circle me-1"></i>
+                                            {% trans "Enter the approval code provided by the Point of Contact at the job site." %}
+                                            <strong>{% trans "Note:" %}</strong> {% trans "You can enter the code with or without hyphens." %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" id="submitBtn" class="btn btn-secondary btn-lg py-3" disabled>
+                                    <i class="fas fa-paper-plane me-2"></i>
+                                    <span id="submitText">
+                                        {% trans "Waiting for Location..." %}
+                                    </span>
+                                </button>
+                            </div>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+/* Progress Steps */
+.step-indicator {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.step-completed {
+    background-color: #198754;
+    color: white;
+}
+
+.step-pending {
+    background-color: #6c757d;
+    color: white;
+    opacity: 0.8;
+}
+
+.step-connector {
+    flex: 1;
+    height: 2px;
+    background-color: #dee2e6;
+    margin: 0 10px;
+    position: relative;
+    top: 20px;
+    min-width: 0;
+}
+
+.step-connector.step-completed {
+    background-color: #198754;
+}
+
+/* Form Styling */
+.form-control, .form-select {
+    border-radius: 0.5rem;
+    border: 1px solid #dee2e6;
+    padding: 0.75rem 1rem;
+    width: 100%;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    min-width: 0;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.form-check-input:checked {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+/* Button Styling */
+.btn {
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    text-align: center;
+}
+
+.btn-lg {
+    padding: 0.75rem 1.5rem;
+    font-size: 1.1rem;
+}
+
+/* Disabled button appearance */
+.btn:disabled, .btn[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: #adb5bd !important;
+    border-color: #adb5bd !important;
+    color: #495057 !important;
+}
+
+.btn-primary:disabled {
+    background-color: #0d6efd !important;
+    opacity: 0.4;
+    color: white !important;
+}
+
+/* Card Styling */
+.card {
+    border-radius: 0.75rem;
+    border: 1px solid #e9ecef;
+    width: 100%;
+    overflow: hidden;
+}
+
+.card-header {
+    border-radius: 0.75rem 0.75rem 0 0 !important;
+    font-weight: 600;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
+.card-title {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    line-height: 1.3;
+    width: 100%;
+}
+
+.card-body {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    width: 100%;
+}
+
+/* Alert Styling */
+.alert {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    line-height: 1.4;
+    width: 100%;
+}
+
+.alert strong,
+.alert h4 {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    line-height: 1.3;
+}
+
+/* Text and Label Styling */
+.form-label {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    line-height: 1.4;
+    width: 100%;
+}
+
+.form-text {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    line-height: 1.4;
+    width: 100%;
+}
+
+.text-muted {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
+/* Location Information Display */
+#coordinates, #address {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    line-height: 1.4;
+    width: 100%;
+    min-height: 2.5rem;
+    display: flex;
+    align-items: center;
+}
+
+#locationSource {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    line-height: 1.4;
+}
+
+/* Progress Steps Container */
+.d-flex.justify-content-between.align-items-center.mb-3 {
+    width: 100%;
+    min-width: 0;
+}
+
+.flex-fill {
+    min-width: 0;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Header Styling */
+.card-header .d-flex {
+    width: 100%;
+    min-width: 0;
+}
+
+.card-header .d-flex > div {
+    min-width: 0;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Form Check Styling */
+.form-check-label {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    line-height: 1.4;
+    width: 100%;
+}
+
+.form-switch {
+    width: 100%;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Grid System Improvements */
+.row {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.col-12, .col-md-6, .col-lg-10 {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
+/* Container Improvements */
+.container-fluid {
+    width: 100%;
+    overflow-x: hidden;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+/* Text Content Areas */
+.text-center {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
+.opacity-75 {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    line-height: 1.4;
+}
+
+/* Icon with Text Alignment */
+.d-flex.align-items-center {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
+/* Small Text Elements */
+small {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    line-height: 1.3;
+}
+
+/* Form Group Improvements */
+.mb-3 {
+    width: 100%;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Emergency Text Break Classes */
+.break-anywhere {
+    word-break: break-all !important;
+    overflow-wrap: anywhere !important;
+}
+
+.text-container {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    width: 100%;
+}
+
+/* Specific Fixes for Long Text */
+.client-name,
+.site-address,
+.poc-name,
+.work-summary {
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    white-space: normal !important;
+    line-height: 1.4 !important;
+}
+
+/* Button Text Improvements */
+.btn span {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    line-height: 1.3;
+}
+
+/* Status Message Improvements */
+#locationStatus span {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    line-height: 1.4;
+}
+
+/* Check-in/Check-out Time Display */
+#checkInTimeDisplay,
+#checkOutTimeDisplay {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    line-height: 1.3;
+    width: 100%;
+}
+
+/* Submit Button Text */
+#submitText {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    line-height: 1.3;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container-fluid {
+        padding: 1rem 0.5rem;
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    .card-header .d-flex {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+        width: 100%;
+    }
+
+    .step-indicator {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+    }
+
+    .step-connector {
+        top: 17px;
+        min-width: 20px;
+    }
+
+    .btn-lg {
+        padding: 1rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    /* Mobile Text Sizing */
+    .card-title {
+        font-size: 1.1rem;
+        line-height: 1.2;
+    }
+
+    .alert {
+        font-size: 0.9rem;
+        line-height: 1.3;
+    }
+
+    .form-label {
+        font-size: 0.9rem;
+    }
+
+    /* Progress Steps Mobile Layout */
+    .d-flex.justify-content-between.align-items-center.mb-3 {
+        gap: 5px;
+    }
+
+    .flex-fill {
+        min-width: 60px;
+    }
+
+    .step-connector {
+        margin: 0 5px;
+    }
+}
+
+@media (max-width: 576px) {
+    .card-body {
+        padding: 1rem;
+    }
+
+    .alert {
+        padding: 0.75rem;
+        font-size: 0.85rem;
+    }
+
+    .form-control, .form-select {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.9rem;
+    }
+
+    .btn-lg {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .step-indicator {
+        width: 30px;
+        height: 30px;
+        font-size: 0.8rem;
+    }
+
+    .step-connector {
+        top: 15px;
+    }
+
+    /* Very Small Screen Text Adjustments */
+    .card-title {
+        font-size: 1rem;
+    }
+
+    .card-header h2 {
+        font-size: 1.2rem !important;
+    }
+
+    .form-label {
+        font-size: 0.85rem;
+    }
+
+    /* Stack Progress Steps on Very Small Screens */
+    @media (max-width: 400px) {
+        .d-flex.justify-content-between.align-items-center.mb-3 {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .step-connector {
+            display: none;
+        }
+
+        .flex-fill {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+    }
+}
+
+/* Large Screen Optimizations */
+@media (min-width: 1200px) {
+    .container-fluid {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .col-lg-10 {
+        max-width: 1200px;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .btn,
+    .step-indicator,
+    .step-connector {
+        display: none !important;
+    }
+
+    .card {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+    }
+
+    .alert {
+        border: 1px solid #ccc !important;
+    }
+
+    /* Ensure text readability in print */
+    .text-muted {
+        color: #666 !important;
+    }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+    .step-completed {
+        background-color: #000;
+        border: 2px solid #000;
+    }
+
+    .step-pending {
+        background-color: #666;
+        border: 2px solid #666;
+    }
+
+    .form-control:focus {
+        border-color: #000;
+        box-shadow: 0 0 0 2px #000;
+    }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    .step-indicator,
+    .btn,
+    .form-control,
+    .form-select {
+        transition: none;
+    }
+
+    .fa-spin {
+        animation: none;
+    }
+}
+
+/* Focus Styles for Accessibility */
+.btn:focus-visible,
+.form-control:focus-visible,
+.form-select:focus-visible,
+.form-check-input:focus-visible {
+    outline: 2px solid #0d6efd;
+    outline-offset: 2px;
+}
+
+/* Loading State Improvements */
+.fa-spinner {
+    display: inline-block;
+    word-wrap: normal;
+    word-break: normal;
+}
+
+/* Ensure Icons Don't Break */
+.fas, .fa {
+    flex-shrink: 0;
+}
+
+/* Text Alignment in Flex Containers */
+.d-flex {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.d-grid {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Form Validation States */
+.is-invalid {
+    border-color: #dc3545 !important;
+}
+
+.is-valid {
+    border-color: #198754 !important;
+}
+
+.text-danger {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    line-height: 1.3;
+}
+
+/* Ensure All Interactive Elements Are Accessible */
+[role="button"],
+button,
+input,
+select,
+textarea {
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Prevent Horizontal Scrolling */
+body {
+    overflow-x: hidden;
+    width: 100%;
+}
+
+/* Final Safety Nets */
+* {
+    max-width: 100%;
+}
+
+img, table {
+    max-width: 100%;
+    height: auto;
+}
+</style>
+<script>
+// Global variables - use sessionStorage to persist state across page reloads
+let userLocation = null;
+let hasCheckedIn = {% if field_report.check_in_time %}true{% else %}false{% endif %};
+let hasCheckedOut = {% if field_report.check_out_time %}true{% else %}false{% endif %};
+let formSubmitted = {% if field_report.submitted_at %}true{% else %}false{% endif %};
+
+// Load state from sessionStorage on page load
+function loadStateFromStorage() {
+    // Only load if the report hasn't been submitted yet
+    if (formSubmitted) return;
+
+    const storedHasCheckedIn = sessionStorage.getItem('hasCheckedIn-{{ assignment.id }}');
+    const storedHasCheckedOut = sessionStorage.getItem('hasCheckedOut-{{ assignment.id }}');
+
+    if (storedHasCheckedIn === 'true' && !hasCheckedIn) {
+        // If storage says checked in, but server says no (meaning page reload before check-in confirmation from server, rely on server)
+        // **SAFETY FIRST: Only load from storage if the server state is null**
+        if (!('{{ field_report.check_in_time }}')) {
+             hasCheckedIn = true;
+        }
+    }
+    if (storedHasCheckedOut === 'true' && !hasCheckedOut) {
+        if (!('{{ field_report.check_out_time }}')) {
+             hasCheckedOut = true;
+        }
+    }
+    console.log('Loaded state:', { hasCheckedIn, hasCheckedOut, formSubmitted });
+}
+
+// Save state to sessionStorage
+function saveStateToStorage() {
+    sessionStorage.setItem('hasCheckedIn-{{ assignment.id }}', hasCheckedIn);
+    sessionStorage.setItem('hasCheckedOut-{{ assignment.id }}', hasCheckedOut);
+    console.log('Saved state:', { hasCheckedIn, hasCheckedOut, formSubmitted });
+}
+
+// Update UI elements (indicators, buttons)
+function updateUI() {
+    const checkInBtn = document.getElementById('checkInBtn');
+    const checkOutBtn = document.getElementById('checkOutBtn');
+    const checkInText = document.getElementById('checkInText');
+    const checkOutText = document.getElementById('checkOutText');
+
+    // Update Check-In Indicator/Button
+    if (hasCheckedIn) {
+        checkInBtn.disabled = true;
+        checkInText.textContent = "{% trans "Checked In" %}";
+        document.getElementById('stepInIndicator').classList.add('step-completed');
+        document.getElementById('stepInIndicator').querySelector('i').className = 'fas fa-check';
+        document.getElementById('connectorIn').classList.add('step-completed');
+
+        // Update Check-Out Button
+        if (!hasCheckedOut) {
+            checkOutBtn.disabled = false;
+            checkOutBtn.classList.remove('btn-secondary');
+            checkOutBtn.classList.add('btn-warning');
+        }
+
+    } else {
+        checkInText.textContent = "{% trans "Check In" %}";
+        // Only enable if location is found
+        checkInBtn.disabled = !userLocation;
+        checkInBtn.classList.remove('btn-secondary');
+        checkInBtn.classList.add('btn-success');
+    }
+
+    // Update Check-Out Indicator/Button
+    if (hasCheckedOut) {
+        checkOutBtn.disabled = true;
+        checkOutText.textContent = "{% trans "Checked Out" %}";
+        document.getElementById('stepOutIndicator').classList.add('step-completed');
+        document.getElementById('stepOutIndicator').querySelector('i').className = 'fas fa-check';
+        document.getElementById('connectorOut').classList.add('step-completed');
+        document.getElementById('stepSubmitIndicator').classList.remove('step-pending');
+        document.getElementById('stepSubmitIndicator').classList.add('step-completed');
+        document.getElementById('stepSubmitIndicator').querySelector('i').className = 'fas fa-check';
+
+    } else {
+        checkOutText.textContent = "{% trans "Check Out" %}";
+        // Only enable if checked in
+        checkOutBtn.disabled = !hasCheckedIn;
+    }
+
+    // Update Submit Button
+    const submitBtn = document.getElementById('submitBtn');
+    const submitText = document.getElementById('submitText');
+
+    if (hasCheckedIn && hasCheckedOut && userLocation) {
+        submitBtn.disabled = false;
+        submitText.textContent = "{% trans "Submit Report" %}";
+        submitBtn.classList.remove('btn-secondary');
+        submitBtn.classList.add('btn-primary');
+    } else {
+        submitBtn.disabled = true;
+        submitBtn.classList.remove('btn-primary');
+        submitBtn.classList.add('btn-secondary');
+
+        if (!userLocation) {
+            submitText.textContent = "{% trans "Waiting for Location..." %}";
+        } else if (!hasCheckedIn) {
+            submitText.textContent = "{% trans "Check In Required" %}";
+        } else if (hasCheckedIn && !hasCheckedOut) {
+            submitText.textContent = "{% trans "Check Out Required" %}";
+        }
+    }
+    saveStateToStorage();
+}
+
+// Simple and reliable location service
+class SimpleLocationService {
+    constructor() {
+        this.startTime = Date.now();
+    }
+
+    async getLocation() {
+        try {
+            this.updateStatus('<i class="fas fa-sync fa-spin me-2"></i>{% trans "Requesting your location..." %}', 'info');
+            const location = await this.getBrowserLocation();
+
+            if (location) {
+                userLocation = location;
+                this.updateLocationUI(location);
+                updateUI();
+                return location;
+            }
+
+            throw new Error('Could not get location');
+
+        } catch (error) {
+            console.error('Location error:', error);
+            this.handleLocationError(error);
+            updateUI();
+            throw error;
+        }
+    }
+
+    getBrowserLocation() {
+        return new Promise((resolve, reject) => {
+            if (!navigator.geolocation) {
+                reject(new Error('Geolocation not supported'));
+                return;
+            }
+
+            const options = {
+                enableHighAccuracy: true,
+                timeout: 15000,
+                maximumAge: 60000
+            };
+
+            navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                    try {
+                        const accuracy = position.coords.accuracy;
+
+                        this.updateStatus('<i class="fas fa-sync fa-spin me-2"></i>{% trans "Getting address..." %}', 'info');
+
+                        let address = `{% trans "Location at" %} ${position.coords.latitude.toFixed(6)}, ${position.coords.longitude.toFixed(6)}`;
+                        try {
+                            const geocodedAddress = await this.reverseGeocode(
+                                position.coords.latitude,
+                                position.coords.longitude
+                            );
+                            address = geocodedAddress;
+                        } catch (geocodeError) {
+                            console.log('Geocoding failed, using coordinates');
+                        }
+
+                        resolve({
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude,
+                            address: address,
+                            accuracy: accuracy,
+                            source: 'gps',
+                            method: 'browser_geolocation'
+                        });
+
+                    } catch (error) {
+                        reject(error);
+                    }
+                },
+                (error) => {
+                    reject(this.getGeolocationError(error));
+                },
+                options
+            );
+        });
+    }
+
+    async reverseGeocode(lat, lng) {
+        try {
+            const response = await fetch(`{% url "fieldwork:reverse_geocode" %}?lat=${lat}&lng=${lng}`);
+            if (!response.ok) throw new Error('Geocoding service error');
+            const data = await response.json();
+            if (data.success && data.address) return data.address;
+            throw new Error(data.error || 'Geocoding failed');
+        } catch (error) {
+            console.error('Reverse geocoding error:', error);
+            throw error;
+        }
+    }
+
+    updateLocationUI(location) {
+        const elapsed = Date.now() - this.startTime;
+        document.getElementById('coordinates').textContent = `${location.lat.toFixed(6)}, ${location.lng.toFixed(6)}`;
+        document.getElementById('address').textContent = location.address;
+        document.getElementById('submission_lat').value = location.lat;
+        document.getElementById('submission_lng').value = location.lng;
+        document.getElementById('submission_address').value = location.address;
+        document.getElementById('locationSource').innerHTML = `<i class="fas fa-satellite"></i> GPS Location • ${Math.round(location.accuracy)}m accuracy • ${Math.round(elapsed/1000)}s`;
+        this.updateStatus(`<i class="fas fa-check-circle text-success me-2"></i>{% trans "Location acquired successfully!" %}`, 'success');
+    }
+
+    updateStatus(message, type = 'info') {
+        const statusDiv = document.getElementById('locationStatus');
+        if (!statusDiv) return;
+        const alertClass = type === 'success' ? 'alert-success' : type === 'warning' ? 'alert-warning' : type === 'error' ? 'alert-danger' : 'alert-info';
+        statusDiv.className = `alert ${alertClass}`;
+        statusDiv.innerHTML = `<div class="d-flex align-items-center">${message}</div>`;
+    }
+
+    handleLocationError(error) {
+        let errorMessage = '{% trans "Location detection failed." %} ';
+        if (error.message.includes('permission')) {
+            errorMessage += '{% trans "Please allow location access in your browser settings and refresh the page." %}';
+        } else if (error.message.includes('timeout')) {
+            errorMessage += '{% trans "GPS signal is weak. Please ensure you have good GPS reception or try moving to an open area." %}';
+        } else if (error.message.includes('unavailable')) {
+            errorMessage += '{% trans "Location services are unavailable. Please check your device settings." %}';
+        } else {
+            errorMessage += '{% trans "Please try refreshing the page." %}';
+        }
+
+        this.updateStatus(`<i class="fas fa-exclamation-triangle me-2"></i>${errorMessage}`, 'error');
+    }
+
+    getGeolocationError(error) {
+        switch(error.code) {
+            case error.PERMISSION_DENIED: return new Error('Location permission denied');
+            case error.POSITION_UNAVAILABLE: return new Error('Location information unavailable');
+            case error.TIMEOUT: return new Error('Location request timeout');
+            default: return new Error('Unknown location error');
+        }
+    }
+}
+
+// Function to clear all stored form state for this assignment
+function clearAssignmentState() {
+    sessionStorage.removeItem('hasCheckedIn-{{ assignment.id }}');
+    sessionStorage.removeItem('hasCheckedOut-{{ assignment.id }}');
+}
+
+// Check-in/Check-out API calls
+async function handleCheckAction(action) {
+    const btn = document.getElementById(`${action}Btn`);
+    const assignmentId = btn.getAttribute('data-assignment-id');
+    const actionText = action === 'checkIn' ? "{% trans "Check In" %}" : "{% trans "Check Out" %}";
+    const actionUrl = action === 'checkIn' ? `{% url 'fieldwork:check_in' assignment.id %}` : `{% url 'fieldwork:check_out' assignment.id %}`;
+    const actionDisplay = action === 'checkIn' ? 'checkInTimeDisplay' : 'checkOutTimeDisplay';
+
+    // Final location check before submitting time
+    if (!userLocation) {
+        alert('{% trans "Location is required before performing Check-In or Check-Out." %}');
+        locationService.getLocation(); // Try to get location again
+        return;
+    }
+
+    btn.innerHTML = `<i class="fas fa-spinner fa-spin me-2"></i> {% trans "Processing..." %}`;
+    btn.disabled = true;
+
+    try {
+        const response = await fetch(actionUrl, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                lat: userLocation.lat,
+                lng: userLocation.lng
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            const timeKey = action === 'checkIn' ? 'check_in_time' : 'check_out_time';
+            const displayTime = new Date(data[timeKey]).toLocaleTimeString([], { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+            document.getElementById(actionDisplay).innerHTML = `<i class="fas fa-clock me-1"></i>${action === 'checkIn' ? '{% trans "Checked in at:" %}' : '{% trans "Checked out at:" %}'} ${displayTime}`;
+
+            if (action === 'checkIn') {
+                hasCheckedIn = true;
+                // Clear out state from storage if it existed, to ensure only in-state remains
+                sessionStorage.removeItem('hasCheckedOut-{{ assignment.id }}');
+                hasCheckedOut = false; // Reset just in case logic was flawed
+                alert('{% trans "Successfully Checked In at" %} ' + displayTime);
+            } else {
+                hasCheckedOut = true;
+                alert('{% trans "Successfully Checked Out at" %} ' + displayTime);
+            }
+            updateUI();
+        } else {
+            alert(`{% trans "Error during" %} ${actionText}: ${data.error}`);
+            // Restore button state
+            btn.innerHTML = `<i class="fas fa-${action === 'checkIn' ? 'sign-in-alt' : 'sign-out-alt'} me-2"></i> ${actionText}`;
+            updateUI(); // Re-enable if rules allow
+        }
+    } catch (error) {
+        console.error(`${action} error:`, error);
+        alert(`{% trans "A network error occurred during" %} ${actionText}. {% trans "Please check your connection and try again." %}`);
+        // Restore button state
+        btn.innerHTML = `<i class="fas fa-${action === 'checkIn' ? 'sign-in-alt' : 'sign-out-alt'} me-2"></i> ${actionText}`;
+        updateUI(); // Re-enable if rules allow
+    }
+}
+
+// Helper function to get CSRF token
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// Navigation Guard Handler
+function beforeUnloadHandler(e) {
+    if ((hasCheckedIn || hasCheckedOut) && !formSubmitted) {
+        saveStateToStorage();
+        e.preventDefault();
+        e.returnValue = '{% trans "You have unsaved check-in/out progress. Are you sure you want to leave? Your progress will be lost." %}';
+        return e.returnValue;
+    }
+}
+
+// Initialize Location Service
+const locationService = new SimpleLocationService();
+
+document.addEventListener('DOMContentLoaded', function() {
+    loadStateFromStorage();
+    updateUI(); // Initial UI update based on loaded/server state
+
+    // Start location acquisition immediately unless form is submitted
+    if (!formSubmitted) {
+        locationService.getLocation();
+    }
+
+    // Event Listeners for Check-In/Out
+    document.getElementById('checkInBtn').addEventListener('click', () => handleCheckAction('checkIn'));
+    document.getElementById('checkOutBtn').addEventListener('click', () => handleCheckAction('checkOut'));
+
+    // Event Listener for Form Submission
+    document.getElementById('fieldReportForm').addEventListener('submit', function(e) {
+        // Final client-side validation check
+        if (!hasCheckedIn || !hasCheckedOut || !userLocation) {
+            e.preventDefault();
+            alert('{% trans "Submission failed: You must Check In, Check Out, and acquire location before submitting." %}');
+            locationService.getLocation();
+            updateUI();
+            return;
+        }
+
+        // Set formSubmitted flag and clear state on successful submission
+        formSubmitted = true;
+        clearAssignmentState();
+
+        // Final UI changes before actual submit
+        document.getElementById('submitBtn').innerHTML = `<i class="fas fa-spinner fa-spin me-2"></i> {% trans "Submitting..." %}`;
+        window.removeEventListener('beforeunload', beforeUnloadHandler);
+    });
+
+    // Add navigation guard
+    window.addEventListener('beforeunload', beforeUnloadHandler);
+
+    // Clear state when returning to the job list (simulating successful submission flow)
+    document.getElementById('cancelBtn').addEventListener('click', function() {
+        if (formSubmitted) {
+            // Only clear state if submitted, otherwise the beforeunload handles it
+            clearAssignmentState();
+        }
+    });
+});
+</script>
+{% endblock %}

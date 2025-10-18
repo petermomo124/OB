@@ -32,7 +32,6 @@ urlpatterns = [
     ), name='login'),
     path('accounts/logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
 
-
-
-path('rfp/', include('rfp.urls')),
+    path('rfp/', include('rfp.urls')),
+    path('fieldwork/', include('fieldwork.urls', namespace='fieldwork')),
 ]

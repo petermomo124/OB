@@ -25,7 +25,9 @@
     {% comment %} Links visible to authenticated users (Private) {% endcomment %}
     {% else %}
     <div class="global-links">
-
+<a href="{% url 'chatbot_view' %}" class="global-link chatbot-link">
+            <i class="fas fa-robot"></i> <span>AI Chatbot</span>
+        </a>
         {% comment %}
         RFP Link Visibility Logic:
         Check if the user is authenticated AND their role is 'admin' OR 'client'.
@@ -41,7 +43,16 @@
         </a>
         <span class="separator">|</span>
         {% endif %}
-
+{% if request.user.role == 'admin' or request.user.role == 'staff' %}
+    
+    <!-- Add Fieldwork link for both admin and staff -->
+    {% if request.user.role == 'admin' %}
+        <a href="{% url 'fieldwork:field_job_list' %}" class="global-link"><i class="global-link chatbot-link"></i> <span>Fieldwork</span></a>
+    {% else %}
+        <a href="{% url 'fieldwork:staff_field_jobs' %}" class="global-link"><i class="global-link chatbot-link"></i> <span>Fieldwork</span></a>
+    {% endif %}
+    <span class="separator">|</span>
+{% endif %}
         {% comment %} Links available to all authenticated users {% endcomment %}
 
         <span class="separator">|</span>
@@ -288,9 +299,7 @@
 <a href="{% url 'attendance:my_leave_requests' %}" class="global-link"><i class="far fa-calendar-alt"></i> <span>My Leave</span></a>
 
 {% endif %}
-        <a href="{% url 'chatbot_view' %}" class="global-link chatbot-link">
-            <i class="fas fa-robot"></i> <span>AI Chatbot</span>
-        </a>
+        
         {% if request.user.role == 'admin' or request.user.role == 'staff' %}
             <a href="{% url 'task_list' %}" class="global-link"><i class="fas fa-tasks"></i> <span>Tasks</span></a>
             <span class="separator">|</span>
@@ -332,7 +341,7 @@
    style="text-decoration: none; color: #1e88e5; font-weight: 600; font-size: 1.1rem; padding: 5px 10px; border-radius: 5px; transition: color 0.3s ease;"
    onmouseover="this.style.color='#0a5eb5'"
    onmouseout="this.style.color='#1e88e5'">
-    🤖 Public Chatbot
+    🤖 Ask OB
 </a>
                 <a href="{% url 'contact' %}" class="mobile-global-link"><i class="fas fa-envelope"></i> Contact Us</a>
                 <a href="{% url 'rfp_guide' %}" class="global-link"><i class="fas fa-question-circle"></i> <span>RFP Guide</span></a>
@@ -376,7 +385,11 @@
                 </a>
                 {% if request.user.role == 'admin' or request.user.role == 'staff' %}
                 <a href="{% url 'task_list' %}" class="mobile-global-link admin-link"><i class="fas fa-tasks"></i> Tasks</a>
-                
+                {% if request.user.role == 'admin' %}
+        <a href="{% url 'fieldwork:field_job_list' %}" class="mobile-global-link admin-link"><i class="fas fa-clipboard-list"></i> <span>Fieldwork</span></a>
+    {% else %}
+        <a href="{% url 'fieldwork:staff_field_jobs' %}" class="mobile-global-link admin-link"><i class="fas fa-clipboard-list"></i> <span>Fieldwork</span></a>
+    {% endif %}
                 {% endif %}
 
                 <!-- Profile link -->
