@@ -79,200 +79,317 @@
         <!-- Desktop Navigation -->
         {% if not user.is_authenticated %}
         <nav class="nav-menu">
-            <ul class="nav-list">
-                <li class="nav-item">
-                    <a href="#" class="nav-link">Forensic Service</a>
-                    <ul class="dropdown">
-                        <li><a href="#" class="dropdown-link">Data Analytics</a></li>
-                        <li><a href="#" class="dropdown-link">IT Governance</a></li>
-                        <li class="sub-menu">
-                            <a href="#" class="dropdown-link">Computer Forensic</a>
-                            <ul class="sub-dropdown">
-                                <li><a href="#" class="sub-dropdown-link">Bankruptcy</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#" class="dropdown-link">Fraud Assessment and Analysis</a></li>
-                        <li><a href="#" class="dropdown-link">Forensic Accounting</a></li>
-                        <li><a href="#" class="dropdown-link">Fraud Inquiry</a></li>
-                        <li><a href="#" class="dropdown-link">Litigation Support</a></li>
-                        <li><a href="#" class="dropdown-link">Bank and Financial Statement Analysis</a></li>
-                        <li><a href="#" class="dropdown-link">Internal Investigation</a></li>
-                        <li><a href="#" class="dropdown-link">Data Benchmarking</a></li>
-                        <li><a href="#" class="dropdown-link">Creating Effective Financial Exhibits</a></li>
-                        <li class="sub-menu">
-                            <a href="#" class="dropdown-link">Inventory and Valuation Analysis</a>
-                            <ul class="sub-dropdown">
-                                <li><a href="#" class="sub-dropdown-link">Asset Misappropriation</a></li>
-                                <li><a href="#" class="sub-dropdown-link">Corporate Valuation Dispute</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">Audit</a>
-                    <ul class="dropdown">
-                        <li><a href="#" class="dropdown-link">Compilation and Audit Review</a></li>
-                        <li class="sub-menu">
-                            <a href="#" class="dropdown-link">Financial Audit</a>
-                            <ul class="sub-dropdown">
-                                <li><a href="#" class="sub-dropdown-link">Internal Audit</a></li>
-                                <li><a href="#" class="sub-dropdown-link">Performance Audit</a></li>
-                                <li><a href="#" class="sub-dropdown-link">Compliance Audit</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#" class="dropdown-link">Operational Audit</a></li>
-                        <li><a href="#" class="dropdown-link">Agreed Upon Procedure</a></li>
-                        <li><a href="#" class="dropdown-link">Follow-up Audit</a></li>
-                        <li><a href="#" class="dropdown-link">Forensic Audit</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">Tax</a>
-                    <ul class="dropdown">
-                        <li><a href="#" class="dropdown-link">Tax Preparation & Filing</a></li>
-                        <li><a href="#" class="dropdown-link">Tax Compliance</a></li>
-                        <li><a href="#" class="dropdown-link">Payroll Tax</a></li>
-                        <li><a href="#" class="dropdown-link">Business & Personal Tax</a></li>
-                        <li class="sub-menu">
-                            <a href="#" class="dropdown-link">Tax Education</a>
-                            <ul class="sub-dropdown">
-                                <li><a href="#" class="sub-dropdown-link">Tax Accounting</a></li>
-                                <li><a href="#" class="sub-dropdown-link">Tax Advisory</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">Consulting</a>
-                    <ul class="dropdown">
-                        <li><a href="#" class="dropdown-link">Tax Consulting and Planning</a></li>
-                        <li><a href="#" class="dropdown-link">Tax Policy and Implementation</a></li>
-                        <li><a href="#" class="dropdown-link">Grant Management</a></li>
-                        <li><a href="#" class="dropdown-link">Business Analysis</a></li>
-                        <li class="sub-menu">
-                            <a href="#" class="dropdown-link">Forensic Audit and Investigation</a>
-                            <ul class="sub-dropdown">
-                                <li><a href="#" class="sub-dropdown-link">Reviews and Compilations of Financial Statements</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#" class="dropdown-link">Risk Assessment</a></li>
-                        <li><a href="#" class="dropdown-link">Internal Control Review and Analysis</a></li>
-                        <li><a href="#" class="dropdown-link">Micro-assessment</a></li>
-                        <li><a href="#" class="dropdown-link">Spot Check</a></li>
-                        <li class="sub-menu">
+    <ul class="nav-list">
+        <!-- Forensic Service -->
+        <li class="nav-item">
+            <a href="#" class="nav-link">Forensic Service</a>
+            <ul class="dropdown">
+                <div class="dropdown-grid">
+                    <div class="dropdown-column">
+                        <div class="dropdown-section">
+                            <h4 class="dropdown-section-title">Core Services</h4>
+                            <a href="#" class="dropdown-link">Data Analytics</a>
+                            <a href="#" class="dropdown-link">IT Governance</a>
                             <a href="#" class="dropdown-link">Fraud Assessment and Analysis</a>
-                            <ul class="sub-dropdown">
-                                <li><a href="#" class="sub-dropdown-link">Management Consulting</a></li>
-                                <li><a href="#" class="sub-dropdown-link">Financial Advisory Consulting</a></li>
-                                <li><a href="#" class="sub-dropdown-link">Risk & Compliance Consulting</a></li>
-                                <li><a href="#" class="sub-dropdown-link">Operational Consulting</a></li>
-                                <li><a href="#" class="sub-dropdown-link">Fraud Advisory</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">Advisory</a>
-                    <ul class="dropdown">
-                        <li class="sub-menu">
                             <a href="#" class="dropdown-link">Forensic Accounting</a>
-                            <ul class="sub-dropdown">
-                                <li class="sub-sub-menu">
-                                    <a href="#" class="sub-dropdown-link">Financial Accounting – Outsourcing</a>
-                                    <ul class="sub-sub-dropdown">
-                                        <li><a href="#" class="sub-sub-dropdown-link">CFO Service</a></li>
-                                        <li><a href="#" class="sub-sub-dropdown-link">Book-keeping Service</a></li>
-                                        <li><a href="#" class="sub-sub-dropdown-link">Tax Planning and Advisory</a></li>
-                                        <li><a href="#" class="sub-sub-dropdown-link">Internal Control (SOX) Compliance</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="sub-menu">
-                            <a href="#" class="dropdown-link">Forensic Audit and Investigation Analysis</a>
-                            <ul class="sub-dropdown">
-                                <li><a href="#" class="sub-dropdown-link">Payroll Processing and Management</a></li>
-                                <li><a href="#" class="sub-dropdown-link">Account Management and Bookkeeping</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#" class="dropdown-link">Tax Planning and Advisory</a></li>
-                        <li><a href="#" class="dropdown-link">Financial Accounting Advisory</a></li>
-                        <li><a href="#" class="dropdown-link">Internal Control Compliance (SOX)</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">Technology Solutions</a>
-                    <ul class="dropdown">
-                        <li class="sub-menu">
-                            <a href="#" class="dropdown-link">IT Project Management Service</a>
-                            <ul class="sub-dropdown">
-                                <li><a href="#" class="sub-dropdown-link">Hardware Implementation Management</a></li>
-                                <li><a href="#" class="sub-dropdown-link">Software Implementation Management</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#" class="dropdown-link">Software Deployment and Management</a></li>
-                        <li><a href="#" class="dropdown-link">Hardware Deployment and Maintenance</a></li>
-                        <li><a href="#" class="dropdown-link">Cybersecurity Assessment and Management</a></li>
-                        <li><a href="#" class="dropdown-link">IT Project Management</a></li>
-                        <li class="sub-menu">
-                            <a href="#" class="dropdown-link">Inventory and Asset Management</a>
-                            <ul class="sub-dropdown">
-                                <li><a href="#" class="sub-dropdown-link">Asset Registry</a></li>
-                                <li><a href="#" class="sub-dropdown-link">Barcoding</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#" class="dropdown-link">Technology Consulting</a></li>
-                        <li><a href="#" class="dropdown-link">IT Consulting</a></li>
-                        <li><a href="#" class="dropdown-link">Managed IT Service</a></li>
-                        <li><a href="#" class="dropdown-link">IT Security</a></li>
-                        <li><a href="#" class="dropdown-link">Cybersecurity</a></li>
-                        <li><a href="#" class="dropdown-link">Service Desk/Help Desk</a></li>
-                        <li><a href="#" class="dropdown-link">Equipment Supply and Setup</a></li>
-                        <li><a href="#" class="dropdown-link">Inventory Count and Assets Management</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">Managed Service</a>
-                    <ul class="dropdown">
-                        <li class="sub-menu">
-                            <a href="#" class="dropdown-link">Accounting Services</a>
-                            <ul class="sub-dropdown">
-                                <li><a href="#" class="sub-dropdown-link">Account Management/Bookkeeping</a></li>
-                                <li><a href="#" class="sub-dropdown-link">Financial Statement Preparation</a></li>
-                                <li><a href="#" class="sub-dropdown-link">Bank Reconciliation</a></li>
-                                <li><a href="#" class="sub-dropdown-link">Account Payable/Receivable</a></li>
-                                <li><a href="#" class="sub-dropdown-link">Budget and Forecasting</a></li>
-                                <li><a href="#" class="sub-dropdown-link">Forensic Accounting</a></li>
-                                <li><a href="#" class="sub-dropdown-link">Business Consulting</a></li>
-                                <li><a href="#" class="sub-dropdown-link">Public Accounting</a></li>
-                            </ul>
-                        </li>
-                        <li class="sub-menu">
-                            <a href="#" class="dropdown-link">Tax Services</a>
-                            <ul class="sub-dropdown">
-                                <li><a href="#" class="sub-dropdown-link">Tax Planning</a></li>
-                                <li><a href="#" class="sub-dropdown-link">Payroll Tax</a></li>
-                                <li><a href="#" class="sub-dropdown-link">Individual Tax - 1040</a></li>
-                                <li><a href="#" class="sub-dropdown-link">Business Tax – 1120s and 1120</a></li>
-                                <li><a href="#" class="sub-dropdown-link">Non-for-profit Tax – 990</a></li>
-                                <li><a href="#" class="sub-dropdown-link">Tax Accounting</a></li>
-                                <li><a href="#" class="sub-dropdown-link">International Tax</a></li>
-                            </ul>
-                        </li>
-                        <li class="sub-menu">
-                            <a href="#" class="dropdown-link">Technology Services</a>
-                            <ul class="sub-dropdown">
-                                <li><a href="#" class="sub-dropdown-link">Asset Tracking and Management</a></li>
-                                <li><a href="#" class="sub-dropdown-link">IT Support Management</a></li>
-                                <li><a href="#" class="sub-dropdown-link">Cybersecurity</a></li>
-                                <li><a href="#" class="sub-dropdown-link">Network Support/Health Check</a></li>
-                                <li><a href="#" class="sub-dropdown-link">Inventory</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
+                        </div>
+                    </div>
+                    <div class="dropdown-column">
+                        <div class="dropdown-section">
+                            <h4 class="dropdown-section-title">Investigation</h4>
+                            <a href="#" class="dropdown-link">Fraud Inquiry</a>
+                            <a href="#" class="dropdown-link">Litigation Support</a>
+                            <a href="#" class="dropdown-link">Bank and Financial Statement Analysis</a>
+                            <a href="#" class="dropdown-link">Internal Investigation</a>
+                        </div>
+                    </div>
+                    <div class="dropdown-column">
+                        <div class="dropdown-section">
+                            <h4 class="dropdown-section-title">Analysis & Reporting</h4>
+                            <a href="#" class="dropdown-link">Data Benchmarking</a>
+                            <a href="#" class="dropdown-link">Creating Effective Financial Exhibits</a>
+                            <div class="sub-menu">
+                                <a href="#" class="dropdown-link">Computer Forensic</a>
+                                <ul class="sub-dropdown">
+                                    <li><a href="#" class="sub-dropdown-link">Bankruptcy</a></li>
+                                </ul>
+                            </div>
+                            <div class="sub-menu">
+                                <a href="#" class="dropdown-link">Inventory and Valuation Analysis</a>
+                                <ul class="sub-dropdown">
+                                    <li><a href="#" class="sub-dropdown-link">Asset Misappropriation</a></li>
+                                    <li><a href="#" class="sub-dropdown-link">Corporate Valuation Dispute</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </ul>
-        </nav>
+        </li>
+
+        <!-- Audit -->
+        <li class="nav-item">
+            <a href="#" class="nav-link">Audit</a>
+            <ul class="dropdown">
+                <div class="dropdown-grid">
+                    <div class="dropdown-column">
+                        <div class="dropdown-section">
+                            <h4 class="dropdown-section-title">Audit Services</h4>
+                            <a href="#" class="dropdown-link">Compilation and Audit Review</a>
+                            <a href="#" class="dropdown-link">Operational Audit</a>
+                            <a href="#" class="dropdown-link">Agreed Upon Procedure</a>
+                            <a href="#" class="dropdown-link">Follow-up Audit</a>
+                        </div>
+                    </div>
+                    <div class="dropdown-column">
+                        <div class="dropdown-section">
+                            <h4 class="dropdown-section-title">Specialized Audits</h4>
+                            <div class="sub-menu">
+                                <a href="#" class="dropdown-link">Financial Audit</a>
+                                <ul class="sub-dropdown">
+                                    <li><a href="#" class="sub-dropdown-link">Internal Audit</a></li>
+                                    <li><a href="#" class="sub-dropdown-link">Performance Audit</a></li>
+                                    <li><a href="#" class="sub-dropdown-link">Compliance Audit</a></li>
+                                </ul>
+                            </div>
+                            <a href="#" class="dropdown-link">Forensic Audit</a>
+                        </div>
+                    </div>
+                </div>
+            </ul>
+        </li>
+
+        <!-- Tax -->
+        <li class="nav-item">
+            <a href="#" class="nav-link">Tax</a>
+            <ul class="dropdown">
+                <div class="dropdown-grid">
+                    <div class="dropdown-column">
+                        <div class="dropdown-section">
+                            <h4 class="dropdown-section-title">Tax Services</h4>
+                            <a href="#" class="dropdown-link">Tax Preparation & Filing</a>
+                            <a href="#" class="dropdown-link">Tax Compliance</a>
+                            <a href="#" class="dropdown-link">Payroll Tax</a>
+                            <a href="#" class="dropdown-link">Business & Personal Tax</a>
+                        </div>
+                    </div>
+                    <div class="dropdown-column">
+                        <div class="dropdown-section">
+                            <h4 class="dropdown-section-title">Tax Education</h4>
+                            <div class="sub-menu">
+                                <a href="#" class="dropdown-link">Tax Education</a>
+                                <ul class="sub-dropdown">
+                                    <li><a href="#" class="sub-dropdown-link">Tax Accounting</a></li>
+                                    <li><a href="#" class="sub-dropdown-link">Tax Advisory</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ul>
+        </li>
+
+        <!-- Consulting -->
+        <li class="nav-item">
+            <a href="#" class="nav-link">Consulting</a>
+            <ul class="dropdown">
+                <div class="dropdown-grid">
+                    <div class="dropdown-column">
+                        <div class="dropdown-section">
+                            <h4 class="dropdown-section-title">Business Consulting</h4>
+                            <a href="#" class="dropdown-link">Tax Consulting and Planning</a>
+                            <a href="#" class="dropdown-link">Tax Policy and Implementation</a>
+                            <a href="#" class="dropdown-link">Grant Management</a>
+                            <a href="#" class="dropdown-link">Business Analysis</a>
+                            <a href="#" class="dropdown-link">Risk Assessment</a>
+                        </div>
+                    </div>
+                    <div class="dropdown-column">
+                        <div class="dropdown-section">
+                            <h4 class="dropdown-section-title">Operational Consulting</h4>
+                            <a href="#" class="dropdown-link">Internal Control Review and Analysis</a>
+                            <a href="#" class="dropdown-link">Micro-assessment</a>
+                            <a href="#" class="dropdown-link">Spot Check</a>
+                            <div class="sub-menu">
+                                <a href="#" class="dropdown-link">Forensic Audit and Investigation</a>
+                                <ul class="sub-dropdown">
+                                    <li><a href="#" class="sub-dropdown-link">Reviews and Compilations of Financial Statements</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dropdown-column">
+                        <div class="dropdown-section">
+                            <h4 class="dropdown-section-title">Specialized Consulting</h4>
+                            <div class="sub-menu">
+                                <a href="#" class="dropdown-link">Fraud Assessment and Analysis</a>
+                                <ul class="sub-dropdown">
+                                    <li><a href="#" class="sub-dropdown-link">Management Consulting</a></li>
+                                    <li><a href="#" class="sub-dropdown-link">Financial Advisory Consulting</a></li>
+                                    <li><a href="#" class="sub-dropdown-link">Risk & Compliance Consulting</a></li>
+                                    <li><a href="#" class="sub-dropdown-link">Operational Consulting</a></li>
+                                    <li><a href="#" class="sub-dropdown-link">Fraud Advisory</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ul>
+        </li>
+
+        <!-- Advisory -->
+        <li class="nav-item">
+            <a href="#" class="nav-link">Advisory</a>
+            <ul class="dropdown">
+                <div class="dropdown-grid">
+                    <div class="dropdown-column">
+                        <div class="dropdown-section">
+                            <h4 class="dropdown-section-title">Forensic Services</h4>
+                            <div class="sub-menu">
+                                <a href="#" class="dropdown-link">Forensic Accounting</a>
+                                <ul class="sub-dropdown">
+                                    <li class="sub-sub-menu">
+                                        <a href="#" class="sub-dropdown-link">Financial Accounting – Outsourcing</a>
+                                        <ul class="sub-sub-dropdown">
+                                            <li><a href="#" class="sub-sub-dropdown-link">CFO Service</a></li>
+                                            <li><a href="#" class="sub-sub-dropdown-link">Book-keeping Service</a></li>
+                                            <li><a href="#" class="sub-sub-dropdown-link">Tax Planning and Advisory</a></li>
+                                            <li><a href="#" class="sub-sub-dropdown-link">Internal Control (SOX) Compliance</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="sub-menu">
+                                <a href="#" class="dropdown-link">Forensic Audit and Investigation Analysis</a>
+                                <ul class="sub-dropdown">
+                                    <li><a href="#" class="sub-dropdown-link">Payroll Processing and Management</a></li>
+                                    <li><a href="#" class="sub-dropdown-link">Account Management and Bookkeeping</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dropdown-column">
+                        <div class="dropdown-section">
+                            <h4 class="dropdown-section-title">Advisory Services</h4>
+                            <a href="#" class="dropdown-link">Tax Planning and Advisory</a>
+                            <a href="#" class="dropdown-link">Financial Accounting Advisory</a>
+                            <a href="#" class="dropdown-link">Internal Control Compliance (SOX)</a>
+                        </div>
+                    </div>
+                </div>
+            </ul>
+        </li>
+
+        <!-- Technology Solutions -->
+        <li class="nav-item">
+            <a href="#" class="nav-link">Technology Solutions</a>
+            <ul class="dropdown">
+                <div class="dropdown-grid">
+                    <div class="dropdown-column">
+                        <div class="dropdown-section">
+                            <h4 class="dropdown-section-title">Implementation Services</h4>
+                            <div class="sub-menu">
+                                <a href="#" class="dropdown-link">IT Project Management Service</a>
+                                <ul class="sub-dropdown">
+                                    <li><a href="#" class="sub-dropdown-link">Hardware Implementation Management</a></li>
+                                    <li><a href="#" class="sub-dropdown-link">Software Implementation Management</a></li>
+                                </ul>
+                            </div>
+                            <a href="#" class="dropdown-link">Software Deployment and Management</a>
+                            <a href="#" class="dropdown-link">Hardware Deployment and Maintenance</a>
+                            <a href="#" class="dropdown-link">IT Project Management</a>
+                        </div>
+                    </div>
+                    <div class="dropdown-column">
+                        <div class="dropdown-section">
+                            <h4 class="dropdown-section-title">Security & Consulting</h4>
+                            <a href="#" class="dropdown-link">Cybersecurity Assessment and Management</a>
+                            <a href="#" class="dropdown-link">Technology Consulting</a>
+                            <a href="#" class="dropdown-link">IT Consulting</a>
+                            <a href="#" class="dropdown-link">Managed IT Service</a>
+                            <a href="#" class="dropdown-link">IT Security</a>
+                        </div>
+                    </div>
+                    <div class="dropdown-column">
+                        <div class="dropdown-section">
+                            <h4 class="dropdown-section-title">Asset & Support</h4>
+                            <a href="#" class="dropdown-link">Cybersecurity</a>
+                            <a href="#" class="dropdown-link">Service Desk/Help Desk</a>
+                            <a href="#" class="dropdown-link">Equipment Supply and Setup</a>
+                            <a href="#" class="dropdown-link">Inventory Count and Assets Management</a>
+                            <div class="sub-menu">
+                                <a href="#" class="dropdown-link">Inventory and Asset Management</a>
+                                <ul class="sub-dropdown">
+                                    <li><a href="#" class="sub-dropdown-link">Asset Registry</a></li>
+                                    <li><a href="#" class="sub-dropdown-link">Barcoding</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ul>
+        </li>
+
+        <!-- Managed Service -->
+        <li class="nav-item">
+            <a href="#" class="nav-link">Managed Service</a>
+            <ul class="dropdown">
+                <div class="dropdown-grid">
+                    <div class="dropdown-column">
+                        <div class="dropdown-section">
+                            <h4 class="dropdown-section-title">Accounting Services</h4>
+                            <div class="sub-menu">
+                                <a href="#" class="dropdown-link">Accounting Services</a>
+                                <ul class="sub-dropdown">
+                                    <li><a href="#" class="sub-dropdown-link">Account Management/Bookkeeping</a></li>
+                                    <li><a href="#" class="sub-dropdown-link">Financial Statement Preparation</a></li>
+                                    <li><a href="#" class="sub-dropdown-link">Bank Reconciliation</a></li>
+                                    <li><a href="#" class="sub-dropdown-link">Account Payable/Receivable</a></li>
+                                    <li><a href="#" class="sub-dropdown-link">Budget and Forecasting</a></li>
+                                    <li><a href="#" class="sub-dropdown-link">Forensic Accounting</a></li>
+                                    <li><a href="#" class="sub-dropdown-link">Business Consulting</a></li>
+                                    <li><a href="#" class="sub-dropdown-link">Public Accounting</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dropdown-column">
+                        <div class="dropdown-section">
+                            <h4 class="dropdown-section-title">Tax Services</h4>
+                            <div class="sub-menu">
+                                <a href="#" class="dropdown-link">Tax Services</a>
+                                <ul class="sub-dropdown">
+                                    <li><a href="#" class="sub-dropdown-link">Tax Planning</a></li>
+                                    <li><a href="#" class="sub-dropdown-link">Payroll Tax</a></li>
+                                    <li><a href="#" class="sub-dropdown-link">Individual Tax - 1040</a></li>
+                                    <li><a href="#" class="sub-dropdown-link">Business Tax – 1120s and 1120</a></li>
+                                    <li><a href="#" class="sub-dropdown-link">Non-for-profit Tax – 990</a></li>
+                                    <li><a href="#" class="sub-dropdown-link">Tax Accounting</a></li>
+                                    <li><a href="#" class="sub-dropdown-link">International Tax</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dropdown-column">
+                        <div class="dropdown-section">
+                            <h4 class="dropdown-section-title">Technology Services</h4>
+                            <div class="sub-menu">
+                                <a href="#" class="dropdown-link">Technology Services</a>
+                                <ul class="sub-dropdown">
+                                    <li><a href="#" class="sub-dropdown-link">Asset Tracking and Management</a></li>
+                                    <li><a href="#" class="sub-dropdown-link">IT Support Management</a></li>
+                                    <li><a href="#" class="sub-dropdown-link">Cybersecurity</a></li>
+                                    <li><a href="#" class="sub-dropdown-link">Network Support/Health Check</a></li>
+                                    <li><a href="#" class="sub-dropdown-link">Inventory</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ul>
+        </li>
+    </ul>
+</nav>
         {% endif %}
 
        <!-- User Links - Hidden on mobile, visible on desktop -->
@@ -695,7 +812,8 @@
 .mobile-sub-sub-menu.active .mobile-sub-dropdown-link .mobile-dropdown-icon {
     transform: rotate(180deg);
 }
-   /* Additional styles for deeper nested menus */
+
+/* Additional styles for deeper nested menus */
 .mobile-sub-sub-menu {
     position: relative;
 }
@@ -723,6 +841,7 @@
 .mobile-sub-sub-dropdown-link:hover {
     background-color: #e9ecef;
 }
+
 /* Reset and Base Styles */
 * {
     margin: 0;
@@ -858,146 +977,283 @@ body {
     letter-spacing: 0.5px;
 }
 
-/* Navigation Menu */
+/* Enhanced Navigation Menu - EY Style */
 .nav-menu {
     display: flex;
     align-items: center;
+    position: relative;
+    z-index: 1001;
 }
 
 .nav-list {
     list-style: none;
     display: flex;
-    gap: 5px;
+    gap: 2px;
     margin: 0;
     padding: 0;
 }
 
 .nav-item {
-    position: relative;
+    position: static; /* Changed for full-width dropdowns */
 }
 
 .nav-link {
+    position: relative;
+    padding: 15px 20px;
     color: #2c3e50;
     text-decoration: none;
-    padding: 10px 20px;
-    display: flex;
-    align-items: center;
+    font-weight: 600;
+    font-size: 14px;
     transition: all 0.3s ease;
-    font-weight: 500;
-    border-radius: 4px;
-    font-size: 15px;
-    height: 100%;
+    border-radius: 4px 4px 0 0;
+    white-space: nowrap;
 }
 
 .nav-link:hover {
+    background: #f8f9fa;
     color: #007bff;
-    background-color: rgba(0, 123, 255, 0.05);
 }
 
+/* Enhanced Dropdown Structure - Full Width with Scroll */
 .dropdown {
     display: none;
     position: absolute;
     top: 100%;
     left: 0;
-    background: #fff;
-    min-width: 250px;
-    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
+    right: 0;
+    background: white;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    border-radius: 0 0 8px 8px;
     z-index: 1000;
-    padding: 8px 0;
-    border: 1px solid #eee;
-    transform: translateY(5px);
-    transition: all 0.2s ease;
+    padding: 20px;
+    margin-top: 0;
+    border: 1px solid #e9ecef;
+    border-top: 3px solid #007bff;
+    /* Scrollable container */
+    max-height: 70vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    /* Smooth scrolling */
+    scroll-behavior: smooth;
+    /* Custom scrollbar for webkit browsers */
+    scrollbar-width: thin;
+    scrollbar-color: #007bff #f1f1f1;
+}
+
+/* Custom scrollbar for webkit browsers (Chrome, Safari, Edge) */
+.dropdown::-webkit-scrollbar {
+    width: 8px;
+}
+
+.dropdown::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.dropdown::-webkit-scrollbar-thumb {
+    background: #007bff;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+.dropdown::-webkit-scrollbar-thumb:hover {
+    background: #0056b3;
 }
 
 .nav-item:hover .dropdown {
     display: block;
-    transform: translateY(0);
+    animation: fadeInUp 0.3s ease;
 }
 
+/* Enhanced Grid Layout for Dropdown Content - All levels in same box */
+.dropdown-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 10px;
+    /* Ensure grid doesn't overflow */
+    min-height: min-content;
+}
+
+.dropdown-column {
+    display: flex;
+    flex-direction: column;
+    /* Allow column to grow but not overflow */
+    min-height: 0;
+}
+
+.dropdown-section {
+    margin-bottom: 25px;
+    /* Prevent section from growing too much */
+    flex-shrink: 0;
+}
+
+.dropdown-section-title {
+    font-weight: 700;
+    color: #2c3e50;
+    font-size: 16px;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #007bff;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    /* Sticky section headers when scrolling */
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 1;
+    padding: 10px 0;
+    margin-bottom: 10px;
+}
+
+/* Enhanced Link Styles - All levels visible in same container */
 .dropdown-link {
-    color: #444;
-    padding: 10px 20px;
     display: flex;
     align-items: center;
+    padding: 10px 14px;
+    color: #555;
     text-decoration: none;
-    font-size: 13px;
+    font-size: 14px;
+    border-radius: 6px;
     transition: all 0.2s ease;
+    margin-bottom: 6px;
+    position: relative;
+    word-wrap: break-word;
+    white-space: normal;
+    line-height: 1.4;
+    hyphens: auto;
+    background: #f8f9fa;
+    border-left: 4px solid #007bff;
+    /* Ensure links don't grow too large */
+    flex-shrink: 0;
 }
 
 .dropdown-link:hover {
-    background: #f8f9fa;
-    color: #0066cc;
+    background: #007bff;
+    color: white;
+    transform: translateX(5px);
 }
 
+/* Nested sub-menu styles - All displayed in same container */
 .sub-menu {
     position: relative;
+    margin: 6px 0;
 }
 
 .sub-dropdown {
-    display: none;
-    position: absolute;
-    left: 100%;
-    top: 0;
-    background: #fff;
-    min-width: 220px;
-    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
-    padding: 8px 0;
-    border: 1px solid #eee;
-}
-
-.sub-menu:hover .sub-dropdown {
-    display: block;
+    display: block !important;
+    position: static !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 0 0 18px !important;
+    margin: 6px 0 0 0 !important;
+    min-width: auto !important;
+    max-width: none !important;
 }
 
 .sub-dropdown-link {
-    color: #444;
-    padding: 10px 20px;
     display: block;
+    padding: 8px 14px;
+    color: #666;
     text-decoration: none;
-    background: #f9f9f9;
+    font-size: 13px;
+    border-radius: 4px;
     transition: all 0.2s ease;
+    margin-bottom: 4px;
+    word-wrap: break-word;
+    white-space: normal;
+    line-height: 1.4;
+    background: #e9ecef;
+    border-left: 3px solid #28a745;
+    /* Ensure links don't grow too large */
+    flex-shrink: 0;
 }
 
 .sub-dropdown-link:hover {
-    background: #f0f0f0;
-    color: #0066cc;
+    background: #28a745;
+    color: white;
+    transform: translateX(3px);
 }
 
+/* Deeply nested sub-sub-menu styles */
 .sub-sub-menu {
     position: relative;
+    margin: 4px 0;
 }
 
 .sub-sub-dropdown {
-    display: none;
-    position: absolute;
-    left: 100%;
-    top: 0;
-    background: #fff;
-    min-width: 220px;
-    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
-    padding: 8px 0;
-    border: 1px solid #eee;
-}
-
-.sub-sub-menu:hover .sub-sub-dropdown {
-    display: block;
+    display: block !important;
+    position: static !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 0 0 22px !important;
+    margin: 4px 0 0 0 !important;
+    min-width: auto !important;
+    max-width: none !important;
 }
 
 .sub-sub-dropdown-link {
-    color: #444;
-    padding: 10px 20px;
     display: block;
+    padding: 6px 14px;
+    color: #777;
     text-decoration: none;
-    background: #f9f9f9;
+    font-size: 12px;
+    border-radius: 4px;
     transition: all 0.2s ease;
+    margin-bottom: 3px;
+    word-wrap: break-word;
+    white-space: normal;
+    line-height: 1.4;
+    background: #dee2e6;
+    border-left: 2px solid #ffc107;
+    /* Ensure links don't grow too large */
+    flex-shrink: 0;
 }
 
 .sub-sub-dropdown-link:hover {
-    background: #f0f0f0;
-    color: #0066cc;
+    background: #ffc107;
+    color: #212529;
+    transform: translateX(2px);
+}
+
+/* Visual indicators for nested levels */
+.sub-menu > .dropdown-link::before {
+    content: "↳ ";
+    color: #28a745;
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.sub-sub-menu > .sub-dropdown-link::before {
+    content: "↳ ↳ ";
+    color: #ffc107;
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 /* Mobile Sidebar Styles */
@@ -1157,13 +1413,13 @@ body {
 .mobile-sub-dropdown-link:hover {
     background-color: #f0f2f5;
 }
+
 /* Hide desktop-only elements on mobile */
 @media (max-width: 768px) {
     .desktop-only {
         display: none !important;
     }
 
-    /* If using Option 1 (hiding entire container) */
     .global-links.desktop-only {
         display: none !important;
     }
@@ -1179,6 +1435,7 @@ body {
         display: flex !important;
     }
 }
+
 .mobile-overlay {
     position: fixed;
     top: 0;
@@ -1292,7 +1549,12 @@ body {
 }
 
 /* Responsive Design */
-@media (max-width: 1024px) {
+@media (max-width: 1200px) {
+    .dropdown-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+    }
+    
     .header-container {
         padding: 0 15px;
     }
@@ -1383,6 +1645,28 @@ document.addEventListener('DOMContentLoaded', function() {
     const mobileNavItems = document.querySelectorAll('.mobile-nav-item');
     const mobileSubMenus = document.querySelectorAll('.mobile-sub-menu');
     const mobileSubSubMenus = document.querySelectorAll('.mobile-sub-sub-menu');
+
+    // Enhanced desktop navigation hover handling
+    const navItems = document.querySelectorAll('.nav-item');
+    
+    navItems.forEach(item => {
+        item.addEventListener('mouseenter', function() {
+            // Close other dropdowns
+            navItems.forEach(otherItem => {
+                if (otherItem !== item) {
+                    otherItem.classList.remove('active');
+                }
+            });
+            this.classList.add('active');
+        });
+        
+        item.addEventListener('mouseleave', function(e) {
+            // Only remove active if mouse leaves the entire nav item area
+            if (!this.contains(e.relatedTarget)) {
+                this.classList.remove('active');
+            }
+        });
+    });
 
     // Mobile menu toggle
     if (hamburger && mobileSidebar) {

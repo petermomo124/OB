@@ -96,9 +96,24 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
 from .models import User  # Import your custom User model
+from django.shortcuts import render
+from .models import User, Office
 def index(request):
-    return render(request, 'index.html')
+    # Get executive team members (users with executive_team=True)
+    executives = User.objects.filter(
+        executive_team=True,
+        is_active=True
+    ).select_related('office')
 
+    # Get all offices
+    offices = Office.objects.all()
+
+    context = {
+        'executives': executives,
+        'offices': offices,
+    }
+
+    return render(request, 'index.html', context)
 def service_detail(request, service_slug):
     service = SERVICES.get(service_slug)
     if not service:
