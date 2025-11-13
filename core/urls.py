@@ -84,4 +84,31 @@ urlpatterns = [
     path('manage/offices/<int:office_id>/edit/', views.edit_office, name='edit_office'),
     path('manage/offices/<int:office_id>/delete/', views.delete_office, name='delete_office'),
 
+# core/urls.py - Add these URL patterns
+
+# Advisory URLs
+path('advisory/', views.advisory_main, name='advisory_main'),
+
+# Forensic Services
+path('advisory/forensic-accounting/', views.forensic_accounting, name='forensic_accounting'),
+path('advisory/forensic-audit-investigation/', views.forensic_audit_investigation, name='forensic_audit_investigation'),
+
+# Financial Accounting Outsourcing
+path('advisory/forensic-accounting/cfo-service/', views.cfo_service, name='cfo_service'),
+path('advisory/forensic-accounting/bookkeeping-service/', views.bookkeeping_service, name='bookkeeping_service'),
+path('advisory/forensic-accounting/tax-planning-advisory/', views.tax_planning_advisory, name='tax_planning_advisory'),
+path('advisory/forensic-accounting/internal-control-sox-compliance/', views.internal_control_sox_compliance, name='internal_control_sox_compliance'),
+
+# Forensic Audit Investigation
+path('advisory/forensic-audit-investigation/payroll-processing-management/', views.payroll_processing_management, name='payroll_processing_management'),
+path('advisory/forensic-audit-investigation/account-management-bookkeeping/', views.account_management_bookkeeping, name='account_management_bookkeeping'),
+
+# Advisory Services
+path('advisory/tax-planning-advisory/', views.tax_planning_advisory_main, name='tax_planning_advisory_main'),
+path('advisory/financial-accounting-advisory/', views.financial_accounting_advisory, name='financial_accounting_advisory'),
+path('advisory/internal-control-sox-compliance/', views.internal_control_sox_compliance_main, name='internal_control_sox_compliance_main'),
+
+# API Endpoint for Staff Modal
+path('api/staff/<int:staff_id>/', views.get_staff_details, name='get_staff_details'),
+
 ]

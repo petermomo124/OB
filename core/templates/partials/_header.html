@@ -238,47 +238,47 @@
         </li>
 
         <!-- Advisory -->
-        <li class="nav-item">
-            <a href="#" class="nav-link">Advisory</a>
-            <ul class="dropdown">
-                <div class="dropdown-grid">
-                    <div class="dropdown-column">
-                        <div class="dropdown-section">
-                            <h4 class="dropdown-section-title">Forensic Services</h4>
-                            <div class="sub-menu">
-                                <a href="#" class="dropdown-link">Forensic Accounting</a>
-                                <ul class="sub-dropdown">
-                                    <li class="sub-sub-menu">
-                                        <a href="#" class="sub-dropdown-link">Financial Accounting – Outsourcing</a>
-                                        <ul class="sub-sub-dropdown">
-                                            <li><a href="#" class="sub-sub-dropdown-link">CFO Service</a></li>
-                                            <li><a href="#" class="sub-sub-dropdown-link">Book-keeping Service</a></li>
-                                            <li><a href="#" class="sub-sub-dropdown-link">Tax Planning and Advisory</a></li>
-                                            <li><a href="#" class="sub-sub-dropdown-link">Internal Control (SOX) Compliance</a></li>
-                                        </ul>
-                                    </li>
+<li class="nav-item">
+    <a href="{% url 'advisory_main' %}" class="nav-link">Advisory</a>
+    <ul class="dropdown">
+        <div class="dropdown-grid">
+            <div class="dropdown-column">
+                <div class="dropdown-section">
+                    <h4 class="dropdown-section-title">Forensic Services</h4>
+                    <div class="sub-menu">
+                        <a href="{% url 'forensic_accounting' %}" class="dropdown-link">Forensic Accounting</a>
+                        <ul class="sub-dropdown">
+                            <li class="sub-sub-menu">
+                                <a href="{% url 'forensic_accounting' %}" class="sub-dropdown-link">Financial Accounting – Outsourcing</a>
+                                <ul class="sub-sub-dropdown">
+                                    <li><a href="{% url 'cfo_service' %}" class="sub-sub-dropdown-link">CFO Service</a></li>
+                                    <li><a href="{% url 'bookkeeping_service' %}" class="sub-sub-dropdown-link">Book-keeping Service</a></li>
+                                    <li><a href="{% url 'tax_planning_advisory' %}" class="sub-sub-dropdown-link">Tax Planning and Advisory</a></li>
+                                    <li><a href="{% url 'internal_control_sox_compliance' %}" class="sub-sub-dropdown-link">Internal Control (SOX) Compliance</a></li>
                                 </ul>
-                            </div>
-                            <div class="sub-menu">
-                                <a href="#" class="dropdown-link">Forensic Audit and Investigation Analysis</a>
-                                <ul class="sub-dropdown">
-                                    <li><a href="#" class="sub-dropdown-link">Payroll Processing and Management</a></li>
-                                    <li><a href="#" class="sub-dropdown-link">Account Management and Bookkeeping</a></li>
-                                </ul>
-                            </div>
-                        </div>
+                            </li>
+                        </ul>
                     </div>
-                    <div class="dropdown-column">
-                        <div class="dropdown-section">
-                            <h4 class="dropdown-section-title">Advisory Services</h4>
-                            <a href="#" class="dropdown-link">Tax Planning and Advisory</a>
-                            <a href="#" class="dropdown-link">Financial Accounting Advisory</a>
-                            <a href="#" class="dropdown-link">Internal Control Compliance (SOX)</a>
-                        </div>
+                    <div class="sub-menu">
+                        <a href="{% url 'forensic_audit_investigation' %}" class="dropdown-link">Forensic Audit and Investigation Analysis</a>
+                        <ul class="sub-dropdown">
+                            <li><a href="{% url 'payroll_processing_management' %}" class="sub-dropdown-link">Payroll Processing and Management</a></li>
+                            <li><a href="{% url 'account_management_bookkeeping' %}" class="sub-dropdown-link">Account Management and Bookkeeping</a></li>
+                        </ul>
                     </div>
                 </div>
-            </ul>
-        </li>
+            </div>
+            <div class="dropdown-column">
+                <div class="dropdown-section">
+                    <h4 class="dropdown-section-title">Advisory Services</h4>
+                    <a href="{% url 'tax_planning_advisory_main' %}" class="dropdown-link">Tax Planning and Advisory</a>
+                    <a href="{% url 'financial_accounting_advisory' %}" class="dropdown-link">Financial Accounting Advisory</a>
+                    <a href="{% url 'internal_control_sox_compliance_main' %}" class="dropdown-link">Internal Control Compliance (SOX)</a>
+                </div>
+            </div>
+        </div>
+    </ul>
+</li>
 
         <!-- Technology Solutions -->
         <li class="nav-item">
@@ -631,35 +631,35 @@
         </li>
 
         <!-- Advisory -->
-        <li class="mobile-nav-item">
-            <a href="#" class="mobile-nav-link">Advisory <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
-            <ul class="mobile-dropdown">
-                <li class="mobile-sub-menu">
-                    <a href="#" class="mobile-dropdown-link">Forensic Accounting <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
-                    <ul class="mobile-sub-dropdown">
-                        <li class="mobile-sub-sub-menu">
-                            <a href="#" class="mobile-sub-dropdown-link">Financial Accounting – Outsourcing <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
-                            <ul class="mobile-sub-sub-dropdown">
-                                <li><a href="#" class="mobile-sub-sub-dropdown-link">CFO Service</a></li>
-                                <li><a href="#" class="mobile-sub-sub-dropdown-link">Book-keeping Service</a></li>
-                                <li><a href="#" class="mobile-sub-sub-dropdown-link">Tax Planning and Advisory</a></li>
-                                <li><a href="#" class="mobile-sub-sub-dropdown-link">Internal Control (SOX) Compliance</a></li>
-                            </ul>
-                        </li>
+<li class="mobile-nav-item">
+    <a href="{% url 'advisory_main' %}" class="mobile-nav-link">Advisory <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
+    <ul class="mobile-dropdown">
+        <li class="mobile-sub-menu">
+            <a href="{% url 'forensic_accounting' %}" class="mobile-dropdown-link">Forensic Accounting <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
+            <ul class="mobile-sub-dropdown">
+                <li class="mobile-sub-sub-menu">
+                    <a href="{% url 'forensic_accounting' %}" class="mobile-sub-dropdown-link">Financial Accounting – Outsourcing <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
+                    <ul class="mobile-sub-sub-dropdown">
+                        <li><a href="{% url 'cfo_service' %}" class="mobile-sub-sub-dropdown-link">CFO Service</a></li>
+                        <li><a href="{% url 'bookkeeping_service' %}" class="mobile-sub-sub-dropdown-link">Book-keeping Service</a></li>
+                        <li><a href="{% url 'tax_planning_advisory' %}" class="mobile-sub-sub-dropdown-link">Tax Planning and Advisory</a></li>
+                        <li><a href="{% url 'internal_control_sox_compliance' %}" class="mobile-sub-sub-dropdown-link">Internal Control (SOX) Compliance</a></li>
                     </ul>
                 </li>
-                <li class="mobile-sub-menu">
-                    <a href="#" class="mobile-dropdown-link">Forensic Audit and Investigation Analysis <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
-                    <ul class="mobile-sub-dropdown">
-                        <li><a href="#" class="mobile-sub-dropdown-link">Payroll Processing and Management</a></li>
-                        <li><a href="#" class="mobile-sub-dropdown-link">Account Management and Bookkeeping</a></li>
-                    </ul>
-                </li>
-                <li><a href="#" class="mobile-dropdown-link">Tax Planning and Advisory</a></li>
-                <li><a href="#" class="mobile-dropdown-link">Financial Accounting Advisory</a></li>
-                <li><a href="#" class="mobile-dropdown-link">Internal Control Compliance (SOX)</a></li>
             </ul>
         </li>
+        <li class="mobile-sub-menu">
+            <a href="{% url 'forensic_audit_investigation' %}" class="mobile-dropdown-link">Forensic Audit and Investigation Analysis <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
+            <ul class="mobile-sub-dropdown">
+                <li><a href="{% url 'payroll_processing_management' %}" class="mobile-sub-dropdown-link">Payroll Processing and Management</a></li>
+                <li><a href="{% url 'account_management_bookkeeping' %}" class="mobile-sub-dropdown-link">Account Management and Bookkeeping</a></li>
+            </ul>
+        </li>
+        <li><a href="{% url 'tax_planning_advisory_main' %}" class="mobile-dropdown-link">Tax Planning and Advisory</a></li>
+        <li><a href="{% url 'financial_accounting_advisory' %}" class="mobile-dropdown-link">Financial Accounting Advisory</a></li>
+        <li><a href="{% url 'internal_control_sox_compliance_main' %}" class="mobile-dropdown-link">Internal Control Compliance (SOX)</a></li>
+    </ul>
+</li>
 
         <!-- Technology Solutions -->
         <li class="mobile-nav-item">

@@ -2055,3 +2055,236 @@ def delete_office(request, office_id):
 
     # Optional: Render a confirmation page if not a POST request
     return render(request, 'manage/office_confirm_delete.html', {'office': office})
+
+
+# core/views.py - Add these views to your existing views
+
+from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse
+from .models import User
+
+
+# Advisory Main Views
+def advisory_main(request):
+    """Main advisory page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'advisory_staff': advisory_staff,
+    }
+    return render(request, 'advisory/index.html', context)
+
+
+# Forensic Services Views
+def forensic_accounting(request):
+    """Forensic Accounting page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'advisory_staff': advisory_staff,
+        'service_name': 'Forensic Accounting',
+        'service_description': 'Expert investigative accounting services to detect, prevent, and resolve financial irregularities, fraud, and compliance issues.',
+    }
+    return render(request, 'advisory/forensic_services/forensic_accounting.html', context)
+
+
+def forensic_audit_investigation(request):
+    """Forensic Audit and Investigation Analysis page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'forensic_staff': advisory_staff,  # Changed variable name
+        'service_name': 'Forensic Audit and Investigation Analysis',
+        'service_description': 'Comprehensive audit and investigation services to uncover financial discrepancies and ensure regulatory compliance.',
+    }
+    return render(request, 'advisory/forensic_services/forensic_audit_investigation.html', context)
+
+# Financial Accounting Outsourcing Views
+def cfo_service(request):
+    """CFO Service page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'advisory_staff': advisory_staff,
+        'service_name': 'CFO Service',
+        'service_description': 'Strategic financial leadership and executive guidance to drive business growth and financial excellence.',
+    }
+    return render(request, 'advisory/forensic_services/financial_accounting_outsourcing/cfo_service.html', context)
+
+
+def bookkeeping_service(request):
+    """Book-keeping Service page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'advisory_staff': advisory_staff,
+        'service_name': 'Book-keeping Service',
+        'service_description': 'Comprehensive bookkeeping solutions to maintain accurate financial records and support business decision-making.',
+    }
+    return render(request, 'advisory/forensic_services/financial_accounting_outsourcing/bookkeeping_service.html',
+                  context)
+
+
+def tax_planning_advisory(request):
+    """Tax Planning and Advisory page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'advisory_staff': advisory_staff,
+        'service_name': 'Tax Planning and Advisory',
+        'service_description': 'Strategic tax planning and advisory services to optimize tax efficiency and ensure compliance.',
+    }
+    return render(request, 'advisory/forensic_services/financial_accounting_outsourcing/tax_planning_advisory.html',
+                  context)
+
+
+def internal_control_sox_compliance(request):
+    """Internal Control (SOX) Compliance page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'advisory_staff': advisory_staff,
+        'service_name': 'Internal Control (SOX) Compliance',
+        'service_description': 'Comprehensive SOX compliance services to strengthen internal controls and meet regulatory requirements.',
+    }
+    return render(request,
+                  'advisory/forensic_services/financial_accounting_outsourcing/internal_control_sox_compliance.html',
+                  context)
+
+
+# Forensic Audit Investigation Sub-services
+def payroll_processing_management(request):
+    """Payroll Processing and Management page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'advisory_staff': advisory_staff,
+        'service_name': 'Payroll Processing and Management',
+        'service_description': 'End-to-end payroll solutions to ensure accurate, compliant, and efficient payroll processing.',
+    }
+    return render(request, 'advisory/forensic_services/forensic_audit_investigation/payroll_processing_management.html',
+                  context)
+
+
+def account_management_bookkeeping(request):
+    """Account Management and Bookkeeping page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'advisory_staff': advisory_staff,
+        'service_name': 'Account Management and Bookkeeping',
+        'service_description': 'Professional account management and bookkeeping services to maintain financial integrity and support growth.',
+    }
+    return render(request,
+                  'advisory/forensic_services/forensic_audit_investigation/account_management_bookkeeping.html',
+                  context)
+
+
+# Advisory Services Views
+def tax_planning_advisory_main(request):
+    """Tax Planning and Advisory main page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'advisory_staff': advisory_staff,
+        'service_name': 'Tax Planning and Advisory',
+        'service_description': 'Strategic tax planning and advisory services to optimize your tax position and ensure compliance across all jurisdictions.',
+    }
+    return render(request, 'advisory/advisory_services/tax_planning_advisory.html', context)
+
+
+def financial_accounting_advisory(request):
+    """Financial Accounting Advisory page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'advisory_staff': advisory_staff,
+        'service_name': 'Financial Accounting Advisory',
+        'service_description': 'Expert financial accounting guidance to enhance reporting accuracy, compliance, and strategic decision-making.',
+    }
+    return render(request, 'advisory/advisory_services/financial_accounting_advisory.html', context)
+
+
+def internal_control_sox_compliance_main(request):
+    """Internal Control Compliance (SOX) main page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'advisory_staff': advisory_staff,
+        'service_name': 'Internal Control Compliance (SOX)',
+        'service_description': 'Comprehensive SOX compliance services to establish, monitor, and optimize internal control environments.',
+    }
+    return render(request, 'advisory/advisory_services/internal_control_sox_compliance.html', context)
+
+
+# API View for Staff Modal
+def get_staff_details(request, staff_id):
+    """API endpoint to get staff details for modal"""
+    staff = get_object_or_404(User, id=staff_id, is_active=True, is_approved=True)
+
+    data = {
+        'id': staff.id,
+        'first_name': staff.first_name,
+        'last_name': staff.last_name,
+        'email': staff.email,
+        'phone_number': staff.phone_number or '',
+        'address': staff.address or '',
+        'nationality': staff.nationality or '',
+        'linkedin': staff.linkedin or '',
+        'profile_image': staff.profile_image.url if staff.profile_image else '',
+        'field_position': staff.field_position or '',
+        'company_impact': staff.company_impact or '',
+        'office_impact': staff.office_impact or '',
+        'office_location': staff.office.office_location if staff.office else '',
+        'executive_position_description': staff.executive_position_description or '',
+    }
+
+    return JsonResponse(data)
