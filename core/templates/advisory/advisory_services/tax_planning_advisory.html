@@ -2366,6 +2366,142 @@ html, body {
     .staff-card:hover .staff-image {
         transform: none;
     }
+}/* Staff Section Mobile Responsiveness */
+@media (max-width: 1200px) {
+    .staff-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 25px !important;
+    }
+}
+
+@media (max-width: 992px) {
+    .staff-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 20px !important;
+    }
+    
+    .staff-section {
+        padding: 60px 0 !important;
+    }
+    
+    .section-title {
+        font-size: 2.2rem !important;
+        margin-bottom: 40px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .staff-grid {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+        padding: 0 15px !important;
+    }
+    
+    .staff-card {
+        max-width: 400px !important;
+        margin: 0 auto !important;
+    }
+    
+    .staff-section {
+        padding: 50px 0 !important;
+    }
+    
+    .section-title {
+        font-size: 2rem !important;
+        margin-bottom: 30px !important;
+        padding: 0 15px !important;
+    }
+    
+    .staff-image-container {
+        height: 200px !important;
+    }
+    
+    .staff-info {
+        padding: 20px !important;
+    }
+    
+    .staff-name {
+        font-size: 1.1rem !important;
+    }
+    
+    .staff-position {
+        font-size: 0.9rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .staff-section {
+        padding: 40px 0 !important;
+    }
+    
+    .section-title {
+        font-size: 1.8rem !important;
+        margin-bottom: 25px !important;
+    }
+    
+    .staff-grid {
+        gap: 15px !important;
+        padding: 0 10px !important;
+    }
+    
+    .staff-card {
+        max-width: 100% !important;
+    }
+    
+    .staff-image-container {
+        height: 180px !important;
+    }
+    
+    .staff-info {
+        padding: 15px !important;
+    }
+    
+    .btn-view-more {
+        padding: 10px 20px !important;
+        font-size: 0.85rem !important;
+        min-width: 120px !important;
+    }
+    
+    .staff-placeholder {
+        font-size: 2.5rem !important;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .staff-card:hover {
+        transform: none !important;
+    }
+    
+    .staff-overlay {
+        opacity: 1 !important;
+    }
+    
+    .staff-social {
+        transform: translateY(0) !important;
+    }
+    
+    /* Make social links larger for touch */
+    .social-link {
+        width: 44px !important;
+        height: 44px !important;
+        font-size: 1.1rem !important;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .staff-card,
+    .staff-image,
+    .staff-overlay,
+    .staff-social,
+    .btn-view-more {
+        transition: none !important;
+    }
+    
+    .staff-card:hover .staff-image {
+        transform: none !important;
+    }
 }
 
 /* Dark mode support */
