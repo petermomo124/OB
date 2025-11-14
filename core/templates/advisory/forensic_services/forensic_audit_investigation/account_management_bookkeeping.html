@@ -839,6 +839,7 @@ html, body {
     overflow-x: hidden;
 }
 
+background-image: url('https://i.pinimg.com/736x/25/14/3d/25143dc4eabf818d9ce4c47190ca2900.jpg');
 /* Hero Section - Full Viewport */
 .service-hero {
     position: relative;
@@ -847,7 +848,7 @@ html, body {
     text-align: center;
     margin-bottom: 0;
     width: 100%;
-    height: 100vh; /* Full viewport height */
+    height: 100vh;
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -866,10 +867,24 @@ html, body {
     background-size: cover;
     background-position: center;
     background-blend-mode: overlay;
-    background-attachment: fixed;
+    background-attachment: scroll; /* Changed from fixed */
+    background-repeat: no-repeat; /* Added */
     z-index: -1;
 }
 
+/* Mobile-specific hero background fix */
+@media (max-width: 768px) {
+    .hero-background {
+        background-attachment: scroll !important;
+        position: fixed;
+        background-size: cover;
+        background-position: center center;
+    }
+
+    .service-hero {
+        position: relative;
+    }
+}
 .hero-content {
     position: relative;
     z-index: 2;

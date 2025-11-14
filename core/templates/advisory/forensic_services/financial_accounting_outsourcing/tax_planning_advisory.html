@@ -839,6 +839,8 @@ html, body {
     overflow-x: hidden;
 }
 
+
+
 /* Hero Section - Full Viewport */
 .service-hero {
     position: relative;
@@ -847,7 +849,7 @@ html, body {
     text-align: center;
     margin-bottom: 0;
     width: 100%;
-    height: 100vh; /* Full viewport height */
+    height: 100vh;
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -862,12 +864,27 @@ html, body {
     width: 100%;
     height: 100%;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    background-image: url('https://i.pinimg.com/736x/70/af/34/70af343d7f0fd8ea643bcd30da6501b2.jpg');
+    background-image: url('https://i.pinimg.com/1200x/f2/96/a7/f296a7fbd6956d5b6d299f75c52eb613.jpg');
     background-size: cover;
     background-position: center;
     background-blend-mode: overlay;
-    background-attachment: fixed;
+    background-attachment: scroll; /* Changed from fixed */
+    background-repeat: no-repeat; /* Added */
     z-index: -1;
+}
+
+/* Mobile-specific hero background fix */
+@media (max-width: 768px) {
+    .hero-background {
+        background-attachment: scroll !important;
+        position: fixed;
+        background-size: cover;
+        background-position: center center;
+    }
+
+    .service-hero {
+        position: relative;
+    }
 }
 
 .hero-content {
