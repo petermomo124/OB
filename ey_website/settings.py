@@ -264,12 +264,7 @@ LOGIN_URL = '/client-portal/login/'
 # but often Django's base security headers are enough for development.
 
 # Ensure the maps domains are allowed for IFRAMES
-CSRF_TRUSTED_ORIGINS = [
-    # Include your development URL here
-    'http://127.0.0.1:8000',
-    # And potentially the google domains if you are getting CSRF errors
-    'https://*.google.com',
-]
+
 
 # If you have SECUTIRY_MIDDLEWARE enabled, you may need to explicitly allow iframes:
 # IMPORTANT: Use the exact domains your embed URL uses!
@@ -309,12 +304,14 @@ CSP_IMG_SRC = [
     "http:",   # Allow HTTP images (for development)
 ]
 
-# Add Cloudinary to trusted origins
 CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1:8000',
     'http://localhost:8000',
     'https://*.cloudinary.com',
     'https://res.cloudinary.com',
+    # ADD YOUR RENDER DOMAIN
+    'https://ob-global.onrender.com',
+    'http://ob-global.onrender.com',
 ]
 
 # Session settings for better editor experience
