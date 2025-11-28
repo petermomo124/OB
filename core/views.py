@@ -2055,3 +2055,889 @@ def delete_office(request, office_id):
 
     # Optional: Render a confirmation page if not a POST request
     return render(request, 'manage/office_confirm_delete.html', {'office': office})
+
+
+# core/views.py - Add these views to your existing views
+
+from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse
+from .models import User
+
+
+# Advisory Main Views
+def advisory_main(request):
+    """Main advisory page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'advisory_staff': advisory_staff,
+    }
+    return render(request, 'advisory/index.html', context)
+
+
+# Forensic Services Views
+def forensic_accounting(request):
+    """Forensic Accounting page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'advisory_staff': advisory_staff,
+        'service_name': 'Forensic Accounting',
+        'service_description': 'Expert investigative accounting services to detect, prevent, and resolve financial irregularities, fraud, and compliance issues.',
+    }
+    return render(request, 'advisory/forensic_services/forensic_accounting.html', context)
+
+
+def forensic_audit_investigation(request):
+    """Forensic Audit and Investigation Analysis page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'advisory_staff': advisory_staff,  # ✅ Correct variable name
+        'service_name': 'Forensic Audit and Investigation Analysis',
+        'service_description': 'Comprehensive audit and investigation services to uncover financial discrepancies and ensure regulatory compliance.',
+    }
+    return render(request, 'advisory/forensic_services/forensic_audit_investigation.html', context)
+# Financial Accounting Outsourcing Views
+def cfo_service(request):
+    """CFO Service page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'advisory_staff': advisory_staff,
+        'service_name': 'CFO Service',
+        'service_description': 'Strategic financial leadership and executive guidance to drive business growth and financial excellence.',
+    }
+    return render(request, 'advisory/forensic_services/financial_accounting_outsourcing/cfo_service.html', context)
+
+
+def bookkeeping_service(request):
+    """Book-keeping Service page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'advisory_staff': advisory_staff,
+        'service_name': 'Book-keeping Service',
+        'service_description': 'Comprehensive bookkeeping solutions to maintain accurate financial records and support business decision-making.',
+    }
+    return render(request, 'advisory/forensic_services/financial_accounting_outsourcing/bookkeeping_service.html',
+                  context)
+
+
+def tax_planning_advisory(request):
+    """Tax Planning and Advisory page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'advisory_staff': advisory_staff,
+        'service_name': 'Tax Planning and Advisory',
+        'service_description': 'Strategic tax planning and advisory services to optimize tax efficiency and ensure compliance.',
+    }
+    return render(request, 'advisory/forensic_services/financial_accounting_outsourcing/tax_planning_advisory.html',
+                  context)
+
+
+def internal_control_sox_compliance(request):
+    """Internal Control (SOX) Compliance page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'advisory_staff': advisory_staff,
+        'service_name': 'Internal Control (SOX) Compliance',
+        'service_description': 'Comprehensive SOX compliance services to strengthen internal controls and meet regulatory requirements.',
+    }
+    return render(request,
+                  'advisory/forensic_services/financial_accounting_outsourcing/internal_control_sox_compliance.html',
+                  context)
+
+
+# Forensic Audit Investigation Sub-services
+def payroll_processing_management(request):
+    """Payroll Processing and Management page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'advisory_staff': advisory_staff,
+        'service_name': 'Payroll Processing and Management',
+        'service_description': 'End-to-end payroll solutions to ensure accurate, compliant, and efficient payroll processing.',
+    }
+    return render(request, 'advisory/forensic_services/forensic_audit_investigation/payroll_processing_management.html',
+                  context)
+
+
+def account_management_bookkeeping(request):
+    """Account Management and Bookkeeping page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'advisory_staff': advisory_staff,
+        'service_name': 'Account Management and Bookkeeping',
+        'service_description': 'Professional account management and bookkeeping services to maintain financial integrity and support growth.',
+    }
+    return render(request,
+                  'advisory/forensic_services/forensic_audit_investigation/account_management_bookkeeping.html',
+                  context)
+
+
+# Advisory Services Views
+def tax_planning_advisory_main(request):
+    """Tax Planning and Advisory main page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'advisory_staff': advisory_staff,
+        'service_name': 'Tax Planning and Advisory',
+        'service_description': 'Strategic tax planning and advisory services to optimize your tax position and ensure compliance across all jurisdictions.',
+    }
+    return render(request, 'advisory/advisory_services/tax_planning_advisory.html', context)
+
+
+def financial_accounting_advisory(request):
+    """Financial Accounting Advisory page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'advisory_staff': advisory_staff,
+        'service_name': 'Financial Accounting Advisory',
+        'service_description': 'Expert financial accounting guidance to enhance reporting accuracy, compliance, and strategic decision-making.',
+    }
+    return render(request, 'advisory/advisory_services/financial_accounting_advisory.html', context)
+
+
+def internal_control_sox_compliance_main(request):
+    """Internal Control Compliance (SOX) main page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'advisory_staff': advisory_staff,
+        'service_name': 'Internal Control Compliance (SOX)',
+        'service_description': 'Comprehensive SOX compliance services to establish, monitor, and optimize internal control environments.',
+    }
+    return render(request, 'advisory/advisory_services/internal_control_sox_compliance.html', context)
+
+
+# API View for Staff Modal
+def get_staff_details(request, staff_id):
+    """API endpoint to get staff details for modal"""
+    staff = get_object_or_404(User, id=staff_id, is_active=True, is_approved=True)
+
+    data = {
+        'id': staff.id,
+        'first_name': staff.first_name,
+        'last_name': staff.last_name,
+        'email': staff.email,
+        'phone_number': staff.phone_number or '',
+        'address': staff.address or '',
+        'nationality': staff.nationality or '',
+        'linkedin': staff.linkedin or '',
+        'profile_image': staff.profile_image.url if staff.profile_image else '',
+        'field_position': staff.field_position or '',
+        'company_impact': staff.company_impact or '',
+        'office_impact': staff.office_impact or '',
+        'office_location': staff.office.office_location if staff.office else '',
+        'executive_position_description': staff.executive_position_description or '',
+    }
+
+    return JsonResponse(data)
+
+
+
+# Technology Solutions Views
+def technology_main(request):
+    """Main technology solutions page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+    }
+    return render(request, 'technology/index.html', context)
+
+# Implementation Services Views
+def it_project_management_service(request):
+    """IT Project Management Service page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'IT Project Management Service',
+        'service_description': 'Comprehensive IT project management services to ensure successful technology implementations and digital transformations.',
+    }
+    return render(request, 'technology/implementation_services/it_project_management.html', context)
+
+def hardware_implementation_management(request):
+    """Hardware Implementation Management page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'Hardware Implementation Management',
+        'service_description': 'End-to-end hardware implementation and management services for optimal infrastructure performance.',
+    }
+    return render(request, 'technology/implementation_services/hardware_implementation_management.html', context)
+
+def software_implementation_management(request):
+    """Software Implementation Management page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'Software Implementation Management',
+        'service_description': 'Professional software implementation services to ensure seamless deployment and integration.',
+    }
+    return render(request, 'technology/implementation_services/software_implementation_management.html', context)
+
+def software_deployment_management(request):
+    """Software Deployment and Management page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'Software Deployment and Management',
+        'service_description': 'Comprehensive software deployment and ongoing management services for optimal system performance.',
+    }
+    return render(request, 'technology/implementation_services/software_deployment_management.html', context)
+
+def hardware_deployment_maintenance(request):
+    """Hardware Deployment and Maintenance page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'Hardware Deployment and Maintenance',
+        'service_description': 'Complete hardware deployment and maintenance services to ensure reliable infrastructure operations.',
+    }
+    return render(request, 'technology/implementation_services/hardware_deployment_maintenance.html', context)
+
+def it_project_management(request):
+    """IT Project Management page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'IT Project Management',
+        'service_description': 'Strategic IT project management to deliver technology initiatives on time and within budget.',
+    }
+    return render(request, 'technology/implementation_services/it_project_management_main.html', context)
+
+# Security & Consulting Views
+def cybersecurity_assessment_management(request):
+    """Cybersecurity Assessment and Management page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'Cybersecurity Assessment and Management',
+        'service_description': 'Comprehensive cybersecurity services to protect your digital assets and ensure regulatory compliance.',
+    }
+    return render(request, 'technology/security_consulting/cybersecurity_assessment_management.html', context)
+
+def technology_consulting(request):
+    """Technology Consulting page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'Technology Consulting',
+        'service_description': 'Strategic technology consulting to align IT solutions with business objectives and drive digital transformation.',
+    }
+    return render(request, 'technology/security_consulting/technology_consulting.html', context)
+
+def it_consulting(request):
+    """IT Consulting page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'IT Consulting',
+        'service_description': 'Expert IT consulting services to optimize technology infrastructure and support business growth.',
+    }
+    return render(request, 'technology/security_consulting/it_consulting.html', context)
+
+def managed_it_service(request):
+    """Managed IT Service page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'Managed IT Service',
+        'service_description': 'Comprehensive managed IT services to ensure reliable, secure, and efficient technology operations.',
+    }
+    return render(request, 'technology/security_consulting/managed_it_service.html', context)
+
+def it_security(request):
+    """IT Security page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'IT Security',
+        'service_description': 'Robust IT security solutions to protect against cyber threats and ensure data integrity.',
+    }
+    return render(request, 'technology/security_consulting/it_security.html', context)
+
+# Asset & Support Views
+def cybersecurity_main(request):
+    """Cybersecurity page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'Cybersecurity',
+        'service_description': 'Advanced cybersecurity solutions to safeguard your digital infrastructure and sensitive data.',
+    }
+    return render(request, 'technology/asset_support/cybersecurity.html', context)
+
+def service_desk_help_desk(request):
+    """Service Desk/Help Desk page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'Service Desk/Help Desk',
+        'service_description': 'Professional service desk and help desk support to ensure uninterrupted technology operations.',
+    }
+    return render(request, 'technology/asset_support/service_desk_help_desk.html', context)
+
+def equipment_supply_setup(request):
+    """Equipment Supply and Setup page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'Equipment Supply and Setup',
+        'service_description': 'Complete equipment supply and setup services for optimal technology infrastructure deployment.',
+    }
+    return render(request, 'technology/asset_support/equipment_supply_setup.html', context)
+
+def inventory_count_assets_management(request):
+    """Inventory Count and Assets Management page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'Inventory Count and Assets Management',
+        'service_description': 'Comprehensive inventory and asset management solutions to optimize technology resource utilization.',
+    }
+    return render(request, 'technology/asset_support/inventory_count_assets_management.html', context)
+
+def asset_registry(request):
+    """Asset Registry page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'Asset Registry',
+        'service_description': 'Centralized asset registry services to maintain accurate technology asset records and lifecycle management.',
+    }
+    return render(request, 'technology/asset_support/asset_registry.html', context)
+
+def barcoding(request):
+    """Barcoding page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'Barcoding',
+        'service_description': 'Efficient barcoding solutions for streamlined asset tracking and inventory management.',
+    }
+    return render(request, 'technology/asset_support/barcoding.html', context)
+
+def business_process_improvement(request):
+    """Business Process Improvement page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'Business Process Improvement',
+        'service_description': 'Strategic business process optimization to enhance operational efficiency and drive growth.',
+    }
+    return render(request, 'technology/business_process_improvement.html', context)
+
+
+
+# Managed Services Main Views
+def managed_service_main(request):
+    """Main managed service page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+    }
+    return render(request, 'managed_service/index.html', context)
+
+def managed_service_accounting(request):
+    """Accounting Services main page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Accounting Services',
+        'service_description': 'Comprehensive accounting solutions for your business.',
+    }
+    return render(request, 'managed_service/accounting_services/index.html', context)
+
+def managed_service_tax(request):
+    """Tax Services main page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Tax Services',
+        'service_description': 'Complete tax planning and compliance services.',
+    }
+    return render(request, 'managed_service/tax_services/index.html', context)
+
+def managed_service_technology(request):
+    """Technology Services main page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Technology Services',
+        'service_description': 'Comprehensive IT infrastructure and support solutions.',
+    }
+    return render(request, 'managed_service/technology_services/index.html', context)
+
+# Accounting Services Sub-views
+def account_management_bookkeeping_ms(request):
+    """Account Management & Bookkeeping page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Account Management & Bookkeeping',
+        'service_description': 'Professional account management and comprehensive bookkeeping solutions to maintain financial integrity and accuracy.',
+    }
+    return render(request, 'managed_service/accounting_services/account_management_bookkeeping.html', context)
+
+def financial_statement_preparation(request):
+    """Financial Statement Preparation page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Financial Statement Preparation',
+        'service_description': 'Professional preparation of comprehensive financial statements including balance sheets, income statements, and cash flow statements.',
+    }
+    return render(request, 'managed_service/accounting_services/financial_statement_preparation.html', context)
+
+def bank_reconciliation(request):
+    """Bank Reconciliation page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Bank Reconciliation',
+        'service_description': 'Accurate and timely bank reconciliation services to ensure financial records match bank statements.',
+    }
+    return render(request, 'managed_service/accounting_services/bank_reconciliation.html', context)
+
+def account_payable_receivable(request):
+    """Account Payable/Receivable page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Accounts Payable & Receivable Management',
+        'service_description': 'Comprehensive management of accounts payable and receivable to optimize cash flow and vendor relationships.',
+    }
+    return render(request, 'managed_service/accounting_services/account_payable_receivable.html', context)
+
+def budget_and_forecasting(request):
+    """Budget and Forecasting page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Budget and Forecasting',
+        'service_description': 'Strategic budgeting and financial forecasting services to guide business planning and decision-making.',
+    }
+    return render(request, 'managed_service/accounting_services/budget_and_forecasting.html', context)
+
+def forensic_accounting_ms(request):
+    """Forensic Accounting page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Forensic Accounting',
+        'service_description': 'Expert forensic accounting services to investigate financial discrepancies, fraud, and ensure financial integrity.',
+    }
+    return render(request, 'managed_service/accounting_services/forensic_accounting.html', context)
+
+def business_consulting_ms(request):
+    """Business Consulting page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Business Consulting',
+        'service_description': 'Strategic business consulting services to optimize operations, improve efficiency, and drive growth.',
+    }
+    return render(request, 'managed_service/accounting_services/business_consulting.html', context)
+
+def public_accounting(request):
+    """Public Accounting page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Public Accounting',
+        'service_description': 'Comprehensive public accounting services including audit, tax, and consulting for businesses and individuals.',
+    }
+    return render(request, 'managed_service/accounting_services/public_accounting.html', context)
+
+# Tax Services Sub-views
+def tax_planning_ms(request):
+    """Tax Planning page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Tax Planning',
+        'service_description': 'Strategic tax planning services to minimize tax liability and optimize your financial position.',
+    }
+    return render(request, 'managed_service/tax_services/tax_planning.html', context)
+
+def payroll_tax(request):
+    """Payroll Tax page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Payroll Tax Management',
+        'service_description': 'Comprehensive payroll tax services including calculation, filing, and compliance management.',
+    }
+    return render(request, 'managed_service/tax_services/payroll_tax.html', context)
+
+def individual_tax_1040(request):
+    """Individual Tax - 1040 page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Individual Tax - Form 1040',
+        'service_description': 'Complete individual tax preparation and filing services for Form 1040 and related schedules.',
+    }
+    return render(request, 'managed_service/tax_services/individual_tax_1040.html', context)
+
+def business_tax_1120s_1120(request):
+    """Business Tax – 1120s and 1120 page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Business Tax – Forms 1120 & 1120S',
+        'service_description': 'Comprehensive business tax services for corporations (Form 1120) and S-corporations (Form 1120S).',
+    }
+    return render(request, 'managed_service/tax_services/business_tax_1120s_1120.html', context)
+
+def nonprofit_tax_990(request):
+    """Non-profit Tax – 990 page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Non-profit Tax – Form 990',
+        'service_description': 'Specialized tax services for non-profit organizations including Form 990 preparation and compliance.',
+    }
+    return render(request, 'managed_service/tax_services/nonprofit_tax_990.html', context)
+
+def tax_accounting(request):
+    """Tax Accounting page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Tax Accounting',
+        'service_description': 'Professional tax accounting services including provision calculations, deferred taxes, and tax basis accounting.',
+    }
+    return render(request, 'managed_service/tax_services/tax_accounting.html', context)
+
+def international_tax(request):
+    """International Tax page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'International Tax',
+        'service_description': 'Expert international tax services including cross-border transactions, transfer pricing, and treaty analysis.',
+    }
+    return render(request, 'managed_service/tax_services/international_tax.html', context)
+
+# Technology Services Sub-views
+def asset_tracking_management(request):
+    """Asset Tracking and Management page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Asset Tracking and Management',
+        'service_description': 'Comprehensive IT asset tracking and management solutions to optimize technology investments and lifecycle management.',
+    }
+    return render(request, 'managed_service/technology_services/asset_tracking_management.html', context)
+
+def it_support_management(request):
+    """IT Support Management page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'IT Support Management',
+        'service_description': 'Professional IT support management services including help desk, technical support, and system maintenance.',
+    }
+    return render(request, 'managed_service/technology_services/it_support_management.html', context)
+
+def cybersecurity_ms(request):
+    """Cybersecurity page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Cybersecurity Services',
+        'service_description': 'Comprehensive cybersecurity solutions including threat protection, vulnerability assessment, and security monitoring.',
+    }
+    return render(request, 'managed_service/technology_services/cybersecurity.html', context)
+
+def network_support_health_check(request):
+    """Network Support/Health Check page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Network Support & Health Check',
+        'service_description': 'Professional network support services including health checks, optimization, and performance monitoring.',
+    }
+    return render(request, 'managed_service/technology_services/network_support_health_check.html', context)
+
+def inventory(request):
+    """Inventory page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Inventory Management',
+        'service_description': 'Comprehensive inventory management solutions including tracking, optimization, and reporting.',
+    }
+    return render(request, 'managed_service/technology_services/inventory.html', context)
+
