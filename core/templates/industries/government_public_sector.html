@@ -1,0 +1,2369 @@
+
+{% extends "base.html" %}
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}Government & Public Sector Solutions | OB Global{% endblock %}
+
+{% block content %}
+<div class="insights-page-container">
+    <!-- Hero Section - Full Screen (Unchanged) -->
+    <section class="insights-hero">
+        <div class="hero-background"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">
+                Government & Public Sector <span>Solutions</span>
+            </h1>
+
+            <p class="hero-description">
+                Transforming public service delivery through digital innovation, 
+                data-driven governance, and citizen-centric solutions for federal, 
+                state, and local governments.
+            </p>
+        </div>
+    </section>
+
+    <!-- Government Impact Visualization Section -->
+    <section class="ai-impact-visualization">
+        <div class="container">
+            <h2 class="section-title">Digital Government Transformation</h2>
+            
+                <!-- Government Digital Evolution Timeline -->
+    <div class="timeline-section" style="
+        background: linear-gradient(135deg, rgba(0, 82, 147, 0.05) 0%, rgba(0, 52, 89, 0.05) 100%);
+        border-radius: 1rem;
+        padding: clamp(1rem, 3vw, 2rem);
+        margin-bottom: clamp(1.5rem, 4vw, 3rem);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        border-left: clamp(3px, 1vw, 6px) solid #005293;
+        animation: fadeInUp 0.8s ease-out;
+        overflow: hidden;
+    ">
+        <h3 style="
+            font-size: clamp(1.25rem, 4vw, 2rem);
+            margin-bottom: clamp(1rem, 3vw, 2rem);
+            color: #333;
+            text-align: center;
+            font-weight: 700;
+            background: linear-gradient(135deg, #005293, #003459);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.3;
+            padding: 0 0.5rem;
+        ">📈 Evolution of Digital Government</h3>
+        
+        <div class="timeline" style="
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 clamp(0.5rem, 2vw, 1rem);
+        ">
+            <!-- Timeline Line -->
+            <div class="timeline-line" style="
+                position: absolute;
+                left: clamp(40px, 12vw, 50px);
+                top: 0;
+                bottom: 0;
+                width: clamp(2px, 0.5vw, 4px);
+                background: linear-gradient(to bottom, #005293, #003459);
+                border-radius: 2px;
+                z-index: 1;
+            "></div>
+            
+            <div class="timeline-item" style="
+                position: relative;
+                margin-bottom: clamp(2rem, 5vw, 3rem);
+                padding-left: clamp(70px, 20vw, 100px);
+                animation: slideInLeft 0.6s ease-out;
+                z-index: 2;
+            ">
+                <div class="timeline-year" style="
+                    position: absolute;
+                    left: clamp(10px, 3vw, 20px);
+                    top: 0;
+                    background: linear-gradient(135deg, #005293, #003459);
+                    color: white;
+                    padding: clamp(0.4rem, 1.5vw, 0.5rem) clamp(0.8rem, 2vw, 1rem);
+                    border-radius: clamp(0.5rem, 2vw, 1rem);
+                    font-weight: 700;
+                    font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+                    min-width: clamp(50px, 15vw, 80px);
+                    text-align: center;
+                    box-shadow: 0 4px 15px rgba(0, 82, 147, 0.3);
+                    z-index: 3;
+                ">2000-2010</div>
+                <div class="timeline-content" style="
+                    background: white;
+                    padding: clamp(1.5rem, 4vw, 2rem) clamp(1rem, 3vw, 1.5rem);
+                    border-radius: clamp(0.5rem, 2vw, 0.75rem);
+                    border-left: clamp(2px, 1vw, 4px) solid #005293;
+                    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                    transition: all 0.3s ease;
+                    position: relative;
+                    margin-top: 0;
+                    min-height: 120px;
+                ">
+                    <h4 style="
+                        font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+                        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                        color: #333;
+                        font-weight: 600;
+                        line-height: 1.3;
+                        padding-top: 0;
+                    ">E-Government Foundation</h4>
+                    <p style="
+                        color: #666;
+                        line-height: 1.5;
+                        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                        font-size: clamp(0.85rem, 2.5vw, 1rem);
+                    ">Basic online services and static websites emerged. Governments began digitizing essential services like tax filing and license applications, focusing on information dissemination rather than interaction.</p>
+                    <div class="adoption-stats" style="
+                        display: flex;
+                        align-items: center;
+                        gap: clamp(0.5rem, 2vw, 1rem);
+                        padding: clamp(0.75rem, 2vw, 1rem);
+                        background: linear-gradient(135deg, rgba(0, 82, 147, 0.1), rgba(0, 52, 89, 0.1));
+                        border-radius: clamp(0.25rem, 1vw, 0.5rem);
+                        border: 1px solid rgba(0, 82, 147, 0.2);
+                        flex-wrap: wrap;
+                    ">
+                        <div class="stat" style="
+                            font-size: clamp(1.5rem, 5vw, 2rem);
+                            font-weight: 800;
+                            color: #005293;
+                            line-height: 1;
+                        ">28%</div>
+                        <span style="
+                            color: #666;
+                            font-size: clamp(0.75rem, 2vw, 0.9rem);
+                            line-height: 1.2;
+                        ">Online Service Adoption</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="timeline-item" style="
+                position: relative;
+                margin-bottom: clamp(2rem, 5vw, 3rem);
+                padding-left: clamp(70px, 20vw, 100px);
+                animation: slideInLeft 0.6s ease-out 0.2s both;
+                z-index: 2;
+            ">
+                <div class="timeline-year" style="
+                    position: absolute;
+                    left: clamp(10px, 3vw, 20px);
+                    top: 0;
+                    background: linear-gradient(135deg, #2E8B57, #228B22);
+                    color: white;
+                    padding: clamp(0.4rem, 1.5vw, 0.5rem) clamp(0.8rem, 2vw, 1rem);
+                    border-radius: clamp(0.5rem, 2vw, 1rem);
+                    font-weight: 700;
+                    font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+                    min-width: clamp(50px, 15vw, 80px);
+                    text-align: center;
+                    box-shadow: 0 4px 15px rgba(46, 139, 87, 0.3);
+                    z-index: 3;
+                ">2011-2015</div>
+                <div class="timeline-content" style="
+                    background: white;
+                    padding: clamp(1.5rem, 4vw, 2rem) clamp(1rem, 3vw, 1.5rem);
+                    border-radius: clamp(0.5rem, 2vw, 0.75rem);
+                    border-left: clamp(2px, 1vw, 4px) solid #2E8B57;
+                    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                    transition: all 0.3s ease;
+                    position: relative;
+                    margin-top: 0;
+                    min-height: 120px;
+                ">
+                    <h4 style="
+                        font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+                        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                        color: #333;
+                        font-weight: 600;
+                        line-height: 1.3;
+                        padding-top: 0;
+                    ">Open Data & Mobile Services</h4>
+                    <p style="
+                        color: #666;
+                        line-height: 1.5;
+                        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                        font-size: clamp(0.85rem, 2.5vw, 1rem);
+                    ">Governments launched open data portals and mobile applications. Citizen engagement platforms emerged, and cloud adoption began transforming IT infrastructure. Focus shifted to transparency and accessibility.</p>
+                    <div class="adoption-stats" style="
+                        display: flex;
+                        align-items: center;
+                        gap: clamp(0.5rem, 2vw, 1rem);
+                        padding: clamp(0.75rem, 2vw, 1rem);
+                        background: linear-gradient(135deg, rgba(46, 139, 87, 0.1), rgba(34, 139, 34, 0.1));
+                        border-radius: clamp(0.25rem, 1vw, 0.5rem);
+                        border: 1px solid rgba(46, 139, 87, 0.2);
+                        flex-wrap: wrap;
+                    ">
+                        <div class="stat" style="
+                            font-size: clamp(1.5rem, 5vw, 2rem);
+                            font-weight: 800;
+                            color: #2E8B57;
+                            line-height: 1;
+                        ">52%</div>
+                        <span style="
+                            color: #666;
+                            font-size: clamp(0.75rem, 2vw, 0.9rem);
+                            line-height: 1.2;
+                        ">Digital Service Availability</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="timeline-item" style="
+                position: relative;
+                margin-bottom: clamp(2rem, 5vw, 3rem);
+                padding-left: clamp(70px, 20vw, 100px);
+                animation: slideInLeft 0.6s ease-out 0.4s both;
+                z-index: 2;
+            ">
+                <div class="timeline-year" style="
+                    position: absolute;
+                    left: clamp(10px, 3vw, 20px);
+                    top: 0;
+                    background: linear-gradient(135deg, #4169E1, #1E90FF);
+                    color: white;
+                    padding: clamp(0.4rem, 1.5vw, 0.5rem) clamp(0.8rem, 2vw, 1rem);
+                    border-radius: clamp(0.5rem, 2vw, 1rem);
+                    font-weight: 700;
+                    font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+                    min-width: clamp(50px, 15vw, 80px);
+                    text-align: center;
+                    box-shadow: 0 4px 15px rgba(65, 105, 225, 0.3);
+                    z-index: 3;
+                ">2016-2020</div>
+                <div class="timeline-content" style="
+                    background: white;
+                    padding: clamp(1.5rem, 4vw, 2rem) clamp(1rem, 3vw, 1.5rem);
+                    border-radius: clamp(0.5rem, 2vw, 0.75rem);
+                    border-left: clamp(2px, 1vw, 4px) solid #4169E1;
+                    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                    transition: all 0.3s ease;
+                    position: relative;
+                    margin-top: 0;
+                    min-height: 120px;
+                ">
+                    <h4 style="
+                        font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+                        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                        color: #333;
+                        font-weight: 600;
+                        line-height: 1.3;
+                        padding-top: 0;
+                    ">AI & Data-Driven Governance</h4>
+                    <p style="
+                        color: #666;
+                        line-height: 1.5;
+                        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                        font-size: clamp(0.85rem, 2.5vw, 1rem);
+                    ">Artificial intelligence transformed public service delivery. Predictive analytics improved resource allocation, and smart city initiatives gained momentum. Cybersecurity became a critical priority for digital infrastructure.</p>
+                    <div class="adoption-stats" style="
+                        display: flex;
+                        align-items: center;
+                        gap: clamp(0.5rem, 2vw, 1rem);
+                        padding: clamp(0.75rem, 2vw, 1rem);
+                        background: linear-gradient(135deg, rgba(65, 105, 225, 0.1), rgba(30, 144, 255, 0.1));
+                        border-radius: clamp(0.25rem, 1vw, 0.5rem);
+                        border: 1px solid rgba(65, 105, 225, 0.2);
+                        flex-wrap: wrap;
+                    ">
+                        <div class="stat" style="
+                            font-size: clamp(1.5rem, 5vw, 2rem);
+                            font-weight: 800;
+                            color: #4169E1;
+                            line-height: 1;
+                        ">74%</div>
+                        <span style="
+                            color: #666;
+                            font-size: clamp(0.75rem, 2vw, 0.9rem);
+                            line-height: 1.2;
+                        ">AI Implementation Rate</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="timeline-item" style="
+                position: relative;
+                margin-bottom: clamp(2rem, 5vw, 3rem);
+                padding-left: clamp(70px, 20vw, 100px);
+                animation: slideInLeft 0.6s ease-out 0.6s both;
+                z-index: 2;
+            ">
+                <div class="timeline-year" style="
+                    position: absolute;
+                    left: clamp(10px, 3vw, 20px);
+                    top: 0;
+                    background: linear-gradient(135deg, #8A2BE2, #4B0082);
+                    color: white;
+                    padding: clamp(0.4rem, 1.5vw, 0.5rem) clamp(0.8rem, 2vw, 1rem);
+                    border-radius: clamp(0.5rem, 2vw, 1rem);
+                    font-weight: 700;
+                    font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+                    min-width: clamp(50px, 15vw, 80px);
+                    text-align: center;
+                    box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
+                    z-index: 3;
+                ">2021+</div>
+                <div class="timeline-content" style="
+                    background: white;
+                    padding: clamp(1.5rem, 4vw, 2rem) clamp(1rem, 3vw, 1.5rem);
+                    border-radius: clamp(0.5rem, 2vw, 0.75rem);
+                    border-left: clamp(2px, 1vw, 4px) solid #8A2BE2;
+                    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                    transition: all 0.3s ease;
+                    position: relative;
+                    margin-top: 0;
+                    min-height: 120px;
+                ">
+                    <h4 style="
+                        font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+                        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                        color: #333;
+                        font-weight: 600;
+                        line-height: 1.3;
+                        padding-top: 0;
+                    ">Intelligent Government Era</h4>
+                    <p style="
+                        color: #666;
+                        line-height: 1.5;
+                        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                        font-size: clamp(0.85rem, 2.5vw, 1rem);
+                    ">Fully integrated digital ecosystems with autonomous service delivery. Blockchain for transparent governance, quantum computing for complex policy modeling, and immersive technologies for citizen engagement become standard.</p>
+                    <div class="adoption-stats" style="
+                        display: flex;
+                        align-items: center;
+                        gap: clamp(0.5rem, 2vw, 1rem);
+                        padding: clamp(0.75rem, 2vw, 1rem);
+                        background: linear-gradient(135deg, rgba(138, 43, 226, 0.1), rgba(75, 0, 130, 0.1));
+                        border-radius: clamp(0.25rem, 1vw, 0.5rem);
+                        border: 1px solid rgba(138, 43, 226, 0.2);
+                        flex-wrap: wrap;
+                    ">
+                        <div class="stat" style="
+                            font-size: clamp(1.5rem, 5vw, 2rem);
+                            font-weight: 800;
+                            color: #8A2BE2;
+                            line-height: 1;
+                        ">89%</div>
+                        <span style="
+                            color: #666;
+                            font-size: clamp(0.75rem, 2vw, 0.9rem);
+                            line-height: 1.2;
+                        ">Digital Transformation Goal</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+                <!-- Government Impact Metrics -->
+<div class="metrics-section" style="
+    background: linear-gradient(135deg, rgba(0, 82, 147, 0.05) 0%, rgba(46, 139, 87, 0.05) 100%);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border-left: 6px solid #005293;
+    animation: fadeInUp 0.8s ease-out 0.3s both;
+">
+    <h3 style="
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        margin-bottom: 2rem;
+        color: #333;
+        text-align: center;
+        font-weight: 700;
+        background: linear-gradient(135deg, #005293, #2E8B57);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    ">🚀 Public Sector Performance Metrics</h3>
+    <div class="metrics-grid" style="
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+    ">
+        <div class="metric-card" style="
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #005293;
+            animation: bounceIn 0.6s ease-out;
+        ">
+            <div class="metric-value" style="
+                font-size: 3rem;
+                font-weight: 800;
+                color: #005293;
+                margin-bottom: 1rem;
+            ">42%</div>
+            <div class="metric-label" style="
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 1rem;
+            ">Cost Reduction in Service Delivery</div>
+            <div class="metric-description" style="
+                color: #666;
+                line-height: 1.5;
+                font-size: 0.9rem;
+            ">Digital transformation and process automation significantly reduce operational costs while improving service quality and citizen satisfaction.</div>
+        </div>
+        
+        <div class="metric-card" style="
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #2E8B57;
+            animation: bounceIn 0.6s ease-out 0.2s both;
+        ">
+            <div class="metric-value" style="
+                font-size: 3rem;
+                font-weight: 800;
+                color: #2E8B57;
+                margin-bottom: 1rem;
+            ">3.5x</div>
+            <div class="metric-label" style="
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 1rem;
+            ">Faster Service Processing</div>
+            <div class="metric-description" style="
+                color: #666;
+                line-height: 1.5;
+                font-size: 0.9rem;
+            ">Automated workflows and digital platforms dramatically accelerate permit approvals, benefit processing, and citizen service requests.</div>
+        </div>
+        
+        <div class="metric-card" style="
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #4169E1;
+            animation: bounceIn 0.6s ease-out 0.4s both;
+        ">
+            <div class="metric-value" style="
+                font-size: 3rem;
+                font-weight: 800;
+                color: #4169E1;
+                margin-bottom: 1rem;
+            ">68%</div>
+            <div class="metric-label" style="
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 1rem;
+            ">Citizen Satisfaction Improvement</div>
+            <div class="metric-description" style="
+                color: #666;
+                line-height: 1.5;
+                font-size: 0.9rem;
+            ">Digital services and improved accessibility lead to significantly higher citizen satisfaction scores and trust in government institutions.</div>
+        </div>
+        
+        <div class="metric-card" style="
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #8A2BE2;
+            animation: bounceIn 0.6s ease-out 0.6s both;
+        ">
+            <div class="metric-value" style="
+                font-size: 3rem;
+                font-weight: 800;
+                color: #8A2BE2;
+                margin-bottom: 1rem;
+            ">2.8x</div>
+            <div class="metric-label" style="
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 1rem;
+            ">ROI on Digital Investments</div>
+            <div class="metric-description" style="
+                color: #666;
+                line-height: 1.5;
+                font-size: 0.9rem;
+            ">Strategic technology investments deliver substantial returns through operational efficiency, reduced fraud, and improved public service outcomes.</div>
+        </div>
+
+        <!-- New Metric Cards -->
+        <div class="metric-card" style="
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #228B22;
+            animation: bounceIn 0.6s ease-out 0.8s both;
+        ">
+            <div class="metric-value" style="
+                font-size: 3rem;
+                font-weight: 800;
+                color: #228B22;
+                margin-bottom: 1rem;
+            ">91%</div>
+            <div class="metric-label" style="
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 1rem;
+            ">Data Accuracy & Compliance</div>
+            <div class="metric-description" style="
+                color: #666;
+                line-height: 1.5;
+                font-size: 0.9rem;
+            ">Automated systems ensure high data quality and compliance with regulatory requirements, reducing errors and audit findings.</div>
+        </div>
+        
+        <div class="metric-card" style="
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #1E90FF;
+            animation: bounceIn 0.6s ease-out 1s both;
+        ">
+            <div class="metric-value" style="
+                font-size: 3rem;
+                font-weight: 800;
+                color: #1E90FF;
+                margin-bottom: 1rem;
+            ">76%</div>
+            <div class="metric-label" style="
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 1rem;
+            ">Process Automation Rate</div>
+            <div class="metric-description" style="
+                color: #666;
+                line-height: 1.5;
+                font-size: 0.9rem;
+            ">Robotic process automation handles repetitive administrative tasks, freeing staff for higher-value public service activities.</div>
+        </div>
+
+        <!-- Additional Metric Cards -->
+        <div class="metric-card" style="
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #4B0082;
+            animation: bounceIn 0.6s ease-out 1.2s both;
+        ">
+            <div class="metric-value" style="
+                font-size: 3rem;
+                font-weight: 800;
+                color: #4B0082;
+                margin-bottom: 1rem;
+            ">98%</div>
+            <div class="metric-label" style="
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 1rem;
+            ">System Uptime & Reliability</div>
+            <div class="metric-description" style="
+                color: #666;
+                line-height: 1.5;
+                font-size: 0.9rem;
+            ">Cloud infrastructure and advanced monitoring ensure near-perfect availability for critical public services and emergency systems.</div>
+        </div>
+        
+        <div class="metric-card" style="
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #003459;
+            animation: bounceIn 0.6s ease-out 1.4s both;
+        ">
+            <div class="metric-value" style="
+                font-size: 3rem;
+                font-weight: 800;
+                color: #003459;
+                margin-bottom: 1rem;
+            ">4.1x</div>
+            <div class="metric-label" style="
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 1rem;
+            ">Faster Emergency Response</div>
+            <div class="metric-description" style="
+                color: #666;
+                line-height: 1.5;
+                font-size: 0.9rem;
+            ">Integrated emergency management systems and real-time data analytics dramatically improve response times for public safety incidents.</div>
+        </div>
+    </div>
+</div>
+<!-- Government Solutions -->
+<div class="applications-section" style="
+    background: linear-gradient(135deg, rgba(0, 52, 89, 0.05) 0%, rgba(65, 105, 225, 0.05) 100%);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border-left: 6px solid #003459;
+    animation: fadeInUp 0.8s ease-out 0.5s both;
+">
+    <h3 style="
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        margin-bottom: 2rem;
+        color: #333;
+        text-align: center;
+        font-weight: 700;
+        background: linear-gradient(135deg, #003459, #4169E1);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    ">🏛️ Comprehensive Government Solutions</h3>
+    <div class="applications-grid" style="
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    ">
+        <div class="application-area" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #005293;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: zoomIn 0.6s ease-out;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">🇺🇸 Federal Government</h4>
+            <ul class="application-list" style="
+                list-style: none;
+                padding: 0;
+            ">
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Enterprise IT modernization and cloud migration</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Cybersecurity and critical infrastructure protection</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Data analytics for policy decision-making</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Regulatory compliance and reporting automation</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Inter-agency collaboration platforms</li>
+            </ul>
+        </div>
+        
+        <div class="application-area" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #2E8B57;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: zoomIn 0.6s ease-out 0.2s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">🏙️ State & Local Government</h4>
+            <ul class="application-list" style="
+                list-style: none;
+                padding: 0;
+            ">
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Smart city infrastructure and IoT implementation</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Digital citizen services and mobile applications</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Public safety and emergency management systems</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Revenue collection and financial management</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Permitting and licensing automation</li>
+            </ul>
+        </div>
+        
+        <div class="application-area" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #4169E1;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: zoomIn 0.6s ease-out 0.4s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">🏥 Healthcare & Social Services</h4>
+            <ul class="application-list" style="
+                list-style: none;
+                padding: 0;
+            ">
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Electronic health records and health information exchange</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Benefits eligibility and management systems</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Public health surveillance and response</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Aging and disability service coordination</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Mental health and substance abuse programs</li>
+            </ul>
+        </div>
+        
+        <div class="application-area" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #8A2BE2;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: zoomIn 0.6s ease-out 0.6s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">🎓 Education & Workforce Development</h4>
+            <ul class="application-list" style="
+                list-style: none;
+                padding: 0;
+            ">
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Student information and learning management systems</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Workforce development and job matching platforms</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Adult education and vocational training programs</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Education data analytics and performance tracking</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Digital literacy and skills development initiatives</li>
+            </ul>
+        </div>
+
+        <!-- New Application Areas -->
+        <div class="application-area" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #228B22;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: zoomIn 0.6s ease-out 0.8s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">🏗️ Infrastructure & Transportation</h4>
+            <ul class="application-list" style="
+                list-style: none;
+                padding: 0;
+            ">
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Intelligent transportation systems and traffic management</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Asset management and maintenance optimization</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Public transit planning and operations</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Environmental monitoring and sustainability programs</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Utility management and smart grid implementation</li>
+            </ul>
+        </div>
+        
+        <div class="application-area" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #1E90FF;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: zoomIn 0.6s ease-out 1s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">🔒 Public Safety & Justice</h4>
+            <ul class="application-list" style="
+                list-style: none;
+                padding: 0;
+            ">
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Law enforcement records and case management</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Emergency response and dispatch systems</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Court management and judicial proceedings</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Corrections and rehabilitation programs</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Crime analysis and prevention initiatives</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Implementation Framework -->
+<div class="framework-section" style="
+    background: linear-gradient(135deg, rgba(0, 82, 147, 0.05) 0%, rgba(138, 43, 226, 0.05) 100%);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border-left: 6px solid #005293;
+    animation: fadeInUp 0.8s ease-out 0.7s both;
+">
+    <h3 style="
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        margin-bottom: 2rem;
+        color: #333;
+        text-align: center;
+        font-weight: 700;
+        background: linear-gradient(135deg, #005293, #8A2BE2);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    ">🛠️ Digital Government Transformation Framework</h3>
+    <div class="framework-steps">
+        <div class="framework-step" style="
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #005293;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: slideInRight 0.6s ease-out;
+        ">
+            <div class="step-number" style="
+                background: linear-gradient(135deg, #005293, #003459);
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                font-weight: 700;
+                flex-shrink: 0;
+                box-shadow: 0 4px 15px rgba(0, 82, 147, 0.3);
+            ">01</div>
+            <div class="step-content">
+                <h4 style="
+                    font-size: 1.3rem;
+                    margin-bottom: 1rem;
+                    color: #333;
+                    font-weight: 600;
+                ">Digital Readiness Assessment</h4>
+                <p style="
+                    color: #666;
+                    line-height: 1.6;
+                ">Comprehensive analysis of current technology infrastructure, digital capabilities, and citizen service delivery models. Identify gaps, opportunities, and develop a strategic roadmap for digital transformation.</p>
+            </div>
+        </div>
+        
+        <div class="framework-step" style="
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #2E8B57;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: slideInRight 0.6s ease-out 0.2s both;
+        ">
+            <div class="step-number" style="
+                background: linear-gradient(135deg, #2E8B57, #228B22);
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                font-weight: 700;
+                flex-shrink: 0;
+                box-shadow: 0 4px 15px rgba(46, 139, 87, 0.3);
+            ">02</div>
+            <div class="step-content">
+                <h4 style="
+                    font-size: 1.3rem;
+                    margin-bottom: 1rem;
+                    color: #333;
+                    font-weight: 600;
+                ">Citizen-Centric Service Design</h4>
+                <p style="
+                    color: #666;
+                    line-height: 1.6;
+                ">Develop user-centered digital services with a focus on accessibility, inclusivity, and ease of use. Implement design thinking methodologies and establish continuous feedback mechanisms with citizens.</p>
+            </div>
+        </div>
+        
+        <div class="framework-step" style="
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #4169E1;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: slideInRight 0.6s ease-out 0.4s both;
+        ">
+            <div class="step-number" style="
+                background: linear-gradient(135deg, #4169E1, #1E90FF);
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                font-weight: 700;
+                flex-shrink: 0;
+                box-shadow: 0 4px 15px rgba(65, 105, 225, 0.3);
+            ">03</div>
+            <div class="step-content">
+                <h4 style="
+                    font-size: 1.3rem;
+                    margin-bottom: 1rem;
+                    color: #333;
+                    font-weight: 600;
+                ">Technology Infrastructure Modernization</h4>
+                <p style="
+                    color: #666;
+                    line-height: 1.6;
+                ">Migrate legacy systems to cloud-native architectures. Implement API-first approaches, microservices, and ensure interoperability across government agencies. Focus on scalability, security, and maintainability.</p>
+            </div>
+        </div>
+        
+        <div class="framework-step" style="
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #8A2BE2;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: slideInRight 0.6s ease-out 0.6s both;
+        ">
+            <div class="step-number" style="
+                background: linear-gradient(135deg, #8A2BE2, #4B0082);
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                font-weight: 700;
+                flex-shrink: 0;
+                box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
+            ">04</div>
+            <div class="step-content">
+                <h4 style="
+                    font-size: 1.3rem;
+                    margin-bottom: 1rem;
+                    color: #333;
+                    font-weight: 600;
+                ">Data Governance & Analytics</h4>
+                <p style="
+                    color: #666;
+                    line-height: 1.6;
+                ">Establish comprehensive data governance frameworks. Implement advanced analytics for evidence-based policymaking, performance measurement, and predictive insights for public service optimization.</p>
+            </div>
+        </div>
+        
+        <div class="framework-step" style="
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #228B22;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: slideInRight 0.6s ease-out 0.8s both;
+        ">
+            <div class="step-number" style="
+                background: linear-gradient(135deg, #228B22, #006400);
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                font-weight: 700;
+                flex-shrink: 0;
+                box-shadow: 0 4px 15px rgba(34, 139, 34, 0.3);
+            ">05</div>
+            <div class="step-content">
+                <h4 style="
+                    font-size: 1.3rem;
+                    margin-bottom: 1rem;
+                    color: #333;
+                    font-weight: 600;
+                ">Workforce Transformation</h4>
+                <p style="
+                    color: #666;
+                    line-height: 1.6;
+                ">Develop digital skills training programs and change management strategies. Foster innovation culture and establish cross-functional teams. Implement agile methodologies and continuous improvement practices.</p>
+            </div>
+        </div>
+
+        <!-- New Framework Steps -->
+        <div class="framework-step" style="
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #1E90FF;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: slideInRight 0.6s ease-out 1s both;
+        ">
+            <div class="step-number" style="
+                background: linear-gradient(135deg, #1E90FF, #0000FF);
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                font-weight: 700;
+                flex-shrink: 0;
+                box-shadow: 0 4px 15px rgba(30, 144, 255, 0.3);
+            ">06</div>
+            <div class="step-content">
+                <h4 style="
+                    font-size: 1.3rem;
+                    margin-bottom: 1rem;
+                    color: #333;
+                    font-weight: 600;
+                ">Cybersecurity & Privacy Protection</h4>
+                <p style="
+                    color: #666;
+                    line-height: 1.6;
+                ">Implement comprehensive cybersecurity frameworks, zero-trust architectures, and advanced threat protection. Ensure compliance with data privacy regulations and establish robust incident response capabilities.</p>
+            </div>
+        </div>
+        
+        <div class="framework-step" style="
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #4B0082;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: slideInRight 0.6s ease-out 1.2s both;
+        ">
+            <div class="step-number" style="
+                background: linear-gradient(135deg, #4B0082, #2F4F4F);
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                font-weight: 700;
+                flex-shrink: 0;
+                box-shadow: 0 4px 15px rgba(75, 0, 130, 0.3);
+            ">07</div>
+            <div class="step-content">
+                <h4 style="
+                    font-size: 1.3rem;
+                    margin-bottom: 1rem;
+                    color: #333;
+                    font-weight: 600;
+                ">Continuous Innovation & Evaluation</h4>
+                <p style="
+                    color: #666;
+                    line-height: 1.6;
+                ">Establish innovation labs and partnerships with technology providers. Implement performance measurement frameworks and continuous feedback loops. Foster a culture of experimentation and evidence-based improvement.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Challenges & Solutions -->
+<div class="challenges-section" style="
+    background: linear-gradient(135deg, rgba(46, 139, 87, 0.05) 0%, rgba(30, 144, 255, 0.05) 100%);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border-left: 6px solid #2E8B57;
+    animation: fadeInUp 0.8s ease-out 0.9s both;
+">
+    <h3 style="
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        margin-bottom: 2rem;
+        color: #333;
+        text-align: center;
+        font-weight: 700;
+        background: linear-gradient(135deg, #2E8B57, #1E90FF);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    ">⚡ Overcoming Public Sector Challenges</h3>
+    <div class="challenges-grid" style="
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    ">
+        <div class="challenge-item" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-top: 4px solid #005293;
+            transition: transform 0.3s ease;
+            animation: flipInX 0.6s ease-out;
+        ">
+            <h4 style="
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Legacy System Modernization</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+                margin-bottom: 1rem;
+            ">Government agencies often rely on outdated systems that are difficult to maintain, integrate, and secure, creating operational inefficiencies and limiting innovation.</p>
+            <div class="solution" style="
+                padding: 1rem;
+                background: linear-gradient(135deg, rgba(0, 82, 147, 0.1), rgba(0, 52, 89, 0.1));
+                border-radius: 0.5rem;
+                border-left: 4px solid #28a745;
+                font-size: 0.9rem;
+                line-height: 1.5;
+            ">
+                <strong>Solution:</strong> Implement phased modernization strategies with API-led connectivity. Use containerization and cloud migration to extend legacy system life while building new capabilities.
+            </div>
+        </div>
+        
+        <div class="challenge-item" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-top: 4px solid #4169E1;
+            transition: transform 0.3s ease;
+            animation: flipInX 0.6s ease-out 0.2s both;
+        ">
+            <h4 style="
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Data Silos & Interoperability</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+                margin-bottom: 1rem;
+            ">Government data is often trapped in departmental silos, preventing comprehensive analysis, coordinated service delivery, and evidence-based policymaking.</p>
+            <div class="solution" style="
+                padding: 1rem;
+                background: linear-gradient(135deg, rgba(65, 105, 225, 0.1), rgba(30, 144, 255, 0.1));
+                border-radius: 0.5rem;
+                border-left: 4px solid #28a745;
+                font-size: 0.9rem;
+                line-height: 1.5;
+            ">
+                <strong>Solution:</strong> Establish data governance frameworks and implement API ecosystems. Create data sharing agreements and develop centralized data platforms with appropriate privacy safeguards.
+            </div>
+        </div>
+        
+        <div class="challenge-item" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-top: 4px solid #8A2BE2;
+            transition: transform 0.3s ease;
+            animation: flipInX 0.6s ease-out 0.4s both;
+        ">
+            <h4 style="
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Cybersecurity & Privacy Concerns</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+                margin-bottom: 1rem;
+            ">Government systems store sensitive citizen data and critical infrastructure information, making them prime targets for cyber attacks and requiring robust security measures.</p>
+            <div class="solution" style="
+                padding: 1rem;
+                background: linear-gradient(135deg, rgba(138, 43, 226, 0.1), rgba(75, 0, 130, 0.1));
+                border-radius: 0.5rem;
+                border-left: 4px solid #28a745;
+                font-size: 0.9rem;
+                line-height: 1.5;
+            ">
+                <strong>Solution:</strong> Implement zero-trust architectures, advanced threat detection, and comprehensive security frameworks. Conduct regular audits and establish robust incident response capabilities.
+            </div>
+        </div>
+        
+        <div class="challenge-item" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-top: 4px solid #228B22;
+            transition: transform 0.3s ease;
+            animation: flipInX 0.6s ease-out 0.6s both;
+        ">
+            <h4 style="
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Digital Inclusion & Accessibility</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+                margin-bottom: 1rem;
+            ">Ensuring equitable access to digital services for all citizens, including those with disabilities, limited digital literacy, or inadequate internet access remains a significant challenge.</p>
+            <div class="solution" style="
+                padding: 1rem;
+                background: linear-gradient(135deg, rgba(34, 139, 34, 0.1), rgba(0, 100, 0, 0.1));
+                border-radius: 0.5rem;
+                border-left: 4px solid #28a745;
+                font-size: 0.9rem;
+                line-height: 1.5;
+            ">
+                <strong>Solution:</strong> Develop multi-channel service delivery models with offline options. Implement accessibility standards and provide digital literacy training. Ensure services work across all devices and connection types.
+            </div>
+        </div>
+
+        <!-- New Challenge Items -->
+        <div class="challenge-item" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-top: 4px solid #1E90FF;
+            transition: transform 0.3s ease;
+            animation: flipInX 0.6s ease-out 0.8s both;
+        ">
+            <h4 style="
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Workforce Skills Gap</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+                margin-bottom: 1rem;
+            ">The rapid pace of technological change creates demand for digital skills that often exceed the current capabilities of the public sector workforce.</p>
+            <div class="solution" style="
+                padding: 1rem;
+                background: linear-gradient(135deg, rgba(30, 144, 255, 0.1), rgba(0, 0, 255, 0.1));
+                border-radius: 0.5rem;
+                border-left: 4px solid #28a745;
+                font-size: 0.9rem;
+                line-height: 1.5;
+            ">
+                <strong>Solution:</strong> Implement comprehensive training programs, establish partnerships with academic institutions, and create innovation labs. Develop talent pipelines and modernize recruitment strategies.
+            </div>
+        </div>
+        
+        <div class="challenge-item" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-top: 4px solid #4B0082;
+            transition: transform 0.3s ease;
+            animation: flipInX 0.6s ease-out 1s both;
+        ">
+            <h4 style="
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Procurement & Regulatory Barriers</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+                margin-bottom: 1rem;
+            ">Traditional procurement processes and regulatory requirements often hinder innovation and prevent government from adopting modern technology solutions quickly.</p>
+            <div class="solution" style="
+                padding: 1rem;
+                background: linear-gradient(135deg, rgba(75, 0, 130, 0.1), rgba(47, 79, 79, 0.1));
+                border-radius: 0.5rem;
+                border-left: 4px solid #28a745;
+                font-size: 0.9rem;
+                line-height: 1.5;
+            ">
+                <strong>Solution:</strong> Implement agile procurement methods, establish innovation partnerships, and create regulatory sandboxes. Develop outcome-based contracting and streamline approval processes.
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Future Trends -->
+<div class="future-trends-section" style="
+    background: linear-gradient(135deg, rgba(65, 105, 225, 0.05) 0%, rgba(138, 43, 226, 0.05) 100%);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border-left: 6px solid #4169E1;
+    animation: fadeInUp 0.8s ease-out 1.1s both;
+">
+    <h3 style="
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        margin-bottom: 2rem;
+        color: #333;
+        text-align: center;
+        font-weight: 700;
+        background: linear-gradient(135deg, #4169E1, #8A2BE2);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    ">🔮 Future of Digital Government</h3>
+    <div class="trends-content" style="
+        display: grid;
+        gap: 2rem;
+    ">
+        <div class="trend-category" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #4169E1;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: fadeIn 0.6s ease-out;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">AI-Powered Public Services</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+            ">Artificial intelligence will transform service delivery through predictive analytics, automated decision-making, and personalized citizen interactions. AI will enhance efficiency while maintaining human oversight for critical decisions.</p>
+        </div>
+        
+        <div class="trend-category" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #005293;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Blockchain for Transparent Governance</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+            ">Distributed ledger technology will enable transparent voting systems, secure digital identities, and auditable public records. Smart contracts will automate compliance and reduce administrative overhead.</p>
+        </div>
+        
+        <div class="trend-category" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #2E8B57;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: fadeIn 0.6s ease-out 0.4s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Smart Cities & IoT Integration</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+            ">Connected infrastructure will enable real-time monitoring of urban systems, optimized resource allocation, and enhanced public safety. IoT sensors will provide data-driven insights for urban planning and management.</p>
+        </div>
+        
+        <div class="trend-category" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #8A2BE2;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: fadeIn 0.6s ease-out 0.6s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Digital Identity Ecosystems</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+            ">Secure, privacy-preserving digital identities will enable seamless access to government services across jurisdictions. Self-sovereign identity models will give citizens control over their personal data.</p>
+        </div>
+        
+        <div class="trend-category" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #228B22;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: fadeIn 0.6s ease-out 0.8s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Predictive Policy Making</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+            ">Advanced analytics and simulation models will enable governments to test policy impacts before implementation. Real-time data will support dynamic policy adjustments and evidence-based decision-making.</p>
+        </div>
+
+        <!-- New Trend Categories -->
+        <div class="trend-category" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #1E90FF;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: fadeIn 0.6s ease-out 1s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Quantum Computing for Public Good</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+            ">Quantum computing will revolutionize complex optimization problems in logistics, climate modeling, and drug discovery. Governments will leverage quantum capabilities for national security and scientific advancement.</p>
+        </div>
+        
+        <div class="trend-category" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #4B0082;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: fadeIn 0.6s ease-out 1.2s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Autonomous Service Delivery</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+            ">Self-optimizing government systems will automate complex processes from benefit determination to emergency response. AI-driven platforms will make real-time decisions with appropriate human oversight.</p>
+        </div>
+    </div>
+</div>
+                <!-- Call to Action -->
+                <div class="cta-section" style="
+                    background: linear-gradient(270deg, #005293, #003459, #2E8B57, #228B22);
+                    background-size: 800% 800%;
+                    animation: gradientShift 12s ease infinite;
+                    padding: 3rem 2rem;
+                    border-radius: 12px;
+                    text-align: center;
+                    color: white;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                    margin: 2rem 0;
+                    position: relative;
+                    overflow: hidden;
+                ">
+                    <h3 style="
+                        font-size: clamp(1.5rem, 4vw, 2.2rem);
+                        margin-bottom: 1.5rem;
+                        font-weight: 700;
+                        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+                    ">🚀 Transform Your Government Services</h3>
+                    <p style="
+                        font-size: clamp(1rem, 2.5vw, 1.2rem);
+                        line-height: 1.6;
+                        margin-bottom: 2rem;
+                        max-width: 800px;
+                        margin-left: auto;
+                        margin-right: auto;
+                        opacity: 0.95;
+                    ">Our team of public sector experts combines deep government experience with cutting-edge technology solutions to help you navigate digital transformation, improve citizen services, and drive operational excellence. From strategy to implementation, we partner with you to build a more effective, efficient, and responsive government.</p>
+                    <div class="cta-buttons" style="
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 1rem;
+                        justify-content: center;
+                        align-items: center;
+                    ">
+                        <a href="{% url 'contact' %}" class="btn-primary" style="
+                            background: rgba(255,255,255,0.2);
+                            backdrop-filter: blur(10px);
+                            border: 2px solid rgba(255,255,255,0.3);
+                            color: white;
+                            padding: 0.8rem 1.8rem;
+                            border-radius: 50px;
+                            text-decoration: none;
+                            font-weight: 600;
+                            font-size: clamp(0.9rem, 2vw, 1rem);
+                            transition: all 0.3s ease;
+                            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                        ">Schedule Government Consultation</a>
+                        <a href="{% url 'industries_main' %}" class="btn-secondary" style="
+                            background: white;
+                            color: #005293;
+                            padding: 0.8rem 1.8rem;
+                            border-radius: 50px;
+                            text-decoration: none;
+                            font-weight: 600;
+                            font-size: clamp(0.9rem, 2vw, 1rem);
+                            transition: all 0.3s ease;
+                            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+                        ">Explore Industry Solutions</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+}
+
+/* Base Container - Full Width */
+.insights-page-container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Hero Section - Full Viewport (Unchanged) */
+.insights-hero {
+    position: relative;
+    color: white;
+    padding: 0;
+    text-align: center;
+    margin-bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+}
+
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #005293 0%, #003459 100%);
+    background-image: url('https://i.pinimg.com/1200x/52/41/2b/52412b2c6ae21f71a19195bac4a9867c.jpg');
+    background-size: cover;
+    background-position: center;
+    background-blend-mode: overlay;
+    background-attachment: scroll;
+    background-repeat: no-repeat;
+    z-index: -1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    padding: 0 20px;
+    width: 100%;
+}
+
+.hero-title {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    margin-bottom: 1.5rem;
+    font-weight: 900;
+    line-height: 1.1;
+    text-shadow: 3px 3px 10px rgba(0,0,0,0.7);
+    animation: fadeInUp 1s ease-out;
+    background: linear-gradient(135deg, #ffffff 0%, #f0f8ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+    position: relative;
+    display: inline-block;
+}
+
+.hero-title span {
+    background: linear-gradient(135deg, #005293, #003459);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+    text-shadow: none;
+}
+
+.hero-description {
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    margin: 0 auto;
+    line-height: 1.6;
+    opacity: 0.95;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    animation: fadeInUp 1s ease-out 0.3s both;
+    background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(240,248,255,0.9) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 500;
+    max-width: 700px;
+    padding: 1rem 0;
+    position: relative;
+    letter-spacing: 0.2px;
+}
+
+/* Section Title */
+.section-title {
+    text-align: center;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    margin-bottom: 3rem;
+    color: #333;
+    font-weight: 800;
+    line-height: 1.2;
+    background: linear-gradient(135deg, #005293, #003459, #2E8B57, #228B22);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+/* AI Impact Visualization Section */
+.ai-impact-visualization {
+    padding: 4rem 0;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    width: 100%;
+}
+
+.visualization-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Enhanced Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+    70% {
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes flipInX {
+    from {
+        transform: perspective(400px) rotateX(90deg);
+        opacity: 0;
+    }
+    to {
+        transform: perspective(400px) rotateX(0deg);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Enhanced Mobile Responsiveness */
+@media (max-width: 768px) {
+    .insights-hero {
+        height: 100vh;
+        min-height: 100vh;
+        padding: 0 1rem;
+        width: 100vw;
+        margin-left: -50vw;
+        margin-right: -50vw;
+        left: 50%;
+        right: 50%;
+    }
+
+    .hero-content {
+        padding: 0 1rem;
+    }
+
+    .ai-impact-visualization {
+        padding: 2rem 0;
+    }
+
+    .timeline-section,
+    .metrics-section,
+    .applications-section,
+    .framework-section,
+    .challenges-section,
+    .future-trends-section {
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .timeline::before {
+        left: 20px;
+    }
+
+    .timeline-item {
+        padding-left: 60px;
+    }
+
+    .timeline-year {
+        min-width: 60px;
+        font-size: 0.8rem;
+        padding: 0.4rem 0.8rem;
+    }
+
+    .metrics-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .applications-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .framework-step {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .step-number {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+
+    .challenges-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        width: 100%;
+        max-width: 300px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 1rem;
+    }
+
+    .timeline-item {
+        padding-left: 50px;
+    }
+
+    .timeline-year {
+        min-width: 50px;
+        font-size: 0.7rem;
+        padding: 0.3rem 0.6rem;
+    }
+
+    .metric-value {
+        font-size: 2.5rem;
+    }
+
+    .application-area {
+        padding: 1rem;
+    }
+
+    .cta-section {
+        padding: 2rem 1rem;
+    }
+
+    .cta-section h3 {
+        font-size: 1.5rem;
+    }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 360px) {
+    .timeline-item {
+        padding-left: 45px;
+    }
+
+    .timeline-year {
+        min-width: 45px;
+    }
+
+    .metric-card {
+        padding: 1.5rem 1rem;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .metric-card:hover,
+    .framework-step:hover,
+    .application-area:hover,
+    .challenge-item:hover,
+    .trend-category:hover {
+        transform: none;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .metric-card,
+    .framework-step,
+    .application-area,
+    .challenge-item,
+    .trend-category,
+    .btn-primary,
+    .btn-secondary {
+        transition: none;
+    }
+    
+    .hero-title,
+    .hero-description {
+        animation: none;
+    }
+    
+    .timeline-item,
+    .metric-card,
+    .application-area,
+    .framework-step,
+    .challenge-item,
+    .trend-category {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .ai-impact-visualization {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    }
+    
+    .section-title {
+        color: white;
+    }
+
+    .timeline-section,
+    .metrics-section,
+    .applications-section,
+    .framework-section,
+    .challenges-section,
+    .future-trends-section {
+        background: #2d2d2d;
+        color: white;
+    }
+
+    .timeline-content,
+    .application-area,
+    .framework-step,
+    .challenge-item,
+    .trend-category,
+    .metric-card {
+        background: #1a1a1a;
+        color: white;
+    }
+
+    .timeline-section h3,
+    .metrics-section h3,
+    .applications-section h3,
+    .framework-section h3,
+    .challenges-section h3,
+    .future-trends-section h3,
+    .timeline-content h4,
+    .application-area h4,
+    .step-content h4,
+    .challenge-item h4,
+    .trend-category h4,
+    .metric-label {
+        color: white;
+    }
+
+    .timeline-content p,
+    .metric-description,
+    .application-list li,
+    .step-content p,
+    .challenge-item p,
+    .trend-category p {
+        color: #ccc;
+    }
+
+    .adoption-stats {
+        background: #2d2d2d;
+        border-color: #444;
+    }
+
+    .adoption-stats span {
+        color: #ccc;
+    }
+}
+
+/* Mobile-specific hero background fix */
+@media (max-width: 768px) {
+    .hero-background {
+        background-attachment: scroll !important;
+        background-size: cover;
+        background-position: center center;
+    }
+}
+
+/* Text readability improvements */
+.timeline-content h4,
+.application-area h4,
+.step-content h4,
+.challenge-item h4,
+.trend-category h4 {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Container max-width for very large screens */
+@media (min-width: 1400px) {
+    .container {
+        max-width: 1320px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .applications-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .challenges-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Hover effects for interactive elements */
+@media (hover: hover) {
+    .metric-card:hover,
+    .framework-step:hover,
+    .application-area:hover,
+    .challenge-item:hover,
+    .trend-category:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    }
+    
+    .btn-primary:hover {
+        background: rgba(255,255,255,0.3);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+    
+    .btn-secondary:hover {
+        background: rgba(255,255,255,0.9);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Enhanced interactive effects for mobile
+document.addEventListener('DOMContentLoaded', function() {
+    // Add intersection observer for scroll animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    // Animate elements on scroll
+    const animatedElements = document.querySelectorAll('.timeline-item, .metric-card, .application-area, .framework-step, .challenge-item, .trend-category');
+    animatedElements.forEach(element => {
+        element.style.opacity = '0';
+        element.style.transform = 'translateY(20px)';
+        element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(element);
+    });
+});
+
+// Performance optimization
+let scrollTimeout;
+window.addEventListener('scroll', function() {
+    if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
+    }
+    scrollTimeout = setTimeout(function() {
+        // Handle scroll-based animations if needed
+    }, 100);
+});
+</script>
+{% endblock %}

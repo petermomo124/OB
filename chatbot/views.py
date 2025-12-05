@@ -105,7 +105,8 @@ def chatbot_api(request):
             )
 
             # 3. Call the Gemini API, using the key from settings
-            api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key={settings.GEMINI_API_KEY}"
+            # UPDATE THIS LINE in your views.py or configuration file
+            api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={settings.GEMINI_API_KEY}"
             payload = {
                 "contents": [{"parts": [{"text": full_prompt}]}]
             }
@@ -198,7 +199,8 @@ def public_chatbot_api(request):
             )
 
             # 3. Call the Gemini API (same as before)
-            api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key={settings.GEMINI_API_KEY}"
+            # UPDATE THIS LINE in your views.py or configuration file
+            api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={settings.GEMINI_API_KEY}"
             payload = {
                 "contents": [{"parts": [{"text": full_prompt}]}]
             }

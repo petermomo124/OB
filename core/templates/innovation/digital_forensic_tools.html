@@ -1,0 +1,2367 @@
+{% extends "base.html" %}
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}Digital Forensic Tools & Solutions | OB Global{% endblock %}
+
+{% block content %}
+<div class="insights-page-container">
+    <!-- Hero Section - Full Screen (Unchanged) -->
+    <section class="insights-hero">
+        <div class="hero-background"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">
+                Digital Forensic <span>Tools</span>
+            </h1>
+
+            <p class="hero-description">
+                Uncover digital evidence, investigate cyber incidents, and ensure legal compliance with our comprehensive digital forensic solutions. 
+                Advanced tools and expert methodologies for thorough digital investigations and cybercrime analysis.
+            </p>
+        </div>
+    </section>
+
+    <!-- Digital Forensic Impact Visualization Section -->
+    <section class="ai-impact-visualization">
+        <div class="container">
+            <h2 class="section-title">The Evolution of Digital Forensic Tools</h2>
+            
+                <!-- Digital Forensic Evolution Timeline -->
+    <div class="timeline-section" style="
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(5, 150, 105, 0.05) 100%);
+        border-radius: 1rem;
+        padding: clamp(1rem, 3vw, 2rem);
+        margin-bottom: clamp(1.5rem, 4vw, 3rem);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        border-left: clamp(3px, 1vw, 6px) solid #10b981;
+        animation: fadeInUp 0.8s ease-out;
+        overflow: hidden;
+    ">
+        <h3 style="
+            font-size: clamp(1.25rem, 4vw, 2rem);
+            margin-bottom: clamp(1rem, 3vw, 2rem);
+            color: #333;
+            text-align: center;
+            font-weight: 700;
+            background: linear-gradient(135deg, #10b981, #059669);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.3;
+            padding: 0 0.5rem;
+        ">🔍 Evolution of Digital Forensic Tools</h3>
+        
+        <div class="timeline" style="
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 clamp(0.5rem, 2vw, 1rem);
+        ">
+            <!-- Timeline Line -->
+            <div class="timeline-line" style="
+                position: absolute;
+                left: clamp(40px, 12vw, 50px);
+                top: 0;
+                bottom: 0;
+                width: clamp(2px, 0.5vw, 4px);
+                background: linear-gradient(to bottom, #10b981, #059669);
+                border-radius: 2px;
+                z-index: 1;
+            "></div>
+            
+            <div class="timeline-item" style="
+                position: relative;
+                margin-bottom: clamp(2rem, 5vw, 3rem);
+                padding-left: clamp(70px, 20vw, 100px);
+                animation: slideInLeft 0.6s ease-out;
+                z-index: 2;
+            ">
+                <div class="timeline-year" style="
+                    position: absolute;
+                    left: clamp(10px, 3vw, 20px);
+                    top: 0;
+                    background: linear-gradient(135deg, #10b981, #059669);
+                    color: white;
+                    padding: clamp(0.4rem, 1.5vw, 0.5rem) clamp(0.8rem, 2vw, 1rem);
+                    border-radius: clamp(0.5rem, 2vw, 1rem);
+                    font-weight: 700;
+                    font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+                    min-width: clamp(50px, 15vw, 80px);
+                    text-align: center;
+                    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+                    z-index: 3;
+                ">1990-2000</div>
+                <div class="timeline-content" style="
+                    background: white;
+                    padding: clamp(1.5rem, 4vw, 2rem) clamp(1rem, 3vw, 1.5rem);
+                    border-radius: clamp(0.5rem, 2vw, 0.75rem);
+                    border-left: clamp(2px, 1vw, 4px) solid #10b981;
+                    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                    transition: all 0.3s ease;
+                    position: relative;
+                    margin-top: 0;
+                    min-height: 120px;
+                ">
+                    <h4 style="
+                        font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+                        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                        color: #333;
+                        font-weight: 600;
+                        line-height: 1.3;
+                        padding-top: 0;
+                    ">Basic Disk Imaging & Analysis</h4>
+                    <p style="
+                        color: #666;
+                        line-height: 1.5;
+                        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                        font-size: clamp(0.85rem, 2.5vw, 1rem);
+                    ">Early digital forensics focused on basic disk imaging using tools like dd and simple file recovery. Investigations were primarily manual, with limited automation and basic evidence preservation techniques for small storage devices.</p>
+                    <div class="adoption-stats" style="
+                        display: flex;
+                        align-items: center;
+                        gap: clamp(0.5rem, 2vw, 1rem);
+                        padding: clamp(0.75rem, 2vw, 1rem);
+                        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
+                        border-radius: clamp(0.25rem, 1vw, 0.5rem);
+                        border: 1px solid rgba(16, 185, 129, 0.2);
+                        flex-wrap: wrap;
+                    ">
+                        <div class="stat" style="
+                            font-size: clamp(1.5rem, 5vw, 2rem);
+                            font-weight: 800;
+                            color: #10b981;
+                            line-height: 1;
+                        ">2-10GB</div>
+                        <span style="
+                            color: #666;
+                            font-size: clamp(0.75rem, 2vw, 0.9rem);
+                            line-height: 1.2;
+                        ">Typical Storage Capacity</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="timeline-item" style="
+                position: relative;
+                margin-bottom: clamp(2rem, 5vw, 3rem);
+                padding-left: clamp(70px, 20vw, 100px);
+                animation: slideInLeft 0.6s ease-out 0.2s both;
+                z-index: 2;
+            ">
+                <div class="timeline-year" style="
+                    position: absolute;
+                    left: clamp(10px, 3vw, 20px);
+                    top: 0;
+                    background: linear-gradient(135deg, #3b82f6, #2563eb);
+                    color: white;
+                    padding: clamp(0.4rem, 1.5vw, 0.5rem) clamp(0.8rem, 2vw, 1rem);
+                    border-radius: clamp(0.5rem, 2vw, 1rem);
+                    font-weight: 700;
+                    font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+                    min-width: clamp(50px, 15vw, 80px);
+                    text-align: center;
+                    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+                    z-index: 3;
+                ">2001-2010</div>
+                <div class="timeline-content" style="
+                    background: white;
+                    padding: clamp(1.5rem, 4vw, 2rem) clamp(1rem, 3vw, 1.5rem);
+                    border-radius: clamp(0.5rem, 2vw, 0.75rem);
+                    border-left: clamp(2px, 1vw, 4px) solid #3b82f6;
+                    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                    transition: all 0.3s ease;
+                    position: relative;
+                    margin-top: 0;
+                    min-height: 120px;
+                ">
+                    <h4 style="
+                        font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+                        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                        color: #333;
+                        font-weight: 600;
+                        line-height: 1.3;
+                        padding-top: 0;
+                    ">Commercial Forensic Suites</h4>
+                    <p style="
+                        color: #666;
+                        line-height: 1.5;
+                        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                        font-size: clamp(0.85rem, 2.5vw, 1rem);
+                    ">Commercial tools like EnCase and FTK emerged, offering comprehensive forensic capabilities. Network forensics developed, mobile device analysis began, and standardized forensic procedures were established with improved evidence handling.</p>
+                    <div class="adoption-stats" style="
+                        display: flex;
+                        align-items: center;
+                        gap: clamp(0.5rem, 2vw, 1rem);
+                        padding: clamp(0.75rem, 2vw, 1rem);
+                        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.1));
+                        border-radius: clamp(0.25rem, 1vw, 0.5rem);
+                        border: 1px solid rgba(59, 130, 246, 0.2);
+                        flex-wrap: wrap;
+                    ">
+                        <div class="stat" style="
+                            font-size: clamp(1.5rem, 5vw, 2rem);
+                            font-weight: 800;
+                            color: #3b82f6;
+                            line-height: 1;
+                        ">85%</div>
+                        <span style="
+                            color: #666;
+                            font-size: clamp(0.75rem, 2vw, 0.9rem);
+                            line-height: 1.2;
+                        ">Adoption of Commercial Tools</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="timeline-item" style="
+                position: relative;
+                margin-bottom: clamp(2rem, 5vw, 3rem);
+                padding-left: clamp(70px, 20vw, 100px);
+                animation: slideInLeft 0.6s ease-out 0.4s both;
+                z-index: 2;
+            ">
+                <div class="timeline-year" style="
+                    position: absolute;
+                    left: clamp(10px, 3vw, 20px);
+                    top: 0;
+                    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+                    color: white;
+                    padding: clamp(0.4rem, 1.5vw, 0.5rem) clamp(0.8rem, 2vw, 1rem);
+                    border-radius: clamp(0.5rem, 2vw, 1rem);
+                    font-weight: 700;
+                    font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+                    min-width: clamp(50px, 15vw, 80px);
+                    text-align: center;
+                    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+                    z-index: 3;
+                ">2011-2020</div>
+                <div class="timeline-content" style="
+                    background: white;
+                    padding: clamp(1.5rem, 4vw, 2rem) clamp(1rem, 3vw, 1.5rem);
+                    border-radius: clamp(0.5rem, 2vw, 0.75rem);
+                    border-left: clamp(2px, 1vw, 4px) solid #8b5cf6;
+                    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                    transition: all 0.3s ease;
+                    position: relative;
+                    margin-top: 0;
+                    min-height: 120px;
+                ">
+                    <h4 style="
+                        font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+                        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                        color: #333;
+                        font-weight: 600;
+                        line-height: 1.3;
+                        padding-top: 0;
+                    ">Cloud & Mobile Forensics</h4>
+                    <p style="
+                        color: #666;
+                        line-height: 1.5;
+                        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                        font-size: clamp(0.85rem, 2.5vw, 1rem);
+                    ">Explosion of mobile devices and cloud services required new forensic approaches. Advanced memory analysis, IoT device forensics, and automated triage tools emerged. Big data analytics began transforming forensic investigations.</p>
+                    <div class="adoption-stats" style="
+                        display: flex;
+                        align-items: center;
+                        gap: clamp(0.5rem, 2vw, 1rem);
+                        padding: clamp(0.75rem, 2vw, 1rem);
+                        background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(124, 58, 237, 0.1));
+                        border-radius: clamp(0.25rem, 1vw, 0.5rem);
+                        border: 1px solid rgba(139, 92, 246, 0.2);
+                        flex-wrap: wrap;
+                    ">
+                        <div class="stat" style="
+                            font-size: clamp(1.5rem, 5vw, 2rem);
+                            font-weight: 800;
+                            color: #8b5cf6;
+                            line-height: 1;
+                        ">5TB+</div>
+                        <span style="
+                            color: #666;
+                            font-size: clamp(0.75rem, 2vw, 0.9rem);
+                            line-height: 1.2;
+                        ">Common Case Data Volume</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="timeline-item" style="
+                position: relative;
+                margin-bottom: clamp(2rem, 5vw, 3rem);
+                padding-left: clamp(70px, 20vw, 100px);
+                animation: slideInLeft 0.6s ease-out 0.6s both;
+                z-index: 2;
+            ">
+                <div class="timeline-year" style="
+                    position: absolute;
+                    left: clamp(10px, 3vw, 20px);
+                    top: 0;
+                    background: linear-gradient(135deg, #ec4899, #db2777);
+                    color: white;
+                    padding: clamp(0.4rem, 1.5vw, 0.5rem) clamp(0.8rem, 2vw, 1rem);
+                    border-radius: clamp(0.5rem, 2vw, 1rem);
+                    font-weight: 700;
+                    font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+                    min-width: clamp(50px, 15vw, 80px);
+                    text-align: center;
+                    box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
+                    z-index: 3;
+                ">2021+</div>
+                <div class="timeline-content" style="
+                    background: white;
+                    padding: clamp(1.5rem, 4vw, 2rem) clamp(1rem, 3vw, 1.5rem);
+                    border-radius: clamp(0.5rem, 2vw, 0.75rem);
+                    border-left: clamp(2px, 1vw, 4px) solid #ec4899;
+                    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                    transition: all 0.3s ease;
+                    position: relative;
+                    margin-top: 0;
+                    min-height: 120px;
+                ">
+                    <h4 style="
+                        font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+                        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                        color: #333;
+                        font-weight: 600;
+                        line-height: 1.3;
+                        padding-top: 0;
+                    ">AI-Powered Forensic Intelligence</h4>
+                    <p style="
+                        color: #666;
+                        line-height: 1.5;
+                        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                        font-size: clamp(0.85rem, 2.5vw, 1rem);
+                    ">Artificial intelligence and machine learning automate evidence analysis, pattern recognition, and threat detection. Blockchain forensics, quantum-resistant cryptography analysis, and real-time incident response capabilities define modern digital forensics.</p>
+                    <div class="adoption-stats" style="
+                        display: flex;
+                        align-items: center;
+                        gap: clamp(0.5rem, 2vw, 1rem);
+                        padding: clamp(0.75rem, 2vw, 1rem);
+                        background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(219, 39, 119, 0.1));
+                        border-radius: clamp(0.25rem, 1vw, 0.5rem);
+                        border: 1px solid rgba(236, 72, 153, 0.2);
+                        flex-wrap: wrap;
+                    ">
+                        <div class="stat" style="
+                            font-size: clamp(1.5rem, 5vw, 2rem);
+                            font-weight: 800;
+                            color: #ec4899;
+                            line-height: 1;
+                        ">70%</div>
+                        <span style="
+                            color: #666;
+                            font-size: clamp(0.75rem, 2vw, 0.9rem);
+                            line-height: 1.2;
+                        ">AI-Assisted Investigations</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+                <!-- Digital Forensic Impact Metrics -->
+<div class="metrics-section" style="
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border-left: 6px solid #10b981;
+    animation: fadeInUp 0.8s ease-out 0.3s both;
+">
+    <h3 style="
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        margin-bottom: 2rem;
+        color: #333;
+        text-align: center;
+        font-weight: 700;
+        background: linear-gradient(135deg, #10b981, #3b82f6);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    ">📊 Digital Forensic Performance Metrics</h3>
+    <div class="metrics-grid" style="
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+    ">
+        <div class="metric-card" style="
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #10b981;
+            animation: bounceIn 0.6s ease-out;
+        ">
+            <div class="metric-value" style="
+                font-size: 3rem;
+                font-weight: 800;
+                color: #10b981;
+                margin-bottom: 1rem;
+            ">65%</div>
+            <div class="metric-label" style="
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 1rem;
+            ">Faster Evidence Processing</div>
+            <div class="metric-description" style="
+                color: #666;
+                line-height: 1.5;
+                font-size: 0.9rem;
+            ">Advanced forensic tools and automated analysis significantly reduce investigation time, enabling quicker incident response and evidence discovery across multiple data sources.</div>
+        </div>
+        
+        <div class="metric-card" style="
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #3b82f6;
+            animation: bounceIn 0.6s ease-out 0.2s both;
+        ">
+            <div class="metric-value" style="
+                font-size: 3rem;
+                font-weight: 800;
+                color: #3b82f6;
+                margin-bottom: 1rem;
+            ">98.5%</div>
+            <div class="metric-label" style="
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 1rem;
+            "">Evidence Integrity & Admissibility</div>
+            <div class="metric-description" style="
+                color: #666;
+                line-height: 1.5;
+                font-size: 0.9rem;
+            ">Chain of custody preservation, cryptographic hashing, and forensic soundness ensure digital evidence maintains integrity and meets legal standards for admissibility in court.</div>
+        </div>
+        
+        <div class="metric-card" style="
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #8b5cf6;
+            animation: bounceIn 0.6s ease-out 0.4s both;
+        ">
+            <div class="metric-value" style="
+                font-size: 3rem;
+                font-weight: 800;
+                color: #8b5cf6;
+                margin-bottom: 1rem;
+            ">4.2x</div>
+            <div class="metric-label" style="
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 1rem;
+            ">Threat Detection Accuracy</div>
+            <div class="metric-description" style="
+                color: #666;
+                line-height: 1.5;
+                font-size: 0.9rem;
+            ">Advanced forensic tools combined with AI and machine learning significantly improve detection rates for sophisticated cyber threats, malware, and unauthorized activities.</div>
+        </div>
+        
+        <div class="metric-card" style="
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #ec4899;
+            animation: bounceIn 0.6s ease-out 0.6s both;
+        ">
+            <div class="metric-value" style="
+                font-size: 3rem;
+                font-weight: 800;
+                color: #ec4899;
+                margin-bottom: 1rem;
+            ">50TB+</div>
+            <div class="metric-label" style="
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 1rem;
+            "">Data Processing Capacity</div>
+            <div class="metric-description" style="
+                color: #666;
+                line-height: 1.5;
+                font-size: 0.9rem;
+            ">Modern forensic tools can efficiently process massive datasets from cloud storage, enterprise networks, and multiple devices simultaneously, handling complex investigations at scale.</div>
+        </div>
+
+        <!-- New Metric Cards -->
+        <div class="metric-card" style="
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #06b6d4;
+            animation: bounceIn 0.6s ease-out 0.8s both;
+        ">
+            <div class="metric-value" style="
+                font-size: 3rem;
+                font-weight: 800;
+                color: #06b6d4;
+                margin-bottom: 1rem;
+            ">89%</div>
+            <div class="metric-label" style="
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 1rem;
+            ">Data Recovery Success Rate</div>
+            <div class="metric-description" style="
+                color: #666;
+                line-height: 1.5;
+                font-size: 0.9rem;
+            ">Advanced recovery algorithms and deep scan capabilities successfully retrieve deleted, corrupted, or hidden data from various storage media and file systems.</div>
+        </div>
+        
+        <div class="metric-card" style="
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #f59e0b;
+            animation: bounceIn 0.6s ease-out 1s both;
+        ">
+            <div class="metric-value" style="
+                font-size: 3rem;
+                font-weight: 800;
+                color: #f59e0b;
+                margin-bottom: 1rem;
+            ">3.8x</div>
+            <div class="metric-label" style="
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 1rem;
+            ">Faster Incident Response</div>
+            <div class="metric-description" style="
+                color: #666;
+                line-height: 1.5;
+                font-size: 0.9rem;
+            ">Real-time forensic capabilities and automated analysis enable rapid incident containment, reducing business impact and minimizing data breach consequences.</div>
+        </div>
+
+        <!-- Additional Metric Cards -->
+        <div class="metric-card" style="
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #84cc16;
+            animation: bounceIn 0.6s ease-out 1.2s both;
+        ">
+            <div class="metric-value" style="
+                font-size: 3rem;
+                font-weight: 800;
+                color: #84cc16;
+                margin-bottom: 1rem;
+            ">95%</div>
+            <div class="metric-label" style="
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 1rem;
+            ">Legal Compliance Rate</div>
+            <div class="metric-description" style="
+                color: #666;
+                line-height: 1.5;
+                font-size: 0.9rem;
+            ">Forensic tools ensure compliance with legal standards, regulatory requirements, and industry best practices for evidence handling and investigation procedures.</div>
+        </div>
+        
+        <div class="metric-card" style="
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #ef4444;
+            animation: bounceIn 0.6s ease-out 1.4s both;
+        ">
+            <div class="metric-value" style="
+                font-size: 3rem;
+                font-weight: 800;
+                color: #ef4444;
+                margin-bottom: 1rem;
+            ">99.9%</div>
+            <div class="metric-label" style="
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 1rem;
+            ">Tool Reliability & Accuracy</div>
+            <div class="metric-description" style="
+                color: #666;
+                line-height: 1.5;
+                font-size: 0.9rem;
+            ">Enterprise-grade forensic tools provide exceptional reliability, accuracy, and reproducibility of results, ensuring consistent performance across diverse investigation scenarios.</div>
+        </div>
+    </div>
+</div>
+<!-- Digital Forensic Solutions -->
+<div class="applications-section" style="
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border-left: 6px solid #3b82f6;
+    animation: fadeInUp 0.8s ease-out 0.5s both;
+">
+    <h3 style="
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        margin-bottom: 2rem;
+        color: #333;
+        text-align: center;
+        font-weight: 700;
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    ">🚀 Comprehensive Digital Forensic Solutions</h3>
+    <div class="applications-grid" style="
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    ">
+        <div class="application-area" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #10b981;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: zoomIn 0.6s ease-out;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">💻 Computer & Disk Forensics</h4>
+            <ul class="application-list" style="
+                list-style: none;
+                padding: 0;
+            ">
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Disk Imaging & Analysis</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">File System Forensics</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Memory Forensics (RAM Analysis)</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Registry & Log Analysis</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Deleted Data Recovery</li>
+            </ul>
+        </div>
+        
+        <div class="application-area" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #3b82f6;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: zoomIn 0.6s ease-out 0.2s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">📱 Mobile Device Forensics</h4>
+            <ul class="application-list" style="
+                list-style: none;
+                padding: 0;
+            ">
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">iOS & Android Extraction</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Mobile App Data Analysis</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">SIM Card & Chip-off Analysis</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Mobile Network Forensics</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Encrypted Device Access</li>
+            </ul>
+        </div>
+        
+        <div class="application-area" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #8b5cf6;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: zoomIn 0.6s ease-out 0.4s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">🌐 Network & Cloud Forensics</h4>
+            <ul class="application-list" style="
+                list-style: none;
+                padding: 0;
+            ">
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Network Traffic Analysis</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Cloud Storage Forensics</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">SaaS Application Investigation</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Email & Communication Analysis</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Incident Response Forensics</li>
+            </ul>
+        </div>
+        
+        <div class="application-area" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #ec4899;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: zoomIn 0.6s ease-out 0.6s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">🕵️‍♂️ Cyber Crime Investigation</h4>
+            <ul class="application-list" style="
+                list-style: none;
+                padding: 0;
+            ">
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Malware Analysis & Reverse Engineering</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Digital Fraud Investigation</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Blockchain & Cryptocurrency Forensics</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Social Media & Dark Web Investigation</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Intellectual Property Theft Analysis</li>
+            </ul>
+        </div>
+
+        <!-- New Application Areas -->
+        <div class="application-area" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #06b6d4;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: zoomIn 0.6s ease-out 0.8s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">🔐 Forensic Data Recovery</h4>
+            <ul class="application-list" style="
+                list-style: none;
+                padding: 0;
+            ">
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Damaged Media Recovery</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Encrypted Data Access</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Advanced File Carving</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Database Forensics</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Virtual Machine Analysis</li>
+            </ul>
+        </div>
+        
+        <div class="application-area" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #f59e0b;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: zoomIn 0.6s ease-out 1s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">⚖️ Legal & Compliance Forensics</h4>
+            <ul class="application-list" style="
+                list-style: none;
+                padding: 0;
+            ">
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">eDiscovery & Legal Hold</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Regulatory Compliance Investigation</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Expert Witness Testimony Support</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Forensic Report Generation</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Chain of Custody Documentation</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Implementation Framework -->
+<div class="framework-section" style="
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(236, 72, 153, 0.05) 100%);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border-left: 6px solid #10b981;
+    animation: fadeInUp 0.8s ease-out 0.7s both;
+">
+    <h3 style="
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        margin-bottom: 2rem;
+        color: #333;
+        text-align: center;
+        font-weight: 700;
+        background: linear-gradient(135deg, #10b981, #ec4899);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    ">🛠️ Digital Forensic Investigation Process</h3>
+    <div class="framework-steps">
+        <div class="framework-step" style="
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #10b981;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: slideInRight 0.6s ease-out;
+        ">
+            <div class="step-number" style="
+                background: linear-gradient(135deg, #10b981, #059669);
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                font-weight: 700;
+                flex-shrink: 0;
+                box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            ">01</div>
+            <div class="step-content">
+                <h4 style="
+                    font-size: 1.3rem;
+                    margin-bottom: 1rem;
+                    color: #333;
+                    font-weight: 600;
+                ">Incident Identification & Scope Definition</h4>
+                <p style="
+                    color: #666;
+                    line-height: 1.6;
+                ">Initial assessment of the security incident or legal matter. Define investigation scope, identify relevant data sources, establish legal authority, and create an investigation plan with clear objectives and constraints.</p>
+            </div>
+        </div>
+        
+        <div class="framework-step" style="
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #3b82f6;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: slideInRight 0.6s ease-out 0.2s both;
+        ">
+            <div class="step-number" style="
+                background: linear-gradient(135deg, #3b82f6, #2563eb);
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                font-weight: 700;
+                flex-shrink: 0;
+                box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+            ">02</div>
+            <div class="step-content">
+                <h4 style="
+                    font-size: 1.3rem;
+                    margin-bottom: 1rem;
+                    color: #333;
+                    font-weight: 600;
+                ">Evidence Acquisition & Preservation</h4>
+                <p style="
+                    color: #666;
+                    line-height: 1.6;
+                ">Forensically sound collection of digital evidence using write-blockers and validated tools. Create forensic images, document chain of custody, and implement evidence preservation protocols to maintain integrity.</p>
+            </div>
+        </div>
+        
+        <div class="framework-step" style="
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #8b5cf6;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: slideInRight 0.6s ease-out 0.4s both;
+        ">
+            <div class="step-number" style="
+                background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                font-weight: 700;
+                flex-shrink: 0;
+                box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+            ">03</div>
+            <div class="step-content">
+                <h4 style="
+                    font-size: 1.3rem;
+                    margin-bottom: 1rem;
+                    color: #333;
+                    font-weight: 600;
+                ">Forensic Analysis & Examination</h4>
+                <p style="
+                    color: #666;
+                    line-height: 1.6;
+                ">Comprehensive analysis using specialized forensic tools. Examine file systems, recover deleted data, analyze metadata, investigate network traffic, and identify patterns of suspicious activity or evidence.</p>
+            </div>
+        </div>
+        
+        <div class="framework-step" style="
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #ec4899;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: slideInRight 0.6s ease-out 0.6s both;
+        ">
+            <div class="step-number" style="
+                background: linear-gradient(135deg, #ec4899, #db2777);
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                font-weight: 700;
+                flex-shrink: 0;
+                box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
+            ">04</div>
+            <div class="step-content">
+                <h4 style="
+                    font-size: 1.3rem;
+                    margin-bottom: 1rem;
+                    color: #333;
+                    font-weight: 600;
+                ">Evidence Correlation & Timeline Analysis</h4>
+                <p style="
+                    color: #666;
+                    line-height: 1.6;
+                ">Correlate evidence from multiple sources, create comprehensive timelines of events, and establish connections between different pieces of digital evidence to build a complete investigation picture.</p>
+            </div>
+        </div>
+        
+        <div class="framework-step" style="
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #06b6d4;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: slideInRight 0.6s ease-out 0.8s both;
+        ">
+            <div class="step-number" style="
+                background: linear-gradient(135deg, #06b6d4, #0891b2);
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                font-weight: 700;
+                flex-shrink: 0;
+                box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+            ">05</div>
+            <div class="step-content">
+                <h4 style="
+                    font-size: 1.3rem;
+                    margin-bottom: 1rem;
+                    color: #333;
+                    font-weight: 600;
+                ">Reporting & Documentation</h4>
+                <p style="
+                    color: #666;
+                    line-height: 1.6;
+                ">Prepare comprehensive forensic reports detailing findings, methodologies, and conclusions. Create expert witness testimony materials and ensure all documentation meets legal and regulatory requirements.</p>
+            </div>
+        </div>
+
+        <!-- New Framework Steps -->
+        <div class="framework-step" style="
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #f59e0b;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: slideInRight 0.6s ease-out 1s both;
+        ">
+            <div class="step-number" style="
+                background: linear-gradient(135deg, #f59e0b, #d97706);
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                font-weight: 700;
+                flex-shrink: 0;
+                box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+            ">06</div>
+            <div class="step-content">
+                <h4 style="
+                    font-size: 1.3rem;
+                    margin-bottom: 1rem;
+                    color: #333;
+                    font-weight: 600;
+                ">Legal Proceedings & Testimony</h4>
+                <p style="
+                    color: #666;
+                    line-height: 1.6;
+                ">Support legal proceedings with expert testimony, evidence presentation, and technical explanations. Ensure proper evidence handling throughout legal processes and maintain chain of custody integrity.</p>
+            </div>
+        </div>
+        
+        <div class="framework-step" style="
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #84cc16;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: slideInRight 0.6s ease-out 1.2s both;
+        ">
+            <div class="step-number" style="
+                background: linear-gradient(135deg, #84cc16, #65a30d);
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                font-weight: 700;
+                flex-shrink: 0;
+                box-shadow: 0 4px 15px rgba(132, 204, 22, 0.3);
+            ">07</div>
+            <div class="step-content">
+                <h4 style="
+                    font-size: 1.3rem;
+                    margin-bottom: 1rem;
+                    color: #333;
+                    font-weight: 600;
+                ">Continuous Improvement & Tool Updates</h4>
+                <p style="
+                    color: #666;
+                    line-height: 1.6;
+                ">Maintain and update forensic tools, methodologies, and knowledge base. Stay current with emerging technologies, new attack vectors, and evolving legal requirements for digital evidence.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Challenges & Solutions -->
+<div class="challenges-section" style="
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(6, 182, 212, 0.05) 100%);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border-left: 6px solid #3b82f6;
+    animation: fadeInUp 0.8s ease-out 0.9s both;
+">
+    <h3 style="
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        margin-bottom: 2rem;
+        color: #333;
+        text-align: center;
+        font-weight: 700;
+        background: linear-gradient(135deg, #3b82f6, #06b6d4);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    ">⚡ Overcoming Digital Forensic Challenges</h3>
+    <div class="challenges-grid" style="
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    ">
+        <div class="challenge-item" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-top: 4px solid #10b981;
+            transition: transform 0.3s ease;
+            animation: flipInX 0.6s ease-out;
+        ">
+            <h4 style="
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Encryption & Data Protection</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+                margin-bottom: 1rem;
+            ">Widespread use of strong encryption, secure boot mechanisms, and advanced data protection features in modern devices and platforms creates significant barriers to evidence acquisition and analysis.</p>
+            <div class="solution" style="
+                padding: 1rem;
+                background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
+                border-radius: 0.5rem;
+                border-left: 4px solid #06b6d4;
+                font-size: 0.9rem;
+                line-height: 1.5;
+            ">
+                <strong>Solution:</strong> Develop advanced decryption capabilities, leverage legal access methods, use chip-off techniques for mobile devices, and employ specialized tools for bypassing security mechanisms while maintaining forensic integrity.
+            </div>
+        </div>
+        
+        <div class="challenge-item" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-top: 4px solid #8b5cf6;
+            transition: transform 0.3s ease;
+            animation: flipInX 0.6s ease-out 0.2s both;
+        ">
+            <h4 style="
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Big Data & Volume Challenges</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+                margin-bottom: 1rem;
+            ">Exponential growth in data volumes from cloud storage, enterprise systems, and multiple devices makes traditional forensic approaches impractical and time-consuming for large-scale investigations.</p>
+            <div class="solution" style="
+                padding: 1rem;
+                background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(124, 58, 237, 0.1));
+                border-radius: 0.5rem;
+                border-left: 4px solid #06b6d4;
+                font-size: 0.9rem;
+                line-height: 1.5;
+            ">
+                <strong>Solution:</strong> Implement AI-powered triage systems, use distributed processing frameworks, develop targeted collection strategies, and leverage cloud-scale forensic platforms for efficient big data analysis.
+            </div>
+        </div>
+        
+        <div class="challenge-item" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-top: 4px solid #ec4899;
+            transition: transform 0.3s ease;
+            animation: flipInX 0.6s ease-out 0.4s both;
+        ">
+            <h4 style="
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Cloud & Distributed Evidence</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+                margin-bottom: 1rem;
+            ">Evidence distributed across multiple cloud providers, jurisdictions, and service models creates complex legal and technical challenges for acquisition, preservation, and analysis.</p>
+            <div class="solution" style="
+                padding: 1rem;
+                background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(219, 39, 119, 0.1));
+                border-radius: 0.5rem;
+                border-left: 4px solid #06b6d4;
+                font-size: 0.9rem;
+                line-height: 1.5;
+            ">
+                <strong>Solution:</strong> Develop cloud-native forensic tools, establish legal frameworks for cross-border evidence collection, use API-based acquisition methods, and implement comprehensive cloud investigation methodologies.
+            </div>
+        </div>
+        
+        <div class="challenge-item" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-top: 4px solid #f59e0b;
+            transition: transform 0.3s ease;
+            animation: flipInX 0.6s ease-out 0.6s both;
+        ">
+            <h4 style="
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Anti-Forensic Techniques</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+                margin-bottom: 1rem;
+            ">Sophisticated criminals use advanced anti-forensic methods including data hiding, trail obfuscation, timestamp manipulation, and forensic tool detection to evade investigation.</p>
+            <div class="solution" style="
+                padding: 1rem;
+                background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.1));
+                border-radius: 0.5rem;
+                border-left: 4px solid #06b6d4;
+                font-size: 0.9rem;
+                line-height: 1.5;
+            ">
+                <strong>Solution:</strong> Develop counter-anti-forensic capabilities, use multiple analysis techniques, implement deep memory analysis, and employ behavioral analysis to detect sophisticated evasion attempts.
+            </div>
+        </div>
+
+        <!-- New Challenge Items -->
+        <div class="challenge-item" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-top: 4px solid #84cc16;
+            transition: transform 0.3s ease;
+            animation: flipInX 0.6s ease-out 0.8s both;
+        ">
+            <h4 style="
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">IoT & Embedded Device Forensics</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+                margin-bottom: 1rem;
+            ">Proliferation of IoT devices with proprietary systems, limited storage, and diverse communication protocols presents unique challenges for evidence acquisition and analysis.</p>
+            <div class="solution" style="
+                padding: 1rem;
+                background: linear-gradient(135deg, rgba(132, 204, 22, 0.1), rgba(101, 163, 13, 0.1));
+                border-radius: 0.5rem;
+                border-left: 4px solid #06b6d4;
+                font-size: 0.9rem;
+                line-height: 1.5;
+            ">
+                <strong>Solution:</strong> Develop specialized IoT forensic tools, create device-specific acquisition methods, leverage network traffic analysis, and establish IoT evidence handling protocols for diverse device types.
+            </div>
+        </div>
+        
+        <div class="challenge-item" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-top: 4px solid #ef4444;
+            transition: transform 0.3s ease;
+            animation: flipInX 0.6s ease-out 1s both;
+        ">
+            <h4 style="
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Legal & Jurisdictional Complexity</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+                margin-bottom: 1rem;
+            ">Cross-border investigations, conflicting legal requirements, and evolving privacy regulations create significant challenges for evidence admissibility and investigation legality.</p>
+            <div class="solution" style="
+                padding: 1rem;
+                background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.1));
+                border-radius: 0.5rem;
+                border-left: 4px solid #06b6d4;
+                font-size: 0.9rem;
+                line-height: 1.5;
+            ">
+                <strong>Solution:</strong> Establish international legal frameworks, develop jurisdiction-aware tools, implement privacy-by-design forensic processes, and maintain comprehensive legal compliance documentation.
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Future Trends -->
+<div class="future-trends-section" style="
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(236, 72, 153, 0.05) 100%);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border-left: 6px solid #8b5cf6;
+    animation: fadeInUp 0.8s ease-out 1.1s both;
+">
+    <h3 style="
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        margin-bottom: 2rem;
+        color: #333;
+        text-align: center;
+        font-weight: 700;
+        background: linear-gradient(135deg, #8b5cf6, #ec4899);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    ">🔮 Future of Digital Forensic Tools</h3>
+    <div class="trends-content" style="
+        display: grid;
+        gap: 2rem;
+    ">
+        <div class="trend-category" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #8b5cf6;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: fadeIn 0.6s ease-out;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">AI-Powered Forensic Automation</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+            ">Artificial intelligence will automate evidence triage, pattern recognition, and anomaly detection. Machine learning algorithms will predict investigation outcomes and prioritize evidence based on case relevance and probability of findings.</p>
+        </div>
+        
+        <div class="trend-category" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #10b981;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Quantum-Resistant Cryptography Analysis</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+            ">As quantum computing advances, forensic tools will evolve to handle quantum-resistant encryption and develop new methods for analyzing data protected by post-quantum cryptographic algorithms.</p>
+        </div>
+        
+        <div class="trend-category" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #3b82f6;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: fadeIn 0.6s ease-out 0.4s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Real-Time Live Forensics</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+            ">Forensic capabilities will shift toward real-time analysis of live systems, enabling immediate incident response and continuous monitoring for proactive threat detection and investigation.</p>
+        </div>
+        
+        <div class="trend-category" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #ec4899;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: fadeIn 0.6s ease-out 0.6s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Blockchain & DeFi Forensics</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+            ">Specialized tools will emerge for investigating blockchain transactions, smart contracts, and decentralized finance platforms, addressing the unique challenges of distributed ledger technologies.</p>
+        </div>
+        
+        <div class="trend-category" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #06b6d4;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: fadeIn 0.6s ease-out 0.8s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Automated Legal Compliance</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+            ">Forensic tools will integrate automated compliance checking, ensuring investigations adhere to evolving legal standards, privacy regulations, and cross-border data protection requirements.</p>
+        </div>
+
+        <!-- New Trend Categories -->
+        <div class="trend-category" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #f59e0b;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: fadeIn 0.6s ease-out 1s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Extended Reality (XR) Forensics</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+            ">As virtual and augmented reality platforms become mainstream, forensic tools will evolve to investigate XR environments, virtual assets, and immersive digital experiences for evidence collection.</p>
+        </div>
+        
+        <div class="trend-category" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #84cc16;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: fadeIn 0.6s ease-out 1.2s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Predictive Forensic Analytics</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+            ">Advanced analytics will enable predictive modeling of cybercrime patterns, allowing proactive investigation planning and resource allocation based on emerging threat intelligence and historical case data.</p>
+        </div>
+    </div>
+</div>
+                <!-- Call to Action -->
+                <div class="cta-section" style="
+                    background: linear-gradient(270deg, #10b981, #3b82f6, #8b5cf6, #ec4899);
+                    background-size: 800% 800%;
+                    animation: gradientShift 12s ease infinite;
+                    padding: 3rem 2rem;
+                    border-radius: 12px;
+                    text-align: center;
+                    color: white;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                    margin: 2rem 0;
+                    position: relative;
+                    overflow: hidden;
+                ">
+                    <h3 style="
+                        font-size: clamp(1.5rem, 4vw, 2.2rem);
+                        margin-bottom: 1.5rem;
+                        font-weight: 700;
+                        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+                    ">🚀 Strengthen Your Digital Investigation Capabilities</h3>
+                    <p style="
+                        font-size: clamp(1rem, 2.5vw, 1.2rem);
+                        line-height: 1.6;
+                        margin-bottom: 2rem;
+                        max-width: 800px;
+                        margin-left: auto;
+                        margin-right: auto;
+                        opacity: 0.95;
+                    ">Our expert forensic team combines cutting-edge tools with deep investigative expertise to deliver comprehensive digital forensic solutions. From cybercrime investigation to legal compliance, we provide the advanced capabilities and expert support needed for successful digital investigations and evidence preservation.</p>
+                    <div class="cta-buttons" style="
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 1rem;
+                        justify-content: center;
+                        align-items: center;
+                    ">
+                        <a href="{% url 'contact' %}" class="btn-primary" style="
+                            background: rgba(255,255,255,0.2);
+                            backdrop-filter: blur(10px);
+                            border: 2px solid rgba(255,255,255,0.3);
+                            color: white;
+                            padding: 0.8rem 1.8rem;
+                            border-radius: 50px;
+                            text-decoration: none;
+                            font-weight: 600;
+                            font-size: clamp(0.9rem, 2vw, 1rem);
+                            transition: all 0.3s ease;
+                            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                        ">Request Forensic Consultation</a>
+                        <a href="{% url 'innovation_main' %}" class="btn-secondary" style="
+                            background: white;
+                            color: #10b981;
+                            padding: 0.8rem 1.8rem;
+                            border-radius: 50px;
+                            text-decoration: none;
+                            font-weight: 600;
+                            font-size: clamp(0.9rem, 2vw, 1rem);
+                            transition: all 0.3s ease;
+                            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+                        ">View Forensic Case Studies</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+}
+
+/* Base Container - Full Width */
+.insights-page-container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Hero Section - Full Viewport (Unchanged) */
+.insights-hero {
+    position: relative;
+    color: white;
+    padding: 0;
+    text-align: center;
+    margin-bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+}
+
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+    background-image: url('https://i.pinimg.com/736x/c2/7c/66/c27c663271d6750c7a57dce193e6524b.jpg');
+    background-size: cover;
+    background-position: center;
+    background-blend-mode: overlay;
+    background-attachment: scroll;
+    background-repeat: no-repeat;
+    z-index: -1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    padding: 0 20px;
+    width: 100%;
+}
+
+.hero-title {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    margin-bottom: 1.5rem;
+    font-weight: 900;
+    line-height: 1.1;
+    text-shadow: 3px 3px 10px rgba(0,0,0,0.7);
+    animation: fadeInUp 1s ease-out;
+    background: linear-gradient(135deg, #ffffff 0%, #f0f8ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+    position: relative;
+    display: inline-block;
+}
+
+.hero-title span {
+    background: linear-gradient(135deg, #10b981, #3b82f6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+    text-shadow: none;
+}
+
+.hero-description {
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    margin: 0 auto;
+    line-height: 1.6;
+    opacity: 0.95;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    animation: fadeInUp 1s ease-out 0.3s both;
+    background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(240,248,255,0.9) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 500;
+    max-width: 700px;
+    padding: 1rem 0;
+    position: relative;
+    letter-spacing: 0.2px;
+}
+
+/* Section Title */
+.section-title {
+    text-align: center;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    margin-bottom: 3rem;
+    color: #333;
+    font-weight: 800;
+    line-height: 1.2;
+    background: linear-gradient(135deg, #10b981, #3b82f6, #8b5cf6, #ec4899);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+/* AI Impact Visualization Section */
+.ai-impact-visualization {
+    padding: 4rem 0;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    width: 100%;
+}
+
+.visualization-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Enhanced Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+    70% {
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes flipInX {
+    from {
+        transform: perspective(400px) rotateX(90deg);
+        opacity: 0;
+    }
+    to {
+        transform: perspective(400px) rotateX(0deg);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Enhanced Mobile Responsiveness */
+@media (max-width: 768px) {
+    .insights-hero {
+        height: 100vh;
+        min-height: 100vh;
+        padding: 0 1rem;
+        width: 100vw;
+        margin-left: -50vw;
+        margin-right: -50vw;
+        left: 50%;
+        right: 50%;
+    }
+
+    .hero-content {
+        padding: 0 1rem;
+    }
+
+    .ai-impact-visualization {
+        padding: 2rem 0;
+    }
+
+    .timeline-section,
+    .metrics-section,
+    .applications-section,
+    .framework-section,
+    .challenges-section,
+    .future-trends-section {
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .timeline::before {
+        left: 20px;
+    }
+
+    .timeline-item {
+        padding-left: 60px;
+    }
+
+    .timeline-year {
+        min-width: 60px;
+        font-size: 0.8rem;
+        padding: 0.4rem 0.8rem;
+    }
+
+    .metrics-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .applications-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .framework-step {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .step-number {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+
+    .challenges-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        width: 100%;
+        max-width: 300px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 1rem;
+    }
+
+    .timeline-item {
+        padding-left: 50px;
+    }
+
+    .timeline-year {
+        min-width: 50px;
+        font-size: 0.7rem;
+        padding: 0.3rem 0.6rem;
+    }
+
+    .metric-value {
+        font-size: 2.5rem;
+    }
+
+    .application-area {
+        padding: 1rem;
+    }
+
+    .cta-section {
+        padding: 2rem 1rem;
+    }
+
+    .cta-section h3 {
+        font-size: 1.5rem;
+    }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 360px) {
+    .timeline-item {
+        padding-left: 45px;
+    }
+
+    .timeline-year {
+        min-width: 45px;
+    }
+
+    .metric-card {
+        padding: 1.5rem 1rem;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .metric-card:hover,
+    .framework-step:hover,
+    .application-area:hover,
+    .challenge-item:hover,
+    .trend-category:hover {
+        transform: none;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .metric-card,
+    .framework-step,
+    .application-area,
+    .challenge-item,
+    .trend-category,
+    .btn-primary,
+    .btn-secondary {
+        transition: none;
+    }
+    
+    .hero-title,
+    .hero-description {
+        animation: none;
+    }
+    
+    .timeline-item,
+    .metric-card,
+    .application-area,
+    .framework-step,
+    .challenge-item,
+    .trend-category {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .ai-impact-visualization {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    }
+    
+    .section-title {
+        color: white;
+    }
+
+    .timeline-section,
+    .metrics-section,
+    .applications-section,
+    .framework-section,
+    .challenges-section,
+    .future-trends-section {
+        background: #2d2d2d;
+        color: white;
+    }
+
+    .timeline-content,
+    .application-area,
+    .framework-step,
+    .challenge-item,
+    .trend-category,
+    .metric-card {
+        background: #1a1a1a;
+        color: white;
+    }
+
+    .timeline-section h3,
+    .metrics-section h3,
+    .applications-section h3,
+    .framework-section h3,
+    .challenges-section h3,
+    .future-trends-section h3,
+    .timeline-content h4,
+    .application-area h4,
+    .step-content h4,
+    .challenge-item h4,
+    .trend-category h4,
+    .metric-label {
+        color: white;
+    }
+
+    .timeline-content p,
+    .metric-description,
+    .application-list li,
+    .step-content p,
+    .challenge-item p,
+    .trend-category p {
+        color: #ccc;
+    }
+
+    .adoption-stats {
+        background: #2d2d2d;
+        border-color: #444;
+    }
+
+    .adoption-stats span {
+        color: #ccc;
+    }
+}
+
+/* Mobile-specific hero background fix */
+@media (max-width: 768px) {
+    .hero-background {
+        background-attachment: scroll !important;
+        background-size: cover;
+        background-position: center center;
+    }
+}
+
+/* Text readability improvements */
+.timeline-content h4,
+.application-area h4,
+.step-content h4,
+.challenge-item h4,
+.trend-category h4 {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Container max-width for very large screens */
+@media (min-width: 1400px) {
+    .container {
+        max-width: 1320px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .applications-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .challenges-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Hover effects for interactive elements */
+@media (hover: hover) {
+    .metric-card:hover,
+    .framework-step:hover,
+    .application-area:hover,
+    .challenge-item:hover,
+    .trend-category:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    }
+    
+    .btn-primary:hover {
+        background: rgba(255,255,255,0.3);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+    
+    .btn-secondary:hover {
+        background: rgba(255,255,255,0.9);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Enhanced interactive effects for mobile
+document.addEventListener('DOMContentLoaded', function() {
+    // Add intersection observer for scroll animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    // Animate elements on scroll
+    const animatedElements = document.querySelectorAll('.timeline-item, .metric-card, .application-area, .framework-step, .challenge-item, .trend-category');
+    animatedElements.forEach(element => {
+        element.style.opacity = '0';
+        element.style.transform = 'translateY(20px)';
+        element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(element);
+    });
+});
+
+// Performance optimization
+let scrollTimeout;
+window.addEventListener('scroll', function() {
+    if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
+    }
+    scrollTimeout = setTimeout(function() {
+        // Handle scroll-based animations if needed
+    }, 100);
+});
+</script>
+{% endblock %}
