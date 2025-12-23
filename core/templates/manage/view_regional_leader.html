@@ -1,0 +1,1479 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    :root {
+        --primary: #4F46E5;
+        --primary-light: #818CF8;
+        --primary-dark: #3730A3;
+        --secondary: #10B981;
+        --danger: #EF4444;
+        --warning: #F59E0B;
+        --info: #3B82F6;
+        --success: #10B981;
+        --text-dark: #1F2937;
+        --text-medium: #6B7280;
+        --text-light: #9CA3AF;
+        --bg-white: #FFFFFF;
+        --bg-light: #F9FAFB;
+        --bg-gray: #F3F4F6;
+        --border: #E5E7EB;
+        --border-light: #F3F4F6;
+        --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        --radius-sm: 0.375rem;
+        --radius-md: 0.5rem;
+        --radius-lg: 0.75rem;
+        --radius-xl: 1rem;
+        --transition: all 0.2s ease;
+        --font-size-xs: 0.75rem;
+        --font-size-sm: 0.875rem;
+        --font-size-base: 1rem;
+        --font-size-lg: 1.125rem;
+        --font-size-xl: 1.25rem;
+        --font-size-2xl: 1.5rem;
+    }
+
+    .leader-profile-management {
+        padding: 1.5rem;
+        max-width: 1400px;
+        margin: 0 auto;
+        min-height: 100vh;
+        word-wrap: break-word;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        hyphens: auto;
+    }
+
+    .profile-header {
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        border-radius: var(--radius-lg);
+        padding: 1.75rem;
+        margin-bottom: 1.25rem;
+        color: white;
+        position: relative;
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+    }
+
+    .profile-header::before {
+        content: '';
+        position: absolute;
+        top: -50px;
+        right: -50px;
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0, rgba(255,255,255,0) 70%);
+    }
+
+    .header-content {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .header-main {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .header-icon {
+        background: rgba(255, 255, 255, 0.2);
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        backdrop-filter: blur(10px);
+        flex-shrink: 0;
+    }
+
+    .header-text {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .page-title {
+        font-size: var(--font-size-2xl);
+        font-weight: 700;
+        margin: 0;
+        line-height: 1.2;
+        word-wrap: break-word;
+    }
+
+    .page-subtitle {
+        opacity: 0.9;
+        margin: 0.5rem 0 0 0;
+        font-size: var(--font-size-lg);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        line-height: 1.4;
+    }
+
+    .leader-badge {
+        padding: 0.375rem 0.75rem;
+        border-radius: 20px;
+        font-size: var(--font-size-sm);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    .leader-badge.managing_partner {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .leader-badge.regional_leader {
+        background: rgba(16, 185, 129, 0.2);
+        color: var(--secondary);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .header-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-top: 1rem;
+    }
+
+    .btn-back, .btn-edit, .btn-deactivate, .btn-activate {
+        padding: 0.75rem 1rem;
+        border-radius: var(--radius-md);
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        transition: var(--transition);
+        border: 2px solid transparent;
+        font-size: var(--font-size-sm);
+        text-decoration: none;
+        min-height: 44px;
+        flex: 1;
+        min-width: 140px;
+    }
+
+    .btn-back {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-back:hover, .btn-back:focus {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateX(-2px);
+        outline: none;
+    }
+
+    .btn-edit {
+        background: var(--warning);
+        color: white;
+    }
+
+    .btn-edit:hover, .btn-edit:focus {
+        background: #D97706;
+        transform: translateY(-2px);
+        outline: none;
+    }
+
+    .btn-deactivate {
+        background: rgba(239, 68, 68, 0.1);
+        color: var(--danger);
+        border-color: rgba(239, 68, 68, 0.2);
+    }
+
+    .btn-deactivate:hover, .btn-deactivate:focus {
+        background: rgba(239, 68, 68, 0.2);
+        transform: translateY(-2px);
+        outline: none;
+    }
+
+    .btn-activate {
+        background: rgba(16, 185, 129, 0.1);
+        color: var(--secondary);
+        border-color: rgba(16, 185, 129, 0.2);
+    }
+
+    .btn-activate:hover, .btn-activate:focus {
+        background: rgba(16, 185, 129, 0.2);
+        transform: translateY(-2px);
+        outline: none;
+    }
+
+    .profile-content {
+        background: var(--bg-white);
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        box-shadow: var(--shadow-md);
+        margin-bottom: 1.25rem;
+        width: 100%;
+        overflow: hidden;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+    }
+
+    .profile-left, .profile-right {
+        flex: 1;
+        min-width: 300px;
+        max-width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+
+    .profile-card {
+        background: var(--bg-white);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--border);
+        transition: var(--transition);
+        width: 100%;
+    }
+
+    .profile-card:hover {
+        box-shadow: var(--shadow-md);
+    }
+
+    .profile-image-container {
+        position: relative;
+        padding: 1.5rem;
+        text-align: center;
+        width: 100%;
+    }
+
+    .profile-image {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid white;
+        box-shadow: var(--shadow-lg);
+        margin: 0 auto;
+        display: block;
+        max-width: 100%;
+    }
+
+    .profile-status {
+        position: absolute;
+        top: 2.25rem;
+        right: 50%;
+        transform: translateX(60px);
+        z-index: 2;
+    }
+
+    .status-indicator {
+        padding: 0.375rem 0.75rem;
+        border-radius: 20px;
+        font-size: var(--font-size-sm);
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        white-space: nowrap;
+    }
+
+    .status-indicator.active {
+        background: rgba(16, 185, 129, 0.1);
+        color: var(--secondary);
+        border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .status-indicator.inactive {
+        background: rgba(239, 68, 68, 0.1);
+        color: var(--danger);
+        border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    .profile-info {
+        padding: 1.25rem;
+        text-align: center;
+        width: 100%;
+    }
+
+    .profile-name {
+        font-size: var(--font-size-2xl);
+        font-weight: 700;
+        color: var(--text-dark);
+        margin: 0 0 0.625rem 0;
+        line-height: 1.3;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        word-break: break-word;
+        padding: 0 0.5rem;
+    }
+
+    .profile-title, .profile-region, .profile-tenure, .profile-display-order {
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 0.5rem;
+        color: var(--text-medium);
+        font-size: var(--font-size-sm);
+        margin-bottom: 0.5rem;
+        padding: 0 0.5rem;
+        flex-wrap: wrap;
+        text-align: center;
+        line-height: 1.4;
+        width: 100%;
+    }
+
+    .profile-title {
+        font-weight: 600;
+        color: var(--primary);
+    }
+
+    .profile-title i, .profile-region i, .profile-tenure i, .profile-display-order i {
+        color: var(--primary-light);
+        flex-shrink: 0;
+        margin-top: 0.125rem;
+    }
+
+    .title-text, .region-text, .tenure-text {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        word-break: break-word;
+        max-width: 100%;
+        text-align: center;
+        display: inline-block;
+    }
+
+    .tenure-text {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .joining-date, .years-in-role {
+        display: block;
+        width: 100%;
+    }
+
+    .years-in-role {
+        font-size: var(--font-size-xs);
+        color: var(--text-light);
+    }
+
+    .contact-section {
+        padding: 1.5rem;
+        border-top: 1px solid var(--border-light);
+        background: var(--bg-light);
+        width: 100%;
+    }
+
+    .section-title {
+        font-size: var(--font-size-lg);
+        font-weight: 600;
+        color: var(--text-dark);
+        margin: 0 0 1.25rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        word-wrap: break-word;
+    }
+
+    .section-title i {
+        color: var(--primary);
+        flex-shrink: 0;
+    }
+
+    .contact-info-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+        margin-bottom: 1.5rem;
+        width: 100%;
+    }
+
+    .contact-card {
+        background: var(--bg-white);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--border);
+        padding: 1.5rem;
+        transition: var(--transition);
+        width: 100%;
+        overflow: visible;
+        min-height: auto;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .contact-card:hover {
+        border-color: var(--primary-light);
+        box-shadow: var(--shadow-sm);
+        transform: translateY(-2px);
+    }
+
+    .contact-card-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1.25rem 1.25rem 1rem;
+        border-bottom: 1px solid var(--border-light);
+        flex-shrink: 0;
+    }
+
+    .contact-card-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: var(--radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.125rem;
+        flex-shrink: 0;
+    }
+
+    .email-card .contact-card-icon {
+        background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    }
+
+    .phone-card .contact-card-icon {
+        background: linear-gradient(135deg, var(--secondary), #34D399);
+    }
+
+    .linkedin-card .contact-card-icon {
+        background: linear-gradient(135deg, #0077B5, #00A0DC);
+    }
+
+    .contact-card-label {
+        font-size: var(--font-size-sm);
+        font-weight: 600;
+        color: var(--text-medium);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .contact-card-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: visible;
+        min-height: auto;
+        padding: 1.25rem;
+    }
+
+    .contact-card-value {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        color: var(--text-dark);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: var(--font-size-base);
+        width: 100%;
+        transition: var(--transition);
+        overflow: visible;
+        min-height: auto;
+        padding: 0;
+    }
+
+    .contact-card-value:hover, .contact-card-value:focus {
+        color: var(--primary);
+        outline: none;
+    }
+
+    .contact-card-text {
+        flex: 1;
+        word-wrap: break-word;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        white-space: normal;
+        line-height: 1.4;
+        padding-right: 0.5rem;
+        min-width: 0;
+        overflow: visible;
+        display: block;
+    }
+
+    .email-text {
+        color: var(--primary);
+        word-break: break-all;
+    }
+
+    .phone-text {
+        color: var(--secondary);
+        word-break: break-all;
+    }
+
+    .linkedin-text {
+        color: #0077B5;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .linkedin-url-preview {
+        font-size: var(--font-size-xs);
+        color: var(--text-light);
+        font-family: monospace;
+        background: var(--bg-gray);
+        padding: 0.25rem 0.5rem;
+        border-radius: var(--radius-sm);
+        margin-top: 0.25rem;
+        word-break: break-all;
+        display: block;
+        overflow: visible;
+    }
+
+    .contact-external-icon {
+        color: var(--text-light);
+        font-size: var(--font-size-sm);
+        flex-shrink: 0;
+        margin-top: 0.125rem;
+    }
+
+    .linkedin-card {
+        background: linear-gradient(135deg, rgba(0, 119, 181, 0.05), rgba(0, 160, 220, 0.05));
+        border: 1px solid rgba(0, 119, 181, 0.2);
+    }
+
+    .linkedin-card:hover {
+        border-color: #0077B5;
+        background: linear-gradient(135deg, rgba(0, 119, 181, 0.1), rgba(0, 160, 220, 0.1));
+    }
+
+    .linkedin-actions {
+        display: flex;
+        gap: 0.5rem;
+        padding: 0 1.25rem 1.25rem;
+        width: 100%;
+        flex-shrink: 0;
+    }
+
+    .linkedin-action-btn, .linkedin-copy-btn {
+        flex: 1;
+        padding: 0.5rem 0.75rem;
+        border-radius: var(--radius-sm);
+        font-size: var(--font-size-xs);
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.375rem;
+        cursor: pointer;
+        transition: var(--transition);
+        text-decoration: none;
+        border: none;
+        min-height: 36px;
+    }
+
+    .linkedin-action-btn {
+        background: #0077B5;
+        color: white;
+    }
+
+    .linkedin-action-btn:hover, .linkedin-action-btn:focus {
+        background: #005582;
+        transform: translateY(-1px);
+        outline: none;
+    }
+
+    .linkedin-copy-btn {
+        background: var(--bg-white);
+        color: var(--text-medium);
+        border: 1px solid var(--border);
+    }
+
+    .linkedin-copy-btn:hover, .linkedin-copy-btn:focus {
+        background: var(--bg-light);
+        border-color: var(--primary-light);
+        color: var(--primary);
+        outline: none;
+    }
+
+    .quick-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        width: 100%;
+    }
+
+    .quick-action-btn {
+        padding: 0.75rem 1rem;
+        border-radius: var(--radius-md);
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        transition: var(--transition);
+        text-decoration: none;
+        font-size: var(--font-size-sm);
+        min-height: 44px;
+        flex: 1;
+        min-width: 120px;
+        border: 2px solid transparent;
+    }
+
+    .quick-action-btn.email-action {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+    }
+
+    .quick-action-btn.email-action:hover, .quick-action-btn.email-action:focus {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+        outline: none;
+    }
+
+    .quick-action-btn.linkedin-action {
+        background: #0077B5;
+        color: white;
+        border-color: #0077B5;
+    }
+
+    .quick-action-btn.linkedin-action:hover, .quick-action-btn.linkedin-action:focus {
+        background: #005582;
+        transform: translateY(-1px);
+        outline: none;
+    }
+
+    .quick-action-btn span {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+    .info-card {
+        background: var(--bg-white);
+        border-radius: var(--radius-lg);
+        padding: 1.25rem;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--border);
+        width: 100%;
+    }
+
+    .info-content {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        width: 100%;
+    }
+
+    .info-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid var(--border-light);
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        width: 100%;
+    }
+
+    .info-item:last-child {
+        border-bottom: none;
+    }
+
+    .info-label {
+        font-weight: 600;
+        color: var(--text-medium);
+        font-size: var(--font-size-sm);
+        flex-shrink: 0;
+        min-width: 100px;
+    }
+
+    .info-value {
+        color: var(--text-dark);
+        font-weight: 500;
+        text-align: right;
+        flex: 1;
+        min-width: 0;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        word-break: break-word;
+        max-width: 100%;
+    }
+
+    .status-badge {
+        padding: 0.375rem 0.75rem;
+        border-radius: 20px;
+        font-size: var(--font-size-sm);
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    .status-badge.active {
+        background: rgba(16, 185, 129, 0.1);
+        color: var(--secondary);
+        border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .status-badge.inactive {
+        background: rgba(239, 68, 68, 0.1);
+        color: var(--danger);
+        border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    .content-card {
+        background: var(--bg-white);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--border);
+        transition: var(--transition);
+        width: 100%;
+    }
+
+    .content-card:hover {
+        box-shadow: var(--shadow-md);
+    }
+
+    .card-header {
+        background: var(--bg-light);
+        padding: 1.25rem;
+        border-bottom: 1px solid var(--border-light);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        width: 100%;
+    }
+
+    .card-header h3 {
+        margin: 0;
+        font-size: var(--font-size-lg);
+        font-weight: 600;
+        color: var(--text-dark);
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        word-break: break-word;
+        flex: 1;
+    }
+
+    .card-header i {
+        color: var(--primary);
+        font-size: 1.125rem;
+        flex-shrink: 0;
+    }
+
+    .card-content {
+        padding: 1.25rem;
+        width: 100%;
+    }
+
+    .text-content {
+        color: var(--text-dark);
+        line-height: 1.6;
+        font-size: var(--font-size-base);
+        width: 100%;
+    }
+
+    .text-content p {
+        margin: 0 0 1rem 0;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        word-break: break-word;
+    }
+
+    .text-content p:last-child {
+        margin-bottom: 0;
+    }
+
+    .scrollable-text {
+        max-height: 200px;
+        overflow-y: auto;
+        padding-right: 0.5rem;
+    }
+
+    .scrollable-text::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .scrollable-text::-webkit-scrollbar-track {
+        background: var(--bg-light);
+        border-radius: 3px;
+    }
+
+    .scrollable-text::-webkit-scrollbar-thumb {
+        background: var(--text-light);
+        border-radius: 3px;
+    }
+
+    .scrollable-text::-webkit-scrollbar-thumb:hover {
+        background: var(--text-medium);
+    }
+
+    .no-data {
+        color: var(--text-light);
+        font-style: italic;
+        text-align: center;
+        padding: 1rem;
+    }
+
+    .additional-info-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem;
+        width: 100%;
+    }
+
+    .timestamps-card {
+        background: var(--bg-light);
+        border-radius: var(--radius-lg);
+        padding: 1.25rem;
+        border: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        width: 100%;
+    }
+
+    .timestamp-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        color: var(--text-medium);
+        font-size: var(--font-size-xs);
+        width: 100%;
+    }
+
+    .timestamp-item i {
+        color: var(--primary-light);
+        width: 16px;
+        flex-shrink: 0;
+    }
+
+    .timestamp-text {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        word-break: break-word;
+        flex: 1;
+    }
+
+    @media (max-width: 768px) {
+        .profile-content {
+            flex-direction: column;
+        }
+        .profile-left, .profile-right {
+            width: 100%;
+            min-width: auto;
+        }
+        .additional-info-grid {
+            grid-template-columns: 1fr;
+        }
+        .scrollable-text {
+            max-height: 180px;
+        }
+        .leader-profile-management {
+            padding: 1rem;
+        }
+        .profile-header {
+            padding: 1.5rem;
+        }
+        .profile-image {
+            width: 130px;
+            height: 130px;
+        }
+        .profile-name {
+            font-size: var(--font-size-xl);
+        }
+        .contact-card {
+            padding: 1rem;
+        }
+        .contact-card-header {
+            padding: 1rem 1rem 0.875rem;
+        }
+        .contact-card-content {
+            padding: 1rem;
+        }
+        .contact-card-value {
+            font-size: var(--font-size-sm);
+        }
+        .linkedin-actions {
+            padding: 0 1rem 1rem;
+        }
+        .card-header {
+            padding: 1.125rem;
+        }
+        .card-content {
+            padding: 1.125rem;
+        }
+        .info-item {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .info-label {
+            margin-bottom: 0.25rem;
+        }
+        .info-value {
+            text-align: left;
+        }
+    }
+
+    @media (prefers-color-scheme: dark) {
+        body {
+            background: #1a1a1a;
+            color: #e5e5e5;
+        }
+        .leader-profile-management {
+            background: #1a1a1a;
+        }
+        .profile-header {
+            background: linear-gradient(135deg, #2d1b69, #1a0b3d);
+        }
+        .profile-content, .profile-card, .info-card, .content-card, .contact-card {
+            background: #333;
+            border-color: #404040;
+        }
+        .profile-name, .text-content, .contact-card-value, .info-value {
+            color: #e5e5e5;
+        }
+        .contact-card-label {
+            color: #a0a0a0;
+        }
+        .email-text {
+            color: var(--primary-light);
+        }
+        .phone-text {
+            color: #34D399;
+        }
+        .linkedin-text {
+            color: #00A0DC;
+        }
+        .linkedin-url-preview {
+            background: #252525;
+            color: #a0a0a0;
+        }
+        .linkedin-card {
+            background: linear-gradient(135deg, rgba(0, 119, 181, 0.1), rgba(0, 160, 220, 0.1));
+            border-color: rgba(0, 119, 181, 0.3);
+        }
+        .card-header {
+            background: #252525;
+            border-color: #404040;
+        }
+        .card-header h3 {
+            color: #e5e5e5;
+        }
+        .contact-section {
+            background: #252525;
+            border-color: #404040;
+        }
+        .timestamps-card {
+            background: #252525;
+            border-color: #404040;
+        }
+        .timestamp-item, .info-label, .no-data {
+            color: #a0a0a0;
+        }
+        .profile-title, .profile-region, .profile-tenure, .profile-display-order {
+            color: #d0d0d0;
+        }
+        .scrollable-text::-webkit-scrollbar-track {
+            background: #252525;
+        }
+        .scrollable-text::-webkit-scrollbar-thumb {
+            background: #555;
+        }
+        .scrollable-text::-webkit-scrollbar-thumb:hover {
+            background: #666;
+        }
+        .linkedin-copy-btn {
+            background: #333;
+            color: #d0d0d0;
+            border-color: #555;
+        }
+        .linkedin-copy-btn:hover {
+            background: #404040;
+            border-color: #00A0DC;
+            color: #00A0DC;
+        }
+    }
+</style>
+
+<div class="leader-profile-management">
+    <!-- Header Section -->
+    <div class="profile-header">
+        <div class="header-content">
+            <div class="header-main">
+                <div class="header-icon">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="header-text">
+                    <h1 class="page-title">Leader Profile</h1>
+                    <p class="page-subtitle">
+                        {{ leader.get_full_name }}
+                        <span class="leader-badge {{ leader_type }}">
+                            {% if leader_type == 'managing_partner' %}
+                                Managing Partner
+                            {% else %}
+                                Regional Leader
+                            {% endif %}
+                        </span>
+                    </p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <a href="{% url 'manage_regional_leaders' %}" class="btn-back">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to List
+                </a>
+                <a href="{% url 'edit_regional_leader' leader.id %}" class="btn-edit">
+                    <i class="fas fa-edit"></i>
+                    Edit Profile
+                </a>
+                {% if leader.is_active %}
+                <a href="{% url 'delete_regional_leader' leader.id %}" class="btn-deactivate">
+                    <i class="fas fa-user-slash"></i>
+                    Deactivate
+                </a>
+                {% else %}
+                <a href="{% url 'activate_regional_leader' leader.id %}" class="btn-activate">
+                    <i class="fas fa-user-check"></i>
+                    Activate
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Profile Content -->
+    <div class="profile-content">
+        <!-- Left Column: Profile Info & Contact -->
+        <div class="profile-left">
+            <!-- Profile Card -->
+            <div class="profile-card">
+                <div class="profile-image-container">
+                    <img src="{{ leader.get_profile_image_url }}"
+                         alt="{{ leader.get_full_name }}"
+                         class="profile-image"
+                         onerror="this.onerror=null; this.src='{% static 'images/default-profile.jpg' %}'">
+                    <div class="profile-status">
+                        <span class="status-indicator {% if leader.is_active %}active{% else %}inactive{% endif %}">
+                            {% if leader.is_active %}Active{% else %}Inactive{% endif %}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="profile-info">
+                    <h2 class="profile-name">{{ leader.get_full_name }}</h2>
+
+                    {% if leader_type == 'regional_leader' %}
+                    <div class="profile-title">
+                        <i class="fas fa-globe"></i>
+                        <span class="title-text">{{ leader.region_title }}</span>
+                    </div>
+                    <div class="profile-region">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span class="region-text">{{ leader.get_region_display }}</span>
+                    </div>
+                    {% else %}
+                    <div class="profile-title">
+                        <i class="fas fa-briefcase"></i>
+                        <span class="title-text">{{ leader.position_title }}</span>
+                    </div>
+                    <div class="profile-tenure">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span class="tenure-text">
+                            {% if leader.joining_date %}
+                                <span class="joining-date">Joined: {{ leader.joining_date|date:"F Y" }}</span>
+                            {% endif %}
+                            {% if leader.years_in_role %}
+                                <span class="years-in-role">{{ leader.years_in_role }} years in role</span>
+                            {% endif %}
+                        </span>
+                    </div>
+                    {% endif %}
+
+                    <div class="profile-display-order">
+                        <i class="fas fa-sort-numeric-down"></i>
+                        <span>Display Order: {{ leader.display_order }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Information - REDESIGNED -->
+            <div class="contact-section">
+                <h3 class="section-title">
+                    <i class="fas fa-address-book"></i>
+                    Contact Information
+                </h3>
+
+                <div class="contact-info-grid">
+                    {% if leader.email %}
+                    <div class="contact-card email-card">
+                        <div class="contact-card-header">
+                            <div class="contact-card-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <span class="contact-card-label">Email</span>
+                        </div>
+                        <div class="contact-card-body">
+                            <div class="contact-card-content">
+                                <a href="mailto:{{ leader.email }}" class="contact-card-value" title="{{ leader.email }}">
+                                    <span class="contact-card-text email-text">{{ leader.email }}</span>
+                                    <i class="fas fa-external-link-alt contact-external-icon"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if leader.phone %}
+                    <div class="contact-card phone-card">
+                        <div class="contact-card-header">
+                            <div class="contact-card-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <span class="contact-card-label">Phone</span>
+                        </div>
+                        <div class="contact-card-body">
+                            <div class="contact-card-content">
+                                <a href="tel:{{ leader.phone }}" class="contact-card-value">
+                                    <span class="contact-card-text phone-text">{{ leader.phone }}</span>
+                                    <i class="fas fa-phone-alt contact-external-icon"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if leader.linkedin %}
+                    <div class="contact-card linkedin-card">
+                        <div class="contact-card-header">
+                            <div class="contact-card-icon">
+                                <i class="fab fa-linkedin"></i>
+                            </div>
+                            <span class="contact-card-label">LinkedIn</span>
+                        </div>
+                        <div class="contact-card-body">
+                            <div class="contact-card-content">
+                                <a href="{{ leader.linkedin }}" target="_blank" class="contact-card-value linkedin-link" title="Open LinkedIn Profile">
+                                    <span class="contact-card-text linkedin-text">
+                                        View LinkedIn Profile
+                                        <span class="linkedin-url-preview">{{ leader.linkedin|truncatechars:30 }}</span>
+                                    </span>
+                                    <i class="fab fa-linkedin contact-external-icon"></i>
+                                </a>
+                            </div>
+                            <div class="linkedin-actions">
+                                <a href="{{ leader.linkedin }}" target="_blank" class="linkedin-action-btn">
+                                    <i class="fab fa-linkedin"></i>
+                                    Open Profile
+                                </a>
+                                <button class="linkedin-copy-btn" onclick="copyToClipboard('{{ leader.linkedin }}')">
+                                    <i class="fas fa-copy"></i>
+                                    Copy Link
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    {% if leader.email %}
+                    <a href="mailto:{{ leader.email }}" class="quick-action-btn email-action">
+                        <i class="fas fa-paper-plane"></i>
+                        <span>Send Email</span>
+                    </a>
+                    {% endif %}
+
+                    {% if leader.linkedin %}
+                    <a href="{{ leader.linkedin }}" target="_blank" class="quick-action-btn linkedin-action">
+                        <i class="fab fa-linkedin"></i>
+                        <span>Open LinkedIn</span>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Joining Information Card -->
+            <div class="info-card">
+                <h3 class="section-title">
+                    <i class="fas fa-calendar-check"></i>
+                    Joining Information
+                </h3>
+                <div class="info-content">
+                    <div class="info-item">
+                        <span class="info-label">Joined:</span>
+                        <span class="info-value">
+                            {% if leader_type == 'regional_leader' %}
+                                {{ leader.joining_date|default:"Not specified" }}
+                            {% else %}
+                                {{ leader.get_formatted_joining_date }}
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Display Order:</span>
+                        <span class="info-value">{{ leader.display_order }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Status:</span>
+                        <span class="status-badge {% if leader.is_active %}active{% else %}inactive{% endif %}">
+                            {% if leader.is_active %}
+                                <i class="fas fa-check-circle"></i> Active
+                            {% else %}
+                                <i class="fas fa-times-circle"></i> Inactive
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Professional Details -->
+        <div class="profile-right">
+            <!-- Biography Card -->
+            <div class="content-card">
+                <div class="card-header">
+                    <i class="fas fa-user-circle"></i>
+                    <h3>Professional Biography</h3>
+                </div>
+                <div class="card-content">
+                    <div class="text-content scrollable-text">
+                        {% if leader.bio %}
+                            {{ leader.bio|linebreaks }}
+                        {% else %}
+                            <p class="no-data">No biography provided.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Education Card -->
+            <div class="content-card">
+                <div class="card-header">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h3>Education & Qualifications</h3>
+                </div>
+                <div class="card-content">
+                    <div class="text-content scrollable-text">
+                        {% if leader.education %}
+                            {{ leader.education|linebreaks }}
+                        {% else %}
+                            <p class="no-data">No education information provided.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Expertise Card -->
+            <div class="content-card">
+                <div class="card-header">
+                    <i class="fas fa-star"></i>
+                    <h3>
+                        {% if leader_type == 'regional_leader' %}
+                            Regional Expertise
+                        {% else %}
+                            Areas of Expertise
+                        {% endif %}
+                    </h3>
+                </div>
+                <div class="card-content">
+                    <div class="text-content scrollable-text">
+                        {% if leader_type == 'regional_leader' %}
+                            {% if leader.regional_expertise %}
+                                {{ leader.regional_expertise|linebreaks }}
+                            {% else %}
+                                <p class="no-data">No regional expertise information provided.</p>
+                            {% endif %}
+                        {% else %}
+                            {% if leader.expertise %}
+                                {{ leader.expertise|linebreaks }}
+                            {% else %}
+                                <p class="no-data">No expertise information provided.</p>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Achievements Card -->
+            <div class="content-card">
+                <div class="card-header">
+                    <i class="fas fa-trophy"></i>
+                    <h3>Achievements & Milestones</h3>
+                </div>
+                <div class="card-content">
+                    <div class="text-content scrollable-text">
+                        {% if leader.achievements %}
+                            {{ leader.achievements|linebreaks }}
+                        {% else %}
+                            <p class="no-data">No achievements information provided.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leadership Style or Philosophy Card -->
+            {% if leader_type == 'regional_leader' %}
+            <div class="content-card">
+                <div class="card-header">
+                    <i class="fas fa-users"></i>
+                    <h3>Leadership Style</h3>
+                </div>
+                <div class="card-content">
+                    <div class="text-content scrollable-text">
+                        {% if leader.leadership_style %}
+                            {{ leader.leadership_style|linebreaks }}
+                        {% else %}
+                            <p class="no-data">No leadership style information provided.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="content-card">
+                <div class="card-header">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Market Insights</h3>
+                </div>
+                <div class="card-content">
+                    <div class="text-content scrollable-text">
+                        {% if leader.market_insights %}
+                            {{ leader.market_insights|linebreaks }}
+                        {% else %}
+                            <p class="no-data">No market insights provided.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="content-card">
+                <div class="card-header">
+                    <i class="fas fa-hands-helping"></i>
+                    <h3>Leadership Philosophy</h3>
+                </div>
+                <div class="card-content">
+                    <div class="text-content scrollable-text">
+                        {% if leader.leadership_philosophy %}
+                            {{ leader.leadership_philosophy|linebreaks }}
+                        {% else %}
+                            <p class="no-data">No leadership philosophy provided.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="content-card">
+                <div class="card-header">
+                    <i class="fas fa-binoculars"></i>
+                    <h3>Strategic Vision</h3>
+                </div>
+                <div class="card-content">
+                    <div class="text-content scrollable-text">
+                        {% if leader.strategic_vision %}
+                            {{ leader.strategic_vision|linebreaks }}
+                        {% else %}
+                            <p class="no-data">No strategic vision provided.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Company Impact Card -->
+            <div class="content-card">
+                <div class="card-header">
+                    <i class="fas fa-building"></i>
+                    <h3>Company Impact</h3>
+                </div>
+                <div class="card-content">
+                    <div class="text-content scrollable-text">
+                        {% if leader.company_impact %}
+                            {{ leader.company_impact|linebreaks }}
+                        {% else %}
+                            <p class="no-data">No company impact information provided.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Info for Managing Partners -->
+            {% if leader_type == 'managing_partner' %}
+            <div class="additional-info-grid">
+                {% if leader.previous_positions %}
+                <div class="content-card">
+                    <div class="card-header">
+                        <i class="fas fa-briefcase"></i>
+                        <h3>Previous Positions</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="text-content scrollable-text">
+                            {{ leader.previous_positions|linebreaks }}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% if leader.board_memberships %}
+                <div class="content-card">
+                    <div class="card-header">
+                        <i class="fas fa-users"></i>
+                        <h3>Board Memberships</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="text-content scrollable-text">
+                            {{ leader.board_memberships|linebreaks }}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% if leader.awards %}
+                <div class="content-card">
+                    <div class="card-header">
+                        <i class="fas fa-award"></i>
+                        <h3>Awards & Recognitions</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="text-content scrollable-text">
+                            {{ leader.awards|linebreaks }}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <!-- Timestamps -->
+            <div class="timestamps-card">
+                <div class="timestamp-item">
+                    <i class="fas fa-plus-circle"></i>
+                    <span class="timestamp-text">Created: {{ leader.created_at|date:"F d, Y" }}</span>
+                </div>
+                <div class="timestamp-item">
+                    <i class="fas fa-edit"></i>
+                    <span class="timestamp-text">Last Updated: {{ leader.updated_at|date:"F d, Y" }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            alert('LinkedIn link copied to clipboard!');
+        }).catch(err => {
+            console.error('Failed to copy', err);
+            alert('Failed to copy link. Please try again.');
+        });
+    }
+</script>
+{% endblock %}

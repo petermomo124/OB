@@ -1,0 +1,1626 @@
+{% extends "base.html" %}
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}{{ service_name }} | OB Global{% endblock %}
+
+{% block content %}
+<div class="service-page-container">
+    <!-- Hero Section - Full Screen -->
+    <section class="service-hero">
+        <div class="hero-background"></div>
+        <div class="hero-content">
+            <h1 class="hero-title" style="
+                font-size: 4.5rem;
+                margin-bottom: 25px;
+                font-weight: 900;
+                line-height: 1.1;
+                text-shadow: 
+                    2px 2px 4px rgba(0,0,0,0.3),
+                    0 0 30px rgba(255,255,255,0.2),
+                    0 0 60px rgba(255,255,255,0.1);
+                animation: fadeInUp 1s ease-out;
+                background: linear-gradient(135deg, #ffffff 0%, #f0f8ff 100%);
+                -webkit-background-clip: text;
+                background-clip: text;
+                -webkit-text-fill-color: transparent;
+                letter-spacing: -0.5px;
+                position: relative;
+                display: inline-block;
+            ">
+                Software Implementation <span style="
+                    background: linear-gradient(135deg, #667eea, #764ba2);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    font-weight: 800;
+                    text-shadow: none;
+                ">Management</span>
+            </h1>
+
+            <p class="hero-description" style="
+                font-size: 1.5rem;
+                margin: 0 auto;
+                line-height: 1.8;
+                opacity: 0.95;
+                text-shadow: 2px 2px 8px rgba(0,0,0,0.4);
+                animation: fadeInUp 1s ease-out 0.3s both;
+                background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(240,248,255,0.9) 100%);
+                -webkit-background-clip: text;
+                background-clip: text;
+                -webkit-text-fill-color: transparent;
+                font-weight: 500;
+                max-width: 700px;
+                padding: 20px 0;
+                position: relative;
+                letter-spacing: 0.2px;
+            ">
+                Comprehensive software implementation solutions for seamless application deployment and integration. 
+                We ensure your software systems are implemented efficiently, configured optimally, and integrated 
+                perfectly with your business processes.
+            </p>
+        </div>
+    </section>
+
+   <section class="staff-section" style="padding: 80px 0; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); width: 100%;">
+
+    <div class="container" style="max-width: 1400px; margin: 0 auto; padding: 0 20px;">
+
+        <h2 class="section-title" style="text-align: center; font-size: 2.8rem; margin-bottom: 50px; color: #333; font-weight: 800;">The Team</h2>
+
+        <div class="staff-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; margin-bottom: 40px; max-width: 1400px; margin-left: auto; margin-right: auto; padding: 0 20px;">
+
+            {% for staff in technology_staff %}
+
+            <div class="staff-card" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: all 0.4s ease; position: relative; border: none;">
+
+                <div class="staff-image-container" style="position: relative; height: 220px; overflow: hidden; background: linear-gradient(135deg, #667eea, #764ba2);">
+
+                    {% if staff.profile_image %}
+
+                    <img src="{{ staff.profile_image|replace:'/upload/,/upload/q_auto,f_auto/' }}"
+
+                         alt="{{ staff.first_name }} {{ staff.last_name }}"
+
+                         class="staff-image"
+
+                         data-staff-id="{{ staff.id }}"
+
+                         onerror="handleImageError(this)"
+
+                         style="width: 100%; height: 100%; object-fit: cover; transition: all 0.4s ease;">
+
+                    {% else %}
+
+                    <div class="staff-placeholder" style="width: 100%; height: 100%; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; font-size: 3.5rem; color: rgba(255, 255, 255, 0.9);">
+
+                        <i class="fas fa-user"></i>
+
+                    </div>
+
+                    {% endif %}
+
+                    <div class="staff-overlay" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.8)); display: flex; align-items: flex-end; justify-content: center; opacity: 0; transition: all 0.3s ease; padding: 20px;">
+
+                        <div class="staff-social" style="display: flex; gap: 10px; transform: translateY(20px); transition: transform 0.3s ease;">
+
+                            {% if staff.linkedin %}
+
+                            <a href="{{ staff.linkedin }}" target="_blank" class="social-link linkedin" style="width: 40px; height: 40px; background: rgba(255, 255, 255, 0.95); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #333; text-decoration: none; transition: all 0.3s ease; backdrop-filter: blur(10px); font-size: 1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+
+                                <i class="fab fa-linkedin-in"></i>
+
+                            </a>
+
+                            {% endif %}
+
+                            <a href="mailto:{{ staff.email }}" class="social-link email" style="width: 40px; height: 40px; background: rgba(255, 255, 255, 0.95); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #333; text-decoration: none; transition: all 0.3s ease; backdrop-filter: blur(10px); font-size: 1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+
+                                <i class="fas fa-envelope"></i>
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="staff-info" style="padding: 25px; text-align: center; background: white;">
+
+                    <h3 class="staff-name" style="font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; color: #333; line-height: 1.3; word-break: break-word;">{{ staff.first_name }} {{ staff.last_name }}</h3>
+
+                    <p class="staff-position" style="color: #007bff; font-weight: 600; margin-bottom: 10px; font-size: 0.95rem; word-break: break-word;">🎯 {{ staff.field_position|default:"Tax Specialist" }}</p>
+
+                    {% if staff.office %}
+
+                    <p class="staff-office" style="color: #666; font-size: 0.85rem; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 8px; word-break: break-word;">
+
+                        <i class="fas fa-map-marker-alt"></i>
+
+                        📍 {{ staff.office.office_location }}
+
+                    </p>
+
+                    {% endif %}
+
+                    <button class="btn-view-more" onclick="openStaffModal({{ staff.id }})" style="background: linear-gradient(135deg, #007bff, #0056b3); color: white; border: none; padding: 12px 24px; border-radius: 25px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font-size: 0.9rem; min-width: 140px; justify-content: center; box-shadow: 0 4px 15px rgba(0,123,255,0.3);">
+
+                        <span>View Profile</span>
+
+                        <i class="fas fa-arrow-right"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            {% empty %}
+
+            <div class="no-staff" style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: #666;">
+
+                <i class="fas fa-users fa-3x" style="margin-bottom: 20px; color: #ccc;"></i>
+
+                <p style="font-size: 1.1rem; margin: 0;">No tax staff members found.</p>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+
+
+<style>
+
+/* Modal Styles - Override existing styles */
+
+.modal-content {
+
+    max-width: 900px !important;
+
+    width: 90% !important;
+
+    margin: 2% auto !important;
+
+    padding: 40px !important;
+
+    background: #333; /* Dark background for a sleek look */
+
+    color: white;
+
+    border-radius: 20px;
+
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+
+}
+
+
+
+.staff-modal-content {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    text-align: center;
+
+}
+
+
+
+.staff-modal-image,
+
+.staff-modal-placeholder {
+
+    width: 120px !important;
+
+    height: 120px !important;
+
+    border-radius: 50% !important;
+
+    object-fit: cover !important;
+
+    margin-bottom: 20px !important;
+
+    border: 5px solid #007bff;
+
+}
+
+
+
+.staff-modal-placeholder {
+
+    background: #0056b3;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 3rem;
+
+    color: white;
+
+}
+
+
+
+.staff-modal-name {
+
+    font-size: 2rem !important;
+
+    font-weight: 800 !important;
+
+    margin-bottom: 5px !important;
+
+}
+
+
+
+.staff-modal-position {
+
+    font-size: 1.1rem !important;
+
+    color: #007bff !important;
+
+    font-weight: 600 !important;
+
+    margin-bottom: 30px !important;
+
+}
+
+
+
+/* New Structure for Details */
+
+.staff-modal-details {
+
+    display: grid !important;
+
+    grid-template-columns: 1fr 1fr !important; /* Two equal columns */
+
+    gap: 20px 30px !important;
+
+    margin-top: 30px !important;
+
+    width: 100%;
+
+}
+
+
+
+.detail-row {
+
+    display: flex !important;
+
+    flex-direction: column !important;
+
+    border-bottom: none !important;
+
+    padding-bottom: 0 !important;
+
+    gap: 5px !important;
+
+    background: rgba(255, 255, 255, 0.05);
+
+    padding: 15px;
+
+    border-radius: 10px;
+
+}
+
+
+
+.detail-label {
+
+    font-size: 0.85rem !important;
+
+    color: #007bff !important; /* Blue label for emphasis */
+
+    font-weight: 700 !important;
+
+    text-transform: uppercase;
+
+}
+
+
+
+.detail-value {
+
+    text-align: left !important;
+
+    font-size: 1rem !important;
+
+    line-height: 1.4 !important;
+
+    color: white !important;
+
+    font-weight: 500 !important;
+
+    word-break: break-word;
+
+}
+
+
+
+.detail-value a {
+
+    color: #00c6ff;
+
+    text-decoration: none;
+
+    font-weight: 600;
+
+}
+
+
+
+/* Specific styling for larger text areas (spanning full width) */
+
+.full-width-detail {
+
+    grid-column: 1 / -1 !important;
+
+}
+
+
+
+.full-width-detail .detail-value {
+
+    background: rgba(255, 255, 255, 0.1);
+
+    padding: 10px;
+
+    border-radius: 5px;
+
+    border: 1px solid rgba(255, 255, 255, 0.15);
+
+}
+
+
+
+/* Mobile Responsiveness */
+
+@media (max-width: 768px) {
+
+    .modal-content {
+
+        padding: 25px !important;
+
+    }
+
+
+
+    .staff-modal-details {
+
+        grid-template-columns: 1fr !important; /* Single column on mobile */
+
+        gap: 15px !important;
+
+    }
+
+
+
+    .full-width-detail {
+
+        grid-column: auto !important;
+
+    }
+
+}
+
+
+
+@media (max-width: 480px) {
+
+    .modal-content {
+
+        padding: 20px !important;
+
+        margin: 10% auto !important;
+
+    }
+
+
+
+    .detail-value {
+
+        font-size: 0.9rem !important;
+
+    }
+
+
+
+    .detail-label {
+
+        font-size: 0.85rem !important;
+
+    }
+
+}
+
+</style>
+
+
+<script>
+
+function displayStaffModal(data) {
+
+    const modalContent = document.getElementById('modalContent');
+
+
+
+    // Get the actual image URL from the card if available
+
+    const staffCard = document.querySelector(`.staff-image[data-staff-id="${data.id}"]`);
+
+    let profileImageUrl = data.profile_image;
+
+
+
+    // If we have a card with the image, use that URL (it's already optimized)
+
+    if (staffCard && staffCard.src && !staffCard.src.includes('team-placeholder')) {
+
+        profileImageUrl = staffCard.src;
+
+    } else if (data.profile_image) {
+
+        // Apply the same Cloudinary optimization as in the template
+
+        profileImageUrl = data.profile_image.replace('/upload/', '/upload/q_auto,f_auto/');
+
+    }
+
+
+
+    modalContent.innerHTML = `
+
+        <div class="staff-modal-content">
+
+            ${profileImageUrl ?
+
+                `<img src="${profileImageUrl}"
+
+                      alt="${data.first_name} ${data.last_name}"
+
+                      class="staff-modal-image"
+
+                      onerror="this.onerror=null; this.src='{% static 'images/team-placeholder.jpg' %}'">` :
+
+                `<div class="staff-modal-placeholder"><i class="fas fa-user-circle"></i></div>`
+
+            }
+
+            <h3 class="staff-modal-name">${data.first_name} ${data.last_name}</h3>
+
+            <p class="staff-modal-position">🎯 ${data.field_position || 'Tax Specialist'}</p>
+
+
+
+            <div class="staff-modal-details">
+
+                <div class="detail-row">
+
+                    <span class="detail-label"><i class="fas fa-at"></i> Email</span>
+
+                    <span class="detail-value">${data.email}</span>
+
+                </div>
+
+                ${data.office_location ? `
+
+                <div class="detail-row">
+
+                    <span class="detail-label"><i class="fas fa-building"></i> Office</span>
+
+                    <span class="detail-value">${data.office_location}</span>
+
+                </div>` : ''}
+
+                ${data.nationality ? `
+
+                <div class="detail-row">
+
+                    <span class="detail-label"><i class="fas fa-globe-americas"></i> Nationality</span>
+
+                    <span class="detail-value">${data.nationality}</span>
+
+                </div>` : ''}
+
+                ${data.linkedin ? `
+
+                <div class="detail-row">
+
+                    <span class="detail-label"><i class="fab fa-linkedin"></i> LinkedIn</span>
+
+                    <span class="detail-value"><a href="${data.linkedin}" target="_blank">View Profile</a></span>
+
+                </div>` : ''}
+
+                ${data.field_position ? `
+
+                <div class="detail-row full-width-detail">
+
+                    <span class="detail-label"><i class="fas fa-briefcase"></i> Field Position / Specialization</span>
+
+                    <span class="detail-value">${data.field_position}</span>
+
+                </div>` : ''}
+
+                ${data.executive_position_description ? `
+
+                <div class="detail-row full-width-detail">
+
+                    <span class="detail-label"><i class="fas fa-crown"></i> Executive Role Description</span>
+
+                    <span class="detail-value">${data.executive_position_description}</span>
+
+                </div>` : ''}
+
+                ${data.company_impact ? `
+
+                <div class="detail-row full-width-detail">
+
+                    <span class="detail-label"><i class="fas fa-chart-line"></i> Company Impact</span>
+
+                    <span class="detail-value">${data.company_impact}</span>
+
+                </div>` : ''}
+
+                ${data.office_impact ? `
+
+                <div class="detail-row full-width-detail">
+
+                    <span class="detail-label"><i class="fas fa-users-cog"></i> Office Impact</span>
+
+                    <span class="detail-value">${data.office_impact}</span>
+
+                </div>` : ''}
+
+                ${data.address ? `
+
+                <div class="detail-row full-width-detail">
+
+                    <span class="detail-label"><i class="fas fa-map-marked-alt"></i> Address</span>
+
+                    <span class="detail-value">${data.address}</span>
+
+                </div>` : ''}
+
+            </div>
+
+        </div>
+
+    `;
+
+
+
+    // Add escape key listener
+
+    document.addEventListener('keydown', handleEscapeKey);
+
+}
+
+</script>
+
+
+    <!-- Service Details -->
+    <section class="service-details" style="padding: 80px 0; background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); width: 100%;">
+        <div class="container" style="max-width: 1400px; margin: 0 auto; padding: 0 20px;">
+            <div class="details-grid" style="display: grid; gap: 40px; align-items: start;">
+                <div class="details-content" style="max-width: 100%;">
+                    <h2 class="section-title" style="text-align: center; font-size: 2.8rem; margin-bottom: 50px; color: #333; font-weight: 800;">💻 Comprehensive Software Implementation Solutions</h2>
+                    <p class="details-text" style="font-size: 1.2rem; line-height: 1.8; color: #555; margin-bottom: 50px; text-align: center; max-width: 900px; margin-left: auto; margin-right: auto;">
+                        Our Software Implementation Management Service provides comprehensive solutions for seamless 
+                        application deployment and integration. We ensure your software systems are implemented efficiently, 
+                        configured optimally, and integrated perfectly with your business processes.
+                    </p>
+                    
+                    <div class="service-features" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 50px;">
+                        <div class="feature-item" style="background: linear-gradient(135deg, #ff6b6b, #ee5a52); color: white; text-align: center; padding: 40px 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: all 0.4s ease; border: none; position: relative; overflow: hidden;">
+                            <div class="feature-icon" style="width: 80px; height: 80px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: white; font-size: 2rem; backdrop-filter: blur(10px);">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            <h4 style="margin-bottom: 15px; color: white; font-size: 1.3rem; font-weight: 700;">Application Deployment</h4>
+                            <p style="color: rgba(255, 255, 255, 0.9); line-height: 1.6; font-size: 1rem;">Complete software application deployment including ERP, CRM, and custom business solutions</p>
+                            <div class="hover-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.1); opacity: 0; transition: opacity 0.3s ease;"></div>
+                        </div>
+                        <div class="feature-item" style="background: linear-gradient(135deg, #4ecdc4, #44a08d); color: white; text-align: center; padding: 40px 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: all 0.4s ease; border: none; position: relative; overflow: hidden;">
+                            <div class="feature-icon" style="width: 80px; height: 80px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: white; font-size: 2rem; backdrop-filter: blur(10px);">
+                                <i class="fas fa-cogs"></i>
+                            </div>
+                            <h4 style="margin-bottom: 15px; color: white; font-size: 1.3rem; font-weight: 700;">System Configuration</h4>
+                            <p style="color: rgba(255, 255, 255, 0.9); line-height: 1.6; font-size: 1rem;">Comprehensive software configuration and customization to match your business requirements</p>
+                            <div class="hover-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.1); opacity: 0; transition: opacity 0.3s ease;"></div>
+                        </div>
+                        <div class="feature-item" style="background: linear-gradient(135deg, #45b7d1, #96c93d); color: white; text-align: center; padding: 40px 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: all 0.4s ease; border: none; position: relative; overflow: hidden;">
+                            <div class="feature-icon" style="width: 80px; height: 80px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: white; font-size: 2rem; backdrop-filter: blur(10px);">
+                                <i class="fas fa-plug"></i>
+                            </div>
+                            <h4 style="margin-bottom: 15px; color: white; font-size: 1.3rem; font-weight: 700;">Integration Services</h4>
+                            <p style="color: rgba(255, 255, 255, 0.9); line-height: 1.6; font-size: 1rem;">Seamless integration with existing systems, databases, and third-party applications</p>
+                            <div class="hover-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.1); opacity: 0; transition: opacity 0.3s ease;"></div>
+                        </div>
+                        <div class="feature-item" style="background: linear-gradient(135deg, #a8ff78, #78ffd6); color: #333; text-align: center; padding: 40px 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: all 0.4s ease; border: none; position: relative; overflow: hidden;">
+                            <div class="feature-icon" style="width: 80px; height: 80px; background: rgba(255, 255, 255, 0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: #333; font-size: 2rem; backdrop-filter: blur(10px);">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <h4 style="margin-bottom: 15px; color: #333; font-size: 1.3rem; font-weight: 700;">User Training</h4>
+                            <p style="color: #555; line-height: 1.6; font-size: 1rem;">Comprehensive user training and documentation to ensure smooth adoption and maximum productivity</p>
+                            <div class="hover-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.2); opacity: 0; transition: opacity 0.3s ease;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Related Services -->
+                    <div class="related-services" style="margin-top: 50px; padding-top: 40px; border-top: 2px solid #e9ecef;">
+                        <h3 class="sub-title" style="font-size: 2.2rem; margin-bottom: 40px; color: #333; text-align: center; font-weight: 700;">Related Technology Services</h3>
+                        <div class="related-services-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px;">
+                            <a href="{% url 'it_project_management' %}" class="related-service-card" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 35px 25px; border-radius: 20px; text-decoration: none; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: all 0.4s ease; border: none; position: relative; overflow: hidden; display: block; text-align: center;">
+                                <div class="related-service-icon" style="width: 70px; height: 70px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: white; font-size: 1.8rem; backdrop-filter: blur(10px);">
+                                    <i class="fas fa-tasks"></i>
+                                </div>
+                                <h4 style="color: white; margin-bottom: 15px; font-size: 1.3rem; font-weight: 700;">IT Project Management</h4>
+                                <p style="color: rgba(255, 255, 255, 0.9); line-height: 1.6; font-size: 1rem; margin-bottom: 20px;">Comprehensive project management for technology implementations</p>
+                                <span class="learn-more" style="color: white; font-size: 1rem; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; transition: gap 0.3s ease;">
+                                    Learn More <i class="fas fa-arrow-right"></i>
+                                </span>
+                                <div class="hover-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.1); opacity: 0; transition: opacity 0.3s ease;"></div>
+                            </a>
+                            <a href="{% url 'hardware_implementation_management' %}" class="related-service-card" style="background: linear-gradient(135deg, #f093fb, #f5576c); color: white; padding: 35px 25px; border-radius: 20px; text-decoration: none; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: all 0.4s ease; border: none; position: relative; overflow: hidden; display: block; text-align: center;">
+                                <div class="related-service-icon" style="width: 70px; height: 70px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: white; font-size: 1.8rem; backdrop-filter: blur(10px);">
+                                    <i class="fas fa-server"></i>
+                                </div>
+                                <h4 style="color: white; margin-bottom: 15px; font-size: 1.3rem; font-weight: 700;">Hardware Implementation</h4>
+                                <p style="color: rgba(255, 255, 255, 0.9); line-height: 1.6; font-size: 1rem; margin-bottom: 20px;">Complete hardware deployment and infrastructure setup</p>
+                                <span class="learn-more" style="color: white; font-size: 1rem; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; transition: gap 0.3s ease;">
+                                    Learn More <i class="fas fa-arrow-right"></i>
+                                </span>
+                                <div class="hover-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.1); opacity: 0; transition: opacity 0.3s ease;"></div>
+                            </a>
+                            <a href="{% url 'it_consulting' %}" class="related-service-card" style="background: linear-gradient(135deg, #ffd89b, #19547b); color: white; padding: 35px 25px; border-radius: 20px; text-decoration: none; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: all 0.4s ease; border: none; position: relative; overflow: hidden; display: block; text-align: center;">
+                                <div class="related-service-icon" style="width: 70px; height: 70px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: white; font-size: 1.8rem; backdrop-filter: blur(10px);">
+                                    <i class="fas fa-laptop-code"></i>
+                                </div>
+                                <h4 style="color: white; margin-bottom: 15px; font-size: 1.3rem; font-weight: 700;">IT Consulting</h4>
+                                <p style="color: rgba(255, 255, 255, 0.9); line-height: 1.6; font-size: 1rem; margin-bottom: 20px;">Strategic technology advisory and planning services</p>
+                                <span class="learn-more" style="color: white; font-size: 1rem; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; transition: gap 0.3s ease;">
+                                    Learn More <i class="fas fa-arrow-right"></i>
+                                </span>
+                                <div class="hover-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.1); opacity: 0; transition: opacity 0.3s ease;"></div>
+                            </a>
+                            <a href="{% url 'managed_it_service' %}" class="related-service-card" style="background: linear-gradient(135deg, #89f7fe, #66a6ff); color: white; padding: 35px 25px; border-radius: 20px; text-decoration: none; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: all 0.4s ease; border: none; position: relative; overflow: hidden; display: block; text-align: center;">
+                                <div class="related-service-icon" style="width: 70px; height: 70px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: white; font-size: 1.8rem; backdrop-filter: blur(10px);">
+                                    <i class="fas fa-headset"></i>
+                                </div>
+                                <h4 style="color: white; margin-bottom: 15px; font-size: 1.3rem; font-weight: 700;">Managed IT Service</h4>
+                                <p style="color: rgba(255, 255, 255, 0.9); line-height: 1.6; font-size: 1rem; margin-bottom: 20px;">Ongoing IT support and maintenance services</p>
+                                <span class="learn-more" style="color: white; font-size: 1rem; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; transition: gap 0.3s ease;">
+                                    Learn More <i class="fas fa-arrow-right"></i>
+                                </span>
+                                <div class="hover-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.1); opacity: 0; transition: opacity 0.3s ease;"></div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How We Help -->
+    <section class="how-we-help" style="padding: 80px 0; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); width: 100%; position: relative;">
+        <div class="container" style="max-width: 1400px; margin: 0 auto; padding: 0 20px;">
+            <h2 class="section-title" style="text-align: center; font-size: 2.8rem; margin-bottom: 50px; color: #333; font-weight: 800; line-height: 1.2;">How OB Global Software Implementation Management Transforms Your Business Applications</h2>
+            <div class="help-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; max-width: 1400px; margin: 0 auto;">
+                <div class="help-item" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; text-align: center; padding: 40px 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: all 0.4s ease; border: none; position: relative; overflow: hidden; cursor: pointer;">
+                    <div class="help-number" style="font-size: 3rem; font-weight: bold; margin-bottom: 20px; opacity: 0.8; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); transition: all 0.3s ease;">01</div>
+                    <h4 style="font-size: 1.4rem; margin-bottom: 20px; font-weight: 700; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); line-height: 1.3;">💻 Seamless Application Deployment</h4>
+                    <p style="line-height: 1.6; font-size: 1.1rem; margin: 0; word-spacing: 0px; letter-spacing: 0px; text-align: center;">Ensure smooth deployment of enterprise applications including ERP, CRM, and custom business solutions with minimal disruption</p>
+                    <div class="hover-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.1); opacity: 0; transition: opacity 0.3s ease;"></div>
+                </div>
+                <div class="help-item" style="background: linear-gradient(135deg, #f093fb, #f5576c); color: white; text-align: center; padding: 40px 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: all 0.4s ease; border: none; position: relative; overflow: hidden; cursor: pointer;">
+                    <div class="help-number" style="font-size: 3rem; font-weight: bold; margin-bottom: 20px; opacity: 0.8; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); transition: all 0.3s ease;">02</div>
+                    <h4 style="font-size: 1.4rem; margin-bottom: 20px; font-weight: 700; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); line-height: 1.3;">⚡ Custom Configuration & Optimization</h4>
+                    <p style="line-height: 1.6; font-size: 1.1rem; margin: 0; word-spacing: 0px; letter-spacing: 0px; text-align: center;">Configure and optimize software systems to match your specific business processes and maximize operational efficiency</p>
+                    <div class="hover-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.1); opacity: 0; transition: opacity 0.3s ease;"></div>
+                </div>
+                <div class="help-item" style="background: linear-gradient(135deg, #ffd89b, #19547b); color: white; text-align: center; padding: 40px 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: all 0.4s ease; border: none; position: relative; overflow: hidden; cursor: pointer;">
+                    <div class="help-number" style="font-size: 3rem; font-weight: bold; margin-bottom: 20px; opacity: 0.8; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); transition: all 0.3s ease;">03</div>
+                    <h4 style="font-size: 1.4rem; margin-bottom: 20px; font-weight: 700; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); line-height: 1.3;">🛡️ Secure System Integration</h4>
+                    <p style="line-height: 1.6; font-size: 1.1rem; margin: 0; word-spacing: 0px; letter-spacing: 0px; text-align: center;">Implement secure integration with existing systems, databases, and third-party applications while maintaining data integrity</p>
+                    <div class="hover-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.1); opacity: 0; transition: opacity 0.3s ease;"></div>
+                </div>
+                <div class="help-item" style="background: linear-gradient(135deg, #4ecdc4, #44a08d); color: white; text-align: center; padding: 40px 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: all 0.4s ease; border: none; position: relative; overflow: hidden; cursor: pointer;">
+                    <div class="help-number" style="font-size: 3rem; font-weight: bold; margin-bottom: 20px; opacity: 0.8; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); transition: all 0.3s ease;">04</div>
+                    <h4 style="font-size: 1.4rem; margin-bottom: 20px; font-weight: 700; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); line-height: 1.3;">💡 Comprehensive User Training</h4>
+                    <p style="line-height: 1.6; font-size: 1.1rem; margin: 0; word-spacing: 0px; letter-spacing: 0px; text-align: center;">Provide extensive user training and documentation to ensure smooth adoption and maximize productivity across your organization</p>
+                    <div class="hover-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.1); opacity: 0; transition: opacity 0.3s ease;"></div>
+                </div>
+                <div class="help-item" style="background: linear-gradient(135deg, #45b7d1, #96c93d); color: white; text-align: center; padding: 40px 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: all 0.4s ease; border: none; position: relative; overflow: hidden; cursor: pointer;">
+                    <div class="help-number" style="font-size: 3rem; font-weight: bold; margin-bottom: 20px; opacity: 0.8; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); transition: all 0.3s ease;">05</div>
+                    <h4 style="font-size: 1.4rem; margin-bottom: 20px; font-weight: 700; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); line-height: 1.3;">🚀 Data Migration Excellence</h4>
+                    <p style="line-height: 1.6; font-size: 1.1rem; margin: 0; word-spacing: 0px; letter-spacing: 0px; text-align: center;">Execute seamless data migration from legacy systems to new platforms while ensuring data accuracy and integrity</p>
+                    <div class="hover-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.1); opacity: 0; transition: opacity 0.3s ease;"></div>
+                </div>
+                <div class="help-item" style="background: linear-gradient(135deg, #a8ff78, #78ffd6); color: #333; text-align: center; padding: 40px 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: all 0.4s ease; border: none; position: relative; overflow: hidden; cursor: pointer;">
+                    <div class="help-number" style="font-size: 3rem; font-weight: bold; margin-bottom: 20px; opacity: 0.8; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); transition: all 0.3s ease;">06</div>
+                    <h4 style="font-size: 1.4rem; margin-bottom: 20px; font-weight: 700; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); line-height: 1.3;">📈 Ongoing Support & Maintenance</h4>
+                    <p style="line-height: 1.6; font-size: 1.1rem; margin: 0; word-spacing: 0px; letter-spacing: 0px; text-align: center;">Provide continuous support, maintenance, and optimization services to ensure long-term software performance and reliability</p>
+                    <div class="hover-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.2); opacity: 0; transition: opacity 0.3s ease;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Case Studies -->
+    <section class="case-studies" style="padding: 80px 0; background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); width: 100%;">
+        <div class="container" style="max-width: 1400px; margin: 0 auto; padding: 0 20px;">
+            <h2 class="section-title" style="text-align: center; font-size: 2.8rem; margin-bottom: 50px; color: #333; font-weight: 800;">📈 Software Implementation Success Stories</h2>
+            <div class="case-studies-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; align-items: stretch;">
+                <div class="case-study-card" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 35px 25px; border-radius: 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: all 0.4s ease; border: none; position: relative; overflow: hidden; display: flex; flex-direction: column; height: 100%;">
+                    <div class="case-study-icon" style="width: 70px; height: 70px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: white; font-size: 1.8rem; backdrop-filter: blur(10px);">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <h4 style="font-size: 1.3rem; margin-bottom: 15px; font-weight: 700; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); line-height: 1.3;">🏢 Enterprise ERP Implementation</h4>
+                    <p style="color: rgba(255, 255, 255, 0.9); line-height: 1.5; font-size: 1rem; margin-bottom: 20px; flex-grow: 1;">Managed the complete implementation of a new ERP system for a multinational corporation, integrating 15 departments across 8 countries</p>
+                    <div class="case-study-result" style="background: rgba(255, 255, 255, 0.2); padding: 12px 18px; border-radius: 10px; font-size: 0.95rem; color: white; border: 1px solid rgba(255,255,255,0.3); backdrop-filter: blur(10px); margin-top: auto;">
+                        <strong style="color: #ffd700;">Result:</strong> 45% process efficiency improvement
+                    </div>
+                    <div class="hover-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.1); opacity: 0; transition: opacity 0.3s ease;"></div>
+                </div>
+                <div class="case-study-card" style="background: linear-gradient(135deg, #f093fb, #f5576c); color: white; padding: 35px 25px; border-radius: 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: all 0.4s ease; border: none; position: relative; overflow: hidden; display: flex; flex-direction: column; height: 100%;">
+                    <div class="case-study-icon" style="width: 70px; height: 70px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: white; font-size: 1.8rem; backdrop-filter: blur(10px);">
+                        <i class="fas fa-industry"></i>
+                    </div>
+                    <h4 style="font-size: 1.3rem; margin-bottom: 15px; font-weight: 700; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); line-height: 1.3;">🏭 CRM System Deployment</h4>
+                    <p style="color: rgba(255, 255, 255, 0.9); line-height: 1.5; font-size: 1rem; margin-bottom: 20px; flex-grow: 1;">Implemented a comprehensive CRM solution for a sales organization with 500+ users, including custom workflows and integration with existing systems</p>
+                    <div class="case-study-result" style="background: rgba(255, 255, 255, 0.2); padding: 12px 18px; border-radius: 10px; font-size: 0.95rem; color: white; border: 1px solid rgba(255,255,255,0.3); backdrop-filter: blur(10px); margin-top: auto;">
+                        <strong style="color: #ffd700;">Result:</strong> 30% increase in sales productivity
+                    </div>
+                    <div class="hover-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.1); opacity: 0; transition: opacity 0.3s ease;"></div>
+                </div>
+                <div class="case-study-card" style="background: linear-gradient(135deg, #ffd89b, #19547b); color: white; padding: 35px 25px; border-radius: 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: all 0.4s ease; border: none; position: relative; overflow: hidden; display: flex; flex-direction: column; height: 100%;">
+                    <div class="case-study-icon" style="width: 70px; height: 70px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: white; font-size: 1.8rem; backdrop-filter: blur(10px);">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h4 style="font-size: 1.3rem; margin-bottom: 15px; font-weight: 700; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); line-height: 1.3;">📈 Custom Business Application</h4>
+                    <p style="color: rgba(255, 255, 255, 0.9); line-height: 1.5; font-size: 1rem; margin-bottom: 20px; flex-grow: 1;">Developed and implemented a custom business intelligence application for a financial services company, integrating data from multiple sources</p>
+                    <div class="case-study-result" style="background: rgba(255, 255, 255, 0.2); padding: 12px 18px; border-radius: 10px; font-size: 0.95rem; color: white; border: 1px solid rgba(255,255,255,0.3); backdrop-filter: blur(10px); margin-top: auto;">
+                        <strong style="color: #ffd700;">Result:</strong> Real-time analytics capability achieved
+                    </div>
+                    <div class="hover-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.1); opacity: 0; transition: opacity 0.3s ease;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Staff Modal -->
+<div id="staffModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <div id="modalContent"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* All the same CSS styles from the Financial Accounting Advisory page */
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+}
+
+/* Base Container - Full Width */
+.service-page-container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+ /* Hero Section - Full Viewport */
+.service-hero {
+    position: relative;
+    color: white;
+    padding: 0;
+    text-align: center;
+    margin-bottom: 0;
+    width: 100%;
+    height: 100vh;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://i.pinimg.com/736x/65/00/77/6500774a3bcd34fff9cc22e6c034ce18.jpg');
+    background-size: cover;
+    background-position: center;
+    background-blend-mode: overlay;
+    background-attachment: scroll;
+    background-repeat: no-repeat;
+    z-index: -1;
+}
+
+/* Mobile-specific hero background fix */
+@media (max-width: 768px) {
+    .hero-background {
+        background-attachment: scroll !important;
+        position: fixed;
+        background-size: cover;
+        background-position: center center;
+    }
+    
+    .service-hero {
+        position: relative;
+    }
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    padding: 0 20px;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-5px); }
+}
+
+/* Enhanced hover effects for all interactive elements */
+.feature-item:hover,
+.related-service-card:hover,
+.help-item:hover,
+.case-study-card:hover {
+    transform: translateY(-10px) scale(1.02) !important;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25) !important;
+}
+
+.feature-item:hover .hover-overlay,
+.related-service-card:hover .hover-overlay,
+.help-item:hover .hover-overlay,
+.case-study-card:hover .hover-overlay {
+    opacity: 1 !important;
+}
+
+.help-item:hover .help-number {
+    transform: scale(1.1) !important;
+    opacity: 1 !important;
+}
+
+.staff-card:hover {
+    transform: translateY(-10px) scale(1.02) !important;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25) !important;
+}
+
+.staff-card:hover .staff-image {
+    transform: scale(1.1) !important;
+}
+
+.staff-card:hover .staff-overlay {
+    opacity: 1 !important;
+}
+
+.staff-card:hover .staff-social {
+    transform: translateY(0) !important;
+}
+
+.social-link:hover {
+    transform: scale(1.2) !important;
+    background: #007bff !important;
+    color: white !important;
+}
+
+.social-link.linkedin:hover {
+    background: #0077b5 !important;
+}
+
+.social-link.email:hover {
+    background: #ea4335 !important;
+}
+
+.btn-view-more:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 8px 25px rgba(0,123,255,0.4) !important;
+}
+
+.related-service-card:hover .learn-more {
+    gap: 12px !important;
+}
+
+/* Floating animations */
+.feature-item,
+.related-service-card,
+.help-item,
+.case-study-card {
+    animation: float 6s ease-in-out infinite !important;
+}
+
+.help-item:nth-child(1) { animation-delay: 0s !important; }
+.help-item:nth-child(2) { animation-delay: 1s !important; }
+.help-item:nth-child(3) { animation-delay: 2s !important; }
+.help-item:nth-child(4) { animation-delay: 3s !important; }
+.help-item:nth-child(5) { animation-delay: 4s !important; }
+.help-item:nth-child(6) { animation-delay: 5s !important; }
+
+.case-study-card:nth-child(1) { animation-delay: 0s !important; }
+.case-study-card:nth-child(2) { animation-delay: 2s !important; }
+.case-study-card:nth-child(3) { animation-delay: 4s !important; }
+
+.feature-item:nth-child(1) { animation-delay: 0s !important; }
+.feature-item:nth-child(2) { animation-delay: 1.5s !important; }
+.feature-item:nth-child(3) { animation-delay: 3s !important; }
+.feature-item:nth-child(4) { animation-delay: 4.5s !important; }
+
+.related-service-card:nth-child(1) { animation-delay: 0s !important; }
+.related-service-card:nth-child(2) { animation-delay: 1s !important; }
+.related-service-card:nth-child(3) { animation-delay: 2s !important; }
+.related-service-card:nth-child(4) { animation-delay: 3s !important; }
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.8);
+    backdrop-filter: blur(10px);
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    margin: 5% auto;
+    padding: 30px;
+    border-radius: 25px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+    animation: modalSlideIn 0.4s ease-out;
+    color: white;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.close-modal {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.8);
+    transition: all 0.3s ease;
+    z-index: 10001;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.close-modal:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.staff-modal-content {
+    text-align: center;
+}
+
+.staff-modal-image {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 20px;
+    border: 4px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.staff-modal-placeholder {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 3.5rem;
+    color: rgba(255, 255, 255, 0.7);
+    border: 4px solid rgba(255, 255, 255, 0.8);
+}
+
+.staff-modal-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: white;
+    word-break: break-word;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.staff-modal-position {
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 25px;
+    font-size: 1.1rem;
+    word-break: break-word;
+    font-weight: 600;
+}
+
+.staff-modal-details {
+    text-align: left;
+    margin-top: 25px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 25px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.detail-row:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.detail-label {
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.9);
+    flex: 1;
+    font-size: 0.95rem;
+    min-width: 120px;
+}
+
+.detail-value {
+    color: white;
+    flex: 2;
+    text-align: right;
+    word-wrap: break-word;
+    word-break: break-word;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    font-weight: 600;
+}
+
+.detail-value a {
+    color: #ffeb3b;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.detail-value a:hover {
+    text-decoration: underline;
+    color: #fff176;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 1200px) {
+    .staff-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 25px !important;
+    }
+    
+    .help-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 25px !important;
+    }
+}
+
+@media (max-width: 992px) {
+    .staff-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+    
+    .service-features {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 25px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .service-page-container {
+        padding: 0;
+    }
+
+    .service-hero {
+        height: 100vh;
+        min-height: 100vh;
+        padding: 0 15px;
+    }
+
+    .hero-title {
+        font-size: 2.5rem !important;
+    }
+    
+    .hero-description {
+        font-size: 1.1rem !important;
+    }
+    
+    .section-title {
+        font-size: 2rem !important;
+        margin-bottom: 30px !important;
+    }
+    
+    .staff-grid {
+        grid-template-columns: 1fr !important;
+        gap: 25px !important;
+        padding: 0 15px !important;
+    }
+    
+    .help-grid {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+        padding: 0 15px !important;
+    }
+    
+    .service-features {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+        padding: 0 15px !important;
+    }
+    
+    .related-services-grid {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+        padding: 0 15px !important;
+    }
+    
+    .case-studies-grid {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+        padding: 0 15px !important;
+    }
+    
+    .feature-item,
+    .help-item,
+    .case-study-card,
+    .related-service-card {
+        padding: 30px 20px !important;
+    }
+    
+    .sub-title {
+        font-size: 1.8rem !important;
+    }
+    
+    .modal-content {
+        margin: 10% auto;
+        padding: 25px;
+        width: 95%;
+    }
+    
+    .detail-row {
+        flex-direction: column;
+        text-align: center;
+        gap: 8px;
+    }
+    
+    .detail-value {
+        text-align: center;
+    }
+    
+    .staff-modal-image,
+    .staff-modal-placeholder {
+        width: 120px;
+        height: 120px;
+    }
+}
+
+@media (max-width: 480px) {
+    .service-hero {
+        height: 100vh;
+        min-height: 100vh;
+        padding: 0 10px;
+    }
+
+    .hero-title {
+        font-size: 2rem !important;
+    }
+    
+    .hero-description {
+        font-size: 1rem !important;
+    }
+    
+    .section-title {
+        font-size: 1.6rem !important;
+    }
+    
+    .staff-section,
+    .service-details,
+    .how-we-help,
+    .case-studies {
+        padding: 50px 0 !important;
+    }
+    
+    .feature-item,
+    .help-item,
+    .case-study-card,
+    .related-service-card {
+        padding: 25px 15px !important;
+    }
+    
+    .help-number {
+        font-size: 2.5rem !important;
+    }
+    
+    .feature-icon,
+    .case-study-icon,
+    .related-service-icon {
+        width: 60px !important;
+        height: 60px !important;
+        font-size: 1.5rem !important;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .feature-item:hover,
+    .related-service-card:hover,
+    .help-item:hover,
+    .case-study-card:hover,
+    .staff-card:hover {
+        transform: none !important;
+    }
+    
+    .feature-item:hover .hover-overlay,
+    .related-service-card:hover .hover-overlay,
+    .help-item:hover .hover-overlay,
+    .case-study-card:hover .hover-overlay,
+    .staff-card:hover .staff-overlay {
+        opacity: 0 !important;
+    }
+    
+    .help-item:hover .help-number {
+        transform: none !important;
+    }
+    
+    .staff-card:hover .staff-image {
+        transform: none !important;
+    }
+    
+    .staff-card:hover .staff-social {
+        transform: translateY(20px) !important;
+    }
+    
+    /* Disable floating animation on touch devices */
+    .feature-item,
+    .related-service-card,
+    .help-item,
+    .case-study-card {
+        animation: none !important;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .feature-item,
+    .related-service-card,
+    .help-item,
+    .case-study-card,
+    .staff-card,
+    .btn-view-more,
+    .social-link,
+    .hover-overlay {
+        transition: none !important;
+        animation: none !important;
+    }
+    
+    .hero-title,
+    .hero-description {
+        animation: none !important;
+    }
+    
+    .modal-content {
+        animation: none !important;
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Use the same JavaScript from the Financial Accounting Advisory page
+let staffDataCache = {};
+
+function handleImageError(img) {
+    console.log('Image failed to load, using fallback for staff ID:', img.dataset.staffId);
+    const fallbackSrc = '{% static 'images/team-placeholder.jpg' %}';
+    if (img.src !== fallbackSrc) {
+        img.src = fallbackSrc;
+    }
+}
+
+function openStaffModal(staffId) {
+    // Show loading state
+    const modalContent = document.getElementById('modalContent');
+    modalContent.innerHTML = `
+        <div class="text-center p-4">
+            <div class="spinner-border text-warning" style="width: 3rem; height: 3rem;" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-3 text-white">Loading staff details...</p>
+        </div>
+    `;
+    document.getElementById('staffModal').style.display = 'block';
+
+    // Check if we have cached data
+    if (staffDataCache[staffId]) {
+        displayStaffModal(staffDataCache[staffId]);
+        return;
+    }
+
+    fetch(`/api/staff/${staffId}/`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Cache the data
+            staffDataCache[staffId] = data;
+            displayStaffModal(data);
+        })
+        .catch(error => {
+            console.error('Error fetching staff details:', error);
+            modalContent.innerHTML = `
+                <div class="text-center p-4">
+                    <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+                    <h4 class="text-white">Error Loading Profile</h4>
+                    <p class="text-white">Unable to load staff details. Please try again.</p>
+                    <button class="btn-view-more mt-3" onclick="openStaffModal(${staffId})">
+                        <span>🔄 Retry</span>
+                        <i class="fas fa-redo"></i>
+                    </button>
+                </div>
+            `;
+        });
+}
+
+function displayStaffModal(data) {
+    const modalContent = document.getElementById('modalContent');
+    
+    // Get the actual image URL from the card if available
+    const staffCard = document.querySelector(`.staff-image[data-staff-id="${data.id}"]`);
+    let profileImageUrl = data.profile_image;
+    
+    // If we have a card with the image, use that URL (it's already optimized)
+    if (staffCard && staffCard.src && !staffCard.src.includes('team-placeholder')) {
+        profileImageUrl = staffCard.src;
+    } else if (data.profile_image) {
+        // Apply the same Cloudinary optimization as in the template
+        profileImageUrl = data.profile_image.replace('/upload/', '/upload/q_auto,f_auto/');
+    }
+
+    modalContent.innerHTML = `
+        <div class="staff-modal-content">
+            ${profileImageUrl ? 
+                `<img src="${profileImageUrl}" 
+                      alt="${data.first_name} ${data.last_name}" 
+                      class="staff-modal-image"
+                      onerror="this.onerror=null; this.src='{% static 'images/team-placeholder.jpg' %}'">` :
+                `<div class="staff-modal-placeholder"><i class="fas fa-user-circle"></i></div>`
+            }
+            <h3 class="staff-modal-name">${data.first_name} ${data.last_name}</h3>
+            <p class="staff-modal-position">🎯 ${data.field_position || 'Software Implementation Specialist'}</p>
+            
+            <div class="staff-modal-details">
+                <div class="detail-row">
+                    <span class="detail-label">📧 Email:</span>
+                    <span class="detail-value">${data.email}</span>
+                </div>
+                
+                ${data.office_location ? `
+                <div class="detail-row">
+                    <span class="detail-label">🏢 Office:</span>
+                    <span class="detail-value">${data.office_location}</span>
+                </div>` : ''}
+                ${data.address ? `
+                <div class="detail-row">
+                    <span class="detail-label">📍 Address:</span>
+                    <span class="detail-value">${data.address}</span>
+                </div>` : ''}
+                ${data.nationality ? `
+                <div class="detail-row">
+                    <span class="detail-label">🌍 Nationality:</span>
+                    <span class="detail-value">${data.nationality}</span>
+                </div>` : ''}
+                ${data.linkedin ? `
+                <div class="detail-row">
+                    <span class="detail-label">💼 LinkedIn:</span>
+                    <span class="detail-value"><a href="${data.linkedin}" target="_blank">View Profile</a></span>
+                </div>` : ''}
+                ${data.company_impact ? `
+                <div class="detail-row">
+                    <span class="detail-label">🚀 Company Impact:</span>
+                    <span class="detail-value">${data.company_impact}</span>
+                </div>` : ''}
+                ${data.office_impact ? `
+                <div class="detail-row">
+                    <span class="detail-label">💫 Office Impact:</span>
+                    <span class="detail-value">${data.office_impact}</span>
+                </div>` : ''}
+                ${data.field_position ? `
+                <div class="detail-row">
+                    <span class="detail-label">🎯 Field Position:</span>
+                    <span class="detail-value">${data.field_position}</span>
+                </div>` : ''}
+                ${data.executive_position_description ? `
+                <div class="detail-row">
+                    <span class="detail-label">👑 Executive Position:</span>
+                    <span class="detail-value">${data.executive_position_description}</span>
+                </div>` : ''}
+            </div>
+        </div>
+    `;
+    
+    // Add escape key listener
+    document.addEventListener('keydown', handleEscapeKey);
+}
+
+function handleEscapeKey(event) {
+    if (event.key === 'Escape') {
+        closeStaffModal();
+    }
+}
+
+function closeStaffModal() {
+    document.getElementById('staffModal').style.display = 'none';
+    document.removeEventListener('keydown', handleEscapeKey);
+}
+
+// Close modal when clicking the X
+document.querySelector('.close-modal').onclick = closeStaffModal;
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const modal = document.getElementById('staffModal');
+    if (event.target == modal) {
+        closeStaffModal();
+    }
+}
+
+// Enhanced interactive effects
+document.addEventListener('DOMContentLoaded', function() {
+    // Add hover effects to all interactive elements
+    const interactiveElements = document.querySelectorAll('.feature-item, .related-service-card, .help-item, .case-study-card');
+    
+    interactiveElements.forEach(element => {
+        element.addEventListener('mouseenter', function() {
+            if (window.innerWidth > 768) {
+                this.style.transform = 'translateY(-12px) scale(1.03)';
+                this.style.boxShadow = '0 25px 60px rgba(0,0,0,0.3)';
+                const overlay = this.querySelector('.hover-overlay');
+                if (overlay) {
+                    overlay.style.opacity = '1';
+                }
+                const number = this.querySelector('.help-number');
+                if (number) {
+                    number.style.transform = 'scale(1.15)';
+                    number.style.opacity = '1';
+                }
+            }
+        });
+        
+        element.addEventListener('mouseleave', function() {
+            if (window.innerWidth > 768) {
+                this.style.transform = 'translateY(0) scale(1)';
+                this.style.boxShadow = '0 10px 30px rgba(0,0,0,0.15)';
+                const overlay = this.querySelector('.hover-overlay');
+                if (overlay) {
+                    overlay.style.opacity = '0';
+                }
+                const number = this.querySelector('.help-number');
+                if (number) {
+                    number.style.transform = 'scale(1)';
+                    number.style.opacity = '0.8';
+                }
+            }
+        });
+    });
+
+    // Add intersection observer for scroll animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    // Animate elements on scroll
+    const animatedElements = document.querySelectorAll('.feature-item, .related-service-card, .help-item, .case-study-card, .staff-card');
+    animatedElements.forEach(element => {
+        element.style.opacity = '0';
+        element.style.transform = 'translateY(30px)';
+        element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(element);
+    });
+
+    // Force hero section to be full screen
+    function setHeroFullScreen() {
+        const hero = document.querySelector('.service-hero');
+        if (hero) {
+            hero.style.height = '100vh';
+            hero.style.minHeight = '100vh';
+        }
+    }
+
+    setHeroFullScreen();
+    window.addEventListener('resize', setHeroFullScreen);
+});
+</script>
+{% endblock %}

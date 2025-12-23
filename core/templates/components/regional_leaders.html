@@ -1,0 +1,1052 @@
+{% load static %}
+<!-- Regional Leaders Component - Enhanced Design -->
+<div class="regional-leaders-container">
+    <div class="regional-leaders-header">
+        <div class="header-content">
+            <div class="header-icon">🌍</div>
+            <div class="header-text">
+                <h4 class="header-title">Regional Leadership</h4>
+                <p class="header-subtitle">Our Global Experts</p>
+            </div>
+        </div>
+        <i class="fas fa-chevron-down toggle-leaders"></i>
+    </div>
+    
+    <div class="regional-leaders-list">
+        {% for leader in regional_leaders %}
+        <div class="leader-item" data-leader-id="{{ leader.id }}">
+            <div class="leader-card">
+                <div class="leader-avatar-container">
+                    <div class="leader-avatar">
+                        <img src="{{ leader.get_profile_image_url }}" 
+                             alt="{{ leader.first_name }} {{ leader.last_name }}"
+                             class="leader-image"
+                             loading="lazy">
+                    </div>
+                </div>
+                
+                <div class="leader-info">
+                    <div class="leader-name-container">
+                        <a href="{% url 'regional_leader_profile' leader.id %}" class="leader-name">
+                            {{ leader.first_name }} {{ leader.last_name }}
+                        </a>
+                        <div class="leader-badge">
+                            <i class="fas fa-globe"></i>
+                            {{ leader.get_region_display|default:"Global" }}
+                        </div>
+                    </div>
+                    
+                    <p class="leader-position" title="{{ leader.region_title|default:'Regional Leader' }}">
+                        {{ leader.region_title|default:"Regional Leader" }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="empty-state">
+            <div class="empty-icon">👥</div>
+            <h5 class="empty-title">No Leaders Available</h5>
+            <p class="empty-description">Regional leaders will appear here once added.</p>
+        </div>
+        {% endfor %}
+        
+        {% for partner in managing_partners %}
+        <div class="leader-item" data-leader-id="{{ partner.id }}">
+            <div class="leader-card">
+                <div class="leader-avatar-container">
+                    <div class="leader-avatar">
+                        <img src="{{ partner.get_profile_image_url }}" 
+                             alt="{{ partner.first_name }} {{ partner.last_name }}"
+                             class="leader-image"
+                             loading="lazy">
+                    </div>
+                </div>
+                
+                <div class="leader-info">
+                    <div class="leader-name-container">
+                        <a href="{% url 'regional_leader_profile' partner.id %}" class="leader-name">
+                            {{ partner.first_name }} {{ partner.last_name }}
+                        </a>
+                        <div class="leader-badge">
+                            <i class="fas fa-star"></i>
+                            Managing Partner
+                        </div>
+                    </div>
+                    
+                    <p class="leader-position" title="{{ partner.position_title|default:'Managing Partner' }}">
+                        {{ partner.position_title|default:"Managing Partner" }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        
+        {% if regional_leaders|length > 5 %}
+        <div class="view-all-container">
+            <a href="#" class="btn-view-all">
+                <i class="fas fa-users"></i>
+                View All Leaders
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+<style>
+/* ===== VARIABLES ===== */
+:root {
+    --primary-color: #4F46E5;
+    --primary-light: #818CF8;
+    --primary-dark: #3730A3;
+    --secondary-color: #10B981;
+    --text-dark: #1F2937;
+    --text-medium: #6B7280;
+    --text-light: #9CA3AF;
+    --bg-white: #FFFFFF;
+    --bg-light: #F9FAFB;
+    --bg-gray: #F3F4F6;
+    --border-color: #E5E7EB;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    --transition-fast: 150ms ease;
+    --transition-normal: 250ms ease;
+    --transition-slow: 350ms ease;
+}
+
+/* ===== CONTAINER STYLES ===== */
+.regional-leaders-container {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-xl);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    width: 380px;
+    z-index: 100;
+    overflow: hidden;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* ===== HEADER STYLES ===== */
+.regional-leaders-header {
+    padding: 20px 24px;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+}
+
+.regional-leaders-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+    opacity: 0.3;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: relative;
+    z-index: 1;
+}
+
+.header-icon {
+    font-size: 1.8rem;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+}
+
+.header-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.header-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+}
+
+.header-subtitle {
+    margin: 0;
+    font-size: 0.85rem;
+    opacity: 0.9;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+}
+
+/* DESKTOP: Hide toggle button by default */
+.toggle-leaders {
+    display: none;
+    font-size: 0.9rem;
+    opacity: 0.8;
+    transition: transform var(--transition-normal);
+}
+
+/* ===== LIST STYLES ===== */
+.regional-leaders-list {
+    max-height: 500px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    background: var(--bg-white);
+    scroll-behavior: smooth;
+    /* Ensure touch scrolling works properly on mobile */
+    touch-action: pan-y;
+}
+
+/* ===== LEADER ITEM STYLES ===== */
+.leader-item {
+    padding: 0 20px;
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color var(--transition-fast);
+    cursor: pointer;
+    position: relative;
+}
+
+.leader-item:hover {
+    background-color: var(--bg-gray);
+}
+
+.leader-item:hover .leader-card {
+    transform: translateX(4px);
+}
+
+.leader-item:last-child {
+    border-bottom: none;
+}
+
+.leader-card {
+    display: flex;
+    align-items: center;
+    padding: 20px 0;
+    gap: 18px;
+    transition: transform var(--transition-fast);
+}
+
+/* ===== AVATAR STYLES ===== */
+.leader-avatar-container {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.leader-avatar {
+    width: 70px;
+    height: 70px;
+    position: relative;
+}
+
+.leader-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-normal);
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+.leader-item:hover .leader-image {
+    transform: scale(1.08);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-light);
+}
+
+/* ===== INFO STYLES ===== */
+.leader-info {
+    flex: 1;
+    min-width: 0; /* Crucial for text truncation */
+}
+
+.leader-name-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 8px; /* Increased margin since we removed meta section */
+}
+
+.leader-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    text-decoration: none;
+    line-height: 1.3;
+    flex: 1;
+    min-width: 0; /* Allows text truncation */
+    display: block; /* Ensure it's block for truncation */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: color var(--transition-fast);
+    position: relative;
+    padding-right: 2px;
+}
+
+.leader-name:hover {
+    color: var(--primary-color);
+}
+
+.leader-name:hover::after {
+    content: '↗';
+    position: absolute;
+    right: -12px;
+    font-size: 0.8em;
+    opacity: 0.7;
+}
+
+.leader-badge {
+    background: var(--bg-light);
+    color: var(--primary-color);
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    border: 1px solid var(--primary-light);
+}
+
+.leader-position {
+    font-size: 0.85rem;
+    color: var(--text-medium);
+    margin: 0;
+    line-height: 1.4;
+    /* Text truncation for position */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-height: 2.4em; /* Ensures consistent height for 2 lines */
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.empty-icon {
+    font-size: 3rem;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.empty-title {
+    font-size: 1.1rem;
+    color: var(--text-dark);
+    margin: 0 0 8px 0;
+    font-weight: 600;
+}
+
+.empty-description {
+    font-size: 0.9rem;
+    color: var(--text-medium);
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* ===== VIEW ALL BUTTON ===== */
+.view-all-container {
+    padding: 20px;
+    border-top: 1px solid var(--border-color);
+    background: var(--bg-light);
+}
+
+.btn-view-all {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px;
+    background: var(--bg-white);
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    border: 2px solid var(--primary-light);
+    transition: all var(--transition-fast);
+}
+
+.btn-view-all:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* ===== SCROLLBAR STYLING ===== */
+.regional-leaders-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.regional-leaders-list::-webkit-scrollbar-track {
+    background: var(--bg-light);
+    border-radius: 3px;
+}
+
+.regional-leaders-list::-webkit-scrollbar-thumb {
+    background: var(--primary-light);
+    border-radius: 3px;
+    transition: background var(--transition-fast);
+}
+
+.regional-leaders-list::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color);
+}
+
+/* ===== MOBILE RESPONSIVE STYLES ===== */
+@media (max-width: 1024px) {
+    .regional-leaders-container {
+        width: 350px;
+        right: 20px;
+        top: 20px;
+    }
+    
+    .leader-avatar {
+        width: 65px;
+        height: 65px;
+    }
+    
+    .leader-name {
+        font-size: 0.95rem;
+    }
+    
+    .leader-position {
+        font-size: 0.82rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .regional-leaders-container {
+        width: 320px;
+        top: 15px;
+        right: 15px;
+        position: absolute;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    /* Mobile: Make container more compact */
+    .regional-leaders-header {
+        padding: 16px 20px;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        user-select: none;
+    }
+    
+    .header-icon {
+        font-size: 1.6rem;
+    }
+    
+    .header-title {
+        font-size: 1rem;
+    }
+    
+    .header-subtitle {
+        font-size: 0.8rem;
+    }
+    
+    /* MOBILE: Show toggle button */
+    .toggle-leaders {
+        display: block;
+        font-size: 0.85rem;
+        opacity: 0.9;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* MOBILE: Default collapsed state with smooth animation */
+    .regional-leaders-list {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        opacity: 0;
+        transform: translateY(-10px);
+        /* Ensure proper scrolling on mobile */
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+    }
+    
+    /* MOBILE: Expanded state */
+    .regional-leaders-container.expanded .regional-leaders-list {
+        max-height: 450px;
+        opacity: 1;
+        transform: translateY(0);
+        overflow-y: auto;
+    }
+    
+    .regional-leaders-container.expanded .toggle-leaders {
+        transform: rotate(180deg);
+    }
+    
+    /* Adjust leader card for mobile */
+    .leader-card {
+        padding: 16px 0;
+        gap: 16px;
+    }
+    
+    .leader-avatar {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .leader-name {
+        font-size: 0.92rem;
+    }
+    
+    .leader-badge {
+        font-size: 0.65rem;
+        padding: 2px 6px;
+    }
+    
+    .leader-position {
+        font-size: 0.8rem;
+        -webkit-line-clamp: 2;
+        min-height: 2.2em;
+    }
+    
+    /* Make empty state more compact on mobile */
+    .empty-state {
+        padding: 30px 20px;
+    }
+    
+    .empty-icon {
+        font-size: 2.5rem;
+    }
+    
+    .empty-title {
+        font-size: 1rem;
+    }
+    
+    .empty-description {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .regional-leaders-container {
+        width: calc(100% - 30px);
+        max-width: 320px;
+        right: 15px;
+        top: 15px;
+        border-radius: var(--radius-lg);
+    }
+    
+    .regional-leaders-header {
+        padding: 14px 18px;
+    }
+    
+    .leader-card {
+        padding: 14px 0;
+        gap: 14px;
+        /* Better touch handling for mobile */
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    .leader-avatar {
+        width: 55px;
+        height: 55px;
+    }
+    
+    .leader-name-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+    
+    .leader-badge {
+        align-self: flex-start;
+    }
+    
+    .leader-position {
+        -webkit-line-clamp: 2;
+        min-height: 2em;
+    }
+    
+    /* Adjust view all button for mobile */
+    .btn-view-all {
+        padding: 10px;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .regional-leaders-container {
+        width: calc(100% - 20px);
+        right: 10px;
+        top: 10px;
+    }
+    
+    .regional-leaders-header {
+        padding: 12px 16px;
+    }
+    
+    .header-content {
+        gap: 10px;
+    }
+    
+    .header-icon {
+        font-size: 1.4rem;
+    }
+    
+    .header-title {
+        font-size: 0.95rem;
+    }
+    
+    .header-subtitle {
+        font-size: 0.75rem;
+    }
+    
+    .leader-card {
+        padding: 12px 0;
+        gap: 12px;
+    }
+    
+    .leader-avatar {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .leader-name {
+        font-size: 0.88rem;
+    }
+    
+    .leader-position {
+        font-size: 0.78rem;
+        -webkit-line-clamp: 2;
+        min-height: 1.8em;
+    }
+}
+
+/* ===== TOUCH DEVICE OPTIMIZATIONS ===== */
+@media (hover: none) and (pointer: coarse) {
+    .leader-item:hover {
+        background-color: transparent;
+    }
+    
+    .leader-item:active {
+        background-color: var(--bg-gray);
+    }
+    
+    .leader-name:hover::after {
+        display: none;
+    }
+    
+    .btn-view-all:active {
+        transform: scale(0.98);
+    }
+    
+    /* Increase tap targets for mobile */
+    .leader-item {
+        min-height: 70px; /* Reduced since we removed content */
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    .leader-name {
+        min-height: 44px; /* Minimum tap target size */
+        display: inline-flex;
+        align-items: center;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* Better touch scrolling */
+    .regional-leaders-list {
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+        /* Prevent text selection on touch devices */
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+    
+    /* Allow text selection only on the content */
+    .leader-name, .leader-position {
+        -webkit-user-select: auto;
+        -moz-user-select: auto;
+        -ms-user-select: auto;
+        user-select: auto;
+    }
+}
+
+/* ===== PRINT STYLES ===== */
+@media print {
+    .regional-leaders-container {
+        position: static;
+        width: 100%;
+        max-width: 100%;
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+    
+    .regional-leaders-list {
+        max-height: none;
+        overflow: visible;
+    }
+    
+    .toggle-leaders {
+        display: none;
+    }
+}
+
+/* ===== DARK MODE SUPPORT ===== */
+@media (prefers-color-scheme: dark) {
+    .regional-leaders-container {
+        background: rgba(30, 30, 40, 0.95);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .regional-leaders-list {
+        background: rgba(30, 30, 40, 0.95);
+    }
+    
+    .leader-name {
+        color: #E5E7EB;
+    }
+    
+    .leader-position {
+        color: #9CA3AF;
+    }
+    
+    .leader-badge {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .leader-item:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+    
+    .regional-leaders-list::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .view-all-container {
+        background: rgba(255, 255, 255, 0.02);
+    }
+    
+    .btn-view-all {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const leadersContainer = document.querySelector('.regional-leaders-container');
+    const toggleButton = document.querySelector('.toggle-leaders');
+    const leaderItems = document.querySelectorAll('.leader-item');
+    const listContainer = document.querySelector('.regional-leaders-list');
+    
+    // Check if we're on mobile
+    const isMobile = () => window.innerWidth <= 768;
+    
+    console.log('Regional Leaders Component Loaded');
+    console.log('Initial Mobile Check:', isMobile());
+    console.log('Window Width:', window.innerWidth);
+    
+    // Set initial state based on screen size
+    if (isMobile()) {
+        console.log('Mobile detected - initializing collapse behavior');
+        // Start collapsed on mobile
+        leadersContainer.classList.remove('expanded');
+        setupMobileBehavior();
+    } else {
+        console.log('Desktop detected - always expanded');
+        // Ensure expanded state on desktop
+        leadersContainer.classList.add('expanded');
+        setupDesktopBehavior();
+    }
+    
+    setupLeaderInteractions();
+    setupResizeHandler();
+    
+    // Mobile-specific behavior
+    function setupMobileBehavior() {
+        if (!leadersContainer || !toggleButton) return;
+        
+        const toggleLeaders = function(event) {
+            event.stopPropagation();
+            
+            // Toggle expanded class
+            leadersContainer.classList.toggle('expanded');
+            
+            console.log('Toggled - Expanded:', leadersContainer.classList.contains('expanded'));
+            
+            // Haptic feedback for mobile (if supported)
+            if (navigator.vibrate) {
+                navigator.vibrate(10);
+            }
+        };
+        
+        // Add click events for mobile
+        if (toggleButton) {
+            toggleButton.addEventListener('click', toggleLeaders);
+        }
+        
+        // Make header clickable on mobile
+        const header = leadersContainer.querySelector('.regional-leaders-header');
+        if (header) {
+            header.addEventListener('click', toggleLeaders);
+        }
+        
+        // Close when clicking outside (mobile only)
+        document.addEventListener('click', function(event) {
+            if (leadersContainer.classList.contains('expanded') && 
+                !leadersContainer.contains(event.target)) {
+                leadersContainer.classList.remove('expanded');
+            }
+        });
+        
+        // FIXED: Proper touch handling for scrolling
+        let isScrolling = false;
+        let startY = 0;
+        
+        listContainer.addEventListener('touchstart', function(e) {
+            startY = e.touches[0].clientY;
+            isScrolling = false;
+        }, { passive: true });
+        
+        listContainer.addEventListener('touchmove', function(e) {
+            const currentY = e.touches[0].clientY;
+            const diff = startY - currentY;
+            
+            // If we're scrolling inside the list, don't close the container
+            if (Math.abs(diff) > 5) {
+                isScrolling = true;
+            }
+        }, { passive: true });
+        
+        listContainer.addEventListener('touchend', function(e) {
+            setTimeout(() => {
+                isScrolling = false;
+            }, 100);
+        }, { passive: true });
+        
+        // Only close on swipe down from header area, not from list
+        const headerTouch = leadersContainer.querySelector('.regional-leaders-header');
+        let headerStartY = 0;
+        
+        headerTouch.addEventListener('touchstart', function(e) {
+            headerStartY = e.touches[0].clientY;
+        }, { passive: true });
+        
+        headerTouch.addEventListener('touchmove', function(e) {
+            if (!leadersContainer.classList.contains('expanded')) return;
+            
+            const currentY = e.touches[0].clientY;
+            const diff = headerStartY - currentY;
+            
+            // Swipe down from header to close
+            if (diff < -50) {
+                leadersContainer.classList.remove('expanded');
+            }
+        }, { passive: true });
+        
+        // Keyboard support (mobile only)
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && leadersContainer.classList.contains('expanded')) {
+                leadersContainer.classList.remove('expanded');
+            }
+        });
+        
+        // On mobile, limit the height of expanded list to prevent overflow
+        const updateMobileHeight = () => {
+            if (leadersContainer.classList.contains('expanded')) {
+                // Calculate available viewport height minus some padding
+                const viewportHeight = window.innerHeight;
+                const containerTop = leadersContainer.getBoundingClientRect().top;
+                const maxHeight = viewportHeight - containerTop - 30; // 30px bottom padding
+                
+                listContainer.style.maxHeight = Math.min(maxHeight, 450) + 'px';
+            }
+        };
+        
+        // Update height when expanded
+        leadersContainer.addEventListener('click', function(e) {
+            if (e.target.closest('.regional-leaders-header') || e.target.classList.contains('toggle-leaders')) {
+                setTimeout(updateMobileHeight, 100); // Small delay to allow CSS transition to start
+            }
+        });
+        
+        // Update on window resize
+        window.addEventListener('resize', updateMobileHeight);
+        
+        // FIXED: Prevent touch events from propagating when scrolling
+        listContainer.addEventListener('touchmove', function(e) {
+            // Allow touch to scroll the list
+            e.stopPropagation();
+        }, { passive: true });
+        
+        // FIXED: Allow touch scrolling on the entire container
+        leadersContainer.style.touchAction = 'pan-y';
+    }
+    
+    // Desktop-specific behavior
+    function setupDesktopBehavior() {
+        // Desktop: always expanded, no toggle functionality
+        leadersContainer.style.cursor = 'default';
+        
+        // Add hover effects for desktop
+        leadersContainer.addEventListener('mouseenter', function() {
+            this.style.boxShadow = '0 25px 50px -12px rgba(0, 0, 0, 0.25)';
+        });
+        
+        leadersContainer.addEventListener('mouseleave', function() {
+            this.style.boxShadow = 'var(--shadow-xl)';
+        });
+    }
+    
+    // Setup leader item interactions
+    function setupLeaderInteractions() {
+        leaderItems.forEach(item => {
+            // Click to navigate to profile
+            item.addEventListener('click', function(e) {
+                // Don't navigate if clicking on links/buttons inside
+                if (e.target.tagName === 'A' || e.target.closest('a') || 
+                    e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+                    return;
+                }
+                
+                const leaderId = this.dataset.leaderId;
+                if (leaderId) {
+                    window.location.href = `/regional-leader/${leaderId}/`;
+                }
+            });
+            
+            // Touch feedback for mobile
+            item.addEventListener('touchstart', function() {
+                this.style.backgroundColor = 'rgba(102, 126, 234, 0.1)';
+            }, { passive: true });
+            
+            item.addEventListener('touchend', function() {
+                setTimeout(() => {
+                    this.style.backgroundColor = '';
+                }, 150);
+            }, { passive: true });
+            
+            // FIXED: Prevent touch events on list items from closing the container
+            item.addEventListener('touchmove', function(e) {
+                e.stopPropagation();
+            }, { passive: true });
+        });
+    }
+    
+    // Handle screen resize between mobile/desktop
+    function setupResizeHandler() {
+        let currentIsMobile = isMobile();
+        
+        function handleResize() {
+            const newIsMobile = isMobile();
+            
+            // Only update if crossing the threshold
+            if (newIsMobile !== currentIsMobile) {
+                console.log('Screen size changed - Mobile:', newIsMobile);
+                
+                if (newIsMobile) {
+                    // Switching to mobile - collapse and enable toggle
+                    leadersContainer.classList.remove('expanded');
+                    setupMobileBehavior();
+                    console.log('Switched to mobile - collapsed');
+                } else {
+                    // Switching to desktop - expand and disable toggle
+                    leadersContainer.classList.add('expanded');
+                    setupDesktopBehavior();
+                    console.log('Switched to desktop - expanded');
+                }
+                
+                currentIsMobile = newIsMobile;
+            }
+        }
+        
+        // Debounced resize handler
+        let resizeTimeout;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(handleResize, 250);
+        });
+        
+        // Handle orientation changes
+        window.addEventListener('orientationchange', function() {
+            setTimeout(handleResize, 100);
+        });
+    }
+    
+    // FIXED: Enable proper scrolling on mobile
+    function setupMobileScrolling() {
+        if (listContainer) {
+            // Enable momentum scrolling on iOS
+            listContainer.style.webkitOverflowScrolling = 'touch';
+            
+            // Prevent the default behavior that might interfere with scrolling
+            listContainer.addEventListener('touchstart', function(e) {
+                if (listContainer.scrollTop === 0) {
+                    listContainer.scrollTop = 1;
+                } else if (listContainer.scrollHeight === listContainer.scrollTop + listContainer.offsetHeight) {
+                    listContainer.scrollTop = listContainer.scrollTop - 1;
+                }
+            }, { passive: true });
+        }
+    }
+    
+    // Initialize mobile scrolling if needed
+    if (isMobile()) {
+        setupMobileScrolling();
+    }
+    
+    // Check for reduced motion preference
+    function checkReducedMotion() {
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        
+        if (prefersReducedMotion.matches) {
+            // Disable animations
+            const style = document.createElement('style');
+            style.textContent = `
+                .regional-leaders-container,
+                .regional-leaders-list,
+                .leader-card,
+                .leader-image,
+                .toggle-leaders {
+                    transition: none !important;
+                    animation: none !important;
+                }
+            `;
+            document.head.appendChild(style);
+        }
+    }
+    
+    // Initialize
+    checkReducedMotion();
+});
+</script>

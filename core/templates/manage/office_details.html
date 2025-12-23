@@ -1,0 +1,1104 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}{{ office.office_Name }} - Details{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="card header-card">
+        <div class="card-header-custom">
+            <div class="card-icon">
+                <i class="fas fa-building"></i>
+            </div>
+            <h1 class="card-title-custom">{{ office.office_Name }} - Office Details</h1>
+        </div>
+    </div>
+    
+    <div class="row justify-content-center">
+        <div class="col-lg-12">
+            <!-- Bootstrap Toast for Error Messages -->
+            {% if form.errors %}
+            <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;">
+                <div id="errorToast" class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header bg-danger text-white">
+                        <strong class="me-auto"><i class="fas fa-exclamation-circle"></i> Form Errors</strong>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        <ul class="mb-0">
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Standard Django Messages -->
+            {% include 'partials/messages.html' %}
+            
+            <div class="card p-4 p-md-5 shadow-lg border-0">
+                <div class="text-center mb-5">
+                    {% if office_details %}
+                        <h2 class="mb-3"><i class="fas fa-info-circle text-primary"></i> Office Details</h2>
+                        <p class="text-muted lead">View and manage details for {{ office.office_Name }}</p>
+                    {% else %}
+                        <h2 class="mb-3"><i class="fas fa-plus-circle text-primary"></i> Add Office Details</h2>
+                        <p class="text-muted lead">Fill out the form below to add detailed information for {{ office.office_Name }}</p>
+                    {% endif %}
+                </div>
+                
+                {% if office_details %}
+                <!-- Display existing details in form-like layout -->
+                <div class="view-mode">
+                    <div class="row g-4 mb-4">
+                        <div class="col-12">
+                            <h5 class="section-title mb-4"><i class="fas fa-phone text-primary"></i> Contact Information</h5>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">First Phone Number</label>
+                                <div class="form-view-value">
+                                    {{ office_details.first_phone_number|default:"Not specified" }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Second Phone Number</label>
+                                <div class="form-view-value">
+                                    {{ office_details.second_phone_number|default:"Not specified" }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row g-4 mb-4">
+                        <div class="col-12">
+                            <h5 class="section-title mb-4"><i class="fas fa-briefcase text-primary"></i> Office Information</h5>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label class="form-label">Office Focus</label>
+                                <div class="form-view-value">
+                                    {{ office_details.office_focus|linebreaks|default:"Not specified" }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label class="form-label">Community Involvement</label>
+                                <div class="form-view-value">
+                                    {{ office_details.community_involvement|linebreaks|default:"Not specified" }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row g-4 mb-4">
+                        <div class="col-12">
+                            <h5 class="section-title mb-4"><i class="fas fa-user-tie text-primary"></i> Principal Information</h5>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Principal Full Name</label>
+                                <div class="form-view-value">
+                                    {{ office_details.principal_full_name|default:"Not specified" }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Principal Business Email</label>
+                                <div class="form-view-value">
+                                    {{ office_details.principal_business_email|default:"Not specified" }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Principal Business Phone</label>
+                                <div class="form-view-value">
+                                    {{ office_details.principal_business_phone|default:"Not specified" }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Principal Photo</label>
+                                <div class="form-view-value">
+                                    {% if office_details.principal_photo %}
+                                    <div class="photo-preview-container">
+                                        <img src="{{ office_details.get_principal_photo_url }}" 
+                                             alt="{{ office_details.principal_full_name }}" 
+                                             class="img-thumbnail photo-preview">
+                                        <div class="photo-info">
+                                            <p class="text-muted small mb-0 mt-2">
+                                                <i class="fas fa-calendar-alt me-1"></i>
+                                                Uploaded: {{ office_details.created_at|date:"M d, Y" }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    {% else %}
+                                    <div class="no-photo-placeholder">
+                                        <i class="fas fa-user-circle text-muted" style="font-size: 3rem;"></i>
+                                        <p class="text-muted small mb-0 mt-2">No photo uploaded</p>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-5 pt-4 border-top">
+                        <div class="col-12">
+                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+                                <a href="{% url 'manage_offices' %}" class="btn btn-outline-secondary btn-lg w-100 w-md-auto">
+                                    <i class="fas fa-arrow-left"></i> Back to Offices
+                                </a>
+                                <div class="d-flex gap-2">
+                                    <a href="{% url 'edit_office_details' office.id %}" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-edit"></i> Edit Details
+                                    </a>
+                                    <a href="{% url 'delete_office_details' office.id %}" class="btn btn-danger btn-lg">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <!-- Show form to create new details -->
+                <form method="POST" enctype="multipart/form-data" id="officeDetailsForm" novalidate>
+                    {% csrf_token %}
+                    
+                    <div class="row g-4 mb-4">
+                        <div class="col-12">
+                            <h5 class="section-title mb-4"><i class="fas fa-phone text-primary"></i> Contact Information</h5>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label class="form-label required">First Phone Number</label>
+                                {% render_field form.first_phone_number class="form-control form-control-lg" %}
+                                <div class="invalid-feedback">
+                                    Please provide a valid phone number (min. 10 digits).
+                                </div>
+                                <small class="form-text text-muted">Format: +1 (555) 123-4567</small>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label class="form-label required">Second Phone Number</label>
+                                {% render_field form.second_phone_number class="form-control form-control-lg" %}
+                                <div class="invalid-feedback">
+                                    Please provide a valid phone number (min. 10 digits).
+                                </div>
+                                <small class="form-text text-muted">Must be different from first phone</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row g-4 mb-4">
+                        <div class="col-12">
+                            <h5 class="section-title mb-4"><i class="fas fa-briefcase text-primary"></i> Office Information</h5>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label class="form-label required">Office Focus</label>
+                                {% render_field form.office_focus class="form-control" rows="5" %}
+                                <div class="invalid-feedback">
+                                    Please describe the office's focus areas.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label class="form-label required">Community Involvement</label>
+                                {% render_field form.community_involvement class="form-control" rows="5" %}
+                                <div class="invalid-feedback">
+                                    Please describe community involvement initiatives.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row g-4 mb-4">
+                        <div class="col-12">
+                            <h5 class="section-title mb-4"><i class="fas fa-user-tie text-primary"></i> Principal Information</h5>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label class="form-label required">Principal Full Name</label>
+                                {% render_field form.principal_full_name class="form-control form-control-lg" %}
+                                <div class="invalid-feedback">
+                                    Please provide both first and last name.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label class="form-label required">Principal Business Email</label>
+                                {% render_field form.principal_business_email class="form-control form-control-lg" %}
+                                <div class="invalid-feedback">
+                                    Please provide a valid email address.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label class="form-label required">Principal Business Phone</label>
+                                {% render_field form.principal_business_phone class="form-control form-control-lg" %}
+                                <div class="invalid-feedback">
+                                    Please provide a valid phone number (min. 10 digits).
+                                </div>
+                                <small class="form-text text-muted">Must be different from office phones</small>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label class="form-label required">Principal Photo</label>
+                                <div class="file-upload-area">
+                                    {{ form.principal_photo }}
+                                    <div class="file-input-label">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                        <span class="d-block mb-2">Click to choose or drag & drop</span>
+                                        <span class="btn-choose">Choose Image</span>
+                                        <div class="file-name d-none"></div>
+                                    </div>
+                                    <div class="upload-preview d-none">
+                                        <img id="photoPreview" class="img-thumbnail mt-2" style="max-width: 150px;">
+                                        <div id="newFileInfo" class="file-info d-none"></div>
+                                    </div>
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please upload a photo of the principal.
+                                </div>
+                                <small class="form-text text-muted">Recommended: Square photo, 400x400px, JPG or PNG</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-5 pt-4 border-top">
+                        <div class="col-12">
+                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+                                <a href="{% url 'manage_offices' %}" class="btn btn-outline-secondary btn-lg w-100 w-md-auto">
+                                    <i class="fas fa-times"></i> Cancel
+                                </a>
+                                <button type="submit" class="btn btn-primary btn-lg w-100 w-md-auto">
+                                    <i class="fas fa-save"></i> Save Office Details
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Error Modal -->
+<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="errorModalLabel"><i class="fas fa-exclamation-triangle"></i> Validation Error</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning" role="alert">
+                    <h6 class="alert-heading">Please fix the following errors:</h6>
+                    <hr>
+                    <ul id="errorList" class="mb-0"></ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK, I'll fix them</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Modern Variables */
+:root {
+    --primary-color: #4361ee;
+    --secondary-color: #3a0ca3;
+    --accent-color: #4cc9f0;
+    --danger-color: #f72585;
+    --success-color: #4caf50;
+    --warning-color: #ff9800;
+    --light-bg: #f8f9fa;
+    --card-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    --transition-speed: 0.3s;
+}
+
+/* Page Container */
+.page-container {
+    max-width: 1400px;
+    margin: 20px auto;
+    padding: 20px;
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Card Header Enhancement */
+.card-header-custom {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 25px 30px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border-radius: 15px 15px 0 0;
+    margin-bottom: 30px;
+}
+
+.card-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.card-title-custom {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Form Styling */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+    color: #495057;
+    font-size: 1rem;
+}
+
+.form-label.required::after {
+    content: " *";
+    color: var(--danger-color);
+}
+
+/* View Mode Styling - Matching Form Appearance */
+.form-view-value {
+    background: var(--light-bg);
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 15px;
+    font-size: 1rem;
+    min-height: 54px;
+    color: #495057;
+    display: flex;
+    align-items: center;
+    word-break: break-word;
+    line-height: 1.5;
+}
+
+.form-view-value.empty {
+    color: #6c757d;
+    font-style: italic;
+    opacity: 0.7;
+}
+
+/* Photo Preview in View Mode */
+.photo-preview-container {
+    text-align: center;
+}
+
+.photo-preview {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 10px;
+    border: 3px solid var(--primary-color);
+    object-fit: cover;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: all var(--transition-speed);
+}
+
+.photo-preview:hover {
+    transform: scale(1.03);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.no-photo-placeholder {
+    background: var(--light-bg);
+    border: 2px dashed #ced4da;
+    border-radius: 10px;
+    padding: 30px;
+    text-align: center;
+    color: #6c757d;
+}
+
+.form-control, .form-control-lg {
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 15px;
+    font-size: 1rem;
+    transition: all var(--transition-speed);
+    background-color: var(--light-bg);
+}
+
+.form-control:focus, .form-control-lg:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+    background-color: white;
+}
+
+.form-control.is-invalid {
+    border-color: var(--danger-color);
+    background-image: none;
+}
+
+.form-control.is-invalid:focus {
+    box-shadow: 0 0 0 0.25rem rgba(247, 37, 133, 0.25);
+}
+
+/* Section Titles */
+.section-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--secondary-color);
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--accent-color);
+    margin-bottom: 1.5rem;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 10px;
+    padding: 12px 24px;
+    font-weight: 600;
+    transition: all var(--transition-speed);
+    border: none;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border: none;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(67, 97, 238, 0.3);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #dc3545, #b02a37);
+    border: none;
+}
+
+.btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(220, 53, 69, 0.3);
+}
+
+.btn-outline-secondary {
+    border: 2px solid #6c757d;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #6c757d;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.btn-lg {
+    padding: 15px 30px;
+    font-size: 1.1rem;
+}
+
+.btn-sm {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+}
+
+/* File Upload Area - IMPROVED FOR MOBILE */
+.file-upload-area {
+    border: 2px dashed #ced4da;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: var(--light-bg);
+    transition: all var(--transition-speed);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.file-upload-area:hover {
+    border-color: var(--primary-color);
+    background-color: rgba(67, 97, 238, 0.05);
+}
+
+/* Cloudinary File Input Styling */
+.file-upload-area input[type="file"] {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.file-upload-area .cloudinary-fileupload {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.file-upload-area .file-input-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.file-upload-area .file-input-label i {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.file-upload-area .file-input-label .btn-choose {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all var(--transition-speed);
+    margin-top: 10px;
+}
+
+.file-upload-area .file-input-label .btn-choose:hover {
+    background: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+.file-upload-area .file-name {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-top: 10px;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 5px 10px;
+    background: white;
+    border-radius: 5px;
+    border: 1px solid #e9ecef;
+    width: 90%;
+}
+
+/* Image Preview Container */
+.upload-preview {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    text-align: center;
+}
+
+#photoPreview {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 10px;
+    border: 3px solid var(--primary-color);
+    object-fit: cover;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.upload-preview .file-info {
+    background: white;
+    padding: 8px 15px;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    font-size: 0.85rem;
+    color: #495057;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 90%;
+}
+
+/* Principal Photo */
+.principal-photo {
+    border: 4px solid white;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: all var(--transition-speed);
+}
+
+.principal-photo:hover {
+    transform: scale(1.03);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* Toast Styling */
+.toast {
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+}
+
+.toast-header {
+    border-radius: 10px 10px 0 0;
+}
+
+/* Modal Styling */
+.modal-content {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .page-container {
+        padding: 10px;
+        margin: 10px auto;
+    }
+    
+    .card-header-custom {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+        padding: 20px;
+    }
+    
+    .card-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+    
+    .card-title-custom {
+        font-size: 1.5rem;
+    }
+    
+    .btn-lg {
+        padding: 12px 20px;
+        font-size: 1rem;
+        width: 100%;
+    }
+    
+    .form-control, .form-control-lg, .form-view-value {
+        padding: 12px;
+        font-size: 16px; /* Prevents iOS zoom on focus */
+        min-height: 48px;
+    }
+    
+    .section-title {
+        font-size: 1.2rem;
+    }
+    
+    .action-buttons {
+        justify-content: center;
+        width: 100%;
+    }
+    
+    .action-buttons .btn {
+        flex: 1;
+        text-align: center;
+    }
+    
+    /* Mobile-specific file upload improvements */
+    .file-upload-area {
+        min-height: 180px;
+        padding: 15px;
+    }
+    
+    .file-upload-area .file-input-label i {
+        font-size: 2.5rem;
+    }
+    
+    .file-upload-area .file-input-label .btn-choose {
+        padding: 8px 20px;
+        font-size: 0.85rem;
+    }
+    
+    #photoPreview, .photo-preview {
+        max-height: 150px;
+        width: auto;
+        max-width: 90%;
+    }
+    
+    .upload-preview {
+        gap: 10px;
+    }
+    
+    .file-upload-area .file-name,
+    .upload-preview .file-info {
+        font-size: 0.8rem;
+        padding: 6px 10px;
+        width: 95%;
+    }
+    
+    /* Ensure form columns stack properly on mobile */
+    .col-12.col-md-6 {
+        width: 100% !important;
+    }
+    
+    /* View mode adjustments */
+    .form-view-value {
+        min-height: 44px;
+        padding: 12px;
+    }
+    
+    .no-photo-placeholder {
+        padding: 20px;
+    }
+    
+    .no-photo-placeholder i {
+        font-size: 2.5rem !important;
+    }
+    
+    /* Button layout for view mode */
+    .view-mode .d-flex.gap-2 {
+        width: 100%;
+        flex-direction: column;
+    }
+    
+    .view-mode .d-flex.gap-2 .btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .card {
+        padding: 15px !important;
+    }
+    
+    .card-header-custom {
+        padding: 15px;
+        border-radius: 10px 10px 0 0;
+    }
+    
+    .card-title-custom {
+        font-size: 1.3rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1rem;
+    }
+    
+    /* Extra small screen adjustments */
+    .file-upload-area {
+        min-height: 160px;
+        padding: 12px;
+    }
+    
+    .file-upload-area .file-input-label i {
+        font-size: 2rem;
+    }
+    
+    .file-upload-area .file-input-label .btn-choose {
+        padding: 8px 16px;
+        font-size: 0.8rem;
+    }
+    
+    #photoPreview, .photo-preview {
+        max-height: 120px;
+    }
+    
+    /* Touch-friendly file upload area */
+    .file-upload-area input[type="file"] {
+        height: 50px; /* Larger touch target */
+    }
+    
+    .file-upload-area .file-input-label {
+        padding: 15px;
+    }
+    
+    /* View mode text adjustments */
+    .form-view-value {
+        font-size: 14px;
+        min-height: 42px;
+    }
+}
+
+/* Landscape mode adjustments */
+@media (max-height: 600px) and (orientation: landscape) {
+    .file-upload-area {
+        min-height: 150px;
+    }
+    
+    #photoPreview, .photo-preview {
+        max-height: 100px;
+    }
+    
+    .form-view-value {
+        min-height: 40px;
+    }
+}
+
+/* Tablet portrait mode */
+@media (min-width: 577px) and (max-width: 768px) {
+    .file-upload-area {
+        min-height: 220px;
+    }
+    
+    #photoPreview, .photo-preview {
+        max-height: 180px;
+    }
+    
+    .form-view-value {
+        min-height: 52px;
+    }
+}
+
+/* Desktop specific adjustments */
+@media (min-width: 992px) {
+    .view-mode .d-flex.gap-2 {
+        flex-direction: row;
+    }
+    
+    .view-mode .d-flex.gap-2 .btn {
+        width: auto;
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Bootstrap Toasts
+    const errorToast = document.getElementById('errorToast');
+    if (errorToast) {
+        const toast = new bootstrap.Toast(errorToast);
+        setTimeout(() => {
+            toast.show();
+        }, 500);
+        
+        // Auto-hide after 15 seconds
+        setTimeout(() => {
+            toast.hide();
+        }, 15000);
+    }
+
+    // Form Validation with Custom Error Modal - Only for add form
+    const form = document.getElementById('officeDetailsForm');
+    if (form) {
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+                
+                // Collect error messages
+                const errors = [];
+                const errorList = document.getElementById('errorList');
+                errorList.innerHTML = '';
+                
+                // Check each field
+                form.querySelectorAll(':invalid').forEach(function(field) {
+                    const fieldName = field.name.replace(/_/g, ' ');
+                    let errorMessage = field.validationMessage;
+                    
+                    if (!errorMessage) {
+                        if (field.validity.valueMissing) {
+                            errorMessage = 'This field is required';
+                        } else if (field.validity.typeMismatch) {
+                            errorMessage = 'Please enter a valid value';
+                        } else if (field.validity.patternMismatch) {
+                            errorMessage = 'Please match the requested format';
+                        } else if (field.validity.tooLong) {
+                            errorMessage = 'Value is too long';
+                        } else if (field.validity.tooShort) {
+                            errorMessage = 'Value is too short';
+                        } else if (field.validity.rangeUnderflow) {
+                            errorMessage = 'Value is too low';
+                        } else if (field.validity.rangeOverflow) {
+                            errorMessage = 'Value is too high';
+                        } else if (field.validity.stepMismatch) {
+                            errorMessage = 'Invalid step value';
+                        } else if (field.validity.badInput) {
+                            errorMessage = 'Invalid input';
+                        } else if (field.validity.customError) {
+                            errorMessage = field.validationMessage;
+                        }
+                    }
+                    
+                    errors.push(`${fieldName}: ${errorMessage}`);
+                    field.classList.add('is-invalid');
+                });
+                
+                // Add custom phone validation
+                const phoneFields = form.querySelectorAll('input[type="text"]');
+                const phoneNumbers = [];
+                
+                phoneFields.forEach(function(field) {
+                    if (field.name.includes('phone') && field.value) {
+                        const normalizedPhone = field.value.replace(/[^\d+]/g, '');
+                        if (phoneNumbers.includes(normalizedPhone)) {
+                            errors.push(`Duplicate phone number found: ${field.value}`);
+                            field.classList.add('is-invalid');
+                        }
+                        phoneNumbers.push(normalizedPhone);
+                    }
+                });
+                
+                // Show error modal
+                if (errors.length > 0) {
+                    errors.forEach(function(error) {
+                        const li = document.createElement('li');
+                        li.textContent = error;
+                        li.className = 'mb-2';
+                        errorList.appendChild(li);
+                    });
+                    
+                    const errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+                    errorModal.show();
+                }
+            }
+            
+            form.classList.add('was-validated');
+        }, false);
+        
+        // Remove invalid class when user starts typing
+        form.querySelectorAll('.form-control').forEach(function(field) {
+            field.addEventListener('input', function() {
+                if (this.classList.contains('is-invalid')) {
+                    this.classList.remove('is-invalid');
+                }
+            });
+        });
+    }
+    
+    // Photo preview for file upload - Only for add form
+    const photoInput = document.querySelector('input[type="file"]');
+    if (photoInput) {
+        photoInput.addEventListener('change', function() {
+            const preview = document.getElementById('photoPreview');
+            const previewContainer = document.querySelector('.upload-preview');
+            const fileNameDisplay = document.querySelector('.file-name');
+            const newFileInfo = document.getElementById('newFileInfo');
+            const fileInputLabel = document.querySelector('.file-input-label');
+            
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    // Show preview
+                    preview.src = e.target.result;
+                    previewContainer.classList.remove('d-none');
+                    
+                    // Show file info
+                    if (newFileInfo) {
+                        newFileInfo.textContent = `File: ${photoInput.files[0].name}`;
+                        newFileInfo.classList.remove('d-none');
+                    }
+                    
+                    // Hide file input label
+                    if (fileInputLabel) {
+                        fileInputLabel.classList.add('d-none');
+                    }
+                    
+                    // Show file name
+                    if (fileNameDisplay) {
+                        fileNameDisplay.textContent = photoInput.files[0].name;
+                        fileNameDisplay.classList.remove('d-none');
+                    }
+                }
+                
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+    }
+    
+    // Real-time phone number formatting - Only for add form
+    const phoneInputs = document.querySelectorAll('input[name*="phone"]');
+    phoneInputs.forEach(function(input) {
+        input.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            
+            if (value.length > 0) {
+                if (!value.startsWith('+')) {
+                    value = '+' + value;
+                }
+                
+                // Format as +1 (123) 456-7890
+                if (value.length > 1) {
+                    value = value.substring(0, value.length);
+                }
+                
+                if (value.length > 3) {
+                    value = value.substring(0, 3) + ' ' + value.substring(3);
+                }
+                if (value.length > 7) {
+                    value = value.substring(0, 7) + ' ' + value.substring(7);
+                }
+                if (value.length > 12) {
+                    value = value.substring(0, 12) + '-' + value.substring(12, 16);
+                }
+            }
+            
+            e.target.value = value;
+        });
+    });
+    
+    // Add empty class to empty view values
+    document.querySelectorAll('.form-view-value').forEach(function(element) {
+        if (!element.textContent.trim() || element.textContent.trim() === 'Not specified') {
+            element.classList.add('empty');
+        }
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,2367 @@
+{% extends "base.html" %}
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}AI-Driven Business Intelligence Solutions | OB Global{% endblock %}
+
+{% block content %}
+<div class="insights-page-container">
+    <!-- Hero Section - Full Screen (Unchanged) -->
+    <section class="insights-hero">
+        <div class="hero-background"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">
+                AI-Driven Business <span>Intelligence</span>
+            </h1>
+
+            <p class="hero-description">
+                Transform raw data into actionable insights with cutting-edge artificial intelligence 
+                that predicts trends, optimizes operations, and drives intelligent decision-making across your organization.
+            </p>
+        </div>
+    </section>
+
+    <!-- AI BI Impact Visualization Section -->
+    <section class="ai-impact-visualization">
+        <div class="container">
+            <h2 class="section-title">The AI Business Intelligence Revolution</h2>
+            
+                <!-- AI BI Evolution Timeline -->
+    <div class="timeline-section" style="
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(5, 150, 105, 0.05) 100%);
+        border-radius: 1rem;
+        padding: clamp(1rem, 3vw, 2rem);
+        margin-bottom: clamp(1.5rem, 4vw, 3rem);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        border-left: clamp(3px, 1vw, 6px) solid #10b981;
+        animation: fadeInUp 0.8s ease-out;
+        overflow: hidden;
+    ">
+        <h3 style="
+            font-size: clamp(1.25rem, 4vw, 2rem);
+            margin-bottom: clamp(1rem, 3vw, 2rem);
+            color: #333;
+            text-align: center;
+            font-weight: 700;
+            background: linear-gradient(135deg, #10b981, #059669);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.3;
+            padding: 0 0.5rem;
+        ">🤖 Evolution of AI-Driven Business Intelligence</h3>
+        
+        <div class="timeline" style="
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 clamp(0.5rem, 2vw, 1rem);
+        ">
+            <!-- Timeline Line -->
+            <div class="timeline-line" style="
+                position: absolute;
+                left: clamp(40px, 12vw, 50px);
+                top: 0;
+                bottom: 0;
+                width: clamp(2px, 0.5vw, 4px);
+                background: linear-gradient(to bottom, #10b981, #059669);
+                border-radius: 2px;
+                z-index: 1;
+            "></div>
+            
+            <div class="timeline-item" style="
+                position: relative;
+                margin-bottom: clamp(2rem, 5vw, 3rem);
+                padding-left: clamp(70px, 20vw, 100px);
+                animation: slideInLeft 0.6s ease-out;
+                z-index: 2;
+            ">
+                <div class="timeline-year" style="
+                    position: absolute;
+                    left: clamp(10px, 3vw, 20px);
+                    top: 0;
+                    background: linear-gradient(135deg, #10b981, #059669);
+                    color: white;
+                    padding: clamp(0.4rem, 1.5vw, 0.5rem) clamp(0.8rem, 2vw, 1rem);
+                    border-radius: clamp(0.5rem, 2vw, 1rem);
+                    font-weight: 700;
+                    font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+                    min-width: clamp(50px, 15vw, 80px);
+                    text-align: center;
+                    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+                    z-index: 3;
+                ">2010-2015</div>
+                <div class="timeline-content" style="
+                    background: white;
+                    padding: clamp(1.5rem, 4vw, 2rem) clamp(1rem, 3vw, 1.5rem);
+                    border-radius: clamp(0.5rem, 2vw, 0.75rem);
+                    border-left: clamp(2px, 1vw, 4px) solid #10b981;
+                    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                    transition: all 0.3s ease;
+                    position: relative;
+                    margin-top: 0;
+                    min-height: 120px;
+                ">
+                    <h4 style="
+                        font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+                        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                        color: #333;
+                        font-weight: 600;
+                        line-height: 1.3;
+                        padding-top: 0;
+                    ">Traditional BI & Descriptive Analytics</h4>
+                    <p style="
+                        color: #666;
+                        line-height: 1.5;
+                        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                        font-size: clamp(0.85rem, 2.5vw, 1rem);
+                    ">Business intelligence focused on historical data reporting and basic dashboards. Tools provided retrospective views of business performance with limited predictive capabilities and manual data processing.</p>
+                    <div class="adoption-stats" style="
+                        display: flex;
+                        align-items: center;
+                        gap: clamp(0.5rem, 2vw, 1rem);
+                        padding: clamp(0.75rem, 2vw, 1rem);
+                        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
+                        border-radius: clamp(0.25rem, 1vw, 0.5rem);
+                        border: 1px solid rgba(16, 185, 129, 0.2);
+                        flex-wrap: wrap;
+                    ">
+                        <div class="stat" style="
+                            font-size: clamp(1.5rem, 5vw, 2rem);
+                            font-weight: 800;
+                            color: #10b981;
+                            line-height: 1;
+                        ">28%</div>
+                        <span style="
+                            color: #666;
+                            font-size: clamp(0.75rem, 2vw, 0.9rem);
+                            line-height: 1.2;
+                        ">Enterprise BI Adoption</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="timeline-item" style="
+                position: relative;
+                margin-bottom: clamp(2rem, 5vw, 3rem);
+                padding-left: clamp(70px, 20vw, 100px);
+                animation: slideInLeft 0.6s ease-out 0.2s both;
+                z-index: 2;
+            ">
+                <div class="timeline-year" style="
+                    position: absolute;
+                    left: clamp(10px, 3vw, 20px);
+                    top: 0;
+                    background: linear-gradient(135deg, #3b82f6, #2563eb);
+                    color: white;
+                    padding: clamp(0.4rem, 1.5vw, 0.5rem) clamp(0.8rem, 2vw, 1rem);
+                    border-radius: clamp(0.5rem, 2vw, 1rem);
+                    font-weight: 700;
+                    font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+                    min-width: clamp(50px, 15vw, 80px);
+                    text-align: center;
+                    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+                    z-index: 3;
+                ">2016-2020</div>
+                <div class="timeline-content" style="
+                    background: white;
+                    padding: clamp(1.5rem, 4vw, 2rem) clamp(1rem, 3vw, 1.5rem);
+                    border-radius: clamp(0.5rem, 2vw, 0.75rem);
+                    border-left: clamp(2px, 1vw, 4px) solid #3b82f6;
+                    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                    transition: all 0.3s ease;
+                    position: relative;
+                    margin-top: 0;
+                    min-height: 120px;
+                ">
+                    <h4 style="
+                        font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+                        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                        color: #333;
+                        font-weight: 600;
+                        line-height: 1.3;
+                        padding-top: 0;
+                    ">Predictive Analytics & Machine Learning</h4>
+                    <p style="
+                        color: #666;
+                        line-height: 1.5;
+                        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                        font-size: clamp(0.85rem, 2.5vw, 1rem);
+                    ">Machine learning algorithms began transforming BI with predictive capabilities. Automated data processing and natural language queries enabled more sophisticated forecasting and pattern recognition across business operations.</p>
+                    <div class="adoption-stats" style="
+                        display: flex;
+                        align-items: center;
+                        gap: clamp(0.5rem, 2vw, 1rem);
+                        padding: clamp(0.75rem, 2vw, 1rem);
+                        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.1));
+                        border-radius: clamp(0.25rem, 1vw, 0.5rem);
+                        border: 1px solid rgba(59, 130, 246, 0.2);
+                        flex-wrap: wrap;
+                    ">
+                        <div class="stat" style="
+                            font-size: clamp(1.5rem, 5vw, 2rem);
+                            font-weight: 800;
+                            color: #3b82f6;
+                            line-height: 1;
+                        ">52%</div>
+                        <span style="
+                            color: #666;
+                            font-size: clamp(0.75rem, 2vw, 0.9rem);
+                            line-height: 1.2;
+                        ">ML Integration in BI</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="timeline-item" style="
+                position: relative;
+                margin-bottom: clamp(2rem, 5vw, 3rem);
+                padding-left: clamp(70px, 20vw, 100px);
+                animation: slideInLeft 0.6s ease-out 0.4s both;
+                z-index: 2;
+            ">
+                <div class="timeline-year" style="
+                    position: absolute;
+                    left: clamp(10px, 3vw, 20px);
+                    top: 0;
+                    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+                    color: white;
+                    padding: clamp(0.4rem, 1.5vw, 0.5rem) clamp(0.8rem, 2vw, 1rem);
+                    border-radius: clamp(0.5rem, 2vw, 1rem);
+                    font-weight: 700;
+                    font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+                    min-width: clamp(50px, 15vw, 80px);
+                    text-align: center;
+                    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+                    z-index: 3;
+                ">2021-2024</div>
+                <div class="timeline-content" style="
+                    background: white;
+                    padding: clamp(1.5rem, 4vw, 2rem) clamp(1rem, 3vw, 1.5rem);
+                    border-radius: clamp(0.5rem, 2vw, 0.75rem);
+                    border-left: clamp(2px, 1vw, 4px) solid #8b5cf6;
+                    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                    transition: all 0.3s ease;
+                    position: relative;
+                    margin-top: 0;
+                    min-height: 120px;
+                ">
+                    <h4 style="
+                        font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+                        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                        color: #333;
+                        font-weight: 600;
+                        line-height: 1.3;
+                        padding-top: 0;
+                    ">Generative AI & Autonomous Insights</h4>
+                    <p style="
+                        color: #666;
+                        line-height: 1.5;
+                        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                        font-size: clamp(0.85rem, 2.5vw, 1rem);
+                    ">Generative AI transforms business intelligence with natural language explanations, automated insight generation, and conversational analytics. AI systems proactively identify opportunities and risks without human intervention.</p>
+                    <div class="adoption-stats" style="
+                        display: flex;
+                        align-items: center;
+                        gap: clamp(0.5rem, 2vw, 1rem);
+                        padding: clamp(0.75rem, 2vw, 1rem);
+                        background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(124, 58, 237, 0.1));
+                        border-radius: clamp(0.25rem, 1vw, 0.5rem);
+                        border: 1px solid rgba(139, 92, 246, 0.2);
+                        flex-wrap: wrap;
+                    ">
+                        <div class="stat" style="
+                            font-size: clamp(1.5rem, 5vw, 2rem);
+                            font-weight: 800;
+                            color: #8b5cf6;
+                            line-height: 1;
+                        ">74%</div>
+                        <span style="
+                            color: #666;
+                            font-size: clamp(0.75rem, 2vw, 0.9rem);
+                            line-height: 1.2;
+                        ">AI-Powered BI Adoption</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="timeline-item" style="
+                position: relative;
+                margin-bottom: clamp(2rem, 5vw, 3rem);
+                padding-left: clamp(70px, 20vw, 100px);
+                animation: slideInLeft 0.6s ease-out 0.6s both;
+                z-index: 2;
+            ">
+                <div class="timeline-year" style="
+                    position: absolute;
+                    left: clamp(10px, 3vw, 20px);
+                    top: 0;
+                    background: linear-gradient(135deg, #ec4899, #db2777);
+                    color: white;
+                    padding: clamp(0.4rem, 1.5vw, 0.5rem) clamp(0.8rem, 2vw, 1rem);
+                    border-radius: clamp(0.5rem, 2vw, 1rem);
+                    font-weight: 700;
+                    font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+                    min-width: clamp(50px, 15vw, 80px);
+                    text-align: center;
+                    box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
+                    z-index: 3;
+                ">2025+</div>
+                <div class="timeline-content" style="
+                    background: white;
+                    padding: clamp(1.5rem, 4vw, 2rem) clamp(1rem, 3vw, 1.5rem);
+                    border-radius: clamp(0.5rem, 2vw, 0.75rem);
+                    border-left: clamp(2px, 1vw, 4px) solid #ec4899;
+                    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                    transition: all 0.3s ease;
+                    position: relative;
+                    margin-top: 0;
+                    min-height: 120px;
+                ">
+                    <h4 style="
+                        font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+                        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                        color: #333;
+                        font-weight: 600;
+                        line-height: 1.3;
+                        padding-top: 0;
+                    ">Cognitive BI & Prescriptive Intelligence</h4>
+                    <p style="
+                        color: #666;
+                        line-height: 1.5;
+                        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                        font-size: clamp(0.85rem, 2.5vw, 1rem);
+                    ">AI systems evolve into cognitive partners that not only predict outcomes but also prescribe optimal actions. Self-learning algorithms continuously improve decision-making processes and autonomously execute business strategies.</p>
+                    <div class="adoption-stats" style="
+                        display: flex;
+                        align-items: center;
+                        gap: clamp(0.5rem, 2vw, 1rem);
+                        padding: clamp(0.75rem, 2vw, 1rem);
+                        background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(219, 39, 119, 0.1));
+                        border-radius: clamp(0.25rem, 1vw, 0.5rem);
+                        border: 1px solid rgba(236, 72, 153, 0.2);
+                        flex-wrap: wrap;
+                    ">
+                        <div class="stat" style="
+                            font-size: clamp(1.5rem, 5vw, 2rem);
+                            font-weight: 800;
+                            color: #ec4899;
+                            line-height: 1;
+                        ">89%</div>
+                        <span style="
+                            color: #666;
+                            font-size: clamp(0.75rem, 2vw, 0.9rem);
+                            line-height: 1.2;
+                        ">Projected Cognitive BI Adoption</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+                <!-- AI BI Impact Metrics -->
+<div class="metrics-section" style="
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border-left: 6px solid #10b981;
+    animation: fadeInUp 0.8s ease-out 0.3s both;
+">
+    <h3 style="
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        margin-bottom: 2rem;
+        color: #333;
+        text-align: center;
+        font-weight: 700;
+        background: linear-gradient(135deg, #10b981, #3b82f6);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    ">📊 AI Business Intelligence Performance Metrics</h3>
+    <div class="metrics-grid" style="
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+    ">
+        <div class="metric-card" style="
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #10b981;
+            animation: bounceIn 0.6s ease-out;
+        ">
+            <div class="metric-value" style="
+                font-size: 3rem;
+                font-weight: 800;
+                color: #10b981;
+                margin-bottom: 1rem;
+            ">68%</div>
+            <div class="metric-label" style="
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 1rem;
+            ">Faster Decision-Making</div>
+            <div class="metric-description" style="
+                color: #666;
+                line-height: 1.5;
+                font-size: 0.9rem;
+            ">AI-driven insights reduce decision-making time by providing real-time analytics and automated recommendations, enabling faster responses to market changes and opportunities.</div>
+        </div>
+        
+        <div class="metric-card" style="
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #3b82f6;
+            animation: bounceIn 0.6s ease-out 0.2s both;
+        ">
+            <div class="metric-value" style="
+                font-size: 3rem;
+                font-weight: 800;
+                color: #3b82f6;
+                margin-bottom: 1rem;
+            ">3.5x</div>
+            <div class="metric-label" style="
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 1rem;
+            ">Improved Forecast Accuracy</div>
+            <div class="metric-description" style="
+                color: #666;
+                line-height: 1.5;
+                font-size: 0.9rem;
+            ">Machine learning algorithms significantly enhance prediction accuracy across sales forecasting, demand planning, and financial projections compared to traditional methods.</div>
+        </div>
+        
+        <div class="metric-card" style="
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #8b5cf6;
+            animation: bounceIn 0.6s ease-out 0.4s both;
+        ">
+            <div class="metric-value" style="
+                font-size: 3rem;
+                font-weight: 800;
+                color: #8b5cf6;
+                margin-bottom: 1rem;
+            ">45%</div>
+            <div class="metric-label" style="
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 1rem;
+            ">Cost Reduction in Analytics</div>
+            <div class="metric-description" style="
+                color: #666;
+                line-height: 1.5;
+                font-size: 0.9rem;
+            ">Automated data processing and AI-powered insights reduce manual analysis efforts, lowering operational costs while improving analytical depth and coverage.</div>
+        </div>
+        
+        <div class="metric-card" style="
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #ec4899;
+            animation: bounceIn 0.6s ease-out 0.6s both;
+        ">
+            <div class="metric-value" style="
+                font-size: 3rem;
+                font-weight: 800;
+                color: #ec4899;
+                margin-bottom: 1rem;
+            ">2.8x</div>
+            <div class="metric-label" style="
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 1rem;
+            ">ROI on AI BI Investments</div>
+            <div class="metric-description" style="
+                color: #666;
+                line-height: 1.5;
+                font-size: 0.9rem;
+            ">Strategic AI BI implementations deliver substantial returns through improved decision quality, operational efficiency, and competitive advantage in data-driven markets.</div>
+        </div>
+
+        <!-- New Metric Cards -->
+        <div class="metric-card" style="
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #06b6d4;
+            animation: bounceIn 0.6s ease-out 0.8s both;
+        ">
+            <div class="metric-value" style="
+                font-size: 3rem;
+                font-weight: 800;
+                color: #06b6d4;
+                margin-bottom: 1rem;
+            ">82%</div>
+            <div class="metric-label" style="
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 1rem;
+            ">Data Processing Automation</div>
+            <div class="metric-description" style="
+                color: #666;
+                line-height: 1.5;
+                font-size: 0.9rem;
+            ">AI systems automate data cleaning, integration, and transformation processes, enabling faster insights and reducing manual data preparation efforts significantly.</div>
+        </div>
+        
+        <div class="metric-card" style="
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #f59e0b;
+            animation: bounceIn 0.6s ease-out 1s both;
+        ">
+            <div class="metric-value" style="
+                font-size: 3rem;
+                font-weight: 800;
+                color: #f59e0b;
+                margin-bottom: 1rem;
+            ">71%</div>
+            <div class="metric-label" style="
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 1rem;
+            ">Insight Discovery Rate</div>
+            <div class="metric-description" style="
+                color: #666;
+                line-height: 1.5;
+                font-size: 0.9rem;
+            ">AI algorithms identify patterns, correlations, and insights that would be difficult or impossible for human analysts to detect, dramatically increasing valuable business discoveries.</div>
+        </div>
+
+        <!-- Additional Metric Cards -->
+        <div class="metric-card" style="
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #84cc16;
+            animation: bounceIn 0.6s ease-out 1.2s both;
+        ">
+            <div class="metric-value" style="
+                font-size: 3rem;
+                font-weight: 800;
+                color: #84cc16;
+                margin-bottom: 1rem;
+            ">94%</div>
+            <div class="metric-label" style="
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 1rem;
+            ">Real-time Analytics Accuracy</div>
+            <div class="metric-description" style="
+                color: #666;
+                line-height: 1.5;
+                font-size: 0.9rem;
+            ">AI-powered streaming analytics provide near-perfect accuracy in real-time decision support, enabling immediate responses to changing business conditions and opportunities.</div>
+        </div>
+        
+        <div class="metric-card" style="
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #ef4444;
+            animation: bounceIn 0.6s ease-out 1.4s both;
+        ">
+            <div class="metric-value" style="
+                font-size: 3rem;
+                font-weight: 800;
+                color: #ef4444;
+                margin-bottom: 1rem;
+            ">4.2x</div>
+            <div class="metric-label" style="
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 1rem;
+            ">Faster Anomaly Detection</div>
+            <div class="metric-description" style="
+                color: #666;
+                line-height: 1.5;
+                font-size: 0.9rem;
+            ">AI systems identify unusual patterns, fraud, and operational issues significantly faster than traditional monitoring methods, enabling proactive risk management.</div>
+        </div>
+    </div>
+</div>
+<!-- AI BI Solutions -->
+<div class="applications-section" style="
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border-left: 6px solid #3b82f6;
+    animation: fadeInUp 0.8s ease-out 0.5s both;
+">
+    <h3 style="
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        margin-bottom: 2rem;
+        color: #333;
+        text-align: center;
+        font-weight: 700;
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    ">🧠 Comprehensive AI Business Intelligence Solutions</h3>
+    <div class="applications-grid" style="
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    ">
+        <div class="application-area" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #10b981;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: zoomIn 0.6s ease-out;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">📈 Predictive Analytics & Forecasting</h4>
+            <ul class="application-list" style="
+                list-style: none;
+                padding: 0;
+            ">
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Sales and revenue forecasting with machine learning</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Demand planning and inventory optimization</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Customer churn prediction and retention modeling</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Market trend analysis and opportunity identification</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Financial risk assessment and credit scoring</li>
+            </ul>
+        </div>
+        
+        <div class="application-area" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #3b82f6;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: zoomIn 0.6s ease-out 0.2s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">🔍 Natural Language Processing</h4>
+            <ul class="application-list" style="
+                list-style: none;
+                padding: 0;
+            ">
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Conversational analytics and voice-enabled queries</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Automated report generation and insight summarization</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Sentiment analysis and customer feedback processing</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Document intelligence and contract analysis</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Multi-language support and cross-cultural analytics</li>
+            </ul>
+        </div>
+        
+        <div class="application-area" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #8b5cf6;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: zoomIn 0.6s ease-out 0.4s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">🤖 Automated Insights & Anomaly Detection</h4>
+            <ul class="application-list" style="
+                list-style: none;
+                padding: 0;
+            ">
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Automated pattern recognition and trend identification</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Real-time anomaly detection and alert systems</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Root cause analysis and problem diagnosis</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Automated KPI monitoring and performance tracking</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Intelligent alert prioritization and notification systems</li>
+            </ul>
+        </div>
+        
+        <div class="application-area" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #ec4899;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: zoomIn 0.6s ease-out 0.6s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">📊 Prescriptive Analytics & Optimization</h4>
+            <ul class="application-list" style="
+                list-style: none;
+                padding: 0;
+            ">
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Optimization algorithms for resource allocation</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Scenario modeling and what-if analysis</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Automated recommendation engines</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Decision support systems with action planning</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Continuous optimization and learning systems</li>
+            </ul>
+        </div>
+
+        <!-- New Application Areas -->
+        <div class="application-area" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #06b6d4;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: zoomIn 0.6s ease-out 0.8s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">🔗 Data Integration & Management</h4>
+            <ul class="application-list" style="
+                list-style: none;
+                padding: 0;
+            ">
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Automated data pipeline creation and management</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Intelligent data quality assessment and cleaning</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Cross-platform data integration and unification</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Real-time data streaming and processing</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Automated data governance and compliance</li>
+            </ul>
+        </div>
+        
+        <div class="application-area" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #f59e0b;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: zoomIn 0.6s ease-out 1s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">👥 Customer & Market Intelligence</h4>
+            <ul class="application-list" style="
+                list-style: none;
+                padding: 0;
+            ">
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Customer segmentation and persona development</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Market basket analysis and cross-selling opportunities</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Competitive intelligence and market positioning</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Social media and web analytics integration</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Customer journey mapping and experience optimization</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Implementation Framework -->
+<div class="framework-section" style="
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(236, 72, 153, 0.05) 100%);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border-left: 6px solid #10b981;
+    animation: fadeInUp 0.8s ease-out 0.7s both;
+">
+    <h3 style="
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        margin-bottom: 2rem;
+        color: #333;
+        text-align: center;
+        font-weight: 700;
+        background: linear-gradient(135deg, #10b981, #ec4899);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    ">🛠️ AI Business Intelligence Implementation Framework</h3>
+    <div class="framework-steps">
+        <div class="framework-step" style="
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #10b981;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: slideInRight 0.6s ease-out;
+        ">
+            <div class="step-number" style="
+                background: linear-gradient(135deg, #10b981, #059669);
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                font-weight: 700;
+                flex-shrink: 0;
+                box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            ">01</div>
+            <div class="step-content">
+                <h4 style="
+                    font-size: 1.3rem;
+                    margin-bottom: 1rem;
+                    color: #333;
+                    font-weight: 600;
+                ">Data Foundation & Infrastructure</h4>
+                <p style="
+                    color: #666;
+                    line-height: 1.6;
+                ">Assess current data landscape and establish robust data infrastructure. Implement data governance, quality frameworks, and integration pipelines to ensure reliable, clean, and accessible data for AI-driven analytics.</p>
+            </div>
+        </div>
+        
+        <div class="framework-step" style="
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #3b82f6;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: slideInRight 0.6s ease-out 0.2s both;
+        ">
+            <div class="step-number" style="
+                background: linear-gradient(135deg, #3b82f6, #2563eb);
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                font-weight: 700;
+                flex-shrink: 0;
+                box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+            ">02</div>
+            <div class="step-content">
+                <h4 style="
+                    font-size: 1.3rem;
+                    margin-bottom: 1rem;
+                    color: #333;
+                    font-weight: 600;
+                ">AI Model Development & Training</h4>
+                <p style="
+                    color: #666;
+                    line-height: 1.6;
+                ">Develop and train machine learning models for specific business use cases. Implement feature engineering, model selection, and validation processes to ensure accurate and reliable predictive capabilities.</p>
+            </div>
+        </div>
+        
+        <div class="framework-step" style="
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #8b5cf6;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: slideInRight 0.6s ease-out 0.4s both;
+        ">
+            <div class="step-number" style="
+                background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                font-weight: 700;
+                flex-shrink: 0;
+                box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+            ">03</div>
+            <div class="step-content">
+                <h4 style="
+                    font-size: 1.3rem;
+                    margin-bottom: 1rem;
+                    color: #333;
+                    font-weight: 600;
+                ">Insight Generation & Visualization</h4>
+                <p style="
+                    color: #666;
+                    line-height: 1.6;
+                ">Implement automated insight generation and intuitive visualization tools. Develop dashboards, natural language interfaces, and interactive reports that make AI-driven insights accessible to business users.</p>
+            </div>
+        </div>
+        
+        <div class="framework-step" style="
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #ec4899;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: slideInRight 0.6s ease-out 0.6s both;
+        ">
+            <div class="step-number" style="
+                background: linear-gradient(135deg, #ec4899, #db2777);
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                font-weight: 700;
+                flex-shrink: 0;
+                box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
+            ">04</div>
+            <div class="step-content">
+                <h4 style="
+                    font-size: 1.3rem;
+                    margin-bottom: 1rem;
+                    color: #333;
+                    font-weight: 600;
+                ">Decision Support Integration</h4>
+                <p style="
+                    color: #666;
+                    line-height: 1.6;
+                ">Integrate AI insights into business processes and decision-making workflows. Develop recommendation engines, automated alerts, and prescriptive analytics that drive actionable business outcomes.</p>
+            </div>
+        </div>
+        
+        <div class="framework-step" style="
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #06b6d4;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: slideInRight 0.6s ease-out 0.8s both;
+        ">
+            <div class="step-number" style="
+                background: linear-gradient(135deg, #06b6d4, #0891b2);
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                font-weight: 700;
+                flex-shrink: 0;
+                box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+            ">05</div>
+            <div class="step-content">
+                <h4 style="
+                    font-size: 1.3rem;
+                    margin-bottom: 1rem;
+                    color: #333;
+                    font-weight: 600;
+                ">Continuous Learning & Optimization</h4>
+                <p style="
+                    color: #666;
+                    line-height: 1.6;
+                ">Implement model monitoring, retraining, and optimization processes. Establish feedback loops and performance tracking to ensure AI systems continuously improve and adapt to changing business conditions.</p>
+            </div>
+        </div>
+
+        <!-- New Framework Steps -->
+        <div class="framework-step" style="
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #f59e0b;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: slideInRight 0.6s ease-out 1s both;
+        ">
+            <div class="step-number" style="
+                background: linear-gradient(135deg, #f59e0b, #d97706);
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                font-weight: 700;
+                flex-shrink: 0;
+                box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+            ">06</div>
+            <div class="step-content">
+                <h4 style="
+                    font-size: 1.3rem;
+                    margin-bottom: 1rem;
+                    color: #333;
+                    font-weight: 600;
+                ">Scalability & Enterprise Deployment</h4>
+                <p style="
+                    color: #666;
+                    line-height: 1.6;
+                ">Scale successful AI BI solutions across the organization. Implement enterprise-grade infrastructure, security protocols, and user training programs to ensure widespread adoption and maximum business impact.</p>
+            </div>
+        </div>
+        
+        <div class="framework-step" style="
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #84cc16;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: slideInRight 0.6s ease-out 1.2s both;
+        ">
+            <div class="step-number" style="
+                background: linear-gradient(135deg, #84cc16, #65a30d);
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                font-weight: 700;
+                flex-shrink: 0;
+                box-shadow: 0 4px 15px rgba(132, 204, 22, 0.3);
+            ">07</div>
+            <div class="step-content">
+                <h4 style="
+                    font-size: 1.3rem;
+                    margin-bottom: 1rem;
+                    color: #333;
+                    font-weight: 600;
+                ">Innovation & Advanced Capabilities</h4>
+                <p style="
+                    color: #666;
+                    line-height: 1.6;
+                ">Explore and implement advanced AI capabilities including generative AI, autonomous insights, and cognitive computing. Continuously innovate to maintain competitive advantage in AI-driven business intelligence.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Challenges & Solutions -->
+<div class="challenges-section" style="
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(6, 182, 212, 0.05) 100%);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border-left: 6px solid #3b82f6;
+    animation: fadeInUp 0.8s ease-out 0.9s both;
+">
+    <h3 style="
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        margin-bottom: 2rem;
+        color: #333;
+        text-align: center;
+        font-weight: 700;
+        background: linear-gradient(135deg, #3b82f6, #06b6d4);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    ">⚡ Overcoming AI BI Implementation Challenges</h3>
+    <div class="challenges-grid" style="
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    ">
+        <div class="challenge-item" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-top: 4px solid #10b981;
+            transition: transform 0.3s ease;
+            animation: flipInX 0.6s ease-out;
+        ">
+            <h4 style="
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Data Quality & Integration</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+                margin-bottom: 1rem;
+            ">Organizations struggle with inconsistent data quality, siloed data sources, and complex integration requirements that hinder effective AI model training and reliable insights generation.</p>
+            <div class="solution" style="
+                padding: 1rem;
+                background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
+                border-radius: 0.5rem;
+                border-left: 4px solid #06b6d4;
+                font-size: 0.9rem;
+                line-height: 1.5;
+            ">
+                <strong>Solution:</strong> Implement automated data quality frameworks, establish data governance policies, and use AI-powered data integration tools to ensure clean, consistent, and accessible data across the organization.
+            </div>
+        </div>
+        
+        <div class="challenge-item" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-top: 4px solid #8b5cf6;
+            transition: transform 0.3s ease;
+            animation: flipInX 0.6s ease-out 0.2s both;
+        ">
+            <h4 style="
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Model Interpretability & Trust</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+                margin-bottom: 1rem;
+            ">Complex AI models often function as "black boxes," making it difficult for business users to understand and trust the insights, leading to resistance in adoption and decision-making.</p>
+            <div class="solution" style="
+                padding: 1rem;
+                background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(124, 58, 237, 0.1));
+                border-radius: 0.5rem;
+                border-left: 4px solid #06b6d4;
+                font-size: 0.9rem;
+                line-height: 1.5;
+            ">
+                <strong>Solution:</strong> Implement explainable AI techniques, develop intuitive visualization tools, and provide model transparency features that help users understand how insights are generated and build trust in AI recommendations.
+            </div>
+        </div>
+        
+        <div class="challenge-item" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-top: 4px solid #ec4899;
+            transition: transform 0.3s ease;
+            animation: flipInX 0.6s ease-out 0.4s both;
+        ">
+            <h4 style="
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Skill Gaps & Talent Shortage</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+                margin-bottom: 1rem;
+            ">The demand for AI and data science expertise far exceeds the available talent pool, creating implementation bottlenecks and limiting organizations' ability to develop and maintain AI BI solutions.</p>
+            <div class="solution" style="
+                padding: 1rem;
+                background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(219, 39, 119, 0.1));
+                border-radius: 0.5rem;
+                border-left: 4px solid #06b6d4;
+                font-size: 0.9rem;
+                line-height: 1.5;
+            ">
+                <strong>Solution:</strong> Develop comprehensive training programs, implement user-friendly AI tools, and establish partnerships with AI service providers to bridge skill gaps and accelerate implementation.
+            </div>
+        </div>
+        
+        <div class="challenge-item" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-top: 4px solid #f59e0b;
+            transition: transform 0.3s ease;
+            animation: flipInX 0.6s ease-out 0.6s both;
+        ">
+            <h4 style="
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Scalability & Performance</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+                margin-bottom: 1rem;
+            ">AI models and data processing requirements can strain existing infrastructure, leading to performance issues and limitations in scaling solutions across the enterprise.</p>
+            <div class="solution" style="
+                padding: 1rem;
+                background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.1));
+                border-radius: 0.5rem;
+                border-left: 4px solid #06b6d4;
+                font-size: 0.9rem;
+                line-height: 1.5;
+            ">
+                <strong>Solution:</strong> Implement cloud-native architectures, use distributed computing frameworks, and optimize model efficiency to ensure AI BI solutions can scale effectively while maintaining performance.
+            </div>
+        </div>
+
+        <!-- New Challenge Items -->
+        <div class="challenge-item" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-top: 4px solid #84cc16;
+            transition: transform 0.3s ease;
+            animation: flipInX 0.6s ease-out 0.8s both;
+        ">
+            <h4 style="
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Change Management & Adoption</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+                margin-bottom: 1rem;
+            ">Employees may resist AI-driven changes to established workflows and decision-making processes, limiting the effectiveness and ROI of AI BI implementations.</p>
+            <div class="solution" style="
+                padding: 1rem;
+                background: linear-gradient(135deg, rgba(132, 204, 22, 0.1), rgba(101, 163, 13, 0.1));
+                border-radius: 0.5rem;
+                border-left: 4px solid #06b6d4;
+                font-size: 0.9rem;
+                line-height: 1.5;
+            ">
+                <strong>Solution:</strong> Develop comprehensive change management programs, provide extensive training, and demonstrate clear business value to drive user adoption and maximize AI BI benefits.
+            </div>
+        </div>
+        
+        <div class="challenge-item" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-top: 4px solid #ef4444;
+            transition: transform 0.3s ease;
+            animation: flipInX 0.6s ease-out 1s both;
+        ">
+            <h4 style="
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Ethical & Regulatory Compliance</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+                margin-bottom: 1rem;
+            ">AI systems must comply with evolving regulations around data privacy, algorithmic fairness, and transparency, creating complex compliance requirements for AI BI implementations.</p>
+            <div class="solution" style="
+                padding: 1rem;
+                background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.1));
+                border-radius: 0.5rem;
+                border-left: 4px solid #06b6d4;
+                font-size: 0.9rem;
+                line-height: 1.5;
+            ">
+                <strong>Solution:</strong> Implement ethical AI frameworks, conduct regular compliance audits, and establish governance structures to ensure AI BI solutions meet regulatory requirements and ethical standards.
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Future Trends -->
+<div class="future-trends-section" style="
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(236, 72, 153, 0.05) 100%);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border-left: 6px solid #8b5cf6;
+    animation: fadeInUp 0.8s ease-out 1.1s both;
+">
+    <h3 style="
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        margin-bottom: 2rem;
+        color: #333;
+        text-align: center;
+        font-weight: 700;
+        background: linear-gradient(135deg, #8b5cf6, #ec4899);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    ">🔮 Future of AI-Driven Business Intelligence</h3>
+    <div class="trends-content" style="
+        display: grid;
+        gap: 2rem;
+    ">
+        <div class="trend-category" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #8b5cf6;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: fadeIn 0.6s ease-out;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Autonomous Business Intelligence</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+            ">AI systems will evolve to autonomously identify business opportunities, generate insights, and execute decisions with minimal human intervention. Self-learning algorithms will continuously optimize business processes and strategies based on real-time data and market conditions.</p>
+        </div>
+        
+        <div class="trend-category" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #10b981;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Generative AI for Business Strategy</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+            ">Advanced generative AI will create comprehensive business strategies, simulate market scenarios, and generate innovative solutions to complex business challenges. AI will become a strategic partner in executive decision-making and long-term planning.</p>
+        </div>
+        
+        <div class="trend-category" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #3b82f6;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: fadeIn 0.6s ease-out 0.4s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Cognitive Analytics & Emotional Intelligence</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+            ">AI systems will incorporate emotional intelligence and cognitive capabilities to better understand human behavior, market sentiment, and organizational dynamics. This will enable more nuanced and context-aware business insights.</p>
+        </div>
+        
+        <div class="trend-category" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #ec4899;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: fadeIn 0.6s ease-out 0.6s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Quantum-Enhanced Analytics</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+            ">Quantum computing will revolutionize complex optimization problems, risk analysis, and large-scale simulations. Quantum algorithms will enable insights and predictions that are currently computationally infeasible with classical computing.</p>
+        </div>
+        
+        <div class="trend-category" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #06b6d4;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: fadeIn 0.6s ease-out 0.8s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Edge AI & Real-time Intelligence</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+            ">AI processing will move to the edge, enabling real-time analytics and decision-making at the point of data generation. This will transform operations in manufacturing, retail, healthcare, and other industries requiring immediate insights.</p>
+        </div>
+
+        <!-- New Trend Categories -->
+        <div class="trend-category" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #f59e0b;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: fadeIn 0.6s ease-out 1s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Explainable AI & Transparent Analytics</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+            ">Advanced explainability techniques will make AI decision-making processes transparent and understandable to business users. This will build trust, facilitate regulatory compliance, and enable better human-AI collaboration.</p>
+        </div>
+        
+        <div class="trend-category" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #84cc16;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: fadeIn 0.6s ease-out 1.2s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Federated Learning & Privacy-Preserving Analytics</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+            ">Federated learning and privacy-enhancing technologies will enable organizations to derive insights from distributed data sources without compromising data privacy or security, opening new possibilities for collaborative analytics.</p>
+        </div>
+    </div>
+</div>
+                <!-- Call to Action -->
+                <div class="cta-section" style="
+                    background: linear-gradient(270deg, #10b981, #3b82f6, #8b5cf6, #ec4899);
+                    background-size: 800% 800%;
+                    animation: gradientShift 12s ease infinite;
+                    padding: 3rem 2rem;
+                    border-radius: 12px;
+                    text-align: center;
+                    color: white;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                    margin: 2rem 0;
+                    position: relative;
+                    overflow: hidden;
+                ">
+                    <h3 style="
+                        font-size: clamp(1.5rem, 4vw, 2.2rem);
+                        margin-bottom: 1.5rem;
+                        font-weight: 700;
+                        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+                    ">🚀 Transform Your Business with AI Intelligence</h3>
+                    <p style="
+                        font-size: clamp(1rem, 2.5vw, 1.2rem);
+                        line-height: 1.6;
+                        margin-bottom: 2rem;
+                        max-width: 800px;
+                        margin-left: auto;
+                        margin-right: auto;
+                        opacity: 0.95;
+                    ">Our team of AI and business intelligence experts combines cutting-edge machine learning with deep industry knowledge to deliver transformative insights that drive growth, optimize operations, and create competitive advantage. From strategy to implementation, we partner with you to build intelligent, data-driven organizations.</p>
+                    <div class="cta-buttons" style="
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 1rem;
+                        justify-content: center;
+                        align-items: center;
+                    ">
+                        <a href="{% url 'contact' %}" class="btn-primary" style="
+                            background: rgba(255,255,255,0.2);
+                            backdrop-filter: blur(10px);
+                            border: 2px solid rgba(255,255,255,0.3);
+                            color: white;
+                            padding: 0.8rem 1.8rem;
+                            border-radius: 50px;
+                            text-decoration: none;
+                            font-weight: 600;
+                            font-size: clamp(0.9rem, 2vw, 1rem);
+                            transition: all 0.3s ease;
+                            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                        ">Schedule AI BI Consultation</a>
+                        <a href="{% url 'innovation_main' %}" class="btn-secondary" style="
+                            background: white;
+                            color: #10b981;
+                            padding: 0.8rem 1.8rem;
+                            border-radius: 50px;
+                            text-decoration: none;
+                            font-weight: 600;
+                            font-size: clamp(0.9rem, 2vw, 1rem);
+                            transition: all 0.3s ease;
+                            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+                        ">Explore Innovation Solutions</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+}
+
+/* Base Container - Full Width */
+.insights-page-container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Hero Section - Full Viewport (Unchanged) */
+.insights-hero {
+    position: relative;
+    color: white;
+    padding: 0;
+    text-align: center;
+    margin-bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+}
+
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+    background-image: url('https://i.pinimg.com/1200x/10/45/b7/1045b7b68751c7d96519066bf3dd969e.jpg');
+    background-size: cover;
+    background-position: center;
+    background-blend-mode: overlay;
+    background-attachment: scroll;
+    background-repeat: no-repeat;
+    z-index: -1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    padding: 0 20px;
+    width: 100%;
+}
+
+.hero-title {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    margin-bottom: 1.5rem;
+    font-weight: 900;
+    line-height: 1.1;
+    text-shadow: 3px 3px 10px rgba(0,0,0,0.7);
+    animation: fadeInUp 1s ease-out;
+    background: linear-gradient(135deg, #ffffff 0%, #f0f8ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+    position: relative;
+    display: inline-block;
+}
+
+.hero-title span {
+    background: linear-gradient(135deg, #10b981, #3b82f6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+    text-shadow: none;
+}
+
+.hero-description {
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    margin: 0 auto;
+    line-height: 1.6;
+    opacity: 0.95;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    animation: fadeInUp 1s ease-out 0.3s both;
+    background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(240,248,255,0.9) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 500;
+    max-width: 700px;
+    padding: 1rem 0;
+    position: relative;
+    letter-spacing: 0.2px;
+}
+
+/* Section Title */
+.section-title {
+    text-align: center;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    margin-bottom: 3rem;
+    color: #333;
+    font-weight: 800;
+    line-height: 1.2;
+    background: linear-gradient(135deg, #10b981, #3b82f6, #8b5cf6, #ec4899);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+/* AI Impact Visualization Section */
+.ai-impact-visualization {
+    padding: 4rem 0;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    width: 100%;
+}
+
+.visualization-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Enhanced Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+    70% {
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes flipInX {
+    from {
+        transform: perspective(400px) rotateX(90deg);
+        opacity: 0;
+    }
+    to {
+        transform: perspective(400px) rotateX(0deg);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Enhanced Mobile Responsiveness */
+@media (max-width: 768px) {
+    .insights-hero {
+        height: 100vh;
+        min-height: 100vh;
+        padding: 0 1rem;
+        width: 100vw;
+        margin-left: -50vw;
+        margin-right: -50vw;
+        left: 50%;
+        right: 50%;
+    }
+
+    .hero-content {
+        padding: 0 1rem;
+    }
+
+    .ai-impact-visualization {
+        padding: 2rem 0;
+    }
+
+    .timeline-section,
+    .metrics-section,
+    .applications-section,
+    .framework-section,
+    .challenges-section,
+    .future-trends-section {
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .timeline::before {
+        left: 20px;
+    }
+
+    .timeline-item {
+        padding-left: 60px;
+    }
+
+    .timeline-year {
+        min-width: 60px;
+        font-size: 0.8rem;
+        padding: 0.4rem 0.8rem;
+    }
+
+    .metrics-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .applications-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .framework-step {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .step-number {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+
+    .challenges-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        width: 100%;
+        max-width: 300px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 1rem;
+    }
+
+    .timeline-item {
+        padding-left: 50px;
+    }
+
+    .timeline-year {
+        min-width: 50px;
+        font-size: 0.7rem;
+        padding: 0.3rem 0.6rem;
+    }
+
+    .metric-value {
+        font-size: 2.5rem;
+    }
+
+    .application-area {
+        padding: 1rem;
+    }
+
+    .cta-section {
+        padding: 2rem 1rem;
+    }
+
+    .cta-section h3 {
+        font-size: 1.5rem;
+    }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 360px) {
+    .timeline-item {
+        padding-left: 45px;
+    }
+
+    .timeline-year {
+        min-width: 45px;
+    }
+
+    .metric-card {
+        padding: 1.5rem 1rem;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .metric-card:hover,
+    .framework-step:hover,
+    .application-area:hover,
+    .challenge-item:hover,
+    .trend-category:hover {
+        transform: none;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .metric-card,
+    .framework-step,
+    .application-area,
+    .challenge-item,
+    .trend-category,
+    .btn-primary,
+    .btn-secondary {
+        transition: none;
+    }
+    
+    .hero-title,
+    .hero-description {
+        animation: none;
+    }
+    
+    .timeline-item,
+    .metric-card,
+    .application-area,
+    .framework-step,
+    .challenge-item,
+    .trend-category {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .ai-impact-visualization {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    }
+    
+    .section-title {
+        color: white;
+    }
+
+    .timeline-section,
+    .metrics-section,
+    .applications-section,
+    .framework-section,
+    .challenges-section,
+    .future-trends-section {
+        background: #2d2d2d;
+        color: white;
+    }
+
+    .timeline-content,
+    .application-area,
+    .framework-step,
+    .challenge-item,
+    .trend-category,
+    .metric-card {
+        background: #1a1a1a;
+        color: white;
+    }
+
+    .timeline-section h3,
+    .metrics-section h3,
+    .applications-section h3,
+    .framework-section h3,
+    .challenges-section h3,
+    .future-trends-section h3,
+    .timeline-content h4,
+    .application-area h4,
+    .step-content h4,
+    .challenge-item h4,
+    .trend-category h4,
+    .metric-label {
+        color: white;
+    }
+
+    .timeline-content p,
+    .metric-description,
+    .application-list li,
+    .step-content p,
+    .challenge-item p,
+    .trend-category p {
+        color: #ccc;
+    }
+
+    .adoption-stats {
+        background: #2d2d2d;
+        border-color: #444;
+    }
+
+    .adoption-stats span {
+        color: #ccc;
+    }
+}
+
+/* Mobile-specific hero background fix */
+@media (max-width: 768px) {
+    .hero-background {
+        background-attachment: scroll !important;
+        background-size: cover;
+        background-position: center center;
+    }
+}
+
+/* Text readability improvements */
+.timeline-content h4,
+.application-area h4,
+.step-content h4,
+.challenge-item h4,
+.trend-category h4 {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Container max-width for very large screens */
+@media (min-width: 1400px) {
+    .container {
+        max-width: 1320px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .applications-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .challenges-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Hover effects for interactive elements */
+@media (hover: hover) {
+    .metric-card:hover,
+    .framework-step:hover,
+    .application-area:hover,
+    .challenge-item:hover,
+    .trend-category:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    }
+    
+    .btn-primary:hover {
+        background: rgba(255,255,255,0.3);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+    
+    .btn-secondary:hover {
+        background: rgba(255,255,255,0.9);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Enhanced interactive effects for mobile
+document.addEventListener('DOMContentLoaded', function() {
+    // Add intersection observer for scroll animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    // Animate elements on scroll
+    const animatedElements = document.querySelectorAll('.timeline-item, .metric-card, .application-area, .framework-step, .challenge-item, .trend-category');
+    animatedElements.forEach(element => {
+        element.style.opacity = '0';
+        element.style.transform = 'translateY(20px)';
+        element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(element);
+    });
+});
+
+// Performance optimization
+let scrollTimeout;
+window.addEventListener('scroll', function() {
+    if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
+    }
+    scrollTimeout = setTimeout(function() {
+        // Handle scroll-based animations if needed
+    }, 100);
+});
+</script>
+{% endblock %}

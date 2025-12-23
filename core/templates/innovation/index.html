@@ -1,0 +1,1035 @@
+{% extends "base.html" %}
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}Innovation & Critical Thinking | OB Global{% endblock %}
+
+{% block content %}
+<div class="insights-page-container">
+    <!-- Hero Section - Full Screen -->
+    <section class="insights-hero">
+        <div class="hero-background"></div>
+        {% include "components/regional_leaders.html" %}
+        <div class="hero-content">
+            <h1 class="hero-title">
+                Innovation & <span>Critical Thinking</span>
+            </h1>
+
+            <p class="hero-description">
+                Cutting-edge solutions and transformative technologies that drive business innovation, 
+                enhance security, and unlock new opportunities through advanced AI and digital capabilities.
+            </p>
+        </div>
+    </section>
+
+    <!-- Featured Innovations Section -->
+    <section class="featured-insights">
+        <div class="container">
+            <h2 class="section-title">Featured Innovations</h2>
+            
+            <div class="insights-grid">
+                
+                <!-- Innovation Card 1 -->
+                <div class="insight-card">
+                    <div class="insight-image-container">
+                        <img src="https://i.pinimg.com/736x/cc/54/0b/cc540b8c4c7539ee8c7ed2cbaa3612c2.jpg"
+                             alt="AI & Digital Solutions" 
+                             class="insight-image">
+                        <div class="insight-overlay">
+                            <div class="insight-tag">
+                                🤖 AI & Digital
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="insight-info">
+                        <h3 class="insight-title">AI & Digital Solutions</h3>
+                        <p class="insight-excerpt">
+                            Advanced artificial intelligence and digital transformation solutions that revolutionize business operations and decision-making.
+                        </p>
+                        <div class="insight-meta">
+                            <span>🧠 Business Intelligence</span>
+                            <span>📊 Predictive Analytics</span>
+                        </div>
+                        <a href="{% url 'ai_driven_business_intelligence' %}" class="btn-read-more">
+                            <span>Explore Solutions</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Innovation Card 2 -->
+                <div class="insight-card">
+                    <div class="insight-image-container">
+                        <img src="https://i.pinimg.com/1200x/18/09/aa/1809aadd8b5554064cf10b16c7d9577a.jpg"
+                             alt="Security Solutions" 
+                             class="insight-image">
+                        <div class="insight-overlay">
+                            <div class="insight-tag">
+                                🔒 Security
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="insight-info">
+                        <h3 class="insight-title">Advanced Security Solutions</h3>
+                        <p class="insight-excerpt">
+                            Next-generation security frameworks and threat protection systems to safeguard your digital assets and infrastructure.
+                        </p>
+                        <div class="insight-meta">
+                            <span>🛡️ Threat Protection</span>
+                            <span>🔐 Zero Trust</span>
+                        </div>
+                        <a href="{% url 'advanced_threat_protection' %}" class="btn-read-more">
+                            <span>Explore Solutions</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Innovation Card 3 -->
+                <div class="insight-card">
+                    <div class="insight-image-container">
+                        <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
+                             alt="Software Development" 
+                             class="insight-image">
+                        <div class="insight-overlay">
+                            <div class="insight-tag">
+                                💻 Development
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="insight-info">
+                        <h3 class="insight-title">Custom Software Development</h3>
+                        <p class="insight-excerpt">
+                            Tailored software solutions and enterprise application integration to meet your unique business requirements.
+                        </p>
+                        <div class="insight-meta">
+                            <span>⚙️ Custom Solutions</span>
+                            <span>🔗 Integration</span>
+                        </div>
+                        <a href="{% url 'custom_software_development' %}" class="btn-read-more">
+                            <span>Explore Solutions</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Innovation Categories Section -->
+    <section class="insights-categories">
+        <div class="container">
+            <h2 class="section-title">Innovation Categories</h2>
+            
+            <div class="categories-container">
+                
+                <!-- AI & Digital Solutions Card -->
+                <div class="category-card trends-card">
+                    <div class="card-header">
+                        <div class="category-icon">
+                           <span>🤖</span>
+                        </div>
+                        <h3 class="category-title">AI & Digital Solutions</h3>
+                    </div>
+                    
+                    <p class="category-description">
+                        Advanced artificial intelligence, machine learning, and digital transformation solutions that drive intelligent business decisions.
+                    </p>
+                    
+                    <div class="category-links">
+                        <a href="{% url 'ai_driven_business_intelligence' %}" class="category-link">AI-Driven Business Intelligence</a>
+                        <a href="{% url 'predictive_analytics_solutions' %}" class="category-link">Predictive Analytics Solutions</a>
+                        <a href="{% url 'natural_language_processing' %}" class="category-link">Natural Language Processing</a>
+                    </div>
+                </div>
+                
+                <!-- Security & Development Card -->
+                <div class="category-card analysis-card">
+                    <div class="card-header">
+                        <div class="category-icon">
+                            <span>🔒</span>
+                        </div>
+                        <h3 class="category-title">Security & Development</h3>
+                    </div>
+                    
+                    <p class="category-description">
+                        Comprehensive security frameworks and custom development solutions to protect and enhance your digital infrastructure.
+                    </p>
+                    
+                    <div class="category-links">
+                        <a href="{% url 'advanced_threat_protection' %}" class="category-link">Advanced Threat Protection</a>
+                        <a href="{% url 'zero_trust_architecture' %}" class="category-link">Zero Trust Architecture</a>
+                        <a href="{% url 'custom_software_development' %}" class="category-link">Custom Software Development</a>
+                        <a href="{% url 'enterprise_application_integration' %}" class="category-link">Enterprise Application Integration</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Our Innovation Matters Section -->
+    <section class="insights-benefits">
+        <div class="container">
+            <h2 class="section-title">Why Our Innovation Matters</h2>
+            <div class="benefits-grid">
+                <div class="benefit-item">
+                    <div class="benefit-number">01</div>
+                    <h4>🚀 Future-Ready Solutions</h4>
+                    <p>Cutting-edge technologies and innovative approaches that prepare your business for tomorrow's challenges</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-number">02</div>
+                    <h4>🧠 Intelligent Automation</h4>
+                    <p>AI-driven automation and intelligent systems that enhance efficiency and drive data-informed decisions</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-number">03</div>
+                    <h4>🛡️ Robust Security</h4>
+                    <p>Advanced security frameworks and threat protection to safeguard your digital assets and operations</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-number">04</div>
+                    <h4>💡 Strategic Innovation</h4>
+                    <p>Transformative thinking and innovative solutions that create competitive advantages and new opportunities</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+}
+
+/* Base Container - Full Width */
+.insights-page-container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Hero Section - Full Viewport - FIXED */
+.insights-hero {
+    position: relative;
+    color: white;
+    padding: 0;
+    text-align: center;
+    margin-bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+}
+
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-image: url('https://i.pinimg.com/1200x/77/e6/da/77e6da5645e4f67f80a3de3b7a91127c.jpg');
+    background-size: cover;
+    background-position: center;
+    background-blend-mode: overlay;
+    background-attachment: scroll;
+    background-repeat: no-repeat;
+    z-index: -1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    padding: 0 20px;
+    width: 100%;
+}
+
+.hero-title {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    margin-bottom: 1.5rem;
+    font-weight: 900;
+    line-height: 1.1;
+    text-shadow: 3px 3px 10px rgba(0,0,0,0.7);
+    animation: fadeInUp 1s ease-out;
+    background: linear-gradient(135deg, #ffffff 0%, #f0f8ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+    position: relative;
+    display: inline-block;
+}
+
+.hero-title span {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+    text-shadow: none;
+}
+
+.hero-description {
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    margin: 0 auto;
+    line-height: 1.6;
+    opacity: 0.95;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    animation: fadeInUp 1s ease-out 0.3s both;
+    background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(240,248,255,0.9) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 500;
+    max-width: 700px;
+    padding: 1rem 0;
+    position: relative;
+    letter-spacing: 0.2px;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Section Title */
+.section-title {
+    text-align: center;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    margin-bottom: 3rem;
+    color: #333;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+/* Featured Insights Section */
+.featured-insights {
+    padding: 4rem 0;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    width: 100%;
+}
+
+/* Insights Grid */
+.insights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Insight Card Design */
+.insight-card {
+    background: white;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    transition: all 0.4s ease;
+    position: relative;
+    border: none;
+}
+
+.insight-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+}
+
+/* Insight Image Container */
+.insight-image-container {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.insight-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.4s ease;
+}
+
+.insight-card:hover .insight-image {
+    transform: scale(1.05);
+}
+
+/* Insight Overlay with Tag */
+.insight-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.8));
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+    padding: 1rem;
+}
+
+.insight-card:hover .insight-overlay {
+    opacity: 1;
+}
+
+.insight-tag {
+    background: rgba(255, 255, 255, 0.95);
+    color: #333;
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    font-weight: 600;
+    font-size: 0.8rem;
+    backdrop-filter: blur(10px);
+}
+
+/* Insight Info */
+.insight-info {
+    padding: 1.5rem;
+    text-align: center;
+    background: white;
+}
+
+.insight-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+    color: #333;
+    line-height: 1.3;
+    word-break: break-word;
+}
+
+.insight-excerpt {
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 1.2rem;
+    font-size: 0.9rem;
+}
+
+.insight-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.2rem;
+    font-size: 0.8rem;
+    color: #888;
+}
+
+/* Read More Button */
+.btn-read-more {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 1.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    font-size: 0.9rem;
+    min-width: 120px;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0,123,255,0.3);
+}
+
+.btn-read-more:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,123,255,0.4);
+    color: white;
+    text-decoration: none;
+}
+
+/* Insights Categories Section */
+.insights-categories {
+    padding: 4rem 0;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    width: 100%;
+}
+
+.categories-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.category-card {
+    padding: 2rem 1.5rem;
+    border-radius: 1rem;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    transition: all 0.4s ease;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    min-height: 400px;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+}
+
+.category-icon {
+    font-size: 2.5rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.category-title {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    color: white;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    line-height: 1.3;
+}
+
+.category-description {
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+    text-align: center;
+    flex-grow: 1;
+}
+
+.category-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.category-link {
+    color: white;
+    text-decoration: none;
+    padding: 0.8rem 1rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+    border: 1.5px solid rgba(255, 255, 255, 0.3);
+    font-weight: 500;
+    font-size: 0.9rem;
+    text-align: center;
+    backdrop-filter: blur(5px);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.category-link:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    text-decoration: none;
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Category Card Colors */
+.trends-card {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+.analysis-card {
+    background: linear-gradient(135deg, #f093fb, #f5576c);
+}
+
+/* Insights Benefits Section */
+.insights-benefits {
+    padding: 4rem 0;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    width: 100%;
+}
+
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.benefit-item {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    transition: all 0.4s ease;
+    border: none;
+    background: white;
+}
+
+.benefit-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+}
+
+.benefit-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    opacity: 0.8;
+    color: #007bff;
+}
+
+.benefit-item h4 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    color: #333;
+}
+
+.benefit-item p {
+    line-height: 1.5;
+    font-size: 0.9rem;
+    text-align: center;
+    color: #666;
+}
+
+/* Benefit Item Colors */
+.benefits-grid .benefit-item:nth-child(1) {
+    border-left: 4px solid #ff6b6b;
+}
+
+.benefits-grid .benefit-item:nth-child(2) {
+    border-left: 4px solid #4ecdc4;
+}
+
+.benefits-grid .benefit-item:nth-child(3) {
+    border-left: 4px solid #45b7d1;
+}
+
+.benefits-grid .benefit-item:nth-child(4) {
+    border-left: 4px solid #96c93d;
+}
+
+/* Enhanced Mobile Responsiveness - HERO FIXED */
+@media (max-width: 768px) {
+    .insights-hero {
+        height: 100vh;
+        min-height: 100vh;
+        padding: 0 1rem;
+        width: 100vw;
+        margin-left: -50vw;
+        margin-right: -50vw;
+        left: 50%;
+        right: 50%;
+    }
+
+    .hero-content {
+        padding: 0 1rem;
+    }
+
+    .featured-insights,
+    .insights-categories,
+    .insights-benefits {
+        padding: 3rem 0;
+    }
+
+    .section-title {
+        margin-bottom: 2rem;
+    }
+
+    .insights-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 0 1rem;
+    }
+
+    .categories-container {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 0 1rem;
+    }
+
+    .category-card {
+        min-height: 350px;
+        padding: 1.5rem 1rem;
+    }
+
+    .benefits-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 0 1rem;
+    }
+
+    .benefit-item {
+        padding: 1.5rem 1rem;
+    }
+
+    .insight-image-container {
+        height: 180px;
+    }
+
+    .insight-info {
+        padding: 1.25rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .insights-hero {
+        height: 100vh;
+        min-height: 100vh;
+        width: 100vw;
+        margin-left: -50vw;
+        margin-right: -50vw;
+        left: 50%;
+        right: 50%;
+    }
+
+    .featured-insights,
+    .insights-categories,
+    .insights-benefits {
+        padding: 2rem 0;
+    }
+
+    .container {
+        padding: 0 1rem;
+    }
+
+    .category-card {
+        min-height: 320px;
+        padding: 1.25rem 0.875rem;
+    }
+
+    .category-links {
+        gap: 0.6rem;
+    }
+
+    .category-link {
+        padding: 0.7rem 0.8rem;
+        font-size: 0.85rem;
+    }
+
+    .benefit-item {
+        padding: 1.25rem 0.875rem;
+    }
+
+    .benefit-number {
+        font-size: 2rem;
+    }
+
+    .insight-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+    }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 360px) {
+    .insights-hero {
+        height: 100vh;
+        min-height: 100vh;
+        width: 100vw;
+        margin-left: -50vw;
+        margin-right: -50vw;
+        left: 50%;
+        right: 50%;
+    }
+
+    .insights-grid,
+    .categories-container,
+    .benefits-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .category-card {
+        min-height: 300px;
+    }
+
+    .insight-image-container {
+        height: 160px;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .insight-card:hover,
+    .category-card:hover,
+    .benefit-item:hover {
+        transform: none;
+    }
+    
+    .insight-overlay {
+        opacity: 1;
+    }
+
+    .insight-card:active,
+    .category-card:active,
+    .benefit-item:active {
+        transform: scale(0.98);
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .insight-card,
+    .category-card,
+    .benefit-item,
+    .btn-read-more,
+    .category-link {
+        transition: none;
+    }
+    
+    .insight-card:hover .insight-image {
+        transform: none;
+    }
+    
+    .hero-title,
+    .hero-description {
+        animation: none;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .featured-insights,
+    .insights-categories {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    }
+    
+    .insights-benefits {
+        background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+    }
+    
+    .insight-card,
+    .benefit-item {
+        background: #2d2d2d;
+    }
+    
+    .insight-info {
+        background: #2d2d2d;
+    }
+    
+    .insight-title,
+    .benefit-item h4 {
+        color: white;
+    }
+    
+    .insight-excerpt,
+    .benefit-item p {
+        color: #ccc;
+    }
+
+    .section-title {
+        color: white;
+    }
+}
+
+/* Mobile-specific hero background fix */
+@media (max-width: 768px) {
+    .hero-background {
+        background-attachment: scroll !important;
+        background-size: cover;
+        background-position: center center;
+    }
+}
+
+/* Ensure images are optimized for mobile */
+.insight-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Improve button touch targets on mobile */
+@media (max-width: 768px) {
+    .btn-read-more,
+    .category-link {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+/* Text readability improvements */
+.insight-title,
+.category-title,
+.benefit-item h4 {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Container max-width for very large screens */
+@media (min-width: 1400px) {
+    .container {
+        max-width: 1320px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .insights-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .categories-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .benefits-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Enhanced interactive effects for mobile
+document.addEventListener('DOMContentLoaded', function() {
+    const insightCards = document.querySelectorAll('.insight-card');
+    const categoryCards = document.querySelectorAll('.category-card');
+    const benefitItems = document.querySelectorAll('.benefit-item');
+    
+    // Check if device is touch-enabled
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    
+    if (!isTouchDevice) {
+        // Desktop hover effects
+        insightCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+        
+        categoryCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+        
+        benefitItems.forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+            });
+            
+            item.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    } else {
+        // Mobile touch effects
+        insightCards.forEach(card => {
+            card.addEventListener('touchstart', function() {
+                this.style.transform = 'scale(0.98)';
+            });
+            
+            card.addEventListener('touchend', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    }
+    
+    // Add intersection observer for scroll animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    // Animate elements on scroll
+    const animatedElements = document.querySelectorAll('.insight-card, .category-card, .benefit-item');
+    animatedElements.forEach(element => {
+        element.style.opacity = '0';
+        element.style.transform = 'translateY(20px)';
+        element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(element);
+    });
+});
+
+// Performance optimization
+let scrollTimeout;
+window.addEventListener('scroll', function() {
+    if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
+    }
+    scrollTimeout = setTimeout(function() {
+        // Handle scroll-based animations if needed
+    }, 100);
+});
+
+// Load images efficiently
+function preloadImages() {
+    const images = document.querySelectorAll('.insight-image');
+    images.forEach(img => {
+        if (img.dataset.src) {
+            img.src = img.dataset.src;
+        }
+    });
+}
+
+// Load images when they come into view
+const imageObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const img = entry.target;
+            if (img.dataset.src) {
+                img.src = img.dataset.src;
+                img.removeAttribute('data-src');
+            }
+            observer.unobserve(img);
+        }
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const lazyImages = document.querySelectorAll('.insight-image[data-src]');
+    lazyImages.forEach(img => imageObserver.observe(img));
+});
+</script>
+{% endblock %}

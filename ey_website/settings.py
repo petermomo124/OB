@@ -186,7 +186,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'core.User'
 
 # Security settings - adjust these based on your environment
-DEBUG = False
+DEBUG = True
 
 # Logging configuration
 LOGGING = {
@@ -264,12 +264,7 @@ LOGIN_URL = '/client-portal/login/'
 # but often Django's base security headers are enough for development.
 
 # Ensure the maps domains are allowed for IFRAMES
-CSRF_TRUSTED_ORIGINS = [
-    # Include your development URL here
-    'http://127.0.0.1:8000',
-    # And potentially the google domains if you are getting CSRF errors
-    'https://*.google.com',
-]
+
 
 # If you have SECUTIRY_MIDDLEWARE enabled, you may need to explicitly allow iframes:
 # IMPORTANT: Use the exact domains your embed URL uses!
@@ -309,15 +304,29 @@ CSP_IMG_SRC = [
     "http:",   # Allow HTTP images (for development)
 ]
 
-# Add Cloudinary to trusted origins
 CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1:8000',
     'http://localhost:8000',
     'https://*.cloudinary.com',
     'https://res.cloudinary.com',
+    # ADD YOUR RENDER DOMAIN
+    'https://ob-global.onrender.com',
+    'http://ob-global.onrender.com',
 ]
 
-# Session settings for better editor experience
-SESSION_COOKIE_AGE = 3600  # 1 hour session
-SESSION_SAVE_EVERY_REQUEST = True
+# Session settings for 15-minute inactivity timeout
+SESSION_COOKIE_AGE = 900  # 15 minutes
+SESSION_SAVE_EVERY_REQUEST = True  # CRITICAL: This resets the timer on each request
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_COOKIE_SECURE = True # Set to True when using HTTPS
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+
+# For better performance with sessions
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+
+# Additional security
+CSRF_COOKIE_AGE = 900  # Also expire CSRF token after 15 minutes
+CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_HTTPONLY = True
 

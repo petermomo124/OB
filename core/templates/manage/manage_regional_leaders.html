@@ -1,0 +1,2493 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="regional-leaders-management">
+    <!-- Header Section -->
+    <div class="management-header">
+        <div class="header-content">
+            <div class="header-main">
+                <div class="header-icon">
+                    <i class="fas fa-globe-americas"></i>
+                </div>
+                <div class="header-text">
+                    <h1 class="page-title">Leadership Management</h1>
+                    <p class="page-subtitle">Manage regional leaders and managing partners</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <a href="{% url 'add_regional_leader' %}" class="btn-add-leader">
+                    <i class="fas fa-plus"></i>
+                    <span>Add Regional Leader</span>
+                </a>
+                <a href="{% url 'add_regional_leader' %}?type=managing_partner" class="btn-add-leader managing-partner">
+                    <i class="fas fa-user-tie"></i>
+                    <span>Add Managing Partner</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Stats Summary -->
+        <div class="stats-summary">
+            <div class="stat-card">
+                <div class="stat-icon active">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-number">{{ regional_leaders.count|add:managing_partners.count }}</span>
+                    <span class="stat-label">Active Leaders</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon inactive">
+                    <i class="fas fa-user-slash"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-number">{{ inactive_regional_leaders.count|add:inactive_managing_partners.count }}</span>
+                    <span class="stat-label">Inactive</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon total">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-number">
+                        {{ regional_leaders.count|add:managing_partners.count|add:inactive_regional_leaders.count|add:inactive_managing_partners.count }}
+                    </span>
+                    <span class="stat-label">Total Leaders</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search and Filters Section -->
+    <div class="search-filters-section">
+        <div class="search-container">
+            <form method="get" class="search-form">
+                <div class="search-input-group">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text"
+                           class="search-input"
+                           name="search"
+                           placeholder="Search leaders..."
+                           value="{{ search_query }}"
+                           autocomplete="off">
+                    {% if search_query %}
+                    <button type="button" class="clear-search" onclick="clearSearch()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    {% endif %}
+                </div>
+                <button type="submit" class="search-button">
+                    <span class="search-text">Search</span>
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <button class="btn-action" onclick="refreshPage()" title="Refresh">
+                    <i class="fas fa-sync-alt"></i>
+                    <span class="action-text-mobile">Refresh</span>
+                </button>
+                <div class="dropdown view-options">
+                    <button class="btn-action" data-bs-toggle="dropdown">
+                        <i class="fas fa-columns"></i>
+                        <span class="action-text-mobile">View</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#" onclick="toggleView('table')">Table View</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="toggleView('grid')">Grid View</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="toggleView('compact')">Compact View</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Regional Leaders Section -->
+    {% if regional_leaders %}
+    <div class="leaders-section active">
+        <div class="section-header">
+            <div class="section-title">
+                <h2>
+                    <i class="fas fa-globe"></i>
+                    <span class="section-title-text">Active Regional Leaders</span>
+                    <span class="count-badge">{{ regional_leaders.count }}</span>
+                </h2>
+                <p class="section-description">Currently active leaders across all regions</p>
+            </div>
+            
+        </div>
+
+        <div class="leaders-container" id="activeRegionalLeaders">
+            <!-- Table View -->
+            <div class="table-view">
+                <div class="table-container">
+                    <table class="leaders-table">
+                        <thead>
+                            <tr>
+                                <th class="col-photo">Photo</th>
+                                <th class="col-name">Leader Information</th>
+                                <th class="col-region mobile-hidden">Region</th>
+                                <th class="col-contact mobile-hidden">Contact</th>
+                                <th class="col-order mobile-hidden">Order</th>
+                                <th class="col-status mobile-hidden">Status</th>
+                                <th class="col-actions">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for leader in regional_leaders %}
+                            <tr class="leader-row" data-leader-id="{{ leader.id }}" data-leader-type="regional">
+                                <td class="cell-photo">
+                                    <div class="leader-photo-container">
+                                        <img src="{{ leader.get_profile_image_url }}"
+                                             alt="{{ leader.get_full_name }}"
+                                             class="leader-photo"
+                                             loading="lazy"
+                                             onerror="this.onerror=null; this.src='{% static 'images/default-profile.jpg' %}'">
+                                        <div class="photo-badge" data-region="{{ leader.region }}">
+                                            <i class="fas fa-globe"></i>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="cell-info">
+                                    <div class="leader-info">
+                                        <div class="leader-name-row">
+                                            <a href="{% url 'view_regional_leader' leader.id %}"
+                                               class="leader-name">
+                                                {{ leader.get_full_name }}
+                                            </a>
+                                            <span class="leader-id mobile-hidden">#RL{{ leader.id|stringformat:"03d" }}</span>
+                                        </div>
+                                        <div class="leader-details">
+                                            <span class="leader-title" title="{{ leader.region_title|default:'Regional Leader' }}">
+                                                {{ leader.region_title|default:"Regional Leader"|truncatechars:30 }}
+                                            </span>
+                                            <div class="leader-meta">
+                                                <span class="meta-item">
+                                                    <i class="fas fa-calendar"></i>
+                                                    <span class="meta-text">
+                                                    {% if leader.joining_date %}
+                                                        {{ leader.joining_date }}
+                                                    {% else %}
+                                                        Not set
+                                                    {% endif %}
+                                                    </span>
+                                                </span>
+                                                {% if leader.region and not is_mobile %}
+                                                <span class="meta-item mobile-hidden">
+                                                    <i class="fas fa-globe"></i>
+                                                    <span class="meta-text">{{ leader.get_region_display|truncatechars:15 }}</span>
+                                                </span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="cell-region mobile-hidden">
+                                    <div class="region-badge" data-region="{{ leader.region }}">
+                                        <span class="region-icon">
+                                            {% if leader.region == 'africa' %}<i class="fas fa-globe-africa"></i>
+                                            {% elif leader.region == 'europe' %}<i class="fas fa-globe-europe"></i>
+                                            {% elif leader.region == 'asia' %}<i class="fas fa-globe-asia"></i>
+                                            {% elif leader.region == 'north_america' %}<i class="fas fa-flag-usa"></i>
+                                            {% elif leader.region == 'south_america' %}<i class="fas fa-globe-americas"></i>
+                                            {% elif leader.region == 'oceania' %}<i class="fas fa-water"></i>
+                                            {% elif leader.region == 'middle_east' %}<i class="fas fa-mosque"></i>
+                                            {% else %}<i class="fas fa-globe"></i>{% endif %}
+                                        </span>
+                                        <span class="region-name">
+                                            {{ leader.get_region_display|truncatechars:20 }}
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="cell-contact mobile-hidden">
+                                    <div class="contact-info">
+                                        <a href="mailto:{{ leader.email }}"
+                                           class="contact-email"
+                                           title="{{ leader.email }}">
+                                            <i class="fas fa-envelope"></i>
+                                            <span>{{ leader.email|truncatechars:20 }}</span>
+                                        </a>
+                                        {% if leader.linkedin %}
+                                        <a href="{{ leader.linkedin }}"
+                                           target="_blank"
+                                           class="contact-linkedin"
+                                           title="LinkedIn Profile">
+                                            <i class="fab fa-linkedin"></i>
+                                            <span>LinkedIn</span>
+                                        </a>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td class="cell-order mobile-hidden">
+                                    <div class="order-display">
+                                        <span class="order-number">{{ leader.display_order }}</span>
+
+                                    </div>
+                                </td>
+                                <td class="cell-status mobile-hidden">
+                                    <span class="status-badge active">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span class="status-text">Active</span>
+                                    </span>
+                                </td>
+                                <td class="cell-actions">
+                                    <div class="action-buttons">
+                                        <a href="{% url 'view_regional_leader' leader.id %}"
+                                           class="btn-action view"
+                                           title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                            <span class="action-text mobile-hidden">View</span>
+                                        </a>
+                                        <a href="{% url 'edit_regional_leader' leader.id %}"
+                                           class="btn-action edit"
+                                           title="Edit Leader">
+                                            <i class="fas fa-edit"></i>
+                                            <span class="action-text mobile-hidden">Edit</span>
+                                        </a>
+                                        <a href="{% url 'delete_regional_leader' leader.id %}"
+                                           class="btn-action deactivate"
+                                           title="Deactivate Leader">
+                                            <i class="fas fa-user-slash"></i>
+                                            <span class="action-text mobile-hidden">Deactivate</span>
+                                        </a>
+                                        <!-- REPLACED: JavaScript modal with form-based permanent delete -->
+                                        <form method="post" action="{% url 'delete_regional_leader' leader.id %}" style="display: inline;" onsubmit="return confirmPermanentDelete()">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="permanent" value="true">
+                                            <button type="submit" class="btn-action delete-permanent" title="Delete Permanently">
+                                                <i class="fas fa-trash-alt"></i>
+                                                <span class="action-text mobile-hidden">Delete</span>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Grid View (Hidden by default) -->
+            <div class="grid-view" style="display: none;">
+                <div class="leaders-grid">
+                    {% for leader in regional_leaders %}
+                    <div class="leader-card">
+                        <div class="card-header">
+                            <div class="card-photo">
+                                <img src="{{ leader.get_profile_image_url }}"
+                                     alt="{{ leader.get_full_name }}"
+                                     class="card-image"
+                                     onerror="this.onerror=null; this.src='{% static 'images/default-profile.jpg' %}'">
+                                <div class="card-badge" data-region="{{ leader.region }}">
+                                    {{ leader.get_region_display|slice:":2"|upper }}
+                                </div>
+                            </div>
+                            <div class="card-status">
+                                <span class="status-badge active">Active</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="card-name">
+                                <a href="{% url 'view_regional_leader' leader.id %}">
+                                    {{ leader.get_full_name|truncatechars:25 }}
+                                </a>
+                            </h3>
+                            <p class="card-title" title="{{ leader.region_title|default:'Regional Leader' }}">
+                                {{ leader.region_title|default:"Regional Leader"|truncatechars:30 }}
+                            </p>
+                            <div class="card-meta">
+                                <div class="meta-item">
+                                    <i class="fas fa-globe"></i>
+                                    <span>{{ leader.get_region_display|truncatechars:15 }}</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-sort-numeric-up"></i>
+                                    <span>Order: {{ leader.display_order }}</span>
+                                </div>
+                            </div>
+                            <div class="card-contact">
+                                <a href="mailto:{{ leader.email }}" class="contact-email">
+                                    <i class="fas fa-envelope"></i>
+                                    <span>{{ leader.email|truncatechars:20 }}</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="card-actions">
+                                <a href="{% url 'view_regional_leader' leader.id %}" class="btn-action view">
+                                    <i class="fas fa-eye"></i>
+                                    <span class="action-text-mobile">View</span>
+                                </a>
+                                <a href="{% url 'edit_regional_leader' leader.id %}" class="btn-action edit">
+                                    <i class="fas fa-edit"></i>
+                                    <span class="action-text-mobile">Edit</span>
+                                </a>
+                                <a href="{% url 'delete_regional_leader' leader.id %}" class="btn-action deactivate">
+                                    <i class="fas fa-user-slash"></i>
+                                    <span class="action-text-mobile">Deactivate</span>
+                                </a>
+                                <!-- REPLACED: JavaScript modal with form-based permanent delete -->
+                                <form method="post" action="{% url 'delete_regional_leader' leader.id %}" style="display: inline;" onsubmit="return confirmPermanentDelete()">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="permanent" value="true">
+                                    <button type="submit" class="btn-action delete-permanent" title="Delete Permanently">
+                                        <i class="fas fa-trash-alt"></i>
+                                        <span class="action-text-mobile">Delete</span>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">
+            <i class="fas fa-users-slash"></i>
+        </div>
+        <h3 class="empty-title">No Active Regional Leaders Found</h3>
+        <p class="empty-description">
+            {% if search_query %}
+            No regional leaders match your search criteria. Try a different search term.
+            {% else %}
+            Get started by adding your first regional leader.
+            {% endif %}
+        </p>
+        <a href="{% url 'add_regional_leader' %}" class="btn-add-first">
+            <i class="fas fa-plus"></i>
+            Add Your First Regional Leader
+        </a>
+    </div>
+    {% endif %}
+
+    <!-- Active Managing Partners Section -->
+    {% if managing_partners %}
+    <div class="leaders-section active managing-partners">
+        <div class="section-header">
+            <div class="section-title">
+                <h2>
+                    <i class="fas fa-user-tie"></i>
+                    <span class="section-title-text">Active Managing Partners</span>
+                    <span class="count-badge">{{ managing_partners.count }}</span>
+                </h2>
+                <p class="section-description">Senior leadership overseeing all regions</p>
+            </div>
+            
+        </div>
+
+        <div class="leaders-container" id="activeManagingPartners">
+            <!-- Table View -->
+            <div class="table-view">
+                <div class="table-container">
+                    <table class="leaders-table">
+                        <thead>
+                            <tr>
+                                <th class="col-photo">Photo</th>
+                                <th class="col-name">Partner Information</th>
+                                <th class="col-contact mobile-hidden">Contact</th>
+                                <th class="col-order mobile-hidden">Order</th>
+                                <th class="col-status mobile-hidden">Status</th>
+                                <th class="col-actions">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for partner in managing_partners %}
+                            <tr class="leader-row" data-leader-id="{{ partner.id }}" data-leader-type="managing">
+                                <td class="cell-photo">
+                                    <div class="leader-photo-container">
+                                        <img src="{{ partner.get_profile_image_url }}"
+                                             alt="{{ partner.get_full_name }}"
+                                             class="leader-photo"
+                                             loading="lazy"
+                                             onerror="this.onerror=null; this.src='{% static 'images/default-profile.jpg' %}'">
+                                        <div class="photo-badge partner-badge">
+                                            <i class="fas fa-user-tie"></i>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="cell-info">
+                                    <div class="leader-info">
+                                        <div class="leader-name-row">
+                                            <a href="{% url 'view_regional_leader' partner.id %}"
+                                               class="leader-name">
+                                                {{ partner.get_full_name }}
+                                            </a>
+                                            <span class="leader-id mobile-hidden">#MP{{ partner.id|stringformat:"03d" }}</span>
+                                        </div>
+                                        <div class="leader-details">
+                                            <span class="leader-title" title="{{ partner.position_title|default:'Managing Partner' }}">
+                                                {{ partner.position_title|default:"Managing Partner"|truncatechars:40 }}
+                                            </span>
+                                            <div class="leader-meta">
+                                                <span class="meta-item">
+                                                    <i class="fas fa-calendar"></i>
+                                                    <span class="meta-text">
+                                                    {% if partner.joining_date %}
+                                                        {{ partner.joining_date }}
+                                                    {% else %}
+                                                        Not set
+                                                    {% endif %}
+                                                    </span>
+                                                </span>
+                                                <span class="meta-item mobile-hidden">
+                                                    <i class="fas fa-user-clock"></i>
+                                                    <span class="meta-text">{{ partner.years_in_role }} years</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="cell-contact mobile-hidden">
+                                    <div class="contact-info">
+                                        <a href="mailto:{{ partner.email }}"
+                                           class="contact-email"
+                                           title="{{ partner.email }}">
+                                            <i class="fas fa-envelope"></i>
+                                            <span>{{ partner.email|truncatechars:25 }}</span>
+                                        </a>
+                                        {% if partner.linkedin %}
+                                        <a href="{{ partner.linkedin }}"
+                                           target="_blank"
+                                           class="contact-linkedin"
+                                           title="LinkedIn Profile">
+                                            <i class="fab fa-linkedin"></i>
+                                            <span>LinkedIn</span>
+                                        </a>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td class="cell-order mobile-hidden">
+                                    <div class="order-display">
+                                        <span class="order-number">{{ partner.display_order }}</span>
+
+                                    </div>
+                                </td>
+                                <td class="cell-status mobile-hidden">
+                                    <span class="status-badge active">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span class="status-text">Active</span>
+                                    </span>
+                                </td>
+                                <td class="cell-actions">
+                                    <div class="action-buttons">
+                                        <a href="{% url 'view_regional_leader' partner.id %}"
+                                           class="btn-action view"
+                                           title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                            <span class="action-text mobile-hidden">View</span>
+                                        </a>
+                                        <a href="{% url 'edit_regional_leader' partner.id %}"
+                                           class="btn-action edit"
+                                           title="Edit Partner">
+                                            <i class="fas fa-edit"></i>
+                                            <span class="action-text mobile-hidden">Edit</span>
+                                        </a>
+                                        <a href="{% url 'delete_regional_leader' partner.id %}"
+                                           class="btn-action deactivate"
+                                           title="Deactivate Partner">
+                                            <i class="fas fa-user-slash"></i>
+                                            <span class="action-text mobile-hidden">Deactivate</span>
+                                        </a>
+                                        <!-- REPLACED: JavaScript modal with form-based permanent delete -->
+                                        <form method="post" action="{% url 'delete_regional_leader' partner.id %}" style="display: inline;" onsubmit="return confirmPermanentDelete()">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="permanent" value="true">
+                                            <button type="submit" class="btn-action delete-permanent" title="Delete Permanently">
+                                                <i class="fas fa-trash-alt"></i>
+                                                <span class="action-text mobile-hidden">Delete</span>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Grid View (Hidden by default) -->
+            <div class="grid-view" style="display: none;">
+                <div class="leaders-grid">
+                    {% for partner in managing_partners %}
+                    <div class="leader-card partner-card">
+                        <div class="card-header">
+                            <div class="card-photo">
+                                <img src="{{ partner.get_profile_image_url }}"
+                                     alt="{{ partner.get_full_name }}"
+                                     class="card-image"
+                                     onerror="this.onerror=null; this.src='{% static 'images/default-profile.jpg' %}'">
+                                <div class="card-badge partner-badge">
+                                    <i class="fas fa-user-tie"></i>
+                                </div>
+                            </div>
+                            <div class="card-status">
+                                <span class="status-badge active">Active</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="card-name">
+                                <a href="{% url 'view_regional_leader' partner.id %}">
+                                    {{ partner.get_full_name|truncatechars:25 }}
+                                </a>
+                            </h3>
+                            <p class="card-title" title="{{ partner.position_title|default:'Managing Partner' }}">
+                                {{ partner.position_title|default:"Managing Partner"|truncatechars:30 }}
+                            </p>
+                            <div class="card-meta">
+                                <div class="meta-item">
+                                    <i class="fas fa-user-tie"></i>
+                                    <span>Managing Partner</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-sort-numeric-up"></i>
+                                    <span>Order: {{ partner.display_order }}</span>
+                                </div>
+                            </div>
+                            <div class="card-contact">
+                                <a href="mailto:{{ partner.email }}" class="contact-email">
+                                    <i class="fas fa-envelope"></i>
+                                    <span>{{ partner.email|truncatechars:20 }}</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="card-actions">
+                                <a href="{% url 'view_regional_leader' partner.id %}" class="btn-action view">
+                                    <i class="fas fa-eye"></i>
+                                    <span class="action-text-mobile">View</span>
+                                </a>
+                                <a href="{% url 'edit_regional_leader' partner.id %}" class="btn-action edit">
+                                    <i class="fas fa-edit"></i>
+                                    <span class="action-text-mobile">Edit</span>
+                                </a>
+                                <a href="{% url 'delete_regional_leader' partner.id %}" class="btn-action deactivate">
+                                    <i class="fas fa-user-slash"></i>
+                                    <span class="action-text-mobile">Deactivate</span>
+                                </a>
+                                <!-- REPLACED: JavaScript modal with form-based permanent delete -->
+                                <form method="post" action="{% url 'delete_regional_leader' partner.id %}" style="display: inline;" onsubmit="return confirmPermanentDelete()">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="permanent" value="true">
+                                    <button type="submit" class="btn-action delete-permanent" title="Delete Permanently">
+                                        <i class="fas fa-trash-alt"></i>
+                                        <span class="action-text-mobile">Delete</span>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Inactive Leaders Section -->
+    {% if inactive_regional_leaders or inactive_managing_partners %}
+    <div class="leaders-section inactive">
+        <div class="section-header">
+            <div class="section-title">
+                <h2>
+                    <i class="fas fa-user-slash"></i>
+                    <span class="section-title-text">Inactive Leaders</span>
+                    <span class="count-badge">{{ inactive_regional_leaders.count|add:inactive_managing_partners.count }}</span>
+                </h2>
+                <p class="section-description">Previously active leaders who have been deactivated</p>
+            </div>
+            <div class="section-toggle">
+                <button class="btn-toggle-inactive" onclick="toggleInactiveSection()">
+                    <i class="fas fa-chevron-down"></i>
+                    <span class="toggle-text">Show Inactive</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="inactive-leaders-container" style="display: none;">
+            {% if inactive_regional_leaders %}
+            <div class="inactive-section">
+                <h4 class="inactive-section-title">
+                    <i class="fas fa-globe"></i>
+                    <span class="section-title-text">Regional Leaders ({{ inactive_regional_leaders.count }})</span>
+                </h4>
+                <div class="table-container">
+                    <table class="leaders-table inactive">
+                        <thead>
+                            <tr>
+                                <th class="col-name">Leader</th>
+                                <th class="col-region mobile-hidden">Region</th>
+                                <th class="col-contact mobile-hidden">Contact</th>
+                                <th class="col-date">Deactivated</th>
+                                <th class="col-actions">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for leader in inactive_regional_leaders %}
+                            <tr class="leader-row inactive">
+                                <td class="cell-info">
+                                    <div class="leader-info">
+                                        <div class="leader-name-row">
+                                            <span class="leader-name">
+                                                {{ leader.get_full_name }}
+                                            </span>
+                                            <span class="leader-id mobile-hidden">#RL{{ leader.id|stringformat:"03d" }}</span>
+                                        </div>
+                                        <div class="leader-details">
+                                            <span class="leader-title">
+                                                {{ leader.region_title|default:"Regional Leader"|truncatechars:30 }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="cell-region mobile-hidden">
+                                    <div class="region-badge" data-region="{{ leader.region }}">
+                                        <span class="region-icon">
+                                            {% if leader.region == 'africa' %}<i class="fas fa-globe-africa"></i>
+                                            {% elif leader.region == 'europe' %}<i class="fas fa-globe-europe"></i>
+                                            {% elif leader.region == 'asia' %}<i class="fas fa-globe-asia"></i>
+                                            {% else %}<i class="fas fa-globe"></i>{% endif %}
+                                        </span>
+                                        <span class="region-name">
+                                            {{ leader.get_region_display|truncatechars:15 }}
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="cell-contact mobile-hidden">
+                                    <div class="contact-info">
+                                        <a href="mailto:{{ leader.email }}"
+                                           class="contact-email"
+                                           title="{{ leader.email }}">
+                                            <i class="fas fa-envelope"></i>
+                                            <span>{{ leader.email|truncatechars:20 }}</span>
+                                        </a>
+                                    </div>
+                                </td>
+                                <td class="cell-date">
+                                    <span class="date-display">
+                                        <i class="fas fa-calendar-times"></i>
+                                        <span class="date-text">{{ leader.updated_at|date:"M d, Y" }}</span>
+                                    </span>
+                                </td>
+                                <td class="cell-actions">
+                                    <div class="action-buttons">
+                                        <a href="{% url 'activate_regional_leader' leader.id %}"
+                                           class="btn-action activate">
+                                            <i class="fas fa-check"></i>
+                                            <span class="action-text mobile-hidden">Activate</span>
+                                        </a>
+                                        <a href="{% url 'view_regional_leader' leader.id %}"
+                                           class="btn-action view">
+                                            <i class="fas fa-eye"></i>
+                                            <span class="action-text mobile-hidden">View</span>
+                                        </a>
+                                        <!-- REPLACED: JavaScript modal with form-based permanent delete -->
+                                        <form method="post" action="{% url 'delete_regional_leader' leader.id %}" style="display: inline;" onsubmit="return confirmPermanentDelete()">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="permanent" value="true">
+                                            <button type="submit" class="btn-action delete-permanent" title="Delete Permanently">
+                                                <i class="fas fa-trash-alt"></i>
+                                                <span class="action-text mobile-hidden">Delete</span>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if inactive_managing_partners %}
+            <div class="inactive-section">
+                <h4 class="inactive-section-title">
+                    <i class="fas fa-user-tie"></i>
+                    <span class="section-title-text">Managing Partners ({{ inactive_managing_partners.count }})</span>
+                </h4>
+                <div class="table-container">
+                    <table class="leaders-table inactive">
+                        <thead>
+                            <tr>
+                                <th class="col-name">Partner</th>
+                                <th class="col-contact mobile-hidden">Contact</th>
+                                <th class="col-date">Deactivated</th>
+                                <th class="col-actions">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for partner in inactive_managing_partners %}
+                            <tr class="leader-row inactive">
+                                <td class="cell-info">
+                                    <div class="leader-info">
+                                        <div class="leader-name-row">
+                                            <span class="leader-name">
+                                                {{ partner.get_full_name }}
+                                            </span>
+                                            <span class="leader-id mobile-hidden">#MP{{ partner.id|stringformat:"03d" }}</span>
+                                        </div>
+                                        <div class="leader-details">
+                                            <span class="leader-title">
+                                                {{ partner.position_title|default:"Managing Partner"|truncatechars:30 }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="cell-contact mobile-hidden">
+                                    <div class="contact-info">
+                                        <a href="mailto:{{ partner.email }}"
+                                           class="contact-email"
+                                           title="{{ partner.email }}">
+                                            <i class="fas fa-envelope"></i>
+                                            <span>{{ partner.email|truncatechars:20 }}</span>
+                                        </a>
+                                    </div>
+                                </td>
+                                <td class="cell-date">
+                                    <span class="date-display">
+                                        <i class="fas fa-calendar-times"></i>
+                                        <span class="date-text">{{ partner.updated_at|date:"M d, Y" }}</span>
+                                    </span>
+                                </td>
+                                <td class="cell-actions">
+                                    <div class="action-buttons">
+                                        <a href="{% url 'activate_regional_leader' partner.id %}"
+                                           class="btn-action activate">
+                                            <i class="fas fa-check"></i>
+                                            <span class="action-text mobile-hidden">Activate</span>
+                                        </a>
+                                        <a href="{% url 'view_regional_leader' partner.id %}"
+                                           class="btn-action view">
+                                            <i class="fas fa-eye"></i>
+                                            <span class="action-text mobile-hidden">View</span>
+                                        </a>
+                                        <!-- REPLACED: JavaScript modal with form-based permanent delete -->
+                                        <form method="post" action="{% url 'delete_regional_leader' partner.id %}" style="display: inline;" onsubmit="return confirmPermanentDelete()">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="permanent" value="true">
+                                            <button type="submit" class="btn-action delete-permanent" title="Delete Permanently">
+                                                <i class="fas fa-trash-alt"></i>
+                                                <span class="action-text mobile-hidden">Delete</span>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+/* ===== VARIABLES ===== */
+:root {
+    --primary: #4F46E5;
+    --primary-light: #818CF8;
+    --primary-dark: #3730A3;
+    --secondary: #10B981;
+    --danger: #EF4444;
+    --danger-dark: #DC2626;
+    --warning: #F59E0B;
+    --info: #3B82F6;
+    --text-dark: #1F2937;
+    --text-medium: #6B7280;
+    --text-light: #9CA3AF;
+    --bg-white: #FFFFFF;
+    --bg-light: #F9FAFB;
+    --bg-gray: #F3F4F6;
+    --border: #E5E7EB;
+    --border-light: #F3F4F6;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    --transition: all 0.2s ease;
+}
+
+/* ===== BASE STYLES ===== */
+.regional-leaders-management {
+    padding: 0.75rem;
+    margin: 0 auto;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    width: 100%;
+    box-sizing: border-box;
+    background: var(--bg-light);
+}
+
+/* ===== MOBILE-FIRST STYLES ===== */
+.mobile-hidden {
+    display: none !important;
+}
+
+@media (min-width: 768px) {
+    .mobile-hidden {
+        display: table-cell !important;
+    }
+
+    .action-text-mobile {
+        display: none !important;
+    }
+}
+
+/* ===== HEADER STYLES ===== */
+.management-header {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.management-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+}
+
+.header-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
+    position: relative;
+    z-index: 1;
+}
+
+.header-main {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.header-icon {
+    background: rgba(255, 255, 255, 0.2);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    backdrop-filter: blur(10px);
+    flex-shrink: 0;
+}
+
+.header-text {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.page-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.2;
+    word-wrap: break-word;
+}
+
+.page-subtitle {
+    opacity: 0.9;
+    margin: 0.25rem 0 0 0;
+    font-size: 0.9rem;
+    word-wrap: break-word;
+}
+
+.header-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+}
+
+.btn-add-leader {
+    background: white;
+    color: var(--primary);
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+    border: 2px solid transparent;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.95rem;
+    min-height: 44px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.btn-add-leader:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    background: var(--bg-light);
+}
+
+.btn-add-leader.managing-partner {
+    background: var(--secondary);
+    color: white;
+}
+
+.btn-add-leader.managing-partner:hover {
+    background: #0da271;
+}
+
+/* ===== STATS SUMMARY ===== */
+.stats-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.75rem;
+    position: relative;
+    z-index: 1;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    min-height: 70px;
+    box-sizing: border-box;
+}
+
+.stat-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+
+.stat-icon.active { background: rgba(16, 185, 129, 0.2); color: var(--secondary); }
+.stat-icon.inactive { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+.stat-icon.total { background: rgba(79, 70, 229, 0.2); color: var(--primary); }
+
+.stat-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+.stat-number {
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+    word-wrap: break-word;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    opacity: 0.9;
+    margin-top: 0.125rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+}
+
+/* ===== SEARCH AND FILTERS ===== */
+.search-filters-section {
+    margin-bottom: 1.25rem;
+}
+
+.search-container {
+    background: var(--bg-white);
+    border-radius: var(--radius-lg);
+    padding: 1rem;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.search-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+}
+
+.search-input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.search-icon {
+    position: absolute;
+    left: 1rem;
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 2.75rem;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: 0.95rem;
+    transition: var(--transition);
+    background: var(--bg-white);
+    box-sizing: border-box;
+    min-height: 44px;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.clear-search {
+    position: absolute;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: var(--text-light);
+    cursor: pointer;
+    padding: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    min-width: 44px;
+}
+
+.clear-search:hover {
+    color: var(--text-medium);
+}
+
+.search-button {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: var(--transition);
+    white-space: nowrap;
+    min-height: 44px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.search-button:hover {
+    background: var(--primary-dark);
+}
+
+.quick-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+
+.btn-action {
+    background: var(--bg-light);
+    border: 1px solid var(--border);
+    color: var(--text-medium);
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0.5rem;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+    text-decoration: none;
+    font-size: 0.9rem;
+    gap: 0.375rem;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+.btn-action:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.action-text-mobile {
+    display: inline;
+}
+
+/* ===== LEADERS SECTIONS ===== */
+.leaders-section {
+    background: var(--bg-white);
+    border-radius: var(--radius-lg);
+    margin-bottom: 1.25rem;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.leaders-section.inactive {
+    background: var(--bg-light);
+}
+
+.leaders-section.managing-partners {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(16, 185, 129, 0.02));
+    border: 1px solid rgba(16, 185, 129, 0.1);
+}
+
+.section-header {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.section-title h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    word-wrap: break-word;
+}
+
+.section-title h2 i {
+    color: var(--primary);
+}
+
+.leaders-section.managing-partners .section-title h2 i {
+    color: var(--secondary);
+}
+
+.count-badge {
+    background: var(--primary);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: 0.25rem;
+    white-space: nowrap;
+}
+
+.leaders-section.managing-partners .count-badge {
+    background: var(--secondary);
+}
+
+.section-description {
+    color: var(--text-medium);
+    margin: 0.125rem 0 0 0;
+    font-size: 0.85rem;
+    word-wrap: break-word;
+}
+
+.section-actions {
+    display: flex;
+    width: 100%;
+}
+
+.sort-select {
+    width: 100%;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+    background-color: var(--bg-white);
+    min-height: 44px;
+    box-sizing: border-box;
+}
+
+/* ===== TABLE STYLES ===== */
+.table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 0.5rem;
+    width: 100%;
+}
+
+.leaders-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    min-width: 600px;
+}
+
+.leaders-table thead {
+    background: var(--bg-light);
+}
+
+.leaders-table th {
+    padding: 0.75rem 0.5rem;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-dark);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    border-bottom: 2px solid var(--border);
+    word-wrap: break-word;
+}
+
+.leaders-table tbody tr {
+    transition: var(--transition);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.leaders-table tbody tr:hover {
+    background: var(--bg-light);
+}
+
+.leaders-table td {
+    padding: 0.75rem 0.5rem;
+    vertical-align: middle;
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+.leaders-table.inactive th {
+    background: var(--bg-gray);
+}
+
+/* ===== CELL STYLES ===== */
+.cell-photo {
+    width: 70px;
+}
+
+.leader-photo-container {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    margin: 0 auto;
+}
+
+.leader-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: var(--shadow-sm);
+}
+
+.photo-badge {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: var(--primary);
+    color: white;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.5rem;
+    border: 2px solid white;
+}
+
+.photo-badge.partner-badge {
+    background: var(--secondary);
+}
+
+.cell-info {
+    min-width: 180px;
+}
+
+.leader-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.leader-name-row {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    margin-bottom: 0.25rem;
+    flex-wrap: wrap;
+}
+
+.leader-name {
+    font-weight: 600;
+    color: var(--text-dark);
+    text-decoration: none;
+    transition: var(--transition);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+.leader-name:hover {
+    color: var(--primary);
+}
+
+.leader-id {
+    color: var(--text-light);
+    font-size: 0.75rem;
+    background: var(--bg-gray);
+    padding: 0.125rem 0.375rem;
+    border-radius: 8px;
+    white-space: nowrap;
+}
+
+.leader-title {
+    color: var(--text-medium);
+    font-size: 0.85rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.3;
+    margin-bottom: 0.375rem;
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+.leader-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.meta-item {
+    color: var(--text-light);
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    flex-wrap: wrap;
+}
+
+.meta-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100px;
+    word-wrap: break-word;
+}
+
+/* ===== REGION BADGE ===== */
+.cell-region {
+    min-width: 120px;
+}
+
+.region-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.375rem 0.5rem;
+    background: var(--bg-light);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    flex-wrap: wrap;
+}
+
+.region-icon {
+    font-size: 0.9rem;
+}
+
+.region-name {
+    font-size: 0.85rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 80px;
+    word-wrap: break-word;
+}
+
+/* ===== CONTACT CELL ===== */
+.cell-contact {
+    min-width: 150px;
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+
+.contact-email, .contact-linkedin {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    color: var(--text-medium);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: var(--transition);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+}
+
+.contact-email:hover, .contact-linkedin:hover {
+    color: var(--primary);
+}
+
+/* ===== ORDER CELL ===== */
+.cell-order {
+    width: 100px;
+}
+
+.order-display {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.order-number {
+    font-weight: 600;
+    color: var(--primary);
+    font-size: 1rem;
+    min-width: 25px;
+    text-align: center;
+    word-wrap: break-word;
+}
+
+.order-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+}
+
+.order-btn {
+    background: var(--bg-light);
+    border: 1px solid var(--border);
+    color: var(--text-medium);
+    width: 20px;
+    height: 20px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.6rem;
+    transition: var(--transition);
+    min-height: 20px;
+    min-width: 20px;
+}
+
+.order-btn:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+/* ===== STATUS BADGE ===== */
+.cell-status {
+    width: 90px;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+    word-wrap: break-word;
+}
+
+.status-badge.active {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--secondary);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.status-text {
+    white-space: nowrap;
+}
+
+/* ===== ACTION BUTTONS ===== */
+.cell-actions {
+    width: auto;
+    min-width: 180px;
+}
+
+.action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    justify-content: flex-start;
+}
+
+.btn-action {
+    padding: 0.375rem 0.5rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    text-decoration: none;
+    transition: var(--transition);
+    white-space: nowrap;
+    border: 1px solid transparent;
+    min-height: 36px;
+    flex: 1;
+    justify-content: center;
+    max-width: 120px;
+    min-width: 44px;
+    box-sizing: border-box;
+}
+
+.btn-action.view {
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--info);
+    border-color: rgba(59, 130, 246, 0.2);
+}
+
+.btn-action.edit {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--warning);
+    border-color: rgba(245, 158, 11, 0.2);
+}
+
+.btn-action.deactivate {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+    border-color: rgba(239, 68, 68, 0.2);
+}
+
+.btn-action.delete-permanent {
+    background: rgba(220, 38, 38, 0.1);
+    color: var(--danger-dark);
+    border-color: rgba(220, 38, 38, 0.2);
+}
+
+.btn-action.activate {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--secondary);
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+.btn-action:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-action.view:hover {
+    background: var(--info);
+    color: white;
+}
+
+.btn-action.edit:hover {
+    background: var(--warning);
+    color: white;
+}
+
+.btn-action.deactivate:hover {
+    background: var(--danger);
+    color: white;
+}
+
+.btn-action.delete-permanent:hover {
+    background: var(--danger-dark);
+    color: white;
+}
+
+.btn-action.activate:hover {
+    background: var(--secondary);
+    color: white;
+}
+
+.action-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 60px;
+    word-wrap: break-word;
+}
+
+/* ===== GRID VIEW ===== */
+.leaders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.leader-card {
+    background: var(--bg-white);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    min-height: 320px;
+}
+
+.leader-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.leader-card.partner-card {
+    border-color: rgba(16, 185, 129, 0.2);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.03), rgba(16, 185, 129, 0.01));
+}
+
+.card-header {
+    position: relative;
+    padding: 1rem 1rem 0 1rem;
+}
+
+.card-photo {
+    position: relative;
+    width: 70px;
+    height: 70px;
+    margin: 0 auto;
+}
+
+.card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: var(--shadow-sm);
+}
+
+.card-badge {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: var(--primary);
+    color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    font-weight: 600;
+    border: 2px solid white;
+}
+
+.card-badge.partner-badge {
+    background: var(--secondary);
+}
+
+.card-status {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
+.card-body {
+    padding: 1rem;
+    text-align: center;
+    flex: 1;
+}
+
+.card-name {
+    margin: 0 0 0.375rem 0;
+    font-size: 1rem;
+    line-height: 1.3;
+    word-wrap: break-word;
+}
+
+.card-name a {
+    color: var(--text-dark);
+    text-decoration: none;
+    transition: var(--transition);
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: break-word;
+}
+
+.card-name a:hover {
+    color: var(--primary);
+}
+
+.card-title {
+    color: var(--text-medium);
+    font-size: 0.85rem;
+    margin: 0 0 0.75rem 0;
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+}
+
+.card-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    margin-bottom: 0.75rem;
+}
+
+.card-meta .meta-item {
+    justify-content: center;
+    font-size: 0.8rem;
+    flex-wrap: wrap;
+}
+
+.card-contact {
+    margin-top: 0.75rem;
+}
+
+.contact-email {
+    color: var(--text-medium);
+    text-decoration: none;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+}
+
+.card-footer {
+    padding: 0.75rem 1rem;
+    background: var(--bg-light);
+    border-top: 1px solid var(--border);
+}
+
+.card-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+/* ===== INACTIVE SECTION STYLES ===== */
+.inactive-section {
+    margin-bottom: 1.5rem;
+}
+
+.inactive-section:last-child {
+    margin-bottom: 0;
+}
+
+.inactive-section-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin: 0 0 0.75rem 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    flex-wrap: wrap;
+    word-wrap: break-word;
+}
+
+.toggle-text {
+    white-space: nowrap;
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+    padding: 2rem 1rem;
+    text-align: center;
+}
+
+.empty-icon {
+    font-size: 3rem;
+    color: var(--text-light);
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.empty-title {
+    font-size: 1.25rem;
+    color: var(--text-dark);
+    margin: 0 0 0.5rem 0;
+    font-weight: 600;
+    word-wrap: break-word;
+}
+
+.empty-description {
+    color: var(--text-medium);
+    margin: 0 0 1.5rem 0;
+    max-width: 300px;
+    margin: 0 auto 1.5rem;
+    line-height: 1.5;
+    font-size: 0.9rem;
+    word-wrap: break-word;
+}
+
+.btn-add-first {
+    background: var(--primary);
+    color: white;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+    font-size: 0.9rem;
+    white-space: nowrap;
+    min-height: 44px;
+    box-sizing: border-box;
+}
+
+.btn-add-first:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+/* ===== RESPONSIVE STYLES ===== */
+
+/* Small Mobile (max-width: 360px) */
+@media (max-width: 360px) {
+    .regional-leaders-management {
+        padding: 0.5rem;
+    }
+
+    .management-header {
+        padding: 1rem;
+    }
+
+    .header-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+
+    .page-title {
+        font-size: 1.125rem;
+    }
+
+    .page-subtitle {
+        font-size: 0.85rem;
+    }
+
+    .stats-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .leaders-table {
+        min-width: 500px;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-action {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .leaders-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Mobile (min-width: 361px) and (max-width: 575px) */
+@media (min-width: 361px) and (max-width: 575px) {
+    .stats-summary {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .leader-name {
+        max-width: 120px;
+    }
+
+    .leaders-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+}
+
+/* Tablet (576px and up) */
+@media (min-width: 576px) {
+    .regional-leaders-management {
+        padding: 1.5rem;
+    }
+
+    .management-header {
+        padding: 1.5rem;
+    }
+
+    .page-title {
+        font-size: 1.5rem;
+    }
+
+    .header-actions {
+        flex-direction: row;
+    }
+
+    .btn-add-leader {
+        width: auto;
+    }
+
+    .search-form {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .search-input {
+        flex: 1;
+    }
+
+    .search-button {
+        width: auto;
+        min-width: 100px;
+    }
+
+    .action-buttons {
+        flex-wrap: nowrap;
+    }
+
+    .btn-action {
+        flex: none;
+        max-width: none;
+    }
+
+    .stats-summary {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Desktop (768px and up) */
+@media (min-width: 768px) {
+    .header-content {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .header-actions {
+        width: auto;
+        flex-direction: row;
+    }
+
+    .btn-add-leader {
+        width: auto;
+    }
+
+    .search-container {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .search-form {
+        flex: 1;
+    }
+
+    .section-header {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .section-actions {
+        width: auto;
+    }
+
+    .sort-select {
+        width: auto;
+        min-width: 150px;
+    }
+
+    .leaders-table {
+        min-width: auto;
+    }
+
+    .cell-actions {
+        min-width: 250px;
+    }
+
+    .btn-action {
+        padding: 0.5rem 0.75rem;
+    }
+
+    .action-text {
+        display: inline;
+        max-width: none;
+    }
+
+    .action-text-mobile {
+        display: none !important;
+    }
+
+    .mobile-hidden {
+        display: table-cell !important;
+    }
+
+    .section-title-text {
+        font-size: inherit;
+    }
+
+    .page-title {
+        font-size: 1.75rem;
+    }
+}
+
+/* Large Desktop (992px and up) */
+@media (min-width: 992px) {
+    .regional-leaders-management {
+        max-width: 1400px;
+        padding: 2rem;
+    }
+
+    .management-header {
+        padding: 2rem;
+    }
+
+    .page-title {
+        font-size: 2rem;
+    }
+
+    .stats-summary {
+        grid-template-columns: repeat(3, minmax(180px, 1fr));
+        gap: 1rem;
+    }
+
+    .stat-card {
+        padding: 1.25rem;
+    }
+
+    .leader-name {
+        max-width: 200px;
+    }
+
+    .leaders-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+        padding: 1.5rem;
+    }
+}
+
+/* ===== TOUCH DEVICE OPTIMIZATIONS ===== */
+@media (hover: none) and (pointer: coarse) {
+    .btn-action,
+    .order-btn,
+    .search-button,
+    .btn-add-leader,
+    .btn-add-first,
+    .btn-toggle-inactive {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    .leader-row {
+        padding: 0.5rem 0;
+    }
+
+    .action-buttons {
+        gap: 0.5rem;
+    }
+
+    .search-input,
+    .sort-select {
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+
+    .leaders-table {
+        font-size: 14px;
+    }
+}
+
+/* ===== DARK MODE SUPPORT ===== */
+@media (prefers-color-scheme: dark) {
+    .regional-leaders-management {
+        background: #1a1a1a;
+        color: #e5e5e5;
+    }
+
+    .management-header {
+        background: linear-gradient(135deg, #2d1b69, #1a0b3d);
+    }
+
+    .leaders-section,
+    .search-container,
+    .leader-card {
+        background: #2d2d2d;
+        border-color: #404040;
+    }
+
+    .leaders-section.inactive {
+        background: #252525;
+    }
+
+    .search-input {
+        background: #333;
+        border-color: #404040;
+        color: #e5e5e5;
+    }
+
+    .sort-select {
+        background: #333;
+        border-color: #404040;
+        color: #e5e5e5;
+    }
+
+    .stat-card {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .leaders-table thead {
+        background: #333;
+    }
+
+    .leaders-table tbody tr:hover {
+        background: #333;
+    }
+
+    .leader-name {
+        color: #e5e5e5;
+    }
+
+    .leader-title,
+    .region-name,
+    .contact-email {
+        color: #a0a0a0;
+    }
+
+    .btn-action {
+        background: #333;
+        border-color: #404040;
+        color: #d0d0d0;
+    }
+
+    .btn-action.view:hover,
+    .btn-action.edit:hover,
+    .btn-action.deactivate:hover,
+    .btn-action.delete-permanent:hover,
+    .btn-action.activate:hover {
+        color: white;
+    }
+
+    .empty-title {
+        color: #e5e5e5;
+    }
+
+    .empty-description {
+        color: #a0a0a0;
+    }
+}
+
+/* ===== PRINT STYLES ===== */
+@media print {
+    .regional-leaders-management {
+        background: white;
+        color: black;
+    }
+
+    .management-header,
+    .search-filters-section,
+    .action-buttons,
+    .btn-add-leader,
+    .btn-toggle-inactive {
+        display: none;
+    }
+
+    .leaders-section {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+
+    .leaders-table {
+        min-width: auto;
+    }
+
+    .leader-photo {
+        filter: grayscale(100%);
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize tooltips
+    const tooltips = [].slice.call(document.querySelectorAll('[title]'));
+    tooltips.map(function(tooltip) {
+        return new bootstrap.Tooltip(tooltip);
+    });
+
+    // Region badge colors
+    const regionColors = {
+        'africa': '#10B981',
+        'europe': '#3B82F6',
+        'asia': '#EF4444',
+        'north_america': '#F59E0B',
+        'south_america': '#8B5CF6',
+        'oceania': '#EC4899',
+        'middle_east': '#6366F1'
+    };
+
+    // Apply region colors to badges
+    document.querySelectorAll('[data-region]').forEach(badge => {
+        const region = badge.dataset.region;
+        if (regionColors[region]) {
+            badge.style.backgroundColor = regionColors[region];
+        }
+    });
+
+    // Mobile detection
+    const isMobile = window.innerWidth <= 767;
+
+    // Handle mobile layout adjustments
+    function handleMobileLayout() {
+        const isMobileView = window.innerWidth <= 767;
+
+        // Adjust action button text on mobile
+        document.querySelectorAll('.btn-action .action-text').forEach(el => {
+            if (isMobileView) {
+                el.classList.add('mobile-hidden');
+            } else {
+                el.classList.remove('mobile-hidden');
+            }
+        });
+
+        // Adjust table column visibility
+        document.querySelectorAll('.mobile-hidden').forEach(el => {
+            if (isMobileView) {
+                el.style.display = 'none';
+            } else {
+                el.style.display = '';
+            }
+        });
+    }
+
+    // Initial call
+    handleMobileLayout();
+
+    // Resize listener
+    window.addEventListener('resize', handleMobileLayout);
+});
+
+// JavaScript Functions
+function clearSearch() {
+    document.querySelector('.search-input').value = '';
+    document.querySelector('.search-form').submit();
+}
+
+function refreshPage() {
+    window.location.reload();
+}
+
+function toggleView(viewType) {
+    const tableView = document.querySelector('.table-view');
+    const gridView = document.querySelector('.grid-view');
+
+    if (viewType === 'grid') {
+        tableView.style.display = 'none';
+        gridView.style.display = 'block';
+        localStorage.setItem('regionalLeadersView', 'grid');
+    } else if (viewType === 'compact') {
+        tableView.style.display = 'block';
+        gridView.style.display = 'none';
+        document.querySelector('.leaders-table').classList.add('compact');
+        localStorage.setItem('regionalLeadersView', 'compact');
+    } else {
+        tableView.style.display = 'block';
+        gridView.style.display = 'none';
+        document.querySelector('.leaders-table')?.classList.remove('compact');
+        localStorage.setItem('regionalLeadersView', 'table');
+    }
+}
+
+function sortLeaders(sortBy, leaderType) {
+    // Implementation for sorting leaders
+    alert(`Sorting ${leaderType} leaders by ${sortBy} would be implemented here`);
+}
+
+function changeOrder(leaderId, direction, leaderType) {
+    // Implementation for changing order
+    alert(`Moving ${leaderType} leader ${leaderId} ${direction} would be implemented here`);
+}
+
+function toggleInactiveSection() {
+    const container = document.querySelector('.inactive-leaders-container');
+    const button = document.querySelector('.btn-toggle-inactive');
+    const icon = button.querySelector('i');
+    const text = button.querySelector('.toggle-text');
+
+    if (container.style.display === 'none') {
+        container.style.display = 'block';
+        icon.className = 'fas fa-chevron-up';
+        text.textContent = 'Hide Inactive';
+    } else {
+        container.style.display = 'none';
+        icon.className = 'fas fa-chevron-down';
+        text.textContent = 'Show Inactive';
+    }
+}
+
+// REPLACED: Permanent Delete Functions with form-based confirmation
+function confirmPermanentDelete() {
+    return confirm('WARNING: This will permanently delete the leader. This action cannot be undone!\n\nAre you absolutely sure?');
+}
+
+// Restore view preference
+window.addEventListener('load', function() {
+    const savedView = localStorage.getItem('regionalLeadersView');
+    if (savedView) {
+        toggleView(savedView);
+    }
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown', function(e) {
+    // Ctrl/Cmd + F for search
+    if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+        e.preventDefault();
+        document.querySelector('.search-input').focus();
+    }
+
+    // Ctrl/Cmd + N for new leader
+    if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+        e.preventDefault();
+        window.location.href = "{% url 'add_regional_leader' %}";
+    }
+});
+
+// Filter by region
+function filterByRegion(region) {
+    const rows = document.querySelectorAll('.leader-row[data-leader-type="regional"]');
+    rows.forEach(row => {
+        const rowRegion = row.querySelector('[data-region]')?.dataset.region;
+        if (!region || rowRegion === region) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+
+// Quick search for table
+const searchInput = document.querySelector('.search-input');
+if (searchInput) {
+    searchInput.addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        const rows = document.querySelectorAll('.leader-row');
+
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(searchTerm) ? '' : 'none';
+        });
+    });
+}
+
+// Mobile menu toggle for action buttons on very small screens
+function toggleMobileActions(rowId) {
+    const actionButtons = document.querySelector(`[data-row="${rowId}"] .action-buttons`);
+    if (actionButtons) {
+        actionButtons.classList.toggle('mobile-expanded');
+    }
+}
+
+// Touch-friendly enhancements
+if ('ontouchstart' in window) {
+    document.addEventListener('DOMContentLoaded', function() {
+        // Increase tap targets
+        const clickableElements = document.querySelectorAll('a, button, .btn-action, .order-btn, .search-button, .btn-add-leader');
+        clickableElements.forEach(el => {
+            el.style.minHeight = '44px';
+            el.style.minWidth = '44px';
+            el.style.padding = '0.75rem 1rem';
+        });
+
+        // Prevent zoom on double-tap for inputs
+        const inputs = document.querySelectorAll('input, textarea, select');
+        inputs.forEach(input => {
+            input.addEventListener('touchstart', function(e) {
+                if (document.activeElement !== this) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+        });
+
+        // Add touch feedback
+        document.querySelectorAll('.leader-row, .leader-card').forEach(el => {
+            el.addEventListener('touchstart', function() {
+                this.style.transition = 'all 0.1s ease';
+                this.style.transform = 'scale(0.98)';
+            });
+
+            el.addEventListener('touchend', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    });
+}
+
+// Lazy loading for images
+if ('IntersectionObserver' in window) {
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                img.src = img.dataset.src;
+                img.classList.remove('lazy');
+                observer.unobserve(img);
+            }
+        });
+    });
+
+    document.querySelectorAll('img.lazy').forEach(img => {
+        imageObserver.observe(img);
+    });
+}
+</script>
+{% endblock %}

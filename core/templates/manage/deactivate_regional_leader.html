@@ -1,0 +1,1301 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="delete-leader-management">
+    <!-- Header Section -->
+    <div class="delete-header">
+        <div class="header-content">
+            <div class="header-main">
+                <div class="header-icon warning-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="header-text">
+                    <h1 class="page-title">Confirm Deactivation</h1>
+                    <p class="page-subtitle">
+                        You are about to deactivate a leader profile
+                    </p>
+                </div>
+            </div>
+            <a href="{% url 'manage_regional_leaders' %}" class="btn-back-cancel">
+                <i class="fas fa-arrow-left"></i>
+                <span>Cancel & Return</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="delete-content">
+        <div class="warning-container">
+            <!-- Warning Alert -->
+            <div class="warning-alert">
+                <div class="warning-icon-large">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <div class="warning-text">
+                    <h3 class="warning-title">Important Notice</h3>
+                    <p class="warning-description">
+                        Deactivating this leader will remove them from public view on the website. 
+                        The profile information will be preserved in the database and can be reactivated later.
+                    </p>
+                    <div class="warning-details">
+                        <div class="detail-item">
+                            <i class="fas fa-eye-slash"></i>
+                            <span>Will not appear on public website</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-database"></i>
+                            <span>Data preserved in database</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-history"></i>
+                            <span>Can be reactivated anytime</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leader Information Card -->
+            <div class="leader-info-card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-user"></i>
+                        Leader Profile Details
+                    </h3>
+                </div>
+                <div class="card-content">
+                    <div class="leader-summary">
+                        <div class="leader-avatar">
+                            {% if leader.get_profile_image_url %}
+                            <img src="{{ leader.get_profile_image_url }}" 
+                                 alt="{{ leader.get_full_name }}"
+                                 class="avatar-image"
+                                 onerror="this.onerror=null; this.src='{% static 'images/default-profile.jpg' %}'">
+                            {% else %}
+                            <div class="avatar-placeholder">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                            {% endif %}
+                            <div class="avatar-status">
+                                <span class="status-badge active">
+                                    <i class="fas fa-check-circle"></i>
+                                    Currently Active
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="leader-details">
+                            <h4 class="leader-name">{{ leader.get_full_name }}</h4>
+                            
+                            <div class="detail-row">
+                                <span class="detail-label">
+                                    <i class="fas fa-tag"></i>
+                                    Role:
+                                </span>
+                                <span class="detail-value">
+                                    {% if is_managing_partner %}
+                                        Managing Partner
+                                    {% else %}
+                                        Regional Leader
+                                    {% endif %}
+                                </span>
+                            </div>
+                            
+                            {% if not is_managing_partner %}
+                            <div class="detail-row">
+                                <span class="detail-label">
+                                    <i class="fas fa-globe"></i>
+                                    Region:
+                                </span>
+                                <span class="detail-value">
+                                    {{ leader.get_region_display }}
+                                </span>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="detail-row">
+                                <span class="detail-label">
+                                    <i class="fas fa-briefcase"></i>
+                                    Position:
+                                </span>
+                                <span class="detail-value">
+                                    {% if is_managing_partner %}
+                                        {{ leader.position_title }}
+                                    {% else %}
+                                        {{ leader.region_title }}
+                                    {% endif %}
+                                </span>
+                            </div>
+                            
+                            <div class="detail-row">
+                                <span class="detail-label">
+                                    <i class="fas fa-envelope"></i>
+                                    Email:
+                                </span>
+                                <span class="detail-value email-value">
+                                    {{ leader.email }}
+                                </span>
+                            </div>
+                            
+                            {% if leader.phone %}
+                            <div class="detail-row">
+                                <span class="detail-label">
+                                    <i class="fas fa-phone"></i>
+                                    Phone:
+                                </span>
+                                <span class="detail-value">
+                                    {{ leader.phone }}
+                                </span>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="detail-row">
+                                <span class="detail-label">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    Display Order:
+                                </span>
+                                <span class="detail-value">
+                                    {{ leader.display_order }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Impact Preview -->
+                    <div class="impact-preview">
+                        <h5 class="impact-title">
+                            <i class="fas fa-eye"></i>
+                            Impact After Deactivation
+                        </h5>
+                        <div class="impact-items">
+                            <div class="impact-item">
+                                <div class="impact-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="impact-text">
+                                    <span class="impact-label">Will remain in:</span>
+                                    <span class="impact-value">Database records</span>
+                                </div>
+                            </div>
+                            <div class="impact-item">
+                                <div class="impact-icon">
+                                    <i class="fas fa-times-circle"></i>
+                                </div>
+                                <div class="impact-text">
+                                    <span class="impact-label">Will be removed from:</span>
+                                    <span class="impact-value">Public website listing</span>
+                                </div>
+                            </div>
+                            <div class="impact-item">
+                                <div class="impact-icon">
+                                    <i class="fas fa-history"></i>
+                                </div>
+                                <div class="impact-text">
+                                    <span class="impact-label">Can be restored:</span>
+                                    <span class="impact-value">Via "Inactive Leaders" section</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Confirmation Form -->
+            <div class="confirmation-section">
+                <div class="confirmation-header">
+                    <h3 class="confirmation-title">
+                        <i class="fas fa-shield-alt"></i>
+                        Final Confirmation
+                    </h3>
+                    <p class="confirmation-description">
+                        Please confirm that you want to deactivate this leader profile. 
+                        This action can be undone by reactivating the profile later.
+                    </p>
+                </div>
+                
+                <form method="post" class="confirmation-form" id="deactivateForm">
+                    {% csrf_token %}
+                    
+                    <div class="confirmation-checkbox">
+                        <input type="checkbox" id="confirmAction" name="confirm_action" class="confirm-checkbox" required>
+                        <label for="confirmAction" class="checkbox-label">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-text">
+                                I understand that this will deactivate 
+                                <strong>{{ leader.get_full_name }}</strong> 
+                                from public view
+                            </span>
+                        </label>
+                    </div>
+                    
+                    <div class="confirmation-checkbox">
+                        <input type="checkbox" id="confirmReversible" name="confirm_reversible" class="confirm-checkbox" required>
+                        <label for="confirmReversible" class="checkbox-label">
+                            <span class="checkbox-custom"></span>
+                            <span class="checkbox-text">
+                                I understand this action is reversible and the profile 
+                                can be reactivated later
+                            </span>
+                        </label>
+                    </div>
+                    
+                    <!-- Optional Reason -->
+                    <div class="reason-section">
+                        <label for="deactivationReason" class="reason-label">
+                            <i class="fas fa-comment-alt"></i>
+                            Reason for Deactivation (Optional)
+                        </label>
+                        <textarea 
+                            id="deactivationReason" 
+                            name="deactivation_reason" 
+                            class="reason-textarea" 
+                            placeholder="Enter reason for deactivation (optional)..."
+                            rows="3"
+                            maxlength="500"></textarea>
+                        <div class="char-counter">
+                            <span class="char-count">0</span>/500 characters
+                        </div>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <a href="{% url 'manage_regional_leaders' %}" class="btn-cancel">
+                            <i class="fas fa-times"></i>
+                            Cancel Deactivation
+                        </a>
+                        <button type="submit" class="btn-confirm-deactivate" id="confirmBtn" disabled>
+                            <i class="fas fa-user-slash"></i>
+                            Confirm Deactivation
+                        </button>
+                    </div>
+                </form>
+                
+                <!-- Additional Warning -->
+                <div class="final-warning">
+                    <div class="warning-note">
+                        <i class="fas fa-info-circle"></i>
+                        <span>
+                            This action will take effect immediately. 
+                            You can find deactivated leaders in the "Inactive Leaders" section.
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* ===== VARIABLES ===== */
+:root {
+    --primary: #4F46E5;
+    --primary-light: #818CF8;
+    --primary-dark: #3730A3;
+    --secondary: #10B981;
+    --danger: #EF4444;
+    --warning: #F59E0B;
+    --info: #3B82F6;
+    --success: #10B981;
+    --text-dark: #1F2937;
+    --text-medium: #6B7280;
+    --text-light: #9CA3AF;
+    --bg-white: #FFFFFF;
+    --bg-light: #F9FAFB;
+    --bg-gray: #F3F4F6;
+    --border: #E5E7EB;
+    --border-light: #F3F4F6;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    --transition: all 0.2s ease;
+}
+
+/* ===== BASE STYLES ===== */
+.delete-leader-management {
+    padding: 1rem;
+    max-width: 1000px; /* INCREASED FROM 800px */
+    margin: 0 auto;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    background: var(--bg-light);
+}
+
+/* ===== HEADER STYLES ===== */
+.delete-header {
+    background: linear-gradient(135deg, var(--warning), #D97706);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.delete-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+}
+
+.header-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.header-main {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.warning-icon {
+    background: rgba(255, 255, 255, 0.2);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    backdrop-filter: blur(10px);
+    flex-shrink: 0;
+}
+
+.header-text {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.page-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.page-subtitle {
+    opacity: 0.9;
+    margin: 0.5rem 0 0 0;
+    font-size: 1rem;
+}
+
+.btn-back-cancel {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+}
+
+.btn-back-cancel:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateX(-2px);
+    color: white;
+}
+
+/* ===== WARNING CONTAINER ===== */
+.warning-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Warning Alert */
+.warning-alert {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(245, 158, 11, 0.05));
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.warning-icon-large {
+    color: var(--warning);
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+}
+
+.warning-text {
+    flex: 1;
+}
+
+.warning-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--warning);
+    margin: 0 0 0.5rem 0;
+}
+
+.warning-description {
+    color: var(--text-dark);
+    margin: 0 0 1rem 0;
+    line-height: 1.5;
+}
+
+.warning-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--text-medium);
+    font-size: 0.9rem;
+}
+
+.detail-item i {
+    color: var(--warning);
+    width: 16px;
+}
+
+/* Leader Information Card */
+.leader-info-card {
+    background: var(--bg-white);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border);
+}
+
+.card-header {
+    background: var(--bg-light);
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.card-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.card-title i {
+    color: var(--primary);
+}
+
+.card-content {
+    padding: 1.5rem;
+}
+
+.leader-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.leader-avatar {
+    text-align: center;
+    position: relative;
+}
+
+.avatar-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid white;
+    box-shadow: var(--shadow-md);
+    margin: 0 auto;
+    display: block;
+}
+
+.avatar-placeholder {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: var(--bg-gray);
+    border: 4px solid white;
+    box-shadow: var(--shadow-md);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-light);
+    font-size: 3rem;
+}
+
+.avatar-status {
+    margin-top: 0.75rem;
+}
+
+.status-badge {
+    padding: 0.375rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.status-badge.active {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--secondary);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.leader-details {
+    flex: 1;
+}
+
+.leader-name {
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0 0 1rem 0;
+    text-align: center;
+}
+
+.detail-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-bottom: 0.75rem;
+    padding: 0.75rem;
+    background: var(--bg-light);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-light);
+}
+
+.detail-label {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.detail-label i {
+    width: 16px;
+}
+
+.detail-value {
+    font-size: 0.95rem;
+    color: var(--text-dark);
+    font-weight: 500;
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+.email-value {
+    color: var(--primary);
+    word-break: break-all;
+}
+
+/* Impact Preview */
+.impact-preview {
+    background: var(--bg-light);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    border: 1px solid var(--border-light);
+}
+
+.impact-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin: 0 0 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.impact-title i {
+    color: var(--primary);
+}
+
+.impact-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.impact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: var(--bg-white);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+}
+
+.impact-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.impact-item:nth-child(1) .impact-icon {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--secondary);
+}
+
+.impact-item:nth-child(2) .impact-icon {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+}
+
+.impact-item:nth-child(3) .impact-icon {
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--info);
+}
+
+.impact-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+}
+
+.impact-label {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+.impact-value {
+    font-size: 0.9rem;
+    color: var(--text-dark);
+    font-weight: 500;
+}
+
+/* Confirmation Section */
+.confirmation-section {
+    background: var(--bg-white);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border);
+}
+
+.confirmation-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.confirmation-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin: 0 0 0.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.confirmation-title i {
+    color: var(--primary);
+}
+
+.confirmation-description {
+    color: var(--text-medium);
+    margin: 0;
+    line-height: 1.5;
+    font-size: 0.95rem;
+}
+
+/* Confirmation Checkboxes */
+.confirmation-checkbox {
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+/* Hiding the default checkbox */
+.confirmation-checkbox input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    cursor: pointer;
+    padding: 0.75rem;
+    background: var(--bg-light);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    transition: var(--transition);
+    user-select: none;
+}
+
+.checkbox-label:hover {
+    border-color: var(--primary-light);
+    background: var(--bg-gray);
+}
+
+.checkbox-custom {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    background: var(--bg-white);
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+    position: relative;
+    transition: var(--transition);
+}
+
+.confirmation-checkbox input[type="checkbox"]:checked + .checkbox-label .checkbox-custom {
+    background: var(--danger);
+    border-color: var(--danger);
+}
+
+.confirmation-checkbox input[type="checkbox"]:checked + .checkbox-label .checkbox-custom::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+
+.checkbox-text {
+    flex: 1;
+    color: var(--text-dark);
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.checkbox-text strong {
+    color: var(--danger);
+    font-weight: 600;
+}
+
+/* Reason Section */
+.reason-section {
+    margin: 1.5rem 0;
+    padding: 1.25rem;
+    background: var(--bg-light);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-light);
+}
+
+.reason-label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.reason-label i {
+    color: var(--primary);
+}
+
+.reason-textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: 0.95rem;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 80px;
+    transition: var(--transition);
+    background: var(--bg-white);
+}
+
+.reason-textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.char-counter {
+    text-align: right;
+    font-size: 0.75rem;
+    color: var(--text-light);
+    margin-top: 0.25rem;
+}
+
+.char-count {
+    font-weight: 600;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 2rem 0 1.5rem;
+}
+
+.btn-cancel,
+.btn-confirm-deactivate {
+    padding: 0.875rem 1.5rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 1rem;
+    text-decoration: none;
+    width: 100%;
+    text-align: center;
+    min-height: 52px;
+    border: 2px solid transparent;
+}
+
+.btn-cancel {
+    background: var(--bg-white);
+    color: var(--text-medium);
+    border-color: var(--border);
+}
+
+.btn-cancel:hover {
+    background: var(--bg-gray);
+    border-color: var(--text-medium);
+    transform: translateY(-2px);
+}
+
+.btn-confirm-deactivate {
+    background: var(--danger);
+    color: white;
+    border-color: var(--danger);
+}
+
+.btn-confirm-deactivate:hover:not(:disabled) {
+    background: #DC2626;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-confirm-deactivate:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* Final Warning */
+.final-warning {
+    padding: 1rem;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.05), rgba(239, 68, 68, 0.02));
+    border: 1px solid rgba(239, 68, 68, 0.1);
+    border-radius: var(--radius-lg);
+    margin-top: 1.5rem;
+}
+
+.warning-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    color: var(--danger);
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.warning-note i {
+    margin-top: 0.125rem;
+    flex-shrink: 0;
+}
+
+/* ===== RESPONSIVE STYLES ===== */
+
+/* Mobile (default) */
+@media (max-width: 575px) {
+    .delete-leader-management {
+        padding: 0.75rem;
+    }
+    
+    .delete-header {
+        padding: 1.25rem;
+    }
+    
+    .warning-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.25rem;
+    }
+    
+    .page-title {
+        font-size: 1.25rem;
+    }
+    
+    .warning-alert {
+        padding: 1.25rem;
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .warning-icon-large {
+        font-size: 1.75rem;
+    }
+    
+    .card-content {
+        padding: 1.25rem;
+    }
+    
+    .leader-summary {
+        gap: 1.25rem;
+    }
+    
+    .avatar-image,
+    .avatar-placeholder {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .avatar-placeholder {
+        font-size: 2.5rem;
+    }
+    
+    .detail-row {
+        padding: 0.625rem;
+    }
+    
+    .btn-cancel,
+    .btn-confirm-deactivate {
+        padding: 0.75rem 1.25rem;
+        min-height: 48px;
+    }
+}
+
+/* Tablet (576px and up) */
+@media (min-width: 576px) {
+    .header-content {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .btn-back-cancel {
+        width: auto;
+        min-width: 180px;
+    }
+    
+    .leader-summary {
+        flex-direction: row;
+        align-items: flex-start;
+        text-align: left;
+    }
+    
+    .leader-avatar {
+        flex: 0 0 auto;
+    }
+    
+    .leader-name {
+        text-align: left;
+    }
+    
+    .action-buttons {
+        flex-direction: row;
+    }
+    
+    .btn-cancel,
+    .btn-confirm-deactivate {
+        width: 50%;
+    }
+}
+
+/* Desktop (768px and up) */
+@media (min-width: 768px) {
+    .delete-leader-management {
+        padding: 2rem;
+    }
+    
+    .delete-header {
+        padding: 2rem;
+    }
+    
+    .warning-alert {
+        flex-direction: row;
+        text-align: left;
+        padding: 2rem;
+    }
+    
+    .warning-details {
+        flex-direction: row;
+        gap: 1.5rem;
+    }
+    
+    .impact-items {
+        flex-direction: row;
+        gap: 1rem;
+    }
+    
+    .impact-item {
+        flex: 1;
+    }
+    
+    .avatar-image,
+    .avatar-placeholder {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+/* Large Desktop (992px and up) */
+@media (min-width: 992px) {
+    .delete-leader-management {
+        max-width: 1200px; /* WIDER FOR LARGE DESKTOP */
+    }
+    
+    .warning-container {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+}
+
+/* Extra Large Desktop (1200px and up) */
+@media (min-width: 1200px) {
+    .delete-leader-management {
+        max-width: 1400px; /* EVEN WIDER FOR EXTRA LARGE SCREENS */
+    }
+    
+    .warning-container {
+        max-width: 1200px;
+    }
+}
+
+/* ===== DARK MODE SUPPORT ===== */
+@media (prefers-color-scheme: dark) {
+    .delete-leader-management {
+        background: #1a1a1a;
+    }
+    
+    .delete-header {
+        background: linear-gradient(135deg, #92400E, #78350F);
+    }
+    
+    .warning-alert {
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.05));
+        border-color: rgba(245, 158, 11, 0.3);
+    }
+    
+    .leader-info-card,
+    .confirmation-section {
+        background: #2d2d2d;
+        border-color: #404040;
+    }
+    
+    .card-header {
+        background: #252525;
+        border-color: #404040;
+    }
+    
+    .card-title,
+    .leader-name,
+    .detail-value,
+    .checkbox-text,
+    .confirmation-title {
+        color: #e5e5e5;
+    }
+    
+    .warning-description,
+    .confirmation-description {
+        color: #d0d0d0;
+    }
+    
+    .detail-row,
+    .checkbox-label,
+    .reason-section {
+        background: #252525;
+        border-color: #404040;
+    }
+    
+    .detail-label,
+    .impact-label {
+        color: #a0a0a0;
+    }
+    
+    .impact-preview {
+        background: #252525;
+        border-color: #404040;
+    }
+    
+    .impact-item {
+        background: #2d2d2d;
+        border-color: #404040;
+    }
+    
+    .impact-value {
+        color: #e5e5e5;
+    }
+    
+    .reason-textarea {
+        background: #252525;
+        border-color: #404040;
+        color: #e5e5e5;
+    }
+    
+    .btn-cancel {
+        background: #333;
+        color: #d0d0d0;
+        border-color: #555;
+    }
+    
+    .btn-cancel:hover {
+        background: #404040;
+        border-color: #777;
+    }
+    
+    .final-warning {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05));
+        border-color: rgba(239, 68, 68, 0.2);
+    }
+    
+    .warning-note {
+        color: #FCA5A5;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Setup character counter for reason textarea
+    const reasonTextarea = document.getElementById('deactivationReason');
+    const charCount = document.querySelector('.char-count');
+    
+    if (reasonTextarea && charCount) {
+        reasonTextarea.addEventListener('input', function() {
+            charCount.textContent = this.value.length;
+            
+            // Add warning at 90% capacity
+            if (this.value.length > 450) {
+                charCount.style.color = 'var(--warning)';
+            } else {
+                charCount.style.color = '';
+            }
+        });
+        
+        // Initial count
+        charCount.textContent = reasonTextarea.value.length;
+    }
+    
+    // Enable/disable confirm button based on checkboxes
+    const confirmCheckboxes = document.querySelectorAll('.confirm-checkbox');
+    const confirmBtn = document.getElementById('confirmBtn');
+    
+    function updateConfirmButton() {
+        const allChecked = Array.from(confirmCheckboxes).every(checkbox => checkbox.checked);
+        confirmBtn.disabled = !allChecked;
+    }
+    
+    confirmCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateConfirmButton);
+    });
+    
+    // Initial state
+    updateConfirmButton();
+    
+    // Form submission confirmation
+    const form = document.getElementById('deactivateForm');
+    
+    form.addEventListener('submit', function(e) {
+        // Optional: Add additional confirmation
+        if (!confirm('Are you sure you want to deactivate this leader? This action will take effect immediately.')) {
+            e.preventDefault();
+            return false;
+        }
+        
+        // Show loading state
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deactivating...';
+        submitBtn.disabled = true;
+        
+        // Re-enable after 5 seconds (in case submission fails)
+        setTimeout(() => {
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }, 5000);
+    });
+    
+    // Add confirmation warning for cancel button
+    const cancelBtn = document.querySelector('.btn-cancel');
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', function(e) {
+            if (!confirm('Are you sure you want to cancel? Any changes will be lost.')) {
+                e.preventDefault();
+            }
+        });
+    }
+    
+    // Add focus styles for accessibility
+    const focusableElements = form.querySelectorAll('input, textarea, button, a');
+    focusableElements.forEach(el => {
+        el.addEventListener('focus', function() {
+            this.style.outline = '2px solid var(--primary)';
+            this.style.outlineOffset = '2px';
+        });
+        
+        el.addEventListener('blur', function() {
+            this.style.outline = '';
+        });
+    });
+});
+
+// Add keyboard shortcuts
+document.addEventListener('keydown', function(e) {
+    // Ctrl/Cmd + Enter to submit
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        const confirmBtn = document.getElementById('confirmBtn');
+        if (confirmBtn && !confirmBtn.disabled) {
+            confirmBtn.click();
+        }
+    }
+    
+    // Escape to cancel
+    if (e.key === 'Escape') {
+        const cancelBtn = document.querySelector('.btn-cancel');
+        if (cancelBtn) {
+            if (confirm('Cancel deactivation and return to list?')) {
+                cancelBtn.click();
+            }
+        }
+    }
+});
+</script>
+
+{% endblock %}

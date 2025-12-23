@@ -50,15 +50,24 @@
                             <td class="text-truncate" style="max-width: 200px;">{{ office.office_location }}</td>
                             <td class="text-truncate" style="max-width: 150px;">{{ office.office_purpose|truncatechars:30 }}</td>
                             <td class="text-center d-flex justify-content-center gap-1">
-                                <a href="{% url 'view_office' office.id %}" class="btn btn-sm btn-info text-white" title="View"><i class="fas fa-eye"></i></a>
-                                {% if request.user.role == 'admin' %}
-                                <a href="{% url 'edit_office' office.id %}" class="btn btn-sm btn-warning" title="Edit"><i class="fas fa-edit"></i></a>
-                                <a href="#" class="btn btn-sm btn-danger delete-trigger"
-                                   data-office-id="{{ office.id }}"
-                                   data-office-name="{{ office.office_Name }}"
-                                   title="Delete"><i class="fas fa-trash-alt"></i></a>
-                                {% endif %}
-                            </td>
+    <a href="{% url 'view_office' office.id %}" class="btn btn-sm btn-info text-white" title="View"><i class="fas fa-eye"></i></a>
+    
+    <!-- Add this new button here -->
+    <a href="{% url 'manage_office_details' office.id %}" 
+       class="btn btn-sm btn-info btn-sm" 
+       title="Manage Office Details"
+       style="background-color: #17a2b8; border-color: #17a2b8;">
+        <i class="fas fa-info-circle"></i> Details
+    </a>
+    
+    {% if request.user.role == 'admin' %}
+    <a href="{% url 'edit_office' office.id %}" class="btn btn-sm btn-warning" title="Edit"><i class="fas fa-edit"></i></a>
+    <a href="#" class="btn btn-sm btn-danger delete-trigger"
+       data-office-id="{{ office.id }}"
+       data-office-name="{{ office.office_Name }}"
+       title="Delete"><i class="fas fa-trash-alt"></i></a>
+    {% endif %}
+</td>
                         </tr>
                         {% empty %}
                         <tr>

@@ -1,0 +1,2369 @@
+{% extends "base.html" %}
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}Oil and Gas Industry Solutions | OB Global{% endblock %}
+
+{% block content %}
+<div class="insights-page-container">
+    <!-- Hero Section - Full Screen (Unchanged) -->
+    <section class="insights-hero">
+        <div class="hero-background"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">
+                Oil and Gas <span>Solutions</span>
+            </h1>
+
+            <p class="hero-description">
+                Comprehensive energy sector expertise for upstream exploration, midstream transportation,
+                downstream refining, and sustainable energy transition. Driving operational excellence,
+                compliance, and profitability in the global energy landscape.
+            </p>
+        </div>
+    </section>
+
+    <!-- Oil and Gas Impact Visualization Section -->
+    <section class="ai-impact-visualization">
+        <div class="container">
+            <h2 class="section-title">Digital Transformation for Energy Sector</h2>
+
+                <!-- Oil and Gas Digital Evolution Timeline -->
+    <div class="timeline-section" style="
+        background: linear-gradient(135deg, rgba(255, 165, 0, 0.05) 0%, rgba(34, 139, 34, 0.05) 100%);
+        border-radius: 1rem;
+        padding: clamp(1rem, 3vw, 2rem);
+        margin-bottom: clamp(1.5rem, 4vw, 3rem);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        border-left: clamp(3px, 1vw, 6px) solid #ff8c00;
+        animation: fadeInUp 0.8s ease-out;
+        overflow: hidden;
+    ">
+        <h3 style="
+            font-size: clamp(1.25rem, 4vw, 2rem);
+            margin-bottom: clamp(1rem, 3vw, 2rem);
+            color: #333;
+            text-align: center;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff8c00, #228b22);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.3;
+            padding: 0 0.5rem;
+        ">🛢️ Evolution of Oil and Gas Technology</h3>
+
+        <div class="timeline" style="
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 clamp(0.5rem, 2vw, 1rem);
+        ">
+            <!-- Timeline Line -->
+            <div class="timeline-line" style="
+                position: absolute;
+                left: clamp(40px, 12vw, 50px);
+                top: 0;
+                bottom: 0;
+                width: clamp(2px, 0.5vw, 4px);
+                background: linear-gradient(to bottom, #ff8c00, #228b22);
+                border-radius: 2px;
+                z-index: 1;
+            "></div>
+
+            <div class="timeline-item" style="
+                position: relative;
+                margin-bottom: clamp(2rem, 5vw, 3rem);
+                padding-left: clamp(70px, 20vw, 100px);
+                animation: slideInLeft 0.6s ease-out;
+                z-index: 2;
+            ">
+                <div class="timeline-year" style="
+                    position: absolute;
+                    left: clamp(10px, 3vw, 20px);
+                    top: 0;
+                    background: linear-gradient(135deg, #ff8c00, #cc7000);
+                    color: white;
+                    padding: clamp(0.4rem, 1.5vw, 0.5rem) clamp(0.8rem, 2vw, 1rem);
+                    border-radius: clamp(0.5rem, 2vw, 1rem);
+                    font-weight: 700;
+                    font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+                    min-width: clamp(50px, 15vw, 80px);
+                    text-align: center;
+                    box-shadow: 0 4px 15px rgba(255, 140, 0, 0.3);
+                    z-index: 3;
+                ">1970-1990</div>
+                <div class="timeline-content" style="
+                    background: white;
+                    padding: clamp(1.5rem, 4vw, 2rem) clamp(1rem, 3vw, 1.5rem);
+                    border-radius: clamp(0.5rem, 2vw, 0.75rem);
+                    border-left: clamp(2px, 1vw, 4px) solid #ff8c00;
+                    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                    transition: all 0.3s ease;
+                    position: relative;
+                    margin-top: 0;
+                    min-height: 120px;
+                ">
+                    <h4 style="
+                        font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+                        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                        color: #333;
+                        font-weight: 600;
+                        line-height: 1.3;
+                        padding-top: 0;
+                    ">Traditional Exploration & Seismic 2D</h4>
+                    <p style="
+                        color: #666;
+                        line-height: 1.5;
+                        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                        font-size: clamp(0.85rem, 2.5vw, 1rem);
+                    ">Manual geological surveys and 2D seismic imaging. Basic drilling technology with limited directional control. Paper-based documentation and analog communication systems dominated operations.</p>
+                    <div class="adoption-stats" style="
+                        display: flex;
+                        align-items: center;
+                        gap: clamp(0.5rem, 2vw, 1rem);
+                        padding: clamp(0.75rem, 2vw, 1rem);
+                        background: linear-gradient(135deg, rgba(255, 140, 0, 0.1), rgba(204, 112, 0, 0.1));
+                        border-radius: clamp(0.25rem, 1vw, 0.5rem);
+                        border: 1px solid rgba(255, 140, 0, 0.2);
+                        flex-wrap: wrap;
+                    ">
+                        <div class="stat" style="
+                            font-size: clamp(1.5rem, 5vw, 2rem);
+                            font-weight: 800;
+                            color: #ff8c00;
+                            line-height: 1;
+                        ">28%</div>
+                        <span style="
+                            color: #666;
+                            font-size: clamp(0.75rem, 2vw, 0.9rem);
+                            line-height: 1.2;
+                        ">Technology Adoption Rate</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item" style="
+                position: relative;
+                margin-bottom: clamp(2rem, 5vw, 3rem);
+                padding-left: clamp(70px, 20vw, 100px);
+                animation: slideInLeft 0.6s ease-out 0.2s both;
+                z-index: 2;
+            ">
+                <div class="timeline-year" style="
+                    position: absolute;
+                    left: clamp(10px, 3vw, 20px);
+                    top: 0;
+                    background: linear-gradient(135deg, #228b22, #1b6e1b);
+                    color: white;
+                    padding: clamp(0.4rem, 1.5vw, 0.5rem) clamp(0.8rem, 2vw, 1rem);
+                    border-radius: clamp(0.5rem, 2vw, 1rem);
+                    font-weight: 700;
+                    font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+                    min-width: clamp(50px, 15vw, 80px);
+                    text-align: center;
+                    box-shadow: 0 4px 15px rgba(34, 139, 34, 0.3);
+                    z-index: 3;
+                ">1991-2010</div>
+                <div class="timeline-content" style="
+                    background: white;
+                    padding: clamp(1.5rem, 4vw, 2rem) clamp(1rem, 3vw, 1.5rem);
+                    border-radius: clamp(0.5rem, 2vw, 0.75rem);
+                    border-left: clamp(2px, 1vw, 4px) solid #228b22;
+                    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                    transition: all 0.3s ease;
+                    position: relative;
+                    margin-top: 0;
+                    min-height: 120px;
+                ">
+                    <h4 style="
+                        font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+                        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                        color: #333;
+                        font-weight: 600;
+                        line-height: 1.3;
+                        padding-top: 0;
+                    ">3D Seismic & Digital Transformation</h4>
+                    <p style="
+                        color: #666;
+                        line-height: 1.5;
+                        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                        font-size: clamp(0.85rem, 2.5vw, 1rem);
+                    ">Advanced 3D and 4D seismic imaging revolutionized exploration. Horizontal drilling and hydraulic fracturing techniques expanded. Early digital systems for reservoir modeling and production optimization emerged.</p>
+                    <div class="adoption-stats" style="
+                        display: flex;
+                        align-items: center;
+                        gap: clamp(0.5rem, 2vw, 1rem);
+                        padding: clamp(0.75rem, 2vw, 1rem);
+                        background: linear-gradient(135deg, rgba(34, 139, 34, 0.1), rgba(27, 110, 27, 0.1));
+                        border-radius: clamp(0.25rem, 1vw, 0.5rem);
+                        border: 1px solid rgba(34, 139, 34, 0.2);
+                        flex-wrap: wrap;
+                    ">
+                        <div class="stat" style="
+                            font-size: clamp(1.5rem, 5vw, 2rem);
+                            font-weight: 800;
+                            color: #228b22;
+                            line-height: 1;
+                        ">65%</div>
+                        <span style="
+                            color: #666;
+                            font-size: clamp(0.75rem, 2vw, 0.9rem);
+                            line-height: 1.2;
+                        ">Digital Systems Adoption</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item" style="
+                position: relative;
+                margin-bottom: clamp(2rem, 5vw, 3rem);
+                padding-left: clamp(70px, 20vw, 100px);
+                animation: slideInLeft 0.6s ease-out 0.4s both;
+                z-index: 2;
+            ">
+                <div class="timeline-year" style="
+                    position: absolute;
+                    left: clamp(10px, 3vw, 20px);
+                    top: 0;
+                    background: linear-gradient(135deg, #4169e1, #2a4fb3);
+                    color: white;
+                    padding: clamp(0.4rem, 1.5vw, 0.5rem) clamp(0.8rem, 2vw, 1rem);
+                    border-radius: clamp(0.5rem, 2vw, 1rem);
+                    font-weight: 700;
+                    font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+                    min-width: clamp(50px, 15vw, 80px);
+                    text-align: center;
+                    box-shadow: 0 4px 15px rgba(65, 105, 225, 0.3);
+                    z-index: 3;
+                ">2011-2020</div>
+                <div class="timeline-content" style="
+                    background: white;
+                    padding: clamp(1.5rem, 4vw, 2rem) clamp(1rem, 3vw, 1.5rem);
+                    border-radius: clamp(0.5rem, 2vw, 0.75rem);
+                    border-left: clamp(2px, 1vw, 4px) solid #4169e1;
+                    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                    transition: all 0.3s ease;
+                    position: relative;
+                    margin-top: 0;
+                    min-height: 120px;
+                ">
+                    <h4 style="
+                        font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+                        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                        color: #333;
+                        font-weight: 600;
+                        line-height: 1.3;
+                        padding-top: 0;
+                    ">IoT & Predictive Analytics Era</h4>
+                    <p style="
+                        color: #666;
+                        line-height: 1.5;
+                        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                        font-size: clamp(0.85rem, 2.5vw, 1rem);
+                    ">Internet of Things (IoT) sensors enabled real-time monitoring. Predictive analytics transformed maintenance strategies. Digital twins for asset management emerged. Remote operations centers became standard.</p>
+                    <div class="adoption-stats" style="
+                        display: flex;
+                        align-items: center;
+                        gap: clamp(0.5rem, 2vw, 1rem);
+                        padding: clamp(0.75rem, 2vw, 1rem);
+                        background: linear-gradient(135deg, rgba(65, 105, 225, 0.1), rgba(42, 79, 179, 0.1));
+                        border-radius: clamp(0.25rem, 1vw, 0.5rem);
+                        border: 1px solid rgba(65, 105, 225, 0.2);
+                        flex-wrap: wrap;
+                    ">
+                        <div class="stat" style="
+                            font-size: clamp(1.5rem, 5vw, 2rem);
+                            font-weight: 800;
+                            color: #4169e1;
+                            line-height: 1;
+                        ">78%</div>
+                        <span style="
+                            color: #666;
+                            font-size: clamp(0.75rem, 2vw, 0.9rem);
+                            line-height: 1.2;
+                        ">Remote Monitoring</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item" style="
+                position: relative;
+                margin-bottom: clamp(2rem, 5vw, 3rem);
+                padding-left: clamp(70px, 20vw, 100px);
+                animation: slideInLeft 0.6s ease-out 0.6s both;
+                z-index: 2;
+            ">
+                <div class="timeline-year" style="
+                    position: absolute;
+                    left: clamp(10px, 3vw, 20px);
+                    top: 0;
+                    background: linear-gradient(135deg, #8a2be2, #7b1fa2);
+                    color: white;
+                    padding: clamp(0.4rem, 1.5vw, 0.5rem) clamp(0.8rem, 2vw, 1rem);
+                    border-radius: clamp(0.5rem, 2vw, 1rem);
+                    font-weight: 700;
+                    font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+                    min-width: clamp(50px, 15vw, 80px);
+                    text-align: center;
+                    box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
+                    z-index: 3;
+                ">2021+</div>
+                <div class="timeline-content" style="
+                    background: white;
+                    padding: clamp(1.5rem, 4vw, 2rem) clamp(1rem, 3vw, 1.5rem);
+                    border-radius: clamp(0.5rem, 2vw, 0.75rem);
+                    border-left: clamp(2px, 1vw, 4px) solid #8a2be2;
+                    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                    transition: all 0.3s ease;
+                    position: relative;
+                    margin-top: 0;
+                    min-height: 120px;
+                ">
+                    <h4 style="
+                        font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+                        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                        color: #333;
+                        font-weight: 600;
+                        line-height: 1.3;
+                        padding-top: 0;
+                    ">AI & Energy Transition Focus</h4>
+                    <p style="
+                        color: #666;
+                        line-height: 1.5;
+                        margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                        font-size: clamp(0.85rem, 2.5vw, 1rem);
+                    ">Artificial Intelligence optimizes exploration and production. Autonomous operations reduce human intervention. Carbon capture and renewable energy integration. Blockchain for supply chain transparency and emissions tracking.</p>
+                    <div class="adoption-stats" style="
+                        display: flex;
+                        align-items: center;
+                        gap: clamp(0.5rem, 2vw, 1rem);
+                        padding: clamp(0.75rem, 2vw, 1rem);
+                        background: linear-gradient(135deg, rgba(138, 43, 226, 0.1), rgba(123, 31, 162, 0.1));
+                        border-radius: clamp(0.25rem, 1vw, 0.5rem);
+                        border: 1px solid rgba(138, 43, 226, 0.2);
+                        flex-wrap: wrap;
+                    ">
+                        <div class="stat" style="
+                            font-size: clamp(1.5rem, 5vw, 2rem);
+                            font-weight: 800;
+                            color: #8a2be2;
+                            line-height: 1;
+                        ">92%</div>
+                        <span style="
+                            color: #666;
+                            font-size: clamp(0.75rem, 2vw, 0.9rem);
+                            line-height: 1.2;
+                        ">Sustainable Operations Goal</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+                <!-- Oil and Gas Impact Metrics -->
+<div class="metrics-section" style="
+    background: linear-gradient(135deg, rgba(255, 165, 0, 0.05) 0%, rgba(34, 139, 34, 0.05) 100%);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border-left: 6px solid #ff8c00;
+    animation: fadeInUp 0.8s ease-out 0.3s both;
+">
+    <h3 style="
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        margin-bottom: 2rem;
+        color: #333;
+        text-align: center;
+        font-weight: 700;
+        background: linear-gradient(135deg, #ff8c00, #228b22);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    ">🚀 Oil and Gas Performance Metrics</h3>
+    <div class="metrics-grid" style="
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+    ">
+        <div class="metric-card" style="
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #ff8c00;
+            animation: bounceIn 0.6s ease-out;
+        ">
+            <div class="metric-value" style="
+                font-size: 3rem;
+                font-weight: 800;
+                color: #ff8c00;
+                margin-bottom: 1rem;
+            ">42%</div>
+            <div class="metric-label" style="
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 1rem;
+            ">Increase in Operational Efficiency</div>
+            <div class="metric-description" style="
+                color: #666;
+                line-height: 1.5;
+                font-size: 0.9rem;
+            ">Digital twin technology and predictive maintenance significantly reduce downtime and optimize production across upstream, midstream, and downstream operations.</div>
+        </div>
+
+        <div class="metric-card" style="
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #228b22;
+            animation: bounceIn 0.6s ease-out 0.2s both;
+        ">
+            <div class="metric-value" style="
+                font-size: 3rem;
+                font-weight: 800;
+                color: #228b22;
+                margin-bottom: 1rem;
+            ">2.8x</div>
+            <div class="metric-label" style="
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 1rem;
+            "">Reserve Discovery Accuracy</div>
+            <div class="metric-description" style="
+                color: #666;
+                line-height: 1.5;
+                font-size: 0.9rem;
+            ">AI-powered seismic interpretation and reservoir modeling dramatically improve exploration success rates and resource estimation accuracy.</div>
+        </div>
+
+        <div class="metric-card" style="
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #4169e1;
+            animation: bounceIn 0.6s ease-out 0.4s both;
+        ">
+            <div class="metric-value" style="
+                font-size: 3rem;
+                font-weight: 800;
+                color: #4169e1;
+                margin-bottom: 1rem;
+            ">65%</div>
+            <div class="metric-label" style="
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 1rem;
+            ">Reduction in Safety Incidents</div>
+            <div class="metric-description" style="
+                color: #666;
+                line-height: 1.5;
+                font-size: 0.9rem;
+            ">IoT sensors and real-time monitoring systems significantly enhance worker safety and reduce operational risks across hazardous environments.</div>
+        </div>
+
+        <div class="metric-card" style="
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #8a2be2;
+            animation: bounceIn 0.6s ease-out 0.6s both;
+        ">
+            <div class="metric-value" style="
+                font-size: 3rem;
+                font-weight: 800;
+                color: #8a2be2;
+                margin-bottom: 1rem;
+            ">4.2x</div>
+            <div class="metric-label" style="
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 1rem;
+            ">ROI on Digital Investments</div>
+            <div class="metric-description" style="
+                color: #666;
+                line-height: 1.5;
+                font-size: 0.9rem;
+            ">Strategic technology investments deliver substantial returns through increased production, reduced costs, and enhanced compliance in volatile energy markets.</div>
+        </div>
+
+        <!-- New Metric Cards -->
+        <div class="metric-card" style="
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #dc3545;
+            animation: bounceIn 0.6s ease-out 0.8s both;
+        ">
+            <div class="metric-value" style="
+                font-size: 3rem;
+                font-weight: 800;
+                color: #dc3545;
+                margin-bottom: 1rem;
+            ">38%</div>
+            <div class="metric-label" style="
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 1rem;
+            ">Reduction in Carbon Emissions</div>
+            <div class="metric-description" style="
+                color: #666;
+                line-height: 1.5;
+                font-size: 0.9rem;
+            ">Advanced monitoring and optimization technologies significantly reduce greenhouse gas emissions while maintaining production efficiency and regulatory compliance.</div>
+        </div>
+
+        <div class="metric-card" style="
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #17a2b8;
+            animation: bounceIn 0.6s ease-out 1s both;
+        ">
+            <div class="metric-value" style="
+                font-size: 3rem;
+                font-weight: 800;
+                color: #17a2b8;
+                margin-bottom: 1rem;
+            ">71%</div>
+            <div class="metric-label" style="
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 1rem;
+            ">Supply Chain Optimization</div>
+            <div class="metric-description" style="
+                color: #666;
+                line-height: 1.5;
+                font-size: 0.9rem;
+            ">Digital supply chain platforms and blockchain technology enable real-time tracking, inventory optimization, and transparent logistics management.</div>
+        </div>
+
+        <!-- Additional Metric Cards -->
+        <div class="metric-card" style="
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #fd7e14;
+            animation: bounceIn 0.6s ease-out 1.2s both;
+        ">
+            <div class="metric-value" style="
+                font-size: 3rem;
+                font-weight: 800;
+                color: #fd7e14;
+                margin-bottom: 1rem;
+            ">85%</div>
+            <div class="metric-label" style="
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 1rem;
+            ">Predictive Maintenance Success</div>
+            <div class="metric-description" style="
+                color: #666;
+                line-height: 1.5;
+                font-size: 0.9rem;
+            ">AI-driven predictive analytics significantly reduce unplanned downtime and extend asset lifecycles across production facilities and transportation networks.</div>
+        </div>
+
+        <div class="metric-card" style="
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #28a745;
+            animation: bounceIn 0.6s ease-out 1.4s both;
+        ">
+            <div class="metric-value" style="
+                font-size: 3rem;
+                font-weight: 800;
+                color: #28a745;
+                margin-bottom: 1rem;
+            ">3.5x</div>
+            <div class="metric-label" style="
+                font-size: 1.2rem;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 1rem;
+            ">Regulatory Compliance Efficiency</div>
+            <div class="metric-description" style="
+                color: #666;
+                line-height: 1.5;
+                font-size: 0.9rem;
+            ">Automated compliance monitoring and reporting systems dramatically reduce regulatory risks and audit preparation time across global operations.</div>
+        </div>
+    </div>
+</div>
+<!-- Oil and Gas Solutions -->
+<div class="applications-section" style="
+    background: linear-gradient(135deg, rgba(255, 165, 0, 0.05) 0%, rgba(65, 105, 225, 0.05) 100%);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border-left: 6px solid #ff8c00;
+    animation: fadeInUp 0.8s ease-out 0.5s both;
+">
+    <h3 style="
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        margin-bottom: 2rem;
+        color: #333;
+        text-align: center;
+        font-weight: 700;
+        background: linear-gradient(135deg, #ff8c00, #4169e1);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    ">🛢️ Comprehensive Oil and Gas Solutions</h3>
+    <div class="applications-grid" style="
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    ">
+        <div class="application-area" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #ff8c00;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: zoomIn 0.6s ease-out;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">🛢️ Upstream Exploration & Production</h4>
+            <ul class="application-list" style="
+                list-style: none;
+                padding: 0;
+            ">
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Seismic data interpretation & reservoir modeling</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Drilling optimization & well planning</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Production forecasting & asset management</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Enhanced oil recovery techniques</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Offshore platform optimization</li>
+            </ul>
+        </div>
+
+        <div class="application-area" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #228b22;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: zoomIn 0.6s ease-out 0.2s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">🚚 Midstream Transportation & Storage</h4>
+            <ul class="application-list" style="
+                list-style: none;
+                padding: 0;
+            ">
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Pipeline monitoring & integrity management</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Terminal operations & logistics optimization</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Storage facility management</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Supply chain visibility & tracking</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    position: relative;
+                    padding-left: 1.5rem;
+                "">LNG transportation & regasification</li>
+            </ul>
+        </div>
+
+        <div class="application-area" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #4169e1;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: zoomIn 0.6s ease-out 0.4s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">🏭 Downstream Refining & Marketing</h4>
+            <ul class="application-list" style="
+                list-style: none;
+                padding: 0;
+            ">
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Refinery optimization & process control</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                "">Petrochemical production management</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Retail network optimization</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Supply & demand forecasting</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Customer relationship management</li>
+            </ul>
+        </div>
+
+        <div class="application-area" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #8a2be2;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: zoomIn 0.6s ease-out 0.6s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">🌿 Energy Transition & Sustainability</h4>
+            <ul class="application-list" style="
+                list-style: none;
+                padding: 0;
+            ">
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Carbon capture & storage (CCS) solutions</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Renewable energy integration</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Emissions monitoring & reporting</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Circular economy initiatives</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Sustainable operations management</li>
+            </ul>
+        </div>
+
+        <!-- New Application Areas -->
+        <div class="application-area" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #dc3545;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: zoomIn 0.6s ease-out 0.8s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">🔒 Safety & Risk Management</h4>
+            <ul class="application-list" style="
+                list-style: none;
+                padding: 0;
+            ">
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Process safety management systems</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Hazard identification & risk assessment</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Emergency response planning</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Workforce safety monitoring</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Incident investigation & analysis</li>
+            </ul>
+        </div>
+
+        <div class="application-area" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #17a2b8;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: zoomIn 0.6s ease-out 1s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">📈 Asset Performance Management</h4>
+            <ul class="application-list" style="
+                list-style: none;
+                padding: 0;
+            ">
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Digital twin implementation</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Predictive maintenance analytics</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Reliability-centered maintenance</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    border-bottom: 1px solid #e9ecef;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Asset lifecycle optimization</li>
+                <li style="
+                    padding: 0.5rem 0;
+                    color: #666;
+                    line-height: 1.5;
+                    position: relative;
+                    padding-left: 1.5rem;
+                ">Capital investment planning</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Implementation Framework -->
+<div class="framework-section" style="
+    background: linear-gradient(135deg, rgba(255, 165, 0, 0.05) 0%, rgba(34, 139, 34, 0.05) 100%);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border-left: 6px solid #ff8c00;
+    animation: fadeInUp 0.8s ease-out 0.7s both;
+">
+    <h3 style="
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        margin-bottom: 2rem;
+        color: #333;
+        text-align: center;
+        font-weight: 700;
+        background: linear-gradient(135deg, #ff8c00, #228b22);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    ">🛠️ Digital Transformation Framework for Oil and Gas</h3>
+    <div class="framework-steps">
+        <div class="framework-step" style="
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #ff8c00;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: slideInRight 0.6s ease-out;
+        ">
+            <div class="step-number" style="
+                background: linear-gradient(135deg, #ff8c00, #cc7000);
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                font-weight: 700;
+                flex-shrink: 0;
+                box-shadow: 0 4px 15px rgba(255, 140, 0, 0.3);
+            ">01</div>
+            <div class="step-content">
+                <h4 style="
+                    font-size: 1.3rem;
+                    margin-bottom: 1rem;
+                    color: #333;
+                    font-weight: 600;
+                ">Digital Maturity Assessment</h4>
+                <p style="
+                    color: #666;
+                    line-height: 1.6;
+                ">Comprehensive analysis of current technology infrastructure, operational workflows, and data management practices. Identify digital gaps, opportunities, and develop strategic roadmap for energy sector transformation.</p>
+            </div>
+        </div>
+
+        <div class="framework-step" style="
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #228b22;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: slideInRight 0.6s ease-out 0.2s both;
+        ">
+            <div class="step-number" style="
+                background: linear-gradient(135deg, #228b22, #1b6e1b);
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                font-weight: 700;
+                flex-shrink: 0;
+                box-shadow: 0 4px 15px rgba(34, 139, 34, 0.3);
+            ">02</div>
+            <div class="step-content">
+                <h4 style="
+                    font-size: 1.3rem;
+                    margin-bottom: 1rem;
+                    color: #333;
+                    font-weight: 600;
+                ">IoT & Sensor Integration</h4>
+                <p style="
+                    color: #666;
+                    line-height: 1.6;
+                ">Deploy IoT sensors across upstream, midstream, and downstream operations. Establish real-time data collection systems for equipment monitoring, environmental conditions, and production metrics.</p>
+            </div>
+        </div>
+
+        <div class="framework-step" style="
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #4169e1;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: slideInRight 0.6s ease-out 0.4s both;
+        ">
+            <div class="step-number" style="
+                background: linear-gradient(135deg, #4169e1, #2a4fb3);
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                font-weight: 700;
+                flex-shrink: 0;
+                box-shadow: 0 4px 15px rgba(65, 105, 225, 0.3);
+            ">03</div>
+            <div class="step-content">
+                <h4 style="
+                    font-size: 1.3rem;
+                    margin-bottom: 1rem;
+                    color: #333;
+                    font-weight: 600;
+                ">AI-Powered Analytics Implementation</h4>
+                <p style="
+                    color: #666;
+                    line-height: 1.6;
+                ">Deploy AI algorithms for seismic interpretation, reservoir modeling, and production optimization. Implement predictive maintenance systems and establish intelligent workflow automation for operational excellence.</p>
+            </div>
+        </div>
+
+        <div class="framework-step" style="
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #8a2be2;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: slideInRight 0.6s ease-out 0.6s both;
+        ">
+            <div class="step-number" style="
+                background: linear-gradient(135deg, #8a2be2, #7b1fa2);
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                font-weight: 700;
+                flex-shrink: 0;
+                box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
+            ">04</div>
+            <div class="step-content">
+                <h4 style="
+                    font-size: 1.3rem;
+                    margin-bottom: 1rem;
+                    color: #333;
+                    font-weight: 600;
+                ">Digital Twin Development</h4>
+                <p style="
+                    color: #666;
+                    line-height: 1.6;
+                ">Create virtual replicas of critical assets including wells, pipelines, refineries, and offshore platforms. Enable simulation, optimization, and predictive analysis for enhanced decision-making and risk management.</p>
+            </div>
+        </div>
+
+        <div class="framework-step" style="
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #dc3545;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: slideInRight 0.6s ease-out 0.8s both;
+        ">
+            <div class="step-number" style="
+                background: linear-gradient(135deg, #dc3545, #c82333);
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                font-weight: 700;
+                flex-shrink: 0;
+                box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+            ">05</div>
+            <div class="step-content">
+                <h4 style="
+                    font-size: 1.3rem;
+                    margin-bottom: 1rem;
+                    color: #333;
+                    font-weight: 600;
+                ">Safety & Compliance Automation</h4>
+                <p style="
+                    color: #666;
+                    line-height: 1.6;
+                ">Implement automated safety monitoring systems, real-time compliance tracking, and predictive risk assessment tools. Establish digital safety protocols and environmental monitoring frameworks.</p>
+            </div>
+        </div>
+
+        <!-- New Framework Steps -->
+        <div class="framework-step" style="
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #17a2b8;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: slideInRight 0.6s ease-out 1s both;
+        ">
+            <div class="step-number" style="
+                background: linear-gradient(135deg, #17a2b8, #138496);
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                font-weight: 700;
+                flex-shrink: 0;
+                box-shadow: 0 4px 15px rgba(23, 162, 184, 0.3);
+            ">06</div>
+            <div class="step-content">
+                <h4 style="
+                    font-size: 1.3rem;
+                    margin-bottom: 1rem;
+                    color: #333;
+                    font-weight: 600;
+                ">Sustainability Integration</h4>
+                <p style="
+                    color: #666;
+                    line-height: 1.6;
+                ">Implement carbon accounting systems, emissions tracking, and renewable energy integration. Develop circular economy initiatives and establish ESG reporting frameworks for sustainable operations.</p>
+            </div>
+        </div>
+
+        <div class="framework-step" style="
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #28a745;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: slideInRight 0.6s ease-out 1.2s both;
+        ">
+            <div class="step-number" style="
+                background: linear-gradient(135deg, #28a745, #218838);
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                font-weight: 700;
+                flex-shrink: 0;
+                box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+            ">07</div>
+            <div class="step-content">
+                <h4 style="
+                    font-size: 1.3rem;
+                    margin-bottom: 1rem;
+                    color: #333;
+                    font-weight: 600;
+                ">Workforce Transformation</h4>
+                <p style="
+                    color: #666;
+                    line-height: 1.6;
+                ">Develop digital skills training programs, implement remote operations centers, and establish collaborative work environments. Foster innovation culture and continuous improvement mindset across the organization.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Challenges & Solutions -->
+<div class="challenges-section" style="
+    background: linear-gradient(135deg, rgba(34, 139, 34, 0.05) 0%, rgba(65, 105, 225, 0.05) 100%);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border-left: 6px solid #228b22;
+    animation: fadeInUp 0.8s ease-out 0.9s both;
+">
+    <h3 style="
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        margin-bottom: 2rem;
+        color: #333;
+        text-align: center;
+        font-weight: 700;
+        background: linear-gradient(135deg, #228b22, #4169e1);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    ">⚡ Overcoming Oil and Gas Industry Challenges</h3>
+    <div class="challenges-grid" style="
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    ">
+        <div class="challenge-item" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-top: 4px solid #ff8c00;
+            transition: transform 0.3s ease;
+            animation: flipInX 0.6s ease-out;
+        ">
+            <h4 style="
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Volatile Energy Markets & Price Fluctuations</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+                margin-bottom: 1rem;
+            ">Unpredictable commodity prices, geopolitical uncertainties, and shifting demand patterns create significant revenue volatility and investment challenges for oil and gas companies.</p>
+            <div class="solution" style="
+                padding: 1rem;
+                background: linear-gradient(135deg, rgba(255, 140, 0, 0.1), rgba(204, 112, 0, 0.1));
+                border-radius: 0.5rem;
+                border-left: 4px solid #228b22;
+                font-size: 0.9rem;
+                line-height: 1.5;
+            ">
+                <strong>Solution:</strong> Implement AI-powered price forecasting models, dynamic hedging strategies, and flexible operational models. Use scenario planning and real-time market intelligence for agile decision-making.
+            </div>
+        </div>
+
+        <div class="challenge-item" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-top: 4px solid #228b22;
+            transition: transform 0.3s ease;
+            animation: flipInX 0.6s ease-out 0.2s both;
+        ">
+            <h4 style="
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Asset Integrity & Aging Infrastructure</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+                margin-bottom: 1rem;
+            ">Aging pipelines, platforms, and refineries require substantial maintenance investments. Increasing regulatory requirements for safety and environmental compliance add complexity to asset management.</p>
+            <div class="solution" style="
+                padding: 1rem;
+                background: linear-gradient(135deg, rgba(34, 139, 34, 0.1), rgba(27, 110, 27, 0.1));
+                border-radius: 0.5rem;
+                border-left: 4px solid #228b22;
+                font-size: 0.9rem;
+                line-height: 1.5;
+            ">
+                <strong>Solution:</strong> Deploy predictive maintenance systems, implement digital twins for asset lifecycle management, and use robotics for inspection and maintenance in hazardous environments.
+            </div>
+        </div>
+
+        <div class="challenge-item" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-top: 4px solid #4169e1;
+            transition: transform 0.3s ease;
+            animation: flipInX 0.6s ease-out 0.4s both;
+        ">
+            <h4 style="
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Environmental Compliance & Energy Transition</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+                margin-bottom: 1rem;
+            ">Increasing environmental regulations, carbon pricing mechanisms, and stakeholder pressure for sustainable operations require significant operational changes and investment in clean technologies.</p>
+            <div class="solution" style="
+                padding: 1rem;
+                background: linear-gradient(135deg, rgba(65, 105, 225, 0.1), rgba(42, 79, 179, 0.1));
+                border-radius: 0.5rem;
+                border-left: 4px solid #228b22;
+                font-size: 0.9rem;
+                line-height: 1.5;
+            ">
+                <strong>Solution:</strong> Implement comprehensive ESG reporting systems, develop carbon capture and storage solutions, and create transition strategies integrating renewable energy and circular economy principles.
+            </div>
+        </div>
+
+        <div class="challenge-item" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-top: 4px solid #8a2be2;
+            transition: transform 0.3s ease;
+            animation: flipInX 0.6s ease-out 0.6s both;
+        ">
+            <h4 style="
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Workforce Skills & Talent Retention</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+                margin-bottom: 1rem;
+            ">Aging workforce, competition for digital skills, and changing work preferences create talent acquisition and retention challenges in traditional energy companies undergoing digital transformation.</p>
+            <div class="solution" style="
+                padding: 1rem;
+                background: linear-gradient(135deg, rgba(138, 43, 226, 0.1), rgba(123, 31, 162, 0.1));
+                border-radius: 0.5rem;
+                border-left: 4px solid #228b22;
+                font-size: 0.9rem;
+                line-height: 1.5;
+            ">
+                <strong>Solution:</strong> Develop comprehensive digital skills training programs, implement remote operations centers, and create career development pathways combining traditional expertise with new technologies.
+            </div>
+        </div>
+
+        <!-- New Challenge Items -->
+        <div class="challenge-item" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-top: 4px solid #dc3545;
+            transition: transform 0.3s ease;
+            animation: flipInX 0.6s ease-out 0.8s both;
+        ">
+            <h4 style="
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Cybersecurity & Operational Technology Risks</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+                margin-bottom: 1rem;
+            ">Increasing connectivity of industrial control systems creates cybersecurity vulnerabilities. Protecting critical infrastructure from cyber threats while maintaining operational continuity is essential.</p>
+            <div class="solution" style="
+                padding: 1rem;
+                background: linear-gradient(135deg, rgba(220, 53, 69, 0.1), rgba(200, 35, 51, 0.1));
+                border-radius: 0.5rem;
+                border-left: 4px solid #228b22;
+                font-size: 0.9rem;
+                line-height: 1.5;
+            ">
+                <strong>Solution:</strong> Implement comprehensive cybersecurity frameworks, deploy advanced threat detection systems, and establish incident response protocols for operational technology environments.
+            </div>
+        </div>
+
+        <div class="challenge-item" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-top: 4px solid #17a2b8;
+            transition: transform 0.3s ease;
+            animation: flipInX 0.6s ease-out 1s both;
+        ">
+            <h4 style="
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Data Silos & Integration Complexity</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+                margin-bottom: 1rem;
+            ">Legacy systems, fragmented data sources, and organizational silos hinder data-driven decision making. Integrating operational technology data with enterprise systems remains challenging.</p>
+            <div class="solution" style="
+                padding: 1rem;
+                background: linear-gradient(135deg, rgba(23, 162, 184, 0.1), rgba(19, 132, 150, 0.1));
+                border-radius: 0.5rem;
+                border-left: 4px solid #228b22;
+                font-size: 0.9rem;
+                line-height: 1.5;
+            ">
+                <strong>Solution:</strong> Implement data lake architectures, establish data governance frameworks, and deploy integration platforms connecting operational technology with business intelligence systems.
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Future Trends -->
+<div class="future-trends-section" style="
+    background: linear-gradient(135deg, rgba(255, 165, 0, 0.05) 0%, rgba(138, 43, 226, 0.05) 100%);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border-left: 6px solid #ff8c00;
+    animation: fadeInUp 0.8s ease-out 1.1s both;
+">
+    <h3 style="
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        margin-bottom: 2rem;
+        color: #333;
+        text-align: center;
+        font-weight: 700;
+        background: linear-gradient(135deg, #ff8c00, #8a2be2);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    ">🔮 Future of Oil and Gas Industry</h3>
+    <div class="trends-content" style="
+        display: grid;
+        gap: 2rem;
+    ">
+        <div class="trend-category" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #ff8c00;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: fadeIn 0.6s ease-out;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Autonomous Operations & Remote Control</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+            ">Fully automated drilling rigs, unmanned offshore platforms, and remote-controlled refineries will become standard. AI will optimize operations in real-time with minimal human intervention.</p>
+        </div>
+
+        <div class="trend-category" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #228b22;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Carbon-Neutral Energy Companies</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+            ">Traditional oil and gas companies will transform into integrated energy companies, combining hydrocarbons with renewables, hydrogen production, and carbon management services.</p>
+        </div>
+
+        <div class="trend-category" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #4169e1;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: fadeIn 0.6s ease-out 0.4s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Digital Twins & Predictive Analytics</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+            ">Virtual replicas of entire energy systems will enable simulation, optimization, and predictive maintenance. AI will forecast equipment failures and optimize production schedules with unprecedented accuracy.</p>
+        </div>
+
+        <div class="trend-category" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #8a2be2;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: fadeIn 0.6s ease-out 0.6s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Hydrogen Economy & Energy Storage</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+            ">Oil and gas infrastructure will adapt for hydrogen production and transportation. Advanced energy storage solutions will integrate with traditional energy systems for grid stability.</p>
+        </div>
+
+        <div class="trend-category" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #dc3545;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: fadeIn 0.6s ease-out 0.8s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Circular Economy & Waste Valorization</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+            ">Waste products will become valuable resources. Plastic waste will be converted back to feedstock, and carbon emissions will be captured for industrial uses or permanent storage.</p>
+        </div>
+
+        <!-- New Trend Categories -->
+        <div class="trend-category" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #17a2b8;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: fadeIn 0.6s ease-out 1s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Quantum Computing for Reservoir Simulation</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+            ">Quantum computers will revolutionize reservoir modeling, molecular simulation for catalysts, and optimization of complex supply chains, solving problems currently intractable for classical computers.</p>
+        </div>
+
+        <div class="trend-category" style="
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            border-left: 4px solid #28a745;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            animation: fadeIn 0.6s ease-out 1.2s both;
+        ">
+            <h4 style="
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+                color: #333;
+                font-weight: 600;
+            ">Blockchain for Energy Trading</h4>
+            <p style="
+                color: #666;
+                line-height: 1.6;
+            ">Distributed ledger technology will enable peer-to-peer energy trading, transparent carbon credit markets, and automated compliance reporting across global energy supply chains.</p>
+        </div>
+    </div>
+</div>
+                <!-- Call to Action -->
+                <div class="cta-section" style="
+                    background: linear-gradient(270deg, #ff8c00, #cc7000, #228b22, #1b6e1b);
+                    background-size: 800% 800%;
+                    animation: gradientShift 12s ease infinite;
+                    padding: 3rem 2rem;
+                    border-radius: 12px;
+                    text-align: center;
+                    color: white;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                    margin: 2rem 0;
+                    position: relative;
+                    overflow: hidden;
+                ">
+                    <h3 style="
+                        font-size: clamp(1.5rem, 4vw, 2.2rem);
+                        margin-bottom: 1.5rem;
+                        font-weight: 700;
+                        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+                    ">🚀 Transform Your Oil and Gas Operations</h3>
+                    <p style="
+                        font-size: clamp(1rem, 2.5vw, 1.2rem);
+                        line-height: 1.6;
+                        margin-bottom: 2rem;
+                        max-width: 800px;
+                        margin-left: auto;
+                        margin-right: auto;
+                        opacity: 0.95;
+                    ">Our team of energy sector experts combines deep industry knowledge with cutting-edge technology solutions to help you navigate digital transformation, enhance operational efficiency, and drive sustainable growth. From AI-powered exploration to digital twin implementation, we partner with you to build more efficient, profitable, and future-ready energy operations.</p>
+                    <div class="cta-buttons" style="
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 1rem;
+                        justify-content: center;
+                        align-items: center;
+                    ">
+                        <a href="{% url 'contact' %}" class="btn-primary" style="
+                            background: rgba(255,255,255,0.2);
+                            backdrop-filter: blur(10px);
+                            border: 2px solid rgba(255,255,255,0.3);
+                            color: white;
+                            padding: 0.8rem 1.8rem;
+                            border-radius: 50px;
+                            text-decoration: none;
+                            font-weight: 600;
+                            font-size: clamp(0.9rem, 2vw, 1rem);
+                            transition: all 0.3s ease;
+                            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                        ">Schedule Energy Sector Consultation</a>
+                        <a href="{% url 'industries_main' %}" class="btn-secondary" style="
+                            background: white;
+                            color: #ff8c00;
+                            padding: 0.8rem 1.8rem;
+                            border-radius: 50px;
+                            text-decoration: none;
+                            font-weight: 600;
+                            font-size: clamp(0.9rem, 2vw, 1rem);
+                            transition: all 0.3s ease;
+                            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+                        ">Explore Industry Solutions</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* All CSS styles remain exactly the same as in the original template */
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+}
+
+/* Base Container - Full Width */
+.insights-page-container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Hero Section - Full Viewport (Unchanged) */
+.insights-hero {
+    position: relative;
+    color: white;
+    padding: 0;
+    text-align: center;
+    margin-bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+}
+
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #ff8c00 0%, #cc7000 100%);
+    background-image: url('https://i.pinimg.com/1200x/ff/aa/5c/ffaa5c87e45ae4e214072a496f7a72d4.jpg');
+    background-size: cover;
+    background-position: center;
+    background-blend-mode: overlay;
+    background-attachment: scroll;
+    background-repeat: no-repeat;
+    z-index: -1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    padding: 0 20px;
+    width: 100%;
+}
+
+.hero-title {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    margin-bottom: 1.5rem;
+    font-weight: 900;
+    line-height: 1.1;
+    text-shadow: 3px 3px 10px rgba(0,0,0,0.7);
+    animation: fadeInUp 1s ease-out;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+    position: relative;
+    display: inline-block;
+}
+
+.hero-title span {
+    background: linear-gradient(135deg, #ff8c00, #cc7000);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+    text-shadow: none;
+}
+
+.hero-description {
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    margin: 0 auto;
+    line-height: 1.6;
+    opacity: 0.95;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    animation: fadeInUp 1s ease-out 0.3s both;
+    background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,249,250,0.9) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 500;
+    max-width: 700px;
+    padding: 1rem 0;
+    position: relative;
+    letter-spacing: 0.2px;
+}
+
+/* Section Title */
+.section-title {
+    text-align: center;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    margin-bottom: 3rem;
+    color: #333;
+    font-weight: 800;
+    line-height: 1.2;
+    background: linear-gradient(135deg, #ff8c00, #cc7000, #228b22, #1b6e1b);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+/* AI Impact Visualization Section */
+.ai-impact-visualization {
+    padding: 4rem 0;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    width: 100%;
+}
+
+.visualization-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Enhanced Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+    70% {
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes flipInX {
+    from {
+        transform: perspective(400px) rotateX(90deg);
+        opacity: 0;
+    }
+    to {
+        transform: perspective(400px) rotateX(0deg);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Enhanced Mobile Responsiveness */
+@media (max-width: 768px) {
+    .insights-hero {
+        height: 100vh;
+        min-height: 100vh;
+        padding: 0 1rem;
+        width: 100vw;
+        margin-left: -50vw;
+        margin-right: -50vw;
+        left: 50%;
+        right: 50%;
+    }
+
+    .hero-content {
+        padding: 0 1rem;
+    }
+
+    .ai-impact-visualization {
+        padding: 2rem 0;
+    }
+
+    .timeline-section,
+    .metrics-section,
+    .applications-section,
+    .framework-section,
+    .challenges-section,
+    .future-trends-section {
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .timeline::before {
+        left: 20px;
+    }
+
+    .timeline-item {
+        padding-left: 60px;
+    }
+
+    .timeline-year {
+        min-width: 60px;
+        font-size: 0.8rem;
+        padding: 0.4rem 0.8rem;
+    }
+
+    .metrics-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .applications-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .framework-step {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .step-number {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+
+    .challenges-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        width: 100%;
+        max-width: 300px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 1rem;
+    }
+
+    .timeline-item {
+        padding-left: 50px;
+    }
+
+    .timeline-year {
+        min-width: 50px;
+        font-size: 0.7rem;
+        padding: 0.3rem 0.6rem;
+    }
+
+    .metric-value {
+        font-size: 2.5rem;
+    }
+
+    .application-area {
+        padding: 1rem;
+    }
+
+    .cta-section {
+        padding: 2rem 1rem;
+    }
+
+    .cta-section h3 {
+        font-size: 1.5rem;
+    }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 360px) {
+    .timeline-item {
+        padding-left: 45px;
+    }
+
+    .timeline-year {
+        min-width: 45px;
+    }
+
+    .metric-card {
+        padding: 1.5rem 1rem;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .metric-card:hover,
+    .framework-step:hover,
+    .application-area:hover,
+    .challenge-item:hover,
+    .trend-category:hover {
+        transform: none;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .metric-card,
+    .framework-step,
+    .application-area,
+    .challenge-item,
+    .trend-category,
+    .btn-primary,
+    .btn-secondary {
+        transition: none;
+    }
+
+    .hero-title,
+    .hero-description {
+        animation: none;
+    }
+
+    .timeline-item,
+    .metric-card,
+    .application-area,
+    .framework-step,
+    .challenge-item,
+    .trend-category {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .ai-impact-visualization {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    }
+
+    .section-title {
+        color: white;
+    }
+
+    .timeline-section,
+    .metrics-section,
+    .applications-section,
+    .framework-section,
+    .challenges-section,
+    .future-trends-section {
+        background: #2d2d2d;
+        color: white;
+    }
+
+    .timeline-content,
+    .application-area,
+    .framework-step,
+    .challenge-item,
+    .trend-category,
+    .metric-card {
+        background: #1a1a1a;
+        color: white;
+    }
+
+    .timeline-section h3,
+    .metrics-section h3,
+    .applications-section h3,
+    .framework-section h3,
+    .challenges-section h3,
+    .future-trends-section h3,
+    .timeline-content h4,
+    .application-area h4,
+    .step-content h4,
+    .challenge-item h4,
+    .trend-category h4,
+    .metric-label {
+        color: white;
+    }
+
+    .timeline-content p,
+    .metric-description,
+    .application-list li,
+    .step-content p,
+    .challenge-item p,
+    .trend-category p {
+        color: #ccc;
+    }
+
+    .adoption-stats {
+        background: #2d2d2d;
+        border-color: #444;
+    }
+
+    .adoption-stats span {
+        color: #ccc;
+    }
+}
+
+/* Mobile-specific hero background fix */
+@media (max-width: 768px) {
+    .hero-background {
+        background-attachment: scroll !important;
+        background-size: cover;
+        background-position: center center;
+    }
+}
+
+/* Text readability improvements */
+.timeline-content h4,
+.application-area h4,
+.step-content h4,
+.challenge-item h4,
+.trend-category h4 {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Container max-width for very large screens */
+@media (min-width: 1400px) {
+    .container {
+        max-width: 1320px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .applications-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .challenges-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Hover effects for interactive elements */
+@media (hover: hover) {
+    .metric-card:hover,
+    .framework-step:hover,
+    .application-area:hover,
+    .challenge-item:hover,
+    .trend-category:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    }
+
+    .btn-primary:hover {
+        background: rgba(255,255,255,0.3);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+
+    .btn-secondary:hover {
+        background: rgba(255,255,255,0.9);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Enhanced interactive effects for mobile
+document.addEventListener('DOMContentLoaded', function() {
+    // Add intersection observer for scroll animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    // Animate elements on scroll
+    const animatedElements = document.querySelectorAll('.timeline-item, .metric-card, .application-area, .framework-step, .challenge-item, .trend-category');
+    animatedElements.forEach(element => {
+        element.style.opacity = '0';
+        element.style.transform = 'translateY(20px)';
+        element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(element);
+    });
+});
+
+// Performance optimization
+let scrollTimeout;
+window.addEventListener('scroll', function() {
+    if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
+    }
+    scrollTimeout = setTimeout(function() {
+        // Handle scroll-based animations if needed
+    }, 100);
+});
+</script>
+{% endblock %}

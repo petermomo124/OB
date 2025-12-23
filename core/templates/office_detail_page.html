@@ -1,0 +1,1290 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ office.office_Name }} | Detailed Insights{% endblock %}
+
+{% block extra_css %}
+<style>
+/* 🎨 Brand Color Palette (Refined & Attractive) */
+:root {
+    --primary-color: #3f51b5; /* Indigo Blue (Pro/Calm) */
+    --secondary-color: #ff5722; /* Deep Orange (Vibrant Accent) */
+    --accent-color: #ffc107; /* Amber Yellow */
+    --dark-color: #212121; /* Rich Black */
+    --light-color: #f0f4f8; /* Soft Grey-Blue Background */
+    --card-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+    --card-shadow-mobile: 0 8px 20px rgba(0, 0, 0, 0.08);
+    --mobile-padding: 20px;
+}
+
+/* <body> Background for Full-Width effect */
+body {
+    background-color: var(--light-color);
+    overflow-x: hidden;
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* 🌟 HERO SECTION - Full Viewport Height & Parallax Effect - NOW CONSISTENT ACROSS ALL DEVICES */
+.blog-detail-hero {
+    width: 100%;
+    height: 100vh;
+    min-height: 500px;
+    background:
+        linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.45)),
+        url('https://images.pexels.com/photos/1779487/pexels-photo-1779487.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2') center/cover no-repeat;
+    background-attachment: scroll;
+    background-color: #fcebeb;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.blog-detail-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.45));
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    padding: var(--mobile-padding);
+    max-width: 900px;
+    width: 90%;
+    animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-content p.text-uppercase {
+    color: var(--accent-color) !important;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+}
+
+.hero-content h1 {
+    font-size: 5rem;
+    font-weight: 900;
+    color: white;
+    margin-bottom: 20px;
+    text-shadow: 2px 4px 10px rgba(0, 0, 0, 0.8);
+    line-height: 1.1;
+}
+
+.hero-content .lead {
+    font-size: 1.6rem;
+    color: #e0e0e0;
+    margin-bottom: 0;
+}
+
+/* 🧱 Main Content Area (Blog Body) */
+.blog-main-content {
+    background: var(--light-color);
+    margin-top: -100px;
+    position: relative;
+    z-index: 10;
+    padding-bottom: 80px;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* 🛑 CORE CHANGE: Full Width Content Wrapper */
+.content-wrapper {
+    background: white;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    padding: 50px 70px;
+    box-shadow: var(--card-shadow);
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* 📝 Blog-Like Section Styling */
+.blog-section {
+    background: white;
+    border-radius: 15px;
+    padding: 40px;
+    margin-bottom: 45px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    border-left: 8px solid var(--primary-color);
+    transition: all 0.4s ease;
+}
+
+.blog-section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    border-left-color: var(--secondary-color);
+}
+
+.blog-section h3 {
+    color: var(--dark-color);
+    font-size: 1.75rem;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 3px solid var(--accent-color);
+    font-weight: 800;
+    line-height: 1.3;
+}
+
+.info-item {
+    margin-bottom: 25px;
+    padding: 20px;
+    border-radius: 12px;
+    background-color: #e3f2fd;
+    border: 1px solid #bbdefb;
+    box-sizing: border-box;
+}
+
+.info-label {
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.1rem;
+    flex-wrap: wrap;
+}
+
+.info-label i {
+    color: var(--secondary-color);
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+
+.info-value {
+    color: var(--dark-color);
+    line-height: 1.8;
+    margin: 0;
+    font-size: 1.05rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Principal Photo & Card */
+.principal-photo {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 8px solid white;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    margin: 0 auto 30px;
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+.principal-info-card {
+    background: var(--light-color);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    box-sizing: border-box;
+}
+
+/* Map Styling */
+.office-map-container {
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+    margin-top: 25px;
+    border: 5px solid white;
+    height: 450px;
+}
+
+.office-map-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+}
+
+/* 🎯 Action Buttons */
+.action-buttons-relocated {
+    display: flex;
+    gap: 25px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.btn-custom {
+    padding: 14px 30px;
+    border-radius: 50px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+    text-align: center;
+    display: inline-block;
+    box-sizing: border-box;
+    min-height: 48px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+.btn-primary-custom {
+    background: var(--primary-color);
+    color: white;
+    box-shadow: 0 8px 20px rgba(63, 81, 181, 0.4);
+}
+
+.btn-outline-custom {
+    background: white;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+}
+
+.btn-custom:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+/* 🤝 Join Us Section - Gradient Background WITH IMPROVED BUTTON SPACING */
+.join-us-section {
+    background: linear-gradient(135deg, var(--secondary-color) 0%, #d84315 100%);
+    color: white;
+    padding: 80px 0;
+    margin-top: 60px;
+    text-align: center;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(255, 87, 34, 0.4);
+    box-sizing: border-box;
+}
+
+.join-us-icon {
+    font-size: 4rem;
+    margin-bottom: 25px;
+    color: var(--accent-color);
+}
+
+.join-us-section .btn-custom {
+    background: white;
+    color: var(--dark-color) !important;
+}
+
+.join-us-section .btn-custom:hover {
+    background: var(--accent-color);
+}
+
+/* 🆕 ADDED: Improved button spacing in Join Us Section */
+.action-buttons {
+    display: flex;
+    gap: 30px; /* Increased from default for better spacing */
+    margin-top: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* =========================================== */
+/* 📱 COMPREHENSIVE MOBILE RESPONSIVE DESIGN */
+/* =========================================== */
+
+/* Extra Large Devices (Desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 100%;
+        padding-left: 70px;
+        padding-right: 70px;
+    }
+
+    .content-wrapper {
+        padding: 50px 80px;
+    }
+}
+
+/* Large Devices (Laptops, 992px to 1199px) */
+@media (max-width: 1199px) {
+    .content-wrapper {
+        padding: 40px 50px;
+    }
+
+    .hero-content h1 {
+        font-size: 4rem;
+    }
+
+    .container {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+}
+
+/* Medium Devices (Tablets, 768px to 991px) */
+@media (max-width: 991px) {
+    /* HERO SECTION NOW CONSISTENT - REMOVED MOBILE-SPECIFIC CHANGES */
+    /* .blog-detail-hero {
+        height: 70vh;
+        min-height: 450px;
+    }
+
+    .hero-content h1 {
+        font-size: 3.5rem;
+    }
+
+    .hero-content .lead {
+        font-size: 1.4rem;
+    } */
+
+    .content-wrapper {
+        padding: 40px 30px;
+        border-radius: 25px 25px 0 0;
+    }
+
+    .blog-section {
+        padding: 30px;
+    }
+
+    .blog-section h3 {
+        font-size: 1.5rem;
+    }
+
+    .principal-photo {
+        width: 160px;
+        height: 160px;
+    }
+
+    .office-map-container {
+        height: 400px;
+    }
+
+    .action-buttons-relocated {
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .join-us-section {
+        padding: 60px 30px;
+    }
+
+    /* 🆕 Increased button spacing on tablets */
+    .action-buttons {
+        gap: 25px;
+    }
+
+    /* Mobile-specific: Remove hover effects on touch devices */
+    @media (hover: none) and (pointer: coarse) {
+        .btn-custom:hover,
+        .blog-section:hover {
+            transform: none;
+            box-shadow: none;
+        }
+    }
+}
+
+/* Small Devices (Landscape Phones, 576px to 767px) */
+@media (max-width: 767px) {
+    /* HERO SECTION NOW CONSISTENT - REMOVED MOBILE-SPECIFIC CHANGES */
+    /* .blog-detail-hero {
+        height: 60vh;
+        min-height: 400px;
+        background-attachment: scroll !important;
+    }
+
+    .hero-content {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .hero-content h1 {
+        font-size: 2.8rem;
+        line-height: 1.2;
+        margin-bottom: 15px;
+    }
+
+    .hero-content .lead {
+        font-size: 1.2rem;
+        line-height: 1.4;
+    } */
+
+    .blog-main-content {
+        margin-top: -60px;
+        padding-bottom: 40px;
+    }
+
+    .content-wrapper {
+        padding: 30px 20px;
+        border-radius: 20px 20px 0 0;
+    }
+
+    .blog-section {
+        padding: 25px 20px;
+        margin-bottom: 30px;
+        border-left-width: 6px;
+    }
+
+    .blog-section h3 {
+        font-size: 1.4rem;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+    }
+
+    .info-item {
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    .info-label {
+        font-size: 1rem;
+        gap: 8px;
+    }
+
+    .info-value {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    .principal-photo {
+        width: 140px;
+        height: 140px;
+        border-width: 6px;
+    }
+
+    .principal-info-card {
+        padding: 25px 20px;
+    }
+
+    .office-map-container {
+        height: 350px;
+        margin-top: 20px;
+        border-width: 3px;
+    }
+
+    .action-buttons-relocated {
+        gap: 15px;
+        margin-bottom: 30px;
+        justify-content: center;
+    }
+
+    .btn-custom {
+        padding: 12px 25px;
+        font-size: 0.85rem;
+        min-height: 44px;
+        width: 100%;
+        max-width: 280px;
+    }
+
+    .join-us-section {
+        padding: 40px 20px;
+        margin-top: 40px;
+        border-radius: 15px;
+    }
+
+    .join-us-icon {
+        font-size: 3rem;
+        margin-bottom: 20px;
+    }
+
+    .join-us-section h2 {
+        font-size: 1.8rem;
+        line-height: 1.3;
+    }
+
+    .join-us-section p.lead {
+        font-size: 1.1rem;
+        line-height: 1.5;
+    }
+
+    /* 🆕 Increased button spacing on mobile */
+    .action-buttons {
+        gap: 20px;
+    }
+
+    /* Mobile: Stack contact info vertically */
+    .row.mb-5.align-items-center {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .col-lg-7, .col-lg-5 {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .d-flex.justify-content-lg-end.gap-5.flex-wrap {
+        justify-content: center !important;
+        gap: 30px !important;
+        flex-wrap: wrap;
+    }
+
+    /* Mobile: Fix layout issues */
+    .row.justify-content-center {
+        flex-direction: column;
+    }
+
+    .col-md-6 {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    /* Mobile: Remove animation delays */
+    [data-aos-delay] {
+        animation-delay: 0s !important;
+    }
+}
+
+/* Extra Small Devices (Portrait Phones, less than 576px) */
+@media (max-width: 575px) {
+    /* HERO SECTION NOW CONSISTENT - REMOVED MOBILE-SPECIFIC CHANGES */
+    /* .blog-detail-hero {
+        height: 55vh;
+        min-height: 350px;
+    }
+
+    .hero-content h1 {
+        font-size: 2.2rem;
+        margin-bottom: 15px;
+    }
+
+    .hero-content .lead {
+        font-size: 1.1rem;
+    }
+
+    .hero-content p.text-uppercase {
+        font-size: 0.8rem;
+        margin-bottom: 10px;
+    } */
+
+    .blog-main-content {
+        margin-top: -50px;
+        padding-bottom: 30px;
+    }
+
+    .content-wrapper {
+        padding: 25px 15px;
+        border-radius: 15px 15px 0 0;
+    }
+
+    .blog-section {
+        padding: 20px 15px;
+        margin-bottom: 25px;
+        border-left-width: 5px;
+    }
+
+    .blog-section h3 {
+        font-size: 1.3rem;
+        margin-bottom: 15px;
+    }
+
+    .info-item {
+        padding: 12px;
+        margin-bottom: 15px;
+    }
+
+    .info-label {
+        font-size: 0.95rem;
+    }
+
+    .info-value {
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    .principal-photo {
+        width: 120px;
+        height: 120px;
+    }
+
+    .principal-info-card {
+        padding: 20px 15px;
+    }
+
+    .office-map-container {
+        height: 300px;
+        border-radius: 10px;
+    }
+
+    .action-buttons-relocated {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 30px;
+    }
+
+    .btn-custom {
+        padding: 10px 20px;
+        font-size: 0.8rem;
+        min-height: 40px;
+        width: 100%;
+        max-width: 250px;
+    }
+
+    .join-us-section {
+        padding: 30px 15px;
+        margin-top: 30px;
+        border-radius: 12px;
+    }
+
+    .join-us-icon {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+    }
+
+    .join-us-section h2 {
+        font-size: 1.6rem;
+        margin-bottom: 15px;
+    }
+
+    .join-us-section p.lead {
+        font-size: 1rem;
+        margin-bottom: 25px;
+    }
+
+    /* 🆕 Even better button spacing on small phones */
+    .action-buttons {
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+    }
+
+    .action-buttons .btn-custom {
+        width: 100%;
+        max-width: 250px;
+        margin-bottom: 10px;
+    }
+
+    /* Mobile: Improve button spacing */
+    .action-buttons.justify-content-center {
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+    }
+
+    .action-buttons .btn-custom {
+        width: 100%;
+        max-width: 250px;
+    }
+
+    /* Mobile: Fix text alignment */
+    .text-center {
+        text-align: center !important;
+    }
+
+    /* Mobile: Remove unnecessary margins */
+    .mb-5, .mt-5, .mb-4, .mt-4 {
+        margin-bottom: 1.5rem !important;
+        margin-top: 1.5rem !important;
+    }
+
+    /* Mobile: Adjust contact icons */
+    .fa-2x {
+        font-size: 1.5em !important;
+    }
+}
+
+/* Very Small Devices (iPhone SE, Galaxy Fold) */
+@media (max-width: 374px) {
+    /* HERO SECTION NOW CONSISTENT - REMOVED MOBILE-SPECIFIC CHANGES */
+    /* .blog-detail-hero {
+        height: 50vh;
+        min-height: 300px;
+    }
+
+    .hero-content h1 {
+        font-size: 1.8rem;
+        line-height: 1.2;
+    }
+
+    .hero-content .lead {
+        font-size: 1rem;
+    } */
+
+    .content-wrapper {
+        padding: 20px 12px;
+        border-radius: 12px 12px 0 0;
+    }
+
+    .blog-section {
+        padding: 18px 12px;
+        border-left-width: 4px;
+    }
+
+    .blog-section h3 {
+        font-size: 1.2rem;
+        margin-bottom: 12px;
+    }
+
+    .principal-photo {
+        width: 100px;
+        height: 100px;
+    }
+
+    .btn-custom {
+        padding: 10px 15px;
+        font-size: 0.75rem;
+        min-height: 38px;
+    }
+
+    .office-map-container {
+        height: 250px;
+    }
+
+    /* 🆕 Compact but still spaced buttons on very small screens */
+    .action-buttons {
+        gap: 12px;
+    }
+
+    .action-buttons .btn-custom {
+        padding: 10px 15px;
+        font-size: 0.75rem;
+    }
+
+    /* Mobile: Adjust contact info layout */
+    .d-flex.justify-content-lg-end.gap-5.flex-wrap {
+        flex-direction: column;
+        gap: 20px !important;
+    }
+
+    .text-center {
+        width: 100%;
+    }
+}
+
+/* =========================================== */
+/* 📱 MOBILE-FRIENDLY ENHANCEMENTS */
+/* =========================================== */
+
+/* Prevent horizontal scrolling */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* Touch-friendly font sizes */
+@media (pointer: coarse) and (hover: none) {
+    .btn-custom {
+        min-height: 44px;
+        font-size: 16px;
+    }
+
+    .info-label, .info-value, .blog-section h3 {
+        font-size: 16px;
+    }
+
+    /* Improve touch targets */
+    a, button, .btn-custom {
+        min-height: 44px;
+        min-width: 44px;
+    }
+}
+
+/* Safe area insets for modern mobile devices */
+@supports (padding: max(0px)) {
+    .content-wrapper,
+    .blog-section,
+    .join-us-section,
+    .blog-detail-hero {
+        padding-left: max(var(--mobile-padding), env(safe-area-inset-left));
+        padding-right: max(var(--mobile-padding), env(safe-area-inset-right));
+    }
+
+    .blog-main-content {
+        padding-bottom: max(30px, env(safe-area-inset-bottom));
+    }
+
+    .hero-content {
+        padding-top: max(var(--mobile-padding), env(safe-area-inset-top));
+        padding-bottom: max(var(--mobile-padding), env(safe-area-inset-bottom));
+    }
+}
+
+/* Landscape mode adjustments */
+@media (max-height: 500px) and (orientation: landscape) {
+    .blog-detail-hero {
+        height: 120vh;
+        min-height: 400px;
+    }
+
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero-content .lead {
+        font-size: 1.1rem;
+    }
+
+    .office-map-container {
+        height: 250px;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .content-wrapper {
+        background: #1a1a1a;
+    }
+
+    .blog-section {
+        background: #2d2d2d;
+    }
+
+    .blog-section h3 {
+        color: #f0f0f0;
+    }
+
+    .info-value {
+        color: #e0e0e0;
+    }
+
+    .info-item {
+        background-color: #2d3748;
+        border-color: #4a5568;
+    }
+}
+
+/* Print styles */
+@media print {
+    .blog-detail-hero {
+        height: auto;
+        background: none !important;
+        color: black !important;
+    }
+
+    .hero-content h1 {
+        color: black !important;
+        text-shadow: none !important;
+    }
+
+    .btn-custom,
+    .action-buttons-relocated,
+    .join-us-section,
+    .office-map-container {
+        display: none !important;
+    }
+
+    .blog-main-content {
+        margin-top: 0 !important;
+    }
+
+    .content-wrapper {
+        box-shadow: none !important;
+        padding: 0 !important;
+        border-radius: 0 !important;
+    }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .blog-section,
+    .btn-custom {
+        transition: none !important;
+    }
+}
+
+/* 🌟 HERO SECTION - Responsive Text Size Adjustments */
+.blog-detail-hero {
+    width: 100%;
+    height: 100vh;
+    min-height: 500px;
+    background:
+        linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.45)),
+        url('https://i.pinimg.com/1200x/02/bb/4c/02bb4c49859765d470cd82032a037a33.jpg') center/cover no-repeat;
+    background-attachment: scroll;
+    background-color: #fcebeb;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.blog-detail-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.45));
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    padding: var(--mobile-padding);
+    max-width: 900px;
+    width: 90%;
+    animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-content p.text-uppercase {
+    color: var(--accent-color) !important;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+}
+
+.hero-content h1 {
+    font-size: 5rem;
+    font-weight: 900;
+    color: white;
+    margin-bottom: 20px;
+    text-shadow: 2px 4px 10px rgba(0, 0, 0, 0.8);
+    line-height: 1.1;
+}
+
+.hero-content .lead {
+    font-size: 1.6rem;
+    color: #e0e0e0;
+    margin-bottom: 0;
+}
+
+/* 📱 SMALL SCREEN ADJUSTMENTS FOR HERO TEXT */
+@media (max-width: 1199px) {
+    .hero-content h1 {
+        font-size: 4rem;
+    }
+    .hero-content .lead {
+        font-size: 1.4rem;
+    }
+}
+
+@media (max-width: 991px) {
+    .hero-content h1 {
+        font-size: 3.5rem;
+    }
+    .hero-content .lead {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 767px) {
+    .hero-content {
+        width: 95%;
+        padding: 15px;
+    }
+    .hero-content h1 {
+        font-size: 2.8rem;
+        line-height: 1.2;
+        margin-bottom: 15px;
+    }
+    .hero-content .lead {
+        font-size: 1.2rem;
+        line-height: 1.4;
+    }
+}
+
+@media (max-width: 575px) {
+    .hero-content h1 {
+        font-size: 2.2rem;
+        margin-bottom: 15px;
+    }
+    .hero-content .lead {
+        font-size: 1.1rem;
+    }
+    .hero-content p.text-uppercase {
+        font-size: 0.8rem;
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 374px) {
+    .hero-content h1 {
+        font-size: 1.8rem;
+        line-height: 1.2;
+    }
+    .hero-content .lead {
+        font-size: 1rem;
+    }
+    .hero-content p.text-uppercase {
+        font-size: 0.75rem;
+        letter-spacing: 1.5px;
+    }
+}
+
+/* Landscape mode adjustments for text */
+@media (max-height: 500px) and (orientation: landscape) {
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+    .hero-content .lead {
+        font-size: 1.1rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="blog-detail-hero">
+    <div class="container">
+        <div class="hero-content" data-aos="fade-up">
+            <p class="text-uppercase fw-bold mb-2">Office Insight</p>
+            <h1 class="fw-bold">{{ office.office_Name }}</h1>
+            <p class="lead mb-0">
+                <i class="fas fa-map-marker-alt me-2"></i>
+                Here at {{ office.office_location }} our customer satisfaction is a high priority!
+            </p>
+        </div>
+    </div>
+</section>
+
+<div class="container blog-main-content">
+    <div class="content-wrapper">
+
+        {% if office_details %}
+        <div class="row mb-5 align-items-center">
+            <div class="col-lg-7">
+                <div class="action-buttons-relocated">
+                    <a href="{% url 'contact' %}" class="btn-custom btn-primary-custom">
+                        <i class="fas fa-envelope me-2"></i>Reach out Today!
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="d-flex justify-content-lg-end gap-5 flex-wrap">
+                    {% if office_details.first_phone_number %}
+                    <div class="text-center">
+                        <i class="fas fa-phone-volume fa-2x" style="color: var(--secondary-color);"></i>
+                        <p class="mb-0 fw-bold mt-1 text-dark">{{ office_details.first_phone_number }}</p>
+                        <small class="text-muted">Primary Phone</small>
+                    </div>
+                    {% endif %}
+                    {% if office_details.second_phone_number %}
+                    <div class="text-center">
+                        <i class="fas fa-mobile-alt fa-2x" style="color: var(--secondary-color);"></i>
+                        <p class="mb-0 fw-bold mt-1 text-dark">{{ office_details.second_phone_number }}</p>
+                        <small class="text-muted">Secondary Phone</small>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="blog-section" data-aos="fade-up">
+            <h3><i class="fas fa-bullseye me-3"></i>Our Core Purpose</h3>
+            <div class="info-value">
+                {{ office.office_purpose|linebreaks }}
+            </div>
+        </div>
+
+        {% if office_details %}
+        <div class="row">
+            {% if office_details.office_focus %}
+            <div class="col-md-6">
+                <div class="blog-section" data-aos="fade-up" data-aos-delay="100">
+                    <h3><i class="fas fa-briefcase me-3"></i>Office Focus Areas</h3>
+                    <div class="info-value">
+                        {{ office_details.office_focus|linebreaks }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if office_details.community_involvement %}
+            <div class="col-md-6">
+                <div class="blog-section" data-aos="fade-up" data-aos-delay="200">
+                    <h3><i class="fas fa-hands-helping me-3"></i>Community Commitment</h3>
+                    <div class="info-value">
+                        {{ office_details.community_involvement|linebreaks }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="blog-section text-center" data-aos="fade-up" data-aos-delay="300">
+            <h3><i class="fas fa-user-tie me-3"></i>Meet the Office Principal</h3>
+
+            <div class="principal-info-card mx-auto">
+                {% if office_details.principal_photo %}
+                <img src="{{ office_details.get_principal_photo_url }}"
+                     alt="{{ office_details.principal_full_name }}"
+                     class="principal-photo"
+                     onerror="this.src='{% static 'images/team-placeholder.jpg' %}'">
+                {% else %}
+                <img src="{% static 'images/team-placeholder.jpg' %}"
+                     alt="Placeholder Photo"
+                     class="principal-photo">
+                {% endif %}
+
+                <h4 class="fw-bold text-dark mt-3">{{ office_details.principal_full_name }}</h4>
+                <p class="text-muted mb-4">Office Principal</p>
+
+                <div class="row justify-content-center">
+                    {% if office_details.principal_business_email %}
+                    <div class="col-md-6 mb-3">
+                        <div class="info-item p-3">
+                            <div class="info-label justify-content-center">
+                                <i class="fas fa-envelope"></i>Business Email
+                            </div>
+                            <p class="info-value mb-0">
+                                <a href="mailto:{{ office_details.principal_business_email }}" class="text-decoration-none" style="color: var(--dark-color);">
+                                    {{ office_details.principal_business_email }}
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if office_details.principal_business_phone %}
+                    <div class="col-md-6 mb-3">
+                        <div class="info-item p-3">
+                            <div class="info-label justify-content-center">
+                                <i class="fas fa-phone"></i>Business Phone
+                            </div>
+                            <p class="info-value mb-0">{{ office_details.principal_business_phone }}</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if office.google_map_url %}
+        <div class="blog-section" data-aos="fade-up" data-aos-delay="400">
+            <h3><i class="fas fa-map-marked-alt me-3"></i>Office Location Map</h3>
+            <div class="office-map-container">
+                <iframe
+                    src="{{ office.google_map_url }}"
+                    width="100%"
+                    height="500"
+                    style="border:0;"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    title="Office Location Map">
+                </iframe>
+            </div>
+            <!-- Open Larger Map View button has been removed as requested -->
+        </div>
+        {% endif %}
+
+        <div class="join-us-section" data-aos="zoom-in">
+            <div class="join-us-content">
+                <div class="join-us-icon">
+                    <i class="fas fa-handshake"></i>
+                </div>
+                <h2 class="mb-4 fw-bold">Ready to Join Our Success?</h2>
+                <p class="lead mb-5">
+                    Explore exciting career opportunities or learn about our internship programs within the
+                    {{ office.office_location }} office and become part of a global team.
+                </p>
+                <div class="action-buttons justify-content-center">
+                   
+                    <a href="{% url 'contact' %}" class="btn-custom btn-outline-custom" style="background: white; color: var(--secondary-color); border: 2px solid white;">
+                        <i class="fas fa-graduation-cap me-2"></i>Internship Programs
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if device is mobile
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+    // Adjust animations for mobile
+    if (isMobile) {
+        // Remove all animation delays on mobile for better performance
+        document.querySelectorAll('[data-aos-delay]').forEach(el => {
+            el.setAttribute('data-aos-delay', '0');
+        });
+
+        // Disable parallax on mobile for better performance
+        document.querySelectorAll('.blog-detail-hero').forEach(el => {
+            el.style.backgroundAttachment = 'scroll';
+        });
+    }
+
+    // Scroll animation for sections
+    const animateOnScroll = () => {
+        const sections = document.querySelectorAll('.blog-section, .join-us-section');
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: isMobile ? '50px' : '100px'
+        });
+
+        sections.forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+            observer.observe(section);
+        });
+    };
+
+    animateOnScroll();
+
+    // Mobile touch improvements
+    if (isMobile) {
+        // Add touch feedback to buttons
+        document.querySelectorAll('.btn-custom').forEach(btn => {
+            btn.addEventListener('touchstart', function() {
+                this.style.transform = 'scale(0.98)';
+            });
+
+            btn.addEventListener('touchend', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+
+        // Improve map interaction on mobile
+        const mapIframe = document.querySelector('.office-map-container iframe');
+        if (mapIframe) {
+            mapIframe.style.pointerEvents = 'auto';
+        }
+    }
+
+    // Handle window resize
+    let resizeTimer;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function() {
+            // Re-initialize animations on resize
+            animateOnScroll();
+        }, 250);
+    });
+});
+</script>
+{% endblock %}

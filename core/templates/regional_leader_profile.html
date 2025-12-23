@@ -1,0 +1,1898 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ leader.first_name }} {{ leader.last_name }} | OB Global{% endblock %}
+
+{% block content %}
+<div class="managing-partner-profile-container" style="all: initial !important; font-family: 'Montserrat', 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif !important;">
+    <!-- Font Awesome CSS Import -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Hero Section -->
+    <section class="mp-hero-section">
+        <div class="mp-hero-background"></div>
+        
+        <div class="mp-hero-content">
+            <div class="mp-container">
+                <div class="mp-hero-grid">
+                    <!-- Avatar Section -->
+                    <div class="mp-avatar-section">
+                        <div class="mp-avatar-container">
+                            <div class="mp-leader-avatar">
+                                {% if leader.profile_image %}
+                                <img src="{{ leader.get_profile_image_url }}" 
+                                     alt="{{ leader.first_name }} {{ leader.last_name }}"
+                                     class="mp-leader-image">
+                                {% else %}
+                                <div class="mp-leader-placeholder">
+                                    <i class="fas fa-user-tie"></i>
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="mp-avatar-decoration">
+                                <div class="mp-decoration-ring mp-ring-1"></div>
+                                <div class="mp-decoration-ring mp-ring-2"></div>
+                                <div class="mp-decoration-ring mp-ring-3"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Name and Title Section -->
+                    <div class="mp-name-section">
+                        <div class="mp-name-badge">
+                            <h1 class="mp-hero-title">
+                                <span class="mp-first-name">{{ leader.first_name }}</span>
+                                <span class="mp-last-name">{{ leader.last_name }}</span>
+                            </h1>
+                            <div class="mp-title-container">
+                                <span class="mp-leader-title">
+                                    {% if leader_type == 'managing_partner' %}
+                                        🎯 {{ leader.position_title|default:"Managing Partner" }}
+                                    {% else %}
+                                        🎯 {{ leader.region_title|default:"Regional Leader" }}
+                                    {% endif %}
+                                </span>
+                                <div class="mp-title-underline"></div>
+                            </div>
+                            
+                            <!-- Region display for regional leaders -->
+                            {% if leader_type == 'regional_leader' and leader.get_region_display %}
+                            <div class="mp-region-badge">
+                                <i class="fas fa-globe"></i>
+                                {{ leader.get_region_display }}
+                            </div>
+                            {% endif %}
+                            
+                            <!-- Joining Date -->
+                            {% if leader.joining_date %}
+                            <div class="mp-joining-date">
+                                <i class="fas fa-calendar-alt"></i>
+                                {% if leader_type == 'managing_partner' %}
+                                    Joined {{ leader.get_formatted_joining_date }}
+                                {% else %}
+                                    Joined {{ leader.joining_date }}
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                            
+                            <!-- Years in role -->
+                            {% if leader.years_in_role %}
+                            <div class="mp-years-role">
+                                <i class="fas fa-clock"></i>
+                                {{ leader.years_in_role }} years in role
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Contact Section -->
+                    <div class="mp-contact-section">
+                        <div class="mp-contact-card">
+                            <div class="mp-contact-header">
+                                <h3>Contact Information</h3>
+                                <div class="mp-contact-header-icon">
+                                    <i class="fas fa-id-card"></i>
+                                </div>
+                            </div>
+                            <div class="mp-contact-details">
+                                <!-- Email -->
+                                <div class="mp-contact-item">
+                                    <div class="mp-contact-icon">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    <div class="mp-contact-info">
+                                        <span class="mp-contact-label">Email</span>
+                                        <a href="mailto:{{ leader.email }}" class="mp-contact-value">{{ leader.email }}</a>
+                                    </div>
+                                </div>
+
+                                <!-- LinkedIn -->
+                                {% if leader.linkedin %}
+                                <div class="mp-contact-item">
+                                    <a href="{{ leader.linkedin }}" target="_blank" class="mp-linkedin-btn">
+                                        <div class="mp-btn-content">
+                                            <div class="mp-btn-icon">
+                                                <i class="fab fa-linkedin"></i>
+                                            </div>
+                                            <span class="mp-btn-text">Connect on LinkedIn</span>
+                                        </div>
+                                        <div class="mp-btn-hover-effect"></div>
+                                    </a>
+                                </div>
+                                {% endif %}
+
+                                <!-- Phone -->
+                                {% if leader.phone %}
+                                <div class="mp-contact-item">
+                                    <div class="mp-contact-icon">
+                                        <i class="fas fa-phone"></i>
+                                    </div>
+                                    <div class="mp-contact-info">
+                                        <span class="mp-contact-label">Phone</span>
+                                        <a href="tel:{{ leader.phone }}" class="mp-contact-value">{{ leader.phone }}</a>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="mp-scroll-indicator">
+            <div class="mp-scroll-text">Scroll to explore</div>
+            <div class="mp-scroll-arrow">
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section class="mp-education-section">
+        <div class="mp-container">
+            <div class="mp-section-header">
+                <div class="mp-section-badge">
+                    <span class="mp-badge-text">Education & Expertise</span>
+                </div>
+                <h2 class="mp-section-title">Education</h2>
+                <p class="mp-section-subtitle">Academic background and qualifications</p>
+            </div>
+            
+            <div class="mp-education-content">
+                <div class="mp-education-card">
+                    <div class="mp-education-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="mp-education-text">
+                        <p>{{ leader.education|default:"Education information not available" }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Expertise Section -->
+    <section class="mp-expertise-section">
+        <div class="mp-container">
+            <div class="mp-section-header">
+                <h2 class="mp-section-title">Expertise</h2>
+                <p class="mp-section-subtitle">Areas of specialization and professional focus</p>
+            </div>
+            
+            <div class="mp-expertise-content">
+                <div class="mp-expertise-card">
+                    <div class="mp-expertise-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="mp-expertise-text">
+                        <p>
+                            {% if leader_type == 'managing_partner' %}
+                                {{ leader.expertise|default:"Expertise information not available" }}
+                            {% else %}
+                                {{ leader.regional_expertise|default:"Regional expertise information not available" }}
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Achievements Section -->
+    <section class="mp-achievements-section">
+        <div class="mp-container">
+            <div class="mp-section-header">
+                <h2 class="mp-section-title">Key Achievements</h2>
+                <p class="mp-section-subtitle">Notable accomplishments and recognitions</p>
+            </div>
+            
+            <div class="mp-achievements-content">
+                <div class="mp-achievements-card">
+                    <div class="mp-achievements-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="mp-achievements-text">
+                        <p>{{ leader.achievements|default:"Achievements information not available" }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Professional Bio Section -->
+    <section class="mp-bio-section">
+        <div class="mp-container">
+            <div class="mp-section-header">
+                <div class="mp-section-badge">
+                    <span class="mp-badge-text">Professional Profile</span>
+                </div>
+                <h2 class="mp-section-title">Professional Biography</h2>
+                <p class="mp-section-subtitle">Career overview and professional journey</p>
+            </div>
+            
+            <div class="mp-bio-content">
+                <div class="mp-bio-card">
+                    <div class="mp-bio-icon">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <div class="mp-bio-text">
+                        <p>{{ leader.bio|default:"Professional biography not available" }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Company Impact Section -->
+    <section class="mp-impact-section">
+        <div class="mp-container">
+            <div class="mp-section-header">
+                <h2 class="mp-section-title">Company Impact</h2>
+                <p class="mp-section-subtitle">Contributions and influence within the organization</p>
+            </div>
+            
+            <div class="mp-impact-content">
+                <div class="mp-impact-card">
+                    <div class="mp-impact-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <div class="mp-impact-text">
+                        <p>{{ leader.company_impact|default:"Company impact information not available" }}</p>
+                    </div>
+                    
+                    {% if leader.years_in_role %}
+                    <div class="mp-years-role-display">
+                        <div class="mp-years-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="mp-years-info">
+                            <div class="mp-years-value">{{ leader.years_in_role }}</div>
+                            <div class="mp-years-label">Years in Role</div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Leadership Philosophy Section -->
+    <section class="mp-philosophy-section">
+        <div class="mp-container">
+            <div class="mp-section-header">
+                <h2 class="mp-section-title">Leadership Philosophy</h2>
+                <p class="mp-section-subtitle">Approach to leadership and team management</p>
+            </div>
+            
+            <div class="mp-philosophy-content">
+                <div class="mp-philosophy-card">
+                    <div class="mp-philosophy-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <div class="mp-philosophy-text">
+                        <p>
+                            {% if leader_type == 'managing_partner' %}
+                                {{ leader.leadership_philosophy|default:"Leadership philosophy not available" }}
+                            {% else %}
+                                {{ leader.leadership_style|default:"Leadership style not available" }}
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Strategic Vision Section -->
+    <section class="mp-vision-section">
+        <div class="mp-container">
+            <div class="mp-section-header">
+                <h2 class="mp-section-title">Strategic Vision</h2>
+                <p class="mp-section-subtitle">Future direction and strategic outlook</p>
+            </div>
+            
+            <div class="mp-vision-content">
+                <div class="mp-vision-card">
+                    <div class="mp-vision-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="mp-vision-text">
+                        <p>
+                            {% if leader_type == 'managing_partner' %}
+                                {{ leader.strategic_vision|default:"Strategic vision not available" }}
+                            {% else %}
+                                {{ leader.market_insights|default:"Market insights not available" }}
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="mp-cta-section">
+        <div class="mp-cta-background"></div>
+        <div class="mp-container">
+            <div class="mp-cta-content">
+                <div class="mp-cta-header">
+                    <h2 class="mp-cta-title">Ready to Transform Your Business?</h2>
+                    <p class="mp-cta-subtitle">Partner with OB Global for strategic leadership and innovative solutions</p>
+                </div>
+                
+                <div class="mp-cta-features-grid">
+                    <div class="mp-cta-feature">
+                        <div class="mp-feature-icon">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <h4 class="mp-feature-title">Strategic Advisory</h4>
+                        <div class="mp-feature-desc-container">
+                            <p class="mp-feature-desc">Expert guidance for business growth and transformation</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mp-cta-feature">
+                        <div class="mp-feature-icon">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <h4 class="mp-feature-title">Business Optimization</h4>
+                        <div class="mp-feature-desc-container">
+                            <p class="mp-feature-desc">Streamline operations and maximize efficiency</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mp-cta-feature">
+                        <div class="mp-feature-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <h4 class="mp-feature-title">Global Expertise</h4>
+                        <div class="mp-feature-desc-container">
+                            <p class="mp-feature-desc">International experience and market insights</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mp-cta-feature">
+                        <div class="mp-feature-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h4 class="mp-feature-title">Innovation Solutions</h4>
+                        <div class="mp-feature-desc-container">
+                            <p class="mp-feature-desc">Cutting-edge approaches to business challenges</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mp-cta-buttons-grid">
+                    <a href="{% url 'contact' %}" class="mp-cta-btn mp-primary-btn">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>Schedule a Consultation</span>
+                    </a>
+                    
+                    <a href="{% url 'index' %}" class="mp-cta-btn mp-secondary-btn">
+                        <i class="fas fa-handshake"></i>
+                        <span>Explore Our Services</span>
+                    </a>
+                    
+                    <a href="{% url 'insights_main' %}" class="mp-cta-btn mp-tertiary-btn">
+                        <i class="fas fa-newspaper"></i>
+                        <span>Read Our Insights</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        /* Reset and Base Styles */
+        .managing-partner-profile-container * {
+            box-sizing: border-box !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            font-family: inherit !important;
+            max-width: 100% !important;
+        }
+
+        /* Container */
+        .mp-container {
+            width: 100% !important;
+            max-width: 1200px !important;
+            margin: 0 auto !important;
+            padding: 0 20px !important;
+        }
+
+        /* Hero Section */
+        .mp-hero-section {
+            position: relative !important;
+            min-height: 100vh !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 40px 0 !important;
+            color: #ffffff !important;
+            background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #3949ab 100%) !important;
+            overflow: hidden !important;
+        }
+
+        .mp-hero-background {
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            background: url('https://i.pinimg.com/736x/a8/be/af/a8beaf42c5f7b1d89b36f0847fb941e5.jpg') center/cover no-repeat !important;
+            opacity: 0.1 !important;
+            z-index: 0 !important;
+        }
+
+        .mp-hero-content {
+            position: relative !important;
+            z-index: 2 !important;
+            width: 100% !important;
+        }
+
+        .mp-hero-grid {
+            display: grid !important;
+            grid-template-columns: 250px 1fr 320px !important;
+            gap: 40px !important;
+            align-items: center !important;
+            padding: 30px 0 !important;
+        }
+
+        /* Avatar Section */
+        .mp-avatar-container {
+            position: relative !important;
+            display: grid !important;
+            place-items: center !important;
+        }
+
+        .mp-leader-avatar {
+            width: 200px !important;
+            height: 200px !important;
+            border-radius: 50% !important;
+            overflow: hidden !important;
+            border: 5px solid rgba(255, 255, 255, 0.3) !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+            position: relative !important;
+            transition: all 0.3s ease !important;
+            z-index: 2 !important;
+            background: white !important;
+            grid-area: 1 / 1 / 2 / 2 !important;
+        }
+
+        .mp-leader-image {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .mp-leader-placeholder {
+            width: 100% !important;
+            height: 100% !important;
+            display: grid !important;
+            place-items: center !important;
+            background: linear-gradient(135deg, #4e54c8, #8f94fb) !important;
+            color: white !important;
+            font-size: 3.5rem !important;
+        }
+
+        .mp-avatar-decoration {
+            position: absolute !important;
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            width: 100% !important;
+            height: 100% !important;
+            z-index: 1 !important;
+            display: grid !important;
+            place-items: center !important;
+        }
+
+        .mp-decoration-ring {
+            position: absolute !important;
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            border-radius: 50% !important;
+            border: 2px solid rgba(255, 255, 255, 0.3) !important;
+            animation: mp-pulse-ring 3s infinite !important;
+        }
+
+        .mp-ring-1 {
+            width: 230px !important;
+            height: 230px !important;
+            animation-delay: 0s !important;
+        }
+
+        .mp-ring-2 {
+            width: 260px !important;
+            height: 260px !important;
+            animation-delay: 1s !important;
+        }
+
+        .mp-ring-3 {
+            width: 290px !important;
+            height: 290px !important;
+            animation-delay: 2s !important;
+        }
+
+        /* Name Section */
+        .mp-name-section {
+            display: grid !important;
+            align-content: center !important;
+        }
+
+        .mp-name-badge {
+            position: relative !important;
+            display: grid !important;
+            gap: 10px !important;
+        }
+
+        .mp-hero-title {
+            font-size: 2.8rem !important;
+            font-weight: 800 !important;
+            line-height: 1.1 !important;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5) !important;
+            color: #ffffff !important;
+            display: grid !important;
+            gap: 5px !important;
+        }
+
+        .mp-first-name {
+            color: #ffffff !important;
+        }
+
+        .mp-last-name {
+            color: #4fc3f7 !important;
+            font-weight: 900 !important;
+        }
+
+        .mp-title-container {
+            position: relative !important;
+            display: grid !important;
+            gap: 5px !important;
+            margin-bottom: 5px !important;
+        }
+
+        .mp-leader-title {
+            color: #bbdefb !important;
+            font-size: 1.6rem !important;
+            opacity: 0.9 !important;
+            font-weight: 600 !important;
+        }
+
+        .mp-title-underline {
+            height: 3px !important;
+            width: 100px !important;
+            background: linear-gradient(90deg, transparent, #4fc3f7, transparent) !important;
+            border-radius: 2px !important;
+        }
+
+        .mp-region-badge {
+            display: inline-grid !important;
+            grid-auto-flow: column !important;
+            align-items: center !important;
+            gap: 8px !important;
+            background: rgba(255, 255, 255, 0.1) !important;
+            color: #4fc3f7 !important;
+            padding: 8px 15px !important;
+            border-radius: 20px !important;
+            font-size: 0.9rem !important;
+            font-weight: 600 !important;
+            border: 1px solid rgba(79, 195, 247, 0.3) !important;
+            backdrop-filter: blur(10px) !important;
+            width: fit-content !important;
+        }
+
+        .mp-joining-date {
+            display: inline-grid !important;
+            grid-auto-flow: column !important;
+            align-items: center !important;
+            gap: 8px !important;
+            background: rgba(255, 255, 255, 0.1) !important;
+            color: #bbdefb !important;
+            padding: 8px 15px !important;
+            border-radius: 20px !important;
+            font-size: 0.9rem !important;
+            font-weight: 600 !important;
+            border: 1px solid rgba(79, 195, 247, 0.3) !important;
+            backdrop-filter: blur(10px) !important;
+            width: fit-content !important;
+        }
+
+        .mp-years-role {
+            display: inline-grid !important;
+            grid-auto-flow: column !important;
+            align-items: center !important;
+            gap: 8px !important;
+            background: rgba(255, 255, 255, 0.1) !important;
+            color: #ff9800 !important;
+            padding: 8px 15px !important;
+            border-radius: 20px !important;
+            font-size: 0.9rem !important;
+            font-weight: 600 !important;
+            border: 1px solid rgba(255, 152, 0, 0.3) !important;
+            backdrop-filter: blur(10px) !important;
+            width: fit-content !important;
+            margin-top: 5px !important;
+        }
+
+        /* Contact Section */
+        .mp-contact-card {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px) !important;
+            border-radius: 12px !important;
+            padding: 20px !important;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2) !important;
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            transition: all 0.3s ease !important;
+            color: #000000 !important;
+            display: grid !important;
+            gap: 15px !important;
+        }
+
+        .mp-contact-header {
+            display: grid !important;
+            grid-template-columns: 1fr auto !important;
+            align-items: center !important;
+            gap: 15px !important;
+            padding-bottom: 15px !important;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+        }
+
+        .mp-contact-header h3 {
+            font-size: 1.2rem !important;
+            font-weight: 700 !important;
+            color: #000000 !important;
+            margin: 0 !important;
+        }
+
+        .mp-contact-header-icon {
+            font-size: 1.3rem !important;
+            color: #4e54c8 !important;
+        }
+
+        .mp-contact-details {
+            display: grid !important;
+            gap: 10px !important;
+        }
+
+        .mp-contact-item {
+            display: grid !important;
+            grid-template-columns: auto 1fr !important;
+            align-items: center !important;
+            gap: 15px !important;
+            padding: 12px 15px !important;
+            border-radius: 10px !important;
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(20px) !important;
+            border: 2px solid rgba(255, 255, 255, 0.3) !important;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1) !important;
+            transition: all 0.3s ease !important;
+            min-height: 60px !important;
+        }
+
+        .mp-contact-item:has(.mp-linkedin-btn) {
+            grid-template-columns: 1fr !important;
+            padding: 0 !important;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+
+        .mp-contact-icon {
+            font-size: 1.2rem !important;
+            color: #4e54c8 !important;
+            width: 24px !important;
+            text-align: center !important;
+        }
+
+        .mp-contact-info {
+            display: grid !important;
+            gap: 3px !important;
+            min-width: 0 !important;
+        }
+
+        .mp-contact-label {
+            font-size: 0.8rem !important;
+            color: #666 !important;
+            font-weight: 600 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+        }
+
+        .mp-contact-value {
+            font-size: 0.95rem !important;
+            font-weight: 700 !important;
+            color: #1a237e !important;
+            word-break: break-word !important;
+            overflow-wrap: break-word !important;
+            white-space: normal !important;
+            line-height: 1.4 !important;
+            display: block !important;
+            width: 100% !important;
+            text-decoration: none !important;
+            transition: color 0.3s ease !important;
+        }
+
+        .mp-contact-value:hover {
+            color: #4fc3f7 !important;
+        }
+
+        .mp-linkedin-btn {
+            display: grid !important;
+            grid-template-columns: auto 1fr !important;
+            align-items: center !important;
+            gap: 10px !important;
+            background: #0077b5 !important;
+            color: white !important;
+            padding: 12px 20px !important;
+            border-radius: 8px !important;
+            text-decoration: none !important;
+            font-weight: 600 !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 4px 15px rgba(0, 119, 181, 0.3) !important;
+            position: relative !important;
+            overflow: hidden !important;
+        }
+
+        .mp-btn-content {
+            display: grid !important;
+            grid-template-columns: auto 1fr !important;
+            align-items: center !important;
+            gap: 10px !important;
+            z-index: 2 !important;
+            position: relative !important;
+        }
+
+        .mp-btn-icon {
+            font-size: 1.1rem !important;
+        }
+
+        .mp-btn-text {
+            font-size: 0.95rem !important;
+        }
+
+        .mp-btn-hover-effect {
+            position: absolute !important;
+            top: 0 !important;
+            left: -100% !important;
+            width: 100% !important;
+            height: 100% !important;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent) !important;
+            transition: left 0.5s !important;
+        }
+
+        .mp-linkedin-btn:hover .mp-btn-hover-effect {
+            left: 100% !important;
+        }
+
+        /* Scroll Indicator */
+        .mp-scroll-indicator {
+            position: absolute !important;
+            bottom: 20px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            display: grid !important;
+            gap: 5px !important;
+            justify-items: center !important;
+            color: rgba(255, 255, 255, 0.9) !important;
+            z-index: 10 !important;
+            animation: mp-bounce 2s infinite !important;
+        }
+
+        .mp-scroll-text {
+            font-size: 0.85rem !important;
+            letter-spacing: 1px !important;
+            font-weight: 500 !important;
+            color: #ffffff !important;
+        }
+
+        .mp-scroll-arrow i {
+            color: #ffffff !important;
+            font-size: 1rem !important;
+        }
+
+        /* Section Header Styles (Common for all sections) */
+        .mp-section-header {
+            text-align: center !important;
+            margin-bottom: 40px !important;
+            position: relative !important;
+            display: grid !important;
+            gap: 15px !important;
+            justify-items: center !important;
+        }
+
+        .mp-section-badge {
+            display: grid !important;
+            place-items: center !important;
+            background: linear-gradient(135deg, #1a237e, #3949ab) !important;
+            color: white !important;
+            padding: 8px 20px !important;
+            border-radius: 30px !important;
+            font-size: 0.85rem !important;
+            font-weight: 600 !important;
+            letter-spacing: 1px !important;
+            box-shadow: 0 4px 15px rgba(26, 35, 126, 0.3) !important;
+        }
+
+        .mp-badge-text {
+            color: white !important;
+        }
+
+        .mp-section-title {
+            font-size: 2.2rem !important;
+            color: #1a237e !important;
+            font-weight: 700 !important;
+            margin: 0 !important;
+        }
+
+        .mp-section-subtitle {
+            font-size: 1.1rem !important;
+            color: #666 !important;
+            max-width: 600px !important;
+            margin: 0 !important;
+        }
+
+        /* Common Card Styles for Content Sections */
+        .mp-education-card,
+        .mp-expertise-card,
+        .mp-achievements-card,
+        .mp-bio-card,
+        .mp-impact-card,
+        .mp-philosophy-card,
+        .mp-vision-card {
+            background: white !important;
+            padding: 40px !important;
+            border-radius: 15px !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08) !important;
+            transition: all 0.3s ease !important;
+            position: relative !important;
+            overflow: hidden !important;
+            display: grid !important;
+            grid-template-columns: auto 1fr !important;
+            gap: 30px !important;
+            align-items: start !important;
+            border-left: 5px solid !important;
+        }
+
+        /* Education Section */
+        .mp-education-section {
+            padding: 80px 0 !important;
+            background-color: #ffffff !important;
+        }
+
+        .mp-education-card {
+            border-color: #1a237e !important;
+        }
+
+        .mp-education-icon {
+            width: 60px !important;
+            height: 60px !important;
+            border-radius: 50% !important;
+            display: grid !important;
+            place-items: center !important;
+            font-size: 1.8rem !important;
+            color: white !important;
+            background: linear-gradient(135deg, #1a237e, #3949ab) !important;
+            box-shadow: 0 5px 15px rgba(26, 35, 126, 0.3) !important;
+        }
+
+        .mp-education-text p {
+            color: #555 !important;
+            line-height: 1.7 !important;
+            font-size: 1.05rem !important;
+            margin: 0 !important;
+            word-break: break-word !important;
+            overflow-wrap: break-word !important;
+        }
+
+        /* Expertise Section */
+        .mp-expertise-section {
+            padding: 80px 0 !important;
+            background-color: #f8f9fa !important;
+        }
+
+        .mp-expertise-card {
+            border-color: #4fc3f7 !important;
+        }
+
+        .mp-expertise-icon {
+            width: 60px !important;
+            height: 60px !important;
+            border-radius: 50% !important;
+            display: grid !important;
+            place-items: center !important;
+            font-size: 1.8rem !important;
+            color: white !important;
+            background: linear-gradient(135deg, #4fc3f7, #29b6f6) !important;
+            box-shadow: 0 5px 15px rgba(79, 195, 247, 0.3) !important;
+        }
+
+        .mp-expertise-text p {
+            color: #555 !important;
+            line-height: 1.7 !important;
+            font-size: 1.05rem !important;
+            margin: 0 !important;
+            word-break: break-word !important;
+            overflow-wrap: break-word !important;
+        }
+
+        /* Achievements Section */
+        .mp-achievements-section {
+            padding: 80px 0 !important;
+            background-color: #ffffff !important;
+        }
+
+        .mp-achievements-card {
+            border-color: #ff9800 !important;
+        }
+
+        .mp-achievements-icon {
+            width: 60px !important;
+            height: 60px !important;
+            border-radius: 50% !important;
+            display: grid !important;
+            place-items: center !important;
+            font-size: 1.8rem !important;
+            color: white !important;
+            background: linear-gradient(135deg, #ff9800, #ffb74d) !important;
+            box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3) !important;
+        }
+
+        .mp-achievements-text p {
+            color: #555 !important;
+            line-height: 1.7 !important;
+            font-size: 1.05rem !important;
+            margin: 0 !important;
+            word-break: break-word !important;
+            overflow-wrap: break-word !important;
+        }
+
+        /* Bio Section */
+        .mp-bio-section {
+            padding: 80px 0 !important;
+            background-color: #f8f9fa !important;
+        }
+
+        .mp-bio-card {
+            border-color: #4caf50 !important;
+        }
+
+        .mp-bio-icon {
+            width: 60px !important;
+            height: 60px !important;
+            border-radius: 50% !important;
+            display: grid !important;
+            place-items: center !important;
+            font-size: 1.8rem !important;
+            color: white !important;
+            background: linear-gradient(135deg, #4caf50, #81c784) !important;
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3) !important;
+        }
+
+        .mp-bio-text p {
+            color: #555 !important;
+            line-height: 1.7 !important;
+            font-size: 1.05rem !important;
+            margin: 0 !important;
+            word-break: break-word !important;
+            overflow-wrap: break-word !important;
+        }
+
+        /* Impact Section */
+        .mp-impact-section {
+            padding: 80px 0 !important;
+            background-color: #ffffff !important;
+        }
+
+        .mp-impact-card {
+            border-color: #9c27b0 !important;
+            display: grid !important;
+            grid-template-columns: auto 1fr !important;
+            gap: 30px !important;
+            align-items: start !important;
+        }
+
+        .mp-impact-icon {
+            width: 60px !important;
+            height: 60px !important;
+            border-radius: 50% !important;
+            display: grid !important;
+            place-items: center !important;
+            font-size: 1.8rem !important;
+            color: white !important;
+            background: linear-gradient(135deg, #9c27b0, #ba68c8) !important;
+            box-shadow: 0 5px 15px rgba(156, 39, 176, 0.3) !important;
+        }
+
+        .mp-impact-text p {
+            color: #555 !important;
+            line-height: 1.7 !important;
+            font-size: 1.05rem !important;
+            margin: 0 0 20px 0 !important;
+            word-break: break-word !important;
+            overflow-wrap: break-word !important;
+        }
+
+        .mp-years-role-display {
+            grid-column: 2 !important;
+            display: grid !important;
+            grid-template-columns: auto 1fr !important;
+            gap: 15px !important;
+            align-items: center !important;
+            padding: 20px !important;
+            background: #f8f9fa !important;
+            border-radius: 10px !important;
+            border: 1px solid #e9ecef !important;
+        }
+
+        .mp-years-icon {
+            font-size: 1.8rem !important;
+            color: #1a237e !important;
+        }
+
+        .mp-years-info {
+            display: grid !important;
+            gap: 5px !important;
+        }
+
+        .mp-years-value {
+            font-size: 2rem !important;
+            font-weight: 700 !important;
+            color: #1a237e !important;
+        }
+
+        .mp-years-label {
+            font-size: 0.9rem !important;
+            color: #666 !important;
+            font-weight: 600 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 1px !important;
+        }
+
+        /* Philosophy Section */
+        .mp-philosophy-section {
+            padding: 80px 0 !important;
+            background-color: #f8f9fa !important;
+        }
+
+        .mp-philosophy-card {
+            border-color: #673ab7 !important;
+        }
+
+        .mp-philosophy-icon {
+            width: 60px !important;
+            height: 60px !important;
+            border-radius: 50% !important;
+            display: grid !important;
+            place-items: center !important;
+            font-size: 1.8rem !important;
+            color: white !important;
+            background: linear-gradient(135deg, #673ab7, #9575cd) !important;
+            box-shadow: 0 5px 15px rgba(103, 58, 183, 0.3) !important;
+        }
+
+        .mp-philosophy-text p {
+            color: #555 !important;
+            line-height: 1.7 !important;
+            font-size: 1.05rem !important;
+            margin: 0 !important;
+            word-break: break-word !important;
+            overflow-wrap: break-word !important;
+        }
+
+        /* Vision Section */
+        .mp-vision-section {
+            padding: 80px 0 !important;
+            background-color: #ffffff !important;
+        }
+
+        .mp-vision-card {
+            border-color: #00bcd4 !important;
+        }
+
+        .mp-vision-icon {
+            width: 60px !important;
+            height: 60px !important;
+            border-radius: 50% !important;
+            display: grid !important;
+            place-items: center !important;
+            font-size: 1.8rem !important;
+            color: white !important;
+            background: linear-gradient(135deg, #00bcd4, #80deea) !important;
+            box-shadow: 0 5px 15px rgba(0, 188, 212, 0.3) !important;
+        }
+
+        .mp-vision-text p {
+            color: #555 !important;
+            line-height: 1.7 !important;
+            font-size: 1.05rem !important;
+            margin: 0 !important;
+            word-break: break-word !important;
+            overflow-wrap: break-word !important;
+        }
+
+        /* CTA Section */
+        .mp-cta-section {
+            padding: 80px 0 !important;
+            background: linear-gradient(135deg, #1a237e 0%, #283593 100%) !important;
+            color: white !important;
+            position: relative !important;
+            overflow: hidden !important;
+        }
+
+        .mp-cta-background {
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            background: url('https://i.pinimg.com/736x/78/94/15/7894154e75c29f10a3c9f9b9b0a4479f.jpg') center/cover no-repeat !important;
+            opacity: 0.1 !important;
+            z-index: 0 !important;
+        }
+
+        .mp-cta-content {
+            position: relative !important;
+            z-index: 2 !important;
+            display: grid !important;
+            gap: 40px !important;
+        }
+
+        .mp-cta-header {
+            text-align: center !important;
+            display: grid !important;
+            gap: 15px !important;
+        }
+
+        .mp-cta-title {
+            font-size: 2.5rem !important;
+            font-weight: 800 !important;
+            color: white !important;
+            margin: 0 !important;
+        }
+
+        .mp-cta-subtitle {
+            font-size: 1.2rem !important;
+            color: #bbdefb !important;
+            max-width: 600px !important;
+            margin: 0 auto !important;
+        }
+
+        .mp-cta-features-grid {
+            display: grid !important;
+            grid-template-columns: repeat(4, 1fr) !important;
+            gap: 25px !important;
+        }
+
+        .mp-cta-feature {
+            background: rgba(255, 255, 255, 0.1) !important;
+            backdrop-filter: blur(10px) !important;
+            border-radius: 15px !important;
+            padding: 25px 20px !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            transition: all 0.3s ease !important;
+            display: grid !important;
+            grid-template-rows: auto auto 1fr !important;
+            gap: 15px !important;
+            text-align: center !important;
+            min-height: 200px !important;
+        }
+
+        .mp-feature-icon {
+            font-size: 2rem !important;
+            color: #4fc3f7 !important;
+        }
+
+        .mp-feature-title {
+            font-size: 1.2rem !important;
+            font-weight: 600 !important;
+            color: white !important;
+            margin: 0 !important;
+        }
+
+        .mp-feature-desc-container {
+            min-height: 0 !important;
+            overflow: visible !important;
+        }
+
+        .mp-feature-desc {
+            color: #bbdefb !important;
+            font-size: 0.9rem !important;
+            line-height: 1.5 !important;
+            margin: 0 !important;
+            word-break: break-word !important;
+            overflow-wrap: break-word !important;
+        }
+
+        .mp-cta-buttons-grid {
+            display: grid !important;
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 20px !important;
+        }
+
+        .mp-cta-btn {
+            display: grid !important;
+            grid-template-columns: auto 1fr !important;
+            align-items: center !important;
+            gap: 12px !important;
+            padding: 16px 25px !important;
+            border-radius: 50px !important;
+            font-size: 1rem !important;
+            font-weight: 600 !important;
+            text-decoration: none !important;
+            transition: all 0.3s ease !important;
+            text-align: center !important;
+            border: 2px solid transparent !important;
+        }
+
+        .mp-primary-btn {
+            background: #4fc3f7 !important;
+            color: #1a237e !important;
+        }
+
+        .mp-secondary-btn {
+            background: transparent !important;
+            color: white !important;
+            border-color: #4fc3f7 !important;
+        }
+
+        .mp-tertiary-btn {
+            background: rgba(255, 255, 255, 0.1) !important;
+            color: white !important;
+            backdrop-filter: blur(10px) !important;
+        }
+
+        /* Animations */
+        @keyframes mp-pulse-ring {
+            0% {
+                transform: translate(-50%, -50%) scale(0.8) !important;
+                opacity: 1 !important;
+            }
+            80%, 100% {
+                transform: translate(-50%, -50%) scale(1.2) !important;
+                opacity: 0 !important;
+            }
+        }
+
+        @keyframes mp-bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0) !important;
+            }
+            40% {
+                transform: translateX(-50%) translateY(-8px) !important;
+            }
+            60% {
+                transform: translateX(-50%) translateY(-4px) !important;
+            }
+        }
+
+        /* Hover Effects */
+        .mp-education-card:hover,
+        .mp-expertise-card:hover,
+        .mp-achievements-card:hover,
+        .mp-bio-card:hover,
+        .mp-impact-card:hover,
+        .mp-philosophy-card:hover,
+        .mp-vision-card:hover {
+            transform: translateY(-5px) !important;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15) !important;
+        }
+
+        .mp-linkedin-btn:hover {
+            background: #005582 !important;
+            transform: translateY(-2px) !important;
+        }
+
+        .mp-cta-btn:hover {
+            transform: translateY(-3px) scale(1.02) !important;
+        }
+
+        .mp-cta-feature:hover {
+            transform: translateY(-5px) !important;
+            background: rgba(255, 255, 255, 0.15) !important;
+        }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 1024px) {
+            .mp-hero-grid {
+                grid-template-columns: 200px 1fr 300px !important;
+                gap: 30px !important;
+                padding: 20px 0 !important;
+            }
+
+            .mp-leader-avatar {
+                width: 180px !important;
+                height: 180px !important;
+            }
+
+            .mp-ring-1 {
+                width: 210px !important;
+                height: 210px !important;
+            }
+
+            .mp-ring-2 {
+                width: 240px !important;
+                height: 240px !important;
+            }
+
+            .mp-ring-3 {
+                width: 270px !important;
+                height: 270px !important;
+            }
+
+            .mp-hero-title {
+                font-size: 2.4rem !important;
+            }
+
+            .mp-leader-title {
+                font-size: 1.4rem !important;
+            }
+
+            .mp-cta-features-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+
+            .mp-cta-buttons-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+
+            .mp-cta-btn:last-child {
+                grid-column: 1 / -1 !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mp-hero-section {
+                min-height: auto !important;
+                height: auto !important;
+                padding: 30px 0 60px 0 !important;
+                display: block !important;
+            }
+
+            .mp-hero-grid {
+                grid-template-columns: 1fr !important;
+                grid-template-rows: auto auto auto !important;
+                gap: 30px !important;
+                padding: 20px 0 !important;
+                text-align: center !important;
+            }
+
+            .mp-avatar-section {
+                order: 1 !important;
+            }
+
+            .mp-name-section {
+                order: 2 !important;
+                text-align: center !important;
+                justify-items: center !important;
+            }
+
+            .mp-contact-section {
+                order: 3 !important;
+                max-width: 400px !important;
+                margin: 0 auto !important;
+            }
+
+            .mp-leader-avatar {
+                width: 140px !important;
+                height: 140px !important;
+                margin: 0 auto !important;
+                border-width: 4px !important;
+            }
+
+            .mp-ring-1 {
+                width: 160px !important;
+                height: 160px !important;
+            }
+
+            .mp-ring-2 {
+                width: 180px !important;
+                height: 180px !important;
+            }
+
+            .mp-ring-3 {
+                width: 200px !important;
+                height: 200px !important;
+            }
+
+            .mp-hero-title {
+                font-size: 2rem !important;
+            }
+
+            .mp-leader-title {
+                font-size: 1.2rem !important;
+            }
+
+            .mp-region-badge,
+            .mp-joining-date,
+            .mp-years-role {
+                font-size: 0.85rem !important;
+                padding: 6px 12px !important;
+            }
+
+            /* Content Sections Mobile */
+            .mp-education-section,
+            .mp-expertise-section,
+            .mp-achievements-section,
+            .mp-bio-section,
+            .mp-impact-section,
+            .mp-philosophy-section,
+            .mp-vision-section,
+            .mp-cta-section {
+                padding: 60px 0 !important;
+            }
+
+            .mp-section-title {
+                font-size: 1.8rem !important;
+            }
+
+            .mp-section-subtitle {
+                font-size: 1rem !important;
+            }
+
+            .mp-cta-title {
+                font-size: 2rem !important;
+            }
+
+            .mp-cta-subtitle {
+                font-size: 1.1rem !important;
+            }
+
+            /* Card Layout Mobile */
+            .mp-education-card,
+            .mp-expertise-card,
+            .mp-achievements-card,
+            .mp-bio-card,
+            .mp-impact-card,
+            .mp-philosophy-card,
+            .mp-vision-card {
+                grid-template-columns: 1fr !important;
+                gap: 20px !important;
+                padding: 30px !important;
+                text-align: center !important;
+            }
+
+            .mp-education-icon,
+            .mp-expertise-icon,
+            .mp-achievements-icon,
+            .mp-bio-icon,
+            .mp-impact-icon,
+            .mp-philosophy-icon,
+            .mp-vision-icon {
+                margin: 0 auto !important;
+                width: 50px !important;
+                height: 50px !important;
+                font-size: 1.5rem !important;
+            }
+
+            .mp-impact-card {
+                grid-template-columns: 1fr !important;
+            }
+
+            .mp-years-role-display {
+                grid-column: 1 !important;
+                justify-content: center !important;
+                margin-top: 20px !important;
+            }
+
+            .mp-cta-features-grid {
+                grid-template-columns: 1fr !important;
+                gap: 20px !important;
+            }
+
+            .mp-cta-feature {
+                min-height: auto !important;
+                padding: 20px !important;
+            }
+
+            .mp-cta-buttons-grid {
+                grid-template-columns: 1fr !important;
+                gap: 15px !important;
+            }
+
+            .mp-cta-btn {
+                padding: 14px 20px !important;
+                font-size: 0.95rem !important;
+            }
+
+            .mp-contact-card {
+                padding: 20px !important;
+            }
+
+            .mp-contact-item {
+                padding: 10px 15px !important;
+                min-height: 55px !important;
+            }
+
+            .mp-scroll-indicator {
+                bottom: 15px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .mp-container {
+                padding: 0 15px !important;
+            }
+
+            .mp-hero-section {
+                padding: 20px 0 50px 0 !important;
+            }
+
+            .mp-hero-title {
+                font-size: 1.8rem !important;
+            }
+
+            .mp-leader-title {
+                font-size: 1.1rem !important;
+            }
+
+            .mp-leader-avatar {
+                width: 120px !important;
+                height: 120px !important;
+                border-width: 3px !important;
+            }
+
+            .mp-ring-1 {
+                width: 140px !important;
+                height: 140px !important;
+            }
+
+            .mp-ring-2 {
+                width: 160px !important;
+                height: 160px !important;
+            }
+
+            .mp-ring-3 {
+                width: 180px !important;
+                height: 180px !important;
+            }
+
+            .mp-section-title {
+                font-size: 1.6rem !important;
+            }
+
+            .mp-cta-title {
+                font-size: 1.8rem !important;
+            }
+
+            .mp-cta-subtitle {
+                font-size: 1rem !important;
+            }
+
+            .mp-education-card,
+            .mp-expertise-card,
+            .mp-achievements-card,
+            .mp-bio-card,
+            .mp-impact-card,
+            .mp-philosophy-card,
+            .mp-vision-card {
+                padding: 25px 20px !important;
+            }
+
+            .mp-cta-btn {
+                padding: 12px 18px !important;
+                font-size: 0.9rem !important;
+            }
+
+            .mp-education-icon,
+            .mp-expertise-icon,
+            .mp-achievements-icon,
+            .mp-bio-icon,
+            .mp-impact-icon,
+            .mp-philosophy-icon,
+            .mp-vision-icon {
+                width: 45px !important;
+                height: 45px !important;
+                font-size: 1.3rem !important;
+            }
+
+            .mp-years-value {
+                font-size: 1.8rem !important;
+            }
+
+            .mp-section-title {
+                font-size: 1.1rem !important;
+            }
+
+            .mp-education-text p,
+            .mp-expertise-text p,
+            .mp-achievements-text p,
+            .mp-bio-text p,
+            .mp-impact-text p,
+            .mp-philosophy-text p,
+            .mp-vision-text p,
+            .mp-feature-desc {
+                font-size: 0.95rem !important;
+            }
+
+            .mp-contact-card {
+                padding: 15px !important;
+            }
+
+            .mp-contact-item {
+                padding: 8px 12px !important;
+                min-height: 50px !important;
+            }
+
+            .mp-contact-label {
+                font-size: 0.75rem !important;
+            }
+
+            .mp-contact-value,
+            .mp-btn-text {
+                font-size: 0.85rem !important;
+            }
+
+            .mp-scroll-indicator {
+                bottom: 10px !important;
+            }
+
+            .mp-scroll-text {
+                font-size: 0.8rem !important;
+            }
+        }
+
+        /* Text Overflow Prevention */
+        .mp-education-text p,
+        .mp-expertise-text p,
+        .mp-achievements-text p,
+        .mp-bio-text p,
+        .mp-impact-text p,
+        .mp-philosophy-text p,
+        .mp-vision-text p,
+        .mp-contact-value,
+        .mp-feature-desc {
+            word-break: break-word !important;
+            overflow-wrap: break-word !important;
+            hyphens: auto !important;
+            overflow: visible !important;
+            text-overflow: unset !important;
+            white-space: normal !important;
+        }
+
+        /* Font Awesome Icon Styles */
+        .fas, .fab {
+            font-family: 'Font Awesome 6 Free' !important;
+            font-weight: 900 !important;
+        }
+
+        .fab {
+            font-family: 'Font Awesome 6 Brands' !important;
+            font-weight: 400 !important;
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Select interactive elements
+            const detailSections = document.querySelectorAll('.mp-education-card, .mp-expertise-card, .mp-achievements-card, .mp-bio-card, .mp-impact-card, .mp-philosophy-card, .mp-vision-card');
+            const avatar = document.querySelector('.mp-leader-avatar');
+            const buttons = document.querySelectorAll('.mp-linkedin-btn, .mp-cta-btn');
+            const mediaQuery = window.matchMedia('(min-width: 769px)');
+
+            // --- Interactive Avatar 3D Rotation (Desktop only) ---
+            function handleAvatarInteraction(e) {
+                if (!mediaQuery.matches || !avatar) return;
+
+                if (e.type === 'mousemove') {
+                    const rect = avatar.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+
+                    const rotateY = (x - centerX) / 15;
+                    const rotateX = (centerY - y) / 15;
+
+                    avatar.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+                    avatar.style.boxShadow = `0 20px 50px rgba(0, 0, 0, 0.3)`;
+                } else if (e.type === 'mouseleave') {
+                    avatar.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+                    avatar.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.3)';
+                }
+            }
+
+            if (avatar) {
+                avatar.addEventListener('mousemove', handleAvatarInteraction);
+                avatar.addEventListener('mouseleave', handleAvatarInteraction);
+            }
+
+            // --- Enhanced Card Interactions (Desktop only) ---
+            function addHoverEffects(elements, hoverTransform, leaveTransform) {
+                elements.forEach(element => {
+                    element.addEventListener('mouseenter', function() {
+                        if (mediaQuery.matches) {
+                            this.style.transform = hoverTransform;
+                        }
+                    });
+
+                    element.addEventListener('mouseleave', function() {
+                        if (mediaQuery.matches) {
+                            this.style.transform = leaveTransform;
+                        }
+                    });
+                });
+            }
+
+            // Content cards: lift up
+            addHoverEffects(detailSections, 'translateY(-8px) scale(1.02)', 'translateY(0) scale(1)');
+
+            // --- Ripple Effect to Buttons (All devices) ---
+            buttons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    const ripple = document.createElement('span');
+                    const rect = button.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height) * 2;
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+
+                    ripple.style.width = ripple.style.height = size + 'px';
+                    ripple.style.left = x + 'px';
+                    ripple.style.top = y + 'px';
+                    ripple.classList.add('mp-ripple');
+
+                    const existingRipple = this.querySelector('.mp-ripple');
+                    if (existingRipple) {
+                        existingRipple.remove();
+                    }
+
+                    this.appendChild(ripple);
+
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
+
+            // Add CSS for ripple effect dynamically
+            const style = document.createElement('style');
+            style.textContent = `
+                .mp-ripple {
+                    position: absolute;
+                    border-radius: 50%;
+                    background: rgba(255, 255, 255, 0.6);
+                    transform: scale(0);
+                    animation: mp-ripple-animation 0.6s linear;
+                    pointer-events: none;
+                    z-index: 10;
+                }
+
+                @keyframes mp-ripple-animation {
+                    to {
+                        transform: scale(1);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+
+            // --- Smooth scrolling for anchor links ---
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // --- Animate elements on scroll ---
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('mp-animate-in');
+                    }
+                });
+            }, observerOptions);
+
+            // Observe elements to animate
+            document.querySelectorAll('.mp-education-card, .mp-expertise-card, .mp-achievements-card, .mp-bio-card, .mp-impact-card, .mp-philosophy-card, .mp-vision-card, .mp-cta-feature').forEach(el => {
+                observer.observe(el);
+            });
+
+            // Add animation styles
+            const animationStyle = document.createElement('style');
+            animationStyle.textContent = `
+                .mp-education-card,
+                .mp-expertise-card,
+                .mp-achievements-card,
+                .mp-bio-card,
+                .mp-impact-card,
+                .mp-philosophy-card,
+                .mp-vision-card,
+                .mp-cta-feature {
+                    opacity: 0;
+                    transform: translateY(20px);
+                    transition: opacity 0.6s ease, transform 0.6s ease;
+                }
+
+                .mp-education-card.mp-animate-in,
+                .mp-expertise-card.mp-animate-in,
+                .mp-achievements-card.mp-animate-in,
+                .mp-bio-card.mp-animate-in,
+                .mp-impact-card.mp-animate-in,
+                .mp-philosophy-card.mp-animate-in,
+                .mp-vision-card.mp-animate-in,
+                .mp-cta-feature.mp-animate-in {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            `;
+            document.head.appendChild(animationStyle);
+
+            // --- Mobile hero section height adjustment ---
+            function adjustHeroHeight() {
+                const heroSection = document.querySelector('.mp-hero-section');
+                if (!heroSection) return;
+
+                if (window.innerWidth <= 768) {
+                    // On mobile, calculate height based on content
+                    heroSection.style.minHeight = 'auto';
+                    heroSection.style.height = 'auto';
+                    heroSection.style.paddingBottom = '60px';
+                } else {
+                    // On desktop, maintain full viewport height
+                    heroSection.style.minHeight = '100vh';
+                    heroSection.style.height = 'auto';
+                }
+            }
+
+            // Initial adjustment
+            adjustHeroHeight();
+
+            // Adjust on resize
+            window.addEventListener('resize', adjustHeroHeight);
+
+            // --- Cleanup and Initialization ---
+            const allSections = document.querySelectorAll('section');
+            allSections.forEach(section => {
+                section.style.visibility = 'visible';
+            });
+        });
+
+        // Performance optimization for resize operations
+        let resizeTimeout;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(function() {
+                // Recalculate or reapply style bindings on resize if needed
+            }, 250);
+        });
+    </script>
+</div>
+{% endblock %}

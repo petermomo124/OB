@@ -1942,7 +1942,7 @@
                 Register as Client
             </a>
             
-            <a href="{% url 'user_login' %}" class="btn-improved btn-improved-outline-light">
+            <a href="{% url 'user_login' %}" class="btn-improved btn-improved-light">
                 <i class="fas fa-sign-in-alt me-2"></i>
                 Login for RFP
             </a>
@@ -2012,10 +2012,10 @@
 }
 
 .btn-improved-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%); /* Blue gradient */
     color: white;
     border: 3px solid rgba(255,255,255,0.6);
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.7);
+    box-shadow: 0 8px 25px rgba(33, 150, 243, 0.7);
 }
 
 .btn-improved-outline-light {
@@ -2162,7 +2162,7 @@
 @media (hover: hover) {
     .btn-improved-primary:hover {
         transform: translateY(-2px);
-        box-shadow: 0 12px 30px rgba(102, 126, 234, 0.9);
+        box-shadow: 0 12px 30px rgba(33, 150, 243, 0.9); /* Blue shadow */
     }
     
     .btn-improved-outline-light:hover {
@@ -3228,7 +3228,7 @@ document.addEventListener('DOMContentLoaded', function() {
     optimizeAnimations();
 });
 </script>
-<!-- Services Section - Enhanced 3x3 Grid -->
+<!-- Services Section - Major Categories Only -->
 <section id="services" class="services-section">
     <div class="container">
         <div class="text-center mb-5" data-aos="fade-up">
@@ -3244,7 +3244,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <h3 class="service-title">Forensic Services</h3>
                 <p class="service-description">Expert investigation and analysis to uncover financial irregularities and fraud with comprehensive auditing.</p>
-                <a href="#" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
             </div>
 
             <div class="service-card" data-aos="fade-up" data-aos-delay="150">
@@ -3253,7 +3252,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <h3 class="service-title">Audit & Assurance</h3>
                 <p class="service-description">Comprehensive audit services ensuring financial accuracy, compliance, and regulatory adherence.</p>
-                <a href="#" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
             </div>
 
             <div class="service-card" data-aos="fade-up" data-aos-delay="200">
@@ -3262,7 +3260,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <h3 class="service-title">Tax Services</h3>
                 <p class="service-description">Strategic tax planning and compliance services to optimize your financial position and savings.</p>
-                <a href="#" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
             </div>
 
             <!-- Row 2 -->
@@ -3272,16 +3269,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <h3 class="service-title">Business Consulting</h3>
                 <p class="service-description">Strategic guidance and expert consulting to navigate challenges and seize growth opportunities.</p>
-                <a href="#" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
             </div>
 
             <div class="service-card" data-aos="fade-up" data-aos-delay="300">
                 <div class="service-icon">
                     <i class="fas fa-chart-line"></i>
                 </div>
-                <h3 class="service-title">Financial Advisory</h3>
+                <h3 class="service-title">Advisory Services</h3>
                 <p class="service-description">Expert financial advice to drive business growth, improve performance, and manage risks effectively.</p>
-                <a href="#" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
             </div>
 
             <div class="service-card" data-aos="fade-up" data-aos-delay="350">
@@ -3290,7 +3285,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <h3 class="service-title">Technology Solutions</h3>
                 <p class="service-description">Cutting-edge technology services and digital solutions to streamline business operations.</p>
-                <a href="#" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
             </div>
 
             <!-- Row 3 -->
@@ -3300,25 +3294,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <h3 class="service-title">Cybersecurity</h3>
                 <p class="service-description">Comprehensive cybersecurity solutions to protect your digital assets and ensure data security.</p>
-                <a href="#" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
             </div>
 
             <div class="service-card" data-aos="fade-up" data-aos-delay="450">
                 <div class="service-icon">
                     <i class="fas fa-cloud"></i>
                 </div>
-                <h3 class="service-title">Cloud Services</h3>
-                <p class="service-description">Cloud infrastructure and migration services for scalable and efficient business operations.</p>
-                <a href="#" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                <h3 class="service-title">Managed Services</h3>
+                <p class="service-description">Complete IT management and support services for uninterrupted business continuity.</p>
             </div>
 
             <div class="service-card" data-aos="fade-up" data-aos-delay="500">
                 <div class="service-icon">
                     <i class="fas fa-users"></i>
                 </div>
-                <h3 class="service-title">Managed Services</h3>
-                <p class="service-description">Complete IT management and support services for uninterrupted business continuity.</p>
-                <a href="#" class="service-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                <h3 class="service-title">Fieldwork Services</h3>
+                <p class="service-description">Professional on-site services and field operations management for comprehensive business support.</p>
             </div>
         </div>
     </div>
@@ -4468,103 +4459,7 @@ document.addEventListener('DOMContentLoaded', function() {
     justify-content: center;
 }
 </style>
-<!-- Team Section - Compact 6x5 Grid -->
-<section class="ob-executive-team-section" id="executive-team">
-    <div class="container">
-        <div class="text-center mb-4" data-aos="fade-up">
-            <h2 class="display-6 fw-bold text-white">Meet Our Executive Team</h2>
-            <p class="lead text-white">Experienced leaders dedicated to your success</p>
-        </div>
 
-        <div class="ob-team-grid">
-            {% for executive in executives %}
-            <div class="ob-team-member" data-aos="fade-up" data-aos-delay="{{ forloop.counter|add:100 }}">
-                <!-- Card with creative rectangular design -->
-                <div class="ob-team-card">
-                    <!-- Image Container with Rectangular Shape -->
-                    <div class="ob-team-image-container">
-                        {% if executive.profile_image %}
-                        <img src="{{ executive.profile_image }}" alt="{{ executive.get_full_name }}" class="ob-team-image" onerror="this.src='{% static 'images/team-placeholder.jpg' %}'">
-                        {% else %}
-                        <img src="{% static 'images/team-placeholder.jpg' %}" alt="{{ executive.get_full_name }}" class="ob-team-image">
-                        {% endif %}
-
-                        <!-- Creative Overlay Elements -->
-                        <div class="ob-image-overlay-shape"></div>
-                        <div class="ob-corner-accent ob-top-left"></div>
-                        <div class="ob-corner-accent ob-bottom-right"></div>
-
-                        <!-- Social Links - Positioned creatively -->
-                        <div class="ob-team-social-overlay">
-                            {% if executive.linkedin %}
-                            <a href="{{ executive.linkedin }}" target="_blank" class="ob-social-icon ob-linkedin">
-                                <i class="fab fa-linkedin-in"></i>
-                            </a>
-                            {% endif %}
-                            <a href="mailto:{{ executive.email }}" class="ob-social-icon ob-email">
-                                <i class="fas fa-envelope"></i>
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Content Area with Creative Layout -->
-                    <div class="ob-team-content">
-                        <div class="ob-content-wrapper">
-                            <h3 class="ob-team-name">{{ executive.get_full_name }}</h3>
-                            <div class="ob-position-badge">
-                                <p class="ob-team-position">
-                                    {{ executive.executive_position_description|default:executive.field_position|default:"Executive Team Member" }}
-                                </p>
-                            </div>
-
-                            <!-- Additional Info with Icons -->
-                            <div class="ob-team-details">
-                                {% if executive.nationality %}
-                                <div class="ob-detail-item">
-                                    <i class="fas fa-globe"></i>
-                                    <span class="ob-text-wrap">{{ executive.nationality }}</span>
-                                </div>
-                                {% endif %}
-
-                                {% if executive.office %}
-                                <div class="ob-detail-item">
-                                    <i class="fas fa-building"></i>
-                                    <span class="ob-text-wrap">{{ executive.office.office_location }}</span>
-                                </div>
-                                {% endif %}
-                            </div>
-
-                            {% if executive.company_impact %}
-                            <div class="ob-impact-statement">
-                                <i class="fas fa-bullseye"></i>
-                                <p class="ob-text-wrap">{{ executive.company_impact }}</p>
-                            </div>
-                            {% endif %}
-
-                            <!-- More Info Button - Always visible but smaller -->
-                            <div class="ob-action-section">
-                                <button class="ob-more-info-btn" data-executive-id="{{ executive.id }}">
-                                    <span>More Info</span>
-                                    <i class="fas fa-chevron-right"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% empty %}
-            <div class="col-12 text-center" data-aos="fade-up">
-                <div class="ob-executive-placeholder">
-                    <i class="fas fa-users fa-4x text-white mb-3"></i>
-                    <h4 class="text-white">Our Executive Team</h4>
-                    <p class="text-white mb-4">Experienced leaders dedicated to your success</p>
-                    <p class="text-white-50">Our executive team information is coming soon.</p>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</section>
 
 <!-- Executive Profile Modals -->
 {% for executive in executives %}
@@ -5632,15 +5527,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 <p class="office-location">
                     <i class="fas fa-map-marker-alt me-2"></i>{{ office.office_location }}
                 </p>
-                <p class="office-purpose">{{ office.office_purpose|truncatewords:25 }}</p>
-                <div class="office-actions">
-                    {% if office.google_map_url %}
-                    <!-- Open map in a modal instead of direct link -->
-                    <button type="button" class="office-map-btn" data-bs-toggle="modal" data-bs-target="#mapModal{{ office.id }}">
-                        <i class="fas fa-map-marked-alt me-2"></i>View on Map
-                    </button>
-                    {% endif %}
-                </div>
+                <p class="office-purpose">{{ office.office_purpose|truncatewords:10 }}</p>
+                <!-- Replace the current office-actions div with this: -->
+<div class="office-actions">
+    {% if office.google_map_url %}
+    <!-- Open map in a modal instead of direct link -->
+    <button type="button" class="office-map-btn" data-bs-toggle="modal" data-bs-target="#mapModal{{ office.id }}">
+        <i class="fas fa-map-marked-alt me-2"></i>View on Map
+    </button>
+    {% endif %}
+    <!-- Add this new button: -->
+    <a href="{% url 'office_detailed_view' office.id %}" class="office-detail-btn">
+        <i class="fas fa-info-circle me-2"></i>View More Detail
+    </a>
+</div>
             </div>
             {% empty %}
             <div class="col-12 text-center" data-aos="fade-up">
@@ -5840,18 +5740,17 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
     </div>
 </section>
-<!-- Social Media Video Gallery Section -->
-<!-- Simple YouTube Video Section -->
-<section class="youtube-video-section">
+<!-- Local Video Gallery Section -->
+<section class="local-video-section">
     <div class="container">
         <div class="text-center mb-5" data-aos="fade-up">
             <h2 class="display-4 fw-bold text-white">Featured Videos</h2>
-            <p class="lead text-white">Watch our latest content from YouTube</p>
+            <p class="lead text-white">Watch our latest content</p>
         </div>
 
-        <div class="youtube-video-grid">
+        <div class="local-video-grid">
             <!-- Video 1 - Business Strategy -->
-            <div class="youtube-video-card" data-aos="fade-up" data-aos-delay="100">
+            <div class="local-video-card" data-aos="fade-up" data-aos-delay="100">
                 <div class="video-thumb-container">
                     <img src="{% static 'yThumnail/v6.jpg' %}" alt="Business Strategy" class="video-thumb">
                     <div class="play-button">
@@ -5863,12 +5762,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     <p>This video discusses some common types of financial advisors</p>
                 </div>
                 <div class="video-data" style="display: none;">
-                    <div class="video-id">Nx4HDJ-TZn4</div>
+                    <div class="video-src">{% static 'videos/financial-advisor.mp4' %}</div>
                 </div>
             </div>
 
             <!-- Video 2 - Digital Transformation -->
-            <div class="youtube-video-card" data-aos="fade-up" data-aos-delay="200">
+            <div class="local-video-card" data-aos="fade-up" data-aos-delay="200">
                 <div class="video-thumb-container">
                    <img src="{% static 'yThumnail/v1.jpg' %}" alt="Digital Transformation" class="video-thumb">
                     <div class="play-button">
@@ -5877,15 +5776,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <div class="video-info">
                     <h3>7 Strategies to Grow Your Business | Brian Tracy</h3>
-                    <p>What does it take to be successful in today’s business world?</p>
+                    <p>What does it take to be successful in today's business world?</p>
                 </div>
                 <div class="video-data" style="display: none;">
-                    <div class="video-id">dJQn4DqzMVQ</div>
+                    <div class="video-src">{% static 'videos/business-strategies.mp4' %}</div>
                 </div>
             </div>
 
             <!-- Video 3 - Leadership -->
-            <div class="youtube-video-card" data-aos="fade-up" data-aos-delay="300">
+            <div class="local-video-card" data-aos="fade-up" data-aos-delay="300">
                 <div class="video-thumb-container">
                     <img src="{% static 'yThumnail/v3.jpg' %}" alt="Digital Transformation" class="video-thumb">
                      <div class="play-button">
@@ -5897,12 +5796,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     <p>Progressive income tax story about three brothers</p>
                 </div>
                 <div class="video-data" style="display: none;">
-                    <div class="video-id">S6HEH23W_bM</div>
+                    <div class="video-src">{% static 'videos/income-tax.mp4' %}</div>
                 </div>
             </div>
 
             <!-- Video 4 - Innovation -->
-            <div class="youtube-video-card" data-aos="fade-up" data-aos-delay="400">
+            <div class="local-video-card" data-aos="fade-up" data-aos-delay="400">
                 <div class="video-thumb-container">
                     <img src="{% static 'yThumnail/v4.jpg' %}" alt="Innovation" class="video-thumb">
                     <div class="play-button">
@@ -5914,26 +5813,26 @@ document.addEventListener('DOMContentLoaded', function() {
                     <p>Watch this video to find out about cyber criminals, and more.</p>
                 </div>
                 <div class="video-data" style="display: none;">
-                    <div class="video-id">88-FENio9Yw</div>
+                    <div class="video-src">{% static 'videos/cyber-security.mp4' %}</div>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Simple Video Modal -->
-<div class="modal fade" id="youtubeModal" tabindex="-1">
+<!-- Local Video Modal -->
+<div class="modal fade" id="localVideoModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Video Player</h5>
+                <h5 class="modal-title" id="videoModalTitle">Video Player</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body p-0">
                 <div class="video-container">
-                    <iframe id="youtubePlayer" width="100%" height="400" frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen></iframe>
+                    <video id="localVideoPlayer" width="100%" height="400" controls controlsList="nodownload">
+                        Your browser does not support the video tag.
+                    </video>
                 </div>
             </div>
         </div>
@@ -5941,17 +5840,61 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 
 <style>
-.youtube-video-section {
+.local-video-section {
     background: url('https://i.pinimg.com/736x/1d/4d/26/1d4d265e5158caf580175ab222bc020f.jpg') center/cover no-repeat;
     padding: 80px 0;
     position: relative;
     z-index: 6;
-    /* Remove opacity: 1.5 as it's invalid - browsers will clamp to 1.0 */
 }
 
 
+/* Add these styles to your existing CSS */
 
-.youtube-video-grid {
+.office-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.office-detail-btn {
+    background: linear-gradient(135deg, #4caf50, #2e7d32);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    min-width: 120px;
+}
+
+.office-detail-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(76, 175, 80, 0.4);
+    color: white;
+}
+
+@media (max-width: 576px) {
+    .office-actions {
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .office-detail-btn,
+    .office-map-btn {
+        min-width: 110px;
+        padding: 8px 16px;
+        font-size: 0.75rem;
+    }
+}
+
+.local-video-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 25px;
@@ -5959,7 +5902,7 @@ document.addEventListener('DOMContentLoaded', function() {
     z-index: 1;
 }
 
-.youtube-video-card {
+.local-video-card {
     background: white;
     border-radius: 15px;
     overflow: hidden;
@@ -5968,7 +5911,7 @@ document.addEventListener('DOMContentLoaded', function() {
     cursor: pointer;
 }
 
-.youtube-video-card:hover {
+.local-video-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 15px 40px rgba(0,0,0,0.3);
 }
@@ -5986,7 +5929,7 @@ document.addEventListener('DOMContentLoaded', function() {
     transition: transform 0.3s ease;
 }
 
-.youtube-video-card:hover .video-thumb {
+.local-video-card:hover .video-thumb {
     transform: scale(1.05);
 }
 
@@ -6008,7 +5951,7 @@ document.addEventListener('DOMContentLoaded', function() {
     opacity: 0.9;
 }
 
-.youtube-video-card:hover .play-button {
+.local-video-card:hover .play-button {
     background: #ff0000;
     transform: translate(-50%, -50%) scale(1.1);
     opacity: 1;
@@ -6040,13 +5983,14 @@ document.addEventListener('DOMContentLoaded', function() {
     padding-bottom: 56.25%; /* 16:9 aspect ratio */
 }
 
-.video-container iframe {
+.video-container video {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     border: none;
+    background: #000;
 }
 
 /* Modal styling */
@@ -6065,9 +6009,14 @@ document.addEventListener('DOMContentLoaded', function() {
     font-weight: 600;
 }
 
+/* Video player styling */
+#localVideoPlayer {
+    border-radius: 0 0 15px 15px;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
-    .youtube-video-grid {
+    .local-video-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 20px;
     }
@@ -6078,7 +6027,7 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 
 @media (max-width: 576px) {
-    .youtube-video-grid {
+    .local-video-grid {
         grid-template-columns: 1fr;
     }
 
@@ -6086,26 +6035,192 @@ document.addEventListener('DOMContentLoaded', function() {
         height: 200px;
     }
 }
+
+
+/* ===================== */
+/* FIX FOR LONG TEXT OVERFLOW IN OFFICE CARDS */
+/* ===================== */
+
+/* Ensure the card container handles overflow */
+.office-card {
+    overflow: hidden !important;
+    min-height: 220px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+}
+
+/* Common text overflow styles for all text elements */
+.office-name,
+.office-location,
+.office-purpose {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    line-height: 1.3 !important;
+    width: 100% !important;
+    word-break: break-word !important;
+    hyphens: auto !important;
+}
+
+/* Specific settings for each element */
+.office-name {
+    -webkit-line-clamp: 2 !important;
+    max-height: 2.6em !important;
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    color: #2d3748 !important;
+    margin-bottom: 8px !important;
+}
+
+.office-location {
+    -webkit-line-clamp: 1 !important;
+    max-height: 1.3em !important;
+    font-size: 0.85rem !important;
+    font-weight: 600 !important;
+    color: #667eea !important;
+    margin-bottom: 12px !important;
+}
+
+.office-purpose {
+    -webkit-line-clamp: 3 !important;
+    max-height: 3.9em !important;
+    font-size: 0.8rem !important;
+    color: #6c757d !important;
+    line-height: 1.3 !important;
+    margin-bottom: 15px !important;
+    font-weight: 500 !important;
+    flex-grow: 1 !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .office-name {
+        -webkit-line-clamp: 2 !important;
+        max-height: 2.6em !important;
+        font-size: 0.9rem !important;
+    }
+
+    .office-location {
+        -webkit-line-clamp: 1 !important;
+        max-height: 1.3em !important;
+        font-size: 0.8rem !important;
+    }
+
+    .office-purpose {
+        -webkit-line-clamp: 2 !important;
+        max-height: 2.6em !important;
+        font-size: 0.75rem !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .office-name {
+        -webkit-line-clamp: 1 !important;
+        max-height: 1.3em !important;
+    }
+
+    .office-purpose {
+        -webkit-line-clamp: 2 !important;
+        max-height: 2.6em !important;
+    }
+}
+
+/* For very long unbroken strings (like the example you provided) */
+.office-location {
+    overflow-wrap: anywhere !important;
+    word-wrap: anywhere !important;
+}
 </style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const videoCards = document.querySelectorAll('.youtube-video-card');
-    const modal = new bootstrap.Modal(document.getElementById('youtubeModal'));
-    const player = document.getElementById('youtubePlayer');
+    const videoCards = document.querySelectorAll('.local-video-card');
+    const modal = new bootstrap.Modal(document.getElementById('localVideoModal'));
+    const videoPlayer = document.getElementById('localVideoPlayer');
+    const modalTitle = document.getElementById('videoModalTitle');
+
+    // Track if we're intentionally closing the modal
+    let isModalClosing = false;
 
     videoCards.forEach(card => {
         card.addEventListener('click', function() {
-            const videoId = this.querySelector('.video-id').textContent;
-            // Use the correct YouTube embed format
-            player.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`;
+            const videoSrc = this.querySelector('.video-src').textContent;
+            const videoTitle = this.querySelector('.video-info h3').textContent;
+
+            // Reset error tracking
+            isModalClosing = false;
+
+            // Set video source and title
+            videoPlayer.src = videoSrc;
+            modalTitle.textContent = videoTitle;
+
+            // Show modal
             modal.show();
+
+            // Attempt to play video when modal is shown
+            const tryPlayVideo = () => {
+                videoPlayer.play().catch(error => {
+                    console.log('Autoplay prevented:', error);
+                    // Autoplay was prevented, but video will play when user clicks play button
+                });
+            };
+
+            // Wait for modal to be fully shown before attempting to play
+            setTimeout(tryPlayVideo, 500);
         });
     });
 
-    // Reset video when modal is closed
-    document.getElementById('youtubeModal').addEventListener('hidden.bs.modal', function() {
-        player.src = '';
+    // Reset video when modal is closed - FIXED VERSION
+    document.getElementById('localVideoModal').addEventListener('hidden.bs.modal', function() {
+        // Set flag to indicate we're intentionally closing
+        isModalClosing = true;
+
+        // Pause the video
+        videoPlayer.pause();
+
+        // Reset video to beginning but DON'T clear the src
+        videoPlayer.currentTime = 0;
+
+        // Clear the source after a short delay to avoid error events
+        setTimeout(() => {
+            if (isModalClosing) {
+                videoPlayer.src = '';
+            }
+        }, 100);
+    });
+
+    // Handle video errors - FIXED VERSION
+    videoPlayer.addEventListener('error', function(e) {
+        // Only show error if we're not intentionally closing the modal
+        if (!isModalClosing) {
+            console.error('Video error:', e);
+            console.error('Video source:', videoPlayer.src);
+            alert('Error loading video. Please check if the video file exists and try again.');
+        }
+    });
+
+    // Handle video loading events
+    videoPlayer.addEventListener('waiting', function() {
+        console.log('Video is waiting for data...');
+    });
+
+    videoPlayer.addEventListener('canplay', function() {
+        console.log('Video can start playing');
+    });
+
+    // Additional event listeners for better error tracking
+    videoPlayer.addEventListener('loadstart', function() {
+        console.log('Video loading started');
+    });
+
+    videoPlayer.addEventListener('loadeddata', function() {
+        console.log('Video data loaded');
+    });
+
+    videoPlayer.addEventListener('loadedmetadata', function() {
+        console.log('Video metadata loaded');
     });
 });
 </script>
@@ -6117,16 +6232,105 @@ document.addEventListener('DOMContentLoaded', function() {
             <p class="cta-subtitle">Let's discuss how our expertise can help you achieve your business goals</p>
             <div class="d-flex justify-content-center gap-3 flex-wrap">
                 <a href="{% url 'contact' %}" class="btn-improved btn-improved-light">Contact Us</a>
-                <a href="{% url 'newsletter:subscribe' %}" class="btn-improved btn-improved-outline-light">Subscribe to Newsletter</a>
+                <a href="{% url 'newsletter:subscribe' %}" class="btn-improved btn-improved-primary">Subscribe to Newsletter</a>
             </div>
         </div>
     </div>
 </section>
 
 <!-- Ask OB Button -->
-<a href="{% url 'public_chatbot_view' %}" class="ask-ob-btn" title="Ask OB">
-    🤖
+<a href="{% url 'public_chatbot_view' %}" class="ask-ob-btn" title="Ask OB" style="
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+    z-index: 9999;
+    transition: all 0.3s ease;
+    border: 3px solid white;
+    overflow: hidden;
+">
+    <div style="
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.1);
+    ">
+        <div style="
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        ">
+            🤖
+        </div>
+    </div>
 </a>
+
+<style>
+/* Simple floating animation only for chatbot */
+.ask-ob-btn {
+    animation: chatbot-float 3s ease-in-out infinite;
+}
+
+@keyframes chatbot-float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+/* Hide when mobile sidebar is active */
+.mobile-sidebar.active ~ .ask-ob-btn,
+.mobile-sidebar.active + .ask-ob-btn {
+    display: none !important;
+}
+
+/* Mobile responsive sizing */
+@media (max-width: 768px) {
+    .ask-ob-btn {
+        bottom: 15px;
+        right: 15px;
+        width: 55px;
+        height: 55px;
+    }
+
+    .ask-ob-btn div div {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .ask-ob-btn {
+        bottom: 10px;
+        right: 10px;
+        width: 50px;
+        height: 50px;
+    }
+
+    .ask-ob-btn div div {
+        font-size: 1.1rem;
+    }
+}
+
+/* Simple hover effect */
+.ask-ob-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(102, 126, 234, 0.6);
+}
+</style>
 {% endblock %}
 
 {% block extra_js %}

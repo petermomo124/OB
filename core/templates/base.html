@@ -243,7 +243,7 @@
         // Initialize any global components
         console.log('Document loaded');
 
-        // Auto-dismiss messages after 5 seconds
+        // Auto-dismiss messages after 20 seconds
         setTimeout(function() {
             const alerts = document.querySelectorAll('.alert');
             alerts.forEach(function(alert) {
@@ -253,12 +253,54 @@
                     alert.remove();
                 }, 500);
             });
-        }, 5000);
+        }, 20000);
     });
 </script>
 
 <script src="{% static 'js/header.js' %}"></script>
 
+<script>
+    // Combined global JavaScript
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize any global components
+        console.log('Document loaded');
+
+        // 🔑 AUTHENTICATION REDIRECT LOGIC
+        const isIndexPage = window.location.pathname === '/' || 
+                           window.location.pathname === '/client-portal/';
+        const isAuthenticated = {% if user.is_authenticated %}true{% else %}false{% endif %};
+        
+        if (isAuthenticated && isIndexPage) {
+            console.log('User is authenticated, redirecting to dashboard...');
+            window.location.href = "{% url 'dashboard' %}";
+            return; // Stop execution to prevent further processing
+        }
+        
+        // Store authentication status
+        if (isAuthenticated) {
+            localStorage.setItem('userAuthenticated', 'true');
+            localStorage.setItem('lastLogin', new Date().toISOString());
+        } else {
+            localStorage.removeItem('userAuthenticated');
+            localStorage.removeItem('lastLogin');
+        }
+
+        // Auto-dismiss messages after 20 seconds (only if not redirected)
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                alert.style.transition = 'opacity 0.5s ease';
+                alert.style.opacity = '0';
+                setTimeout(function() {
+                    alert.remove();
+                }, 500);
+            });
+        }, 20000);
+    });
+</script>
+
+
 {% block extra_js %}{% endblock %}
+ {% include 'partials/_cookie_consent.html' %}
 </body>
 </html>

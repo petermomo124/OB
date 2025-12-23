@@ -2055,3 +2055,1757 @@ def delete_office(request, office_id):
 
     # Optional: Render a confirmation page if not a POST request
     return render(request, 'manage/office_confirm_delete.html', {'office': office})
+
+
+# core/views.py - Add these views to your existing views
+
+from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse
+from .models import User
+
+
+# Advisory Main Views
+def advisory_main(request):
+    """Main advisory page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    # ✅ Get regional leaders from database - only active ones
+    regional_leaders = RegionalLeader.objects.filter(
+        is_active=True
+    ).order_by('display_order', 'region')[:8]  # Limit to 8 for the component
+
+    # ✅ Get managing partners from database - only active ones
+    managing_partners = ManagingPartner.objects.filter(
+        is_active=True
+    ).order_by('display_order')[:3]  # Limit to 3
+
+    context = {
+        'advisory_staff': advisory_staff,
+        'regional_leaders': regional_leaders,
+        'managing_partners': managing_partners,
+    }
+    return render(request, 'advisory/index.html', context)
+# Forensic Services Views
+def forensic_accounting(request):
+    """Forensic Accounting page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'advisory_staff': advisory_staff,
+        'service_name': 'Forensic Accounting',
+        'service_description': 'Expert investigative accounting services to detect, prevent, and resolve financial irregularities, fraud, and compliance issues.',
+    }
+    return render(request, 'advisory/forensic_services/forensic_accounting.html', context)
+
+
+def forensic_audit_investigation(request):
+    """Forensic Audit and Investigation Analysis page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'advisory_staff': advisory_staff,  # ✅ Correct variable name
+        'service_name': 'Forensic Audit and Investigation Analysis',
+        'service_description': 'Comprehensive audit and investigation services to uncover financial discrepancies and ensure regulatory compliance.',
+    }
+    return render(request, 'advisory/forensic_services/forensic_audit_investigation.html', context)
+# Financial Accounting Outsourcing Views
+def cfo_service(request):
+    """CFO Service page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'advisory_staff': advisory_staff,
+        'service_name': 'CFO Service',
+        'service_description': 'Strategic financial leadership and executive guidance to drive business growth and financial excellence.',
+    }
+    return render(request, 'advisory/forensic_services/financial_accounting_outsourcing/cfo_service.html', context)
+
+
+def bookkeeping_service(request):
+    """Book-keeping Service page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'advisory_staff': advisory_staff,
+        'service_name': 'Book-keeping Service',
+        'service_description': 'Comprehensive bookkeeping solutions to maintain accurate financial records and support business decision-making.',
+    }
+    return render(request, 'advisory/forensic_services/financial_accounting_outsourcing/bookkeeping_service.html',
+                  context)
+
+
+def tax_planning_advisory(request):
+    """Tax Planning and Advisory page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'advisory_staff': advisory_staff,
+        'service_name': 'Tax Planning and Advisory',
+        'service_description': 'Strategic tax planning and advisory services to optimize tax efficiency and ensure compliance.',
+    }
+    return render(request, 'advisory/forensic_services/financial_accounting_outsourcing/tax_planning_advisory.html',
+                  context)
+
+
+def internal_control_sox_compliance(request):
+    """Internal Control (SOX) Compliance page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'advisory_staff': advisory_staff,
+        'service_name': 'Internal Control (SOX) Compliance',
+        'service_description': 'Comprehensive SOX compliance services to strengthen internal controls and meet regulatory requirements.',
+    }
+    return render(request,
+                  'advisory/forensic_services/financial_accounting_outsourcing/internal_control_sox_compliance.html',
+                  context)
+
+
+# Forensic Audit Investigation Sub-services
+def payroll_processing_management(request):
+    """Payroll Processing and Management page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'advisory_staff': advisory_staff,
+        'service_name': 'Payroll Processing and Management',
+        'service_description': 'End-to-end payroll solutions to ensure accurate, compliant, and efficient payroll processing.',
+    }
+    return render(request, 'advisory/forensic_services/forensic_audit_investigation/payroll_processing_management.html',
+                  context)
+
+
+def account_management_bookkeeping(request):
+    """Account Management and Bookkeeping page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'advisory_staff': advisory_staff,
+        'service_name': 'Account Management and Bookkeeping',
+        'service_description': 'Professional account management and bookkeeping services to maintain financial integrity and support growth.',
+    }
+    return render(request,
+                  'advisory/forensic_services/forensic_audit_investigation/account_management_bookkeeping.html',
+                  context)
+
+
+# Advisory Services Views
+def tax_planning_advisory_main(request):
+    """Tax Planning and Advisory main page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'advisory_staff': advisory_staff,
+        'service_name': 'Tax Planning and Advisory',
+        'service_description': 'Strategic tax planning and advisory services to optimize your tax position and ensure compliance across all jurisdictions.',
+    }
+    return render(request, 'advisory/advisory_services/tax_planning_advisory.html', context)
+
+
+def financial_accounting_advisory(request):
+    """Financial Accounting Advisory page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'advisory_staff': advisory_staff,
+        'service_name': 'Financial Accounting Advisory',
+        'service_description': 'Expert financial accounting guidance to enhance reporting accuracy, compliance, and strategic decision-making.',
+    }
+    return render(request, 'advisory/advisory_services/financial_accounting_advisory.html', context)
+
+
+def internal_control_sox_compliance_main(request):
+    """Internal Control Compliance (SOX) main page"""
+    advisory_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'advisory_staff': advisory_staff,
+        'service_name': 'Internal Control Compliance (SOX)',
+        'service_description': 'Comprehensive SOX compliance services to establish, monitor, and optimize internal control environments.',
+    }
+    return render(request, 'advisory/advisory_services/internal_control_sox_compliance.html', context)
+
+
+# API View for Staff Modal
+def get_staff_details(request, staff_id):
+    """API endpoint to get staff details for modal"""
+    staff = get_object_or_404(User, id=staff_id, is_active=True, is_approved=True)
+
+    data = {
+        'id': staff.id,
+        'first_name': staff.first_name,
+        'last_name': staff.last_name,
+        'email': staff.email,
+        'phone_number': staff.phone_number or '',
+        'address': staff.address or '',
+        'nationality': staff.nationality or '',
+        'linkedin': staff.linkedin or '',
+        'profile_image': staff.profile_image.url if staff.profile_image else '',
+        'field_position': staff.field_position or '',
+        'company_impact': staff.company_impact or '',
+        'office_impact': staff.office_impact or '',
+        'office_location': staff.office.office_location if staff.office else '',
+        'executive_position_description': staff.executive_position_description or '',
+    }
+
+    return JsonResponse(data)
+
+
+# Technology Solutions Views
+def technology_main(request):
+    """Main technology solutions page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    # ✅ Get regional leaders from database - only active ones
+    regional_leaders = RegionalLeader.objects.filter(
+        is_active=True
+    ).order_by('display_order', 'region')[:8]  # Limit to 8 for the component
+
+    # ✅ Get managing partners from database - only active ones
+    managing_partners = ManagingPartner.objects.filter(
+        is_active=True
+    ).order_by('display_order')[:3]  # Limit to 3
+
+    # ✅ Get technology staff who are also marked as leaders/executives
+    technology_leaders = User.objects.filter(
+        technology_solution=True,
+        executive_team=True,  # Or any field that indicates leadership
+        is_active=True,
+        is_approved=True
+    ).select_related('office')[:5]  # Limit to 5
+
+    context = {
+        'technology_staff': technology_staff,
+        'regional_leaders': regional_leaders,
+        'managing_partners': managing_partners,
+        'technology_leaders': technology_leaders,
+    }
+    return render(request, 'technology/index.html', context)
+# Implementation Services Views
+def it_project_management_service(request):
+    """IT Project Management Service page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    # Regional leaders data - following the same structure as advisory_main
+    regional_leaders = [
+        {
+            'id': 1,
+            'first_name': 'Sarah',
+            'last_name': 'Johnson',
+            'profile_image': 'https://i.pinimg.com/1200x/77/31/a1/7731a10b118bb5b0a0c77bc6f8544bfa.jpg',
+            'email': 'sarah.johnson@obglobal.com',
+            'linkedin': 'https://linkedin.com/in/sarahjohnson'
+        },
+        {
+            'id': 2,
+            'first_name': 'David',
+            'last_name': 'Chen',
+            'profile_image': 'https://i.pinimg.com/736x/ae/e6/d4/aee6d45245609592339c8508ae27182d.jpg',
+            'email': 'david.chen@obglobal.com',
+            'linkedin': 'https://linkedin.com/in/davidchen'
+        },
+        {
+            'id': 3,
+            'first_name': 'Amina',
+            'last_name': 'Diallo',
+            'profile_image': 'https://i.pinimg.com/736x/ae/e6/d4/aee6d45245609592339c8508ae27182d.jpg',
+            'email': 'amina.diallo@obglobal.com',
+            'linkedin': 'https://linkedin.com/in/aminadiallo'
+        },
+        {
+            'id': 4,
+            'first_name': 'Kwame',
+            'last_name': 'Osei',
+            'profile_image': 'https://i.pinimg.com/736x/ae/e6/d4/aee6d45245609592339c8508ae27182d.jpg',
+            'email': 'kwame.osei@obglobal.com',
+            'linkedin': 'https://linkedin.com/in/kwameosei'
+        },
+        {
+            'id': 5,
+            'first_name': 'Fatima',
+            'last_name': 'Bello',
+            'profile_image': 'https://i.pinimg.com/736x/ae/e6/d4/aee6d45245609592339c8508ae27182d.jpg',
+            'email': 'fatima.bello@obglobal.com',
+            'linkedin': 'https://linkedin.com/in/fatimabello'
+        }
+    ]
+
+    context = {
+        'technology_staff': technology_staff,
+        'regional_leaders': regional_leaders,
+        'service_name': 'IT Project Management Service',
+        'service_description': 'Comprehensive IT project management services to ensure successful technology implementations and digital transformations.',
+    }
+    return render(request, 'technology/implementation_services/it_project_management.html', context)
+def hardware_implementation_management(request):
+    """Hardware Implementation Management page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'Hardware Implementation Management',
+        'service_description': 'End-to-end hardware implementation and management services for optimal infrastructure performance.',
+    }
+    return render(request, 'technology/implementation_services/hardware_implementation_management.html', context)
+
+def software_implementation_management(request):
+    """Software Implementation Management page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'Software Implementation Management',
+        'service_description': 'Professional software implementation services to ensure seamless deployment and integration.',
+    }
+    return render(request, 'technology/implementation_services/software_implementation_management.html', context)
+
+def software_deployment_management(request):
+    """Software Deployment and Management page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'Software Deployment and Management',
+        'service_description': 'Comprehensive software deployment and ongoing management services for optimal system performance.',
+    }
+    return render(request, 'technology/implementation_services/software_deployment_management.html', context)
+
+def hardware_deployment_maintenance(request):
+    """Hardware Deployment and Maintenance page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'Hardware Deployment and Maintenance',
+        'service_description': 'Complete hardware deployment and maintenance services to ensure reliable infrastructure operations.',
+    }
+    return render(request, 'technology/implementation_services/hardware_deployment_maintenance.html', context)
+
+def it_project_management(request):
+    """IT Project Management page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'IT Project Management',
+        'service_description': 'Strategic IT project management to deliver technology initiatives on time and within budget.',
+    }
+    return render(request, 'technology/implementation_services/it_project_management_main.html', context)
+
+# Security & Consulting Views
+def cybersecurity_assessment_management(request):
+    """Cybersecurity Assessment and Management page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'Cybersecurity Assessment and Management',
+        'service_description': 'Comprehensive cybersecurity services to protect your digital assets and ensure regulatory compliance.',
+    }
+    return render(request, 'technology/security_consulting/cybersecurity_assessment_management.html', context)
+
+def technology_consulting(request):
+    """Technology Consulting page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'Technology Consulting',
+        'service_description': 'Strategic technology consulting to align IT solutions with business objectives and drive digital transformation.',
+    }
+    return render(request, 'technology/security_consulting/technology_consulting.html', context)
+
+def it_consulting(request):
+    """IT Consulting page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'IT Consulting',
+        'service_description': 'Expert IT consulting services to optimize technology infrastructure and support business growth.',
+    }
+    return render(request, 'technology/security_consulting/it_consulting.html', context)
+
+def managed_it_service(request):
+    """Managed IT Service page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'Managed IT Service',
+        'service_description': 'Comprehensive managed IT services to ensure reliable, secure, and efficient technology operations.',
+    }
+    return render(request, 'technology/security_consulting/managed_it_service.html', context)
+
+def it_security(request):
+    """IT Security page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'IT Security',
+        'service_description': 'Robust IT security solutions to protect against cyber threats and ensure data integrity.',
+    }
+    return render(request, 'technology/security_consulting/it_security.html', context)
+
+# Asset & Support Views
+def cybersecurity_main(request):
+    """Cybersecurity page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'Cybersecurity',
+        'service_description': 'Advanced cybersecurity solutions to safeguard your digital infrastructure and sensitive data.',
+    }
+    return render(request, 'technology/asset_support/cybersecurity.html', context)
+
+def service_desk_help_desk(request):
+    """Service Desk/Help Desk page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'Service Desk/Help Desk',
+        'service_description': 'Professional service desk and help desk support to ensure uninterrupted technology operations.',
+    }
+    return render(request, 'technology/asset_support/service_desk_help_desk.html', context)
+
+def equipment_supply_setup(request):
+    """Equipment Supply and Setup page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'Equipment Supply and Setup',
+        'service_description': 'Complete equipment supply and setup services for optimal technology infrastructure deployment.',
+    }
+    return render(request, 'technology/asset_support/equipment_supply_setup.html', context)
+
+def inventory_count_assets_management(request):
+    """Inventory Count and Assets Management page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'Inventory Count and Assets Management',
+        'service_description': 'Comprehensive inventory and asset management solutions to optimize technology resource utilization.',
+    }
+    return render(request, 'technology/asset_support/inventory_count_assets_management.html', context)
+
+def asset_registry(request):
+    """Asset Registry page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'Asset Registry',
+        'service_description': 'Centralized asset registry services to maintain accurate technology asset records and lifecycle management.',
+    }
+    return render(request, 'technology/asset_support/asset_registry.html', context)
+
+def barcoding(request):
+    """Barcoding page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'Barcoding',
+        'service_description': 'Efficient barcoding solutions for streamlined asset tracking and inventory management.',
+    }
+    return render(request, 'technology/asset_support/barcoding.html', context)
+
+def business_process_improvement(request):
+    """Business Process Improvement page"""
+    technology_staff = User.objects.filter(
+        technology_solution=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'technology_staff': technology_staff,
+        'service_name': 'Business Process Improvement',
+        'service_description': 'Strategic business process optimization to enhance operational efficiency and drive growth.',
+    }
+    return render(request, 'technology/business_process_improvement.html', context)
+
+
+# Managed Services Main Views
+def managed_service_main(request):
+    """Main managed service page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    # ✅ Get regional leaders from database - only active ones
+    regional_leaders = RegionalLeader.objects.filter(
+        is_active=True
+    ).order_by('display_order', 'region')[:8]  # Limit to 8 for the component
+
+    # ✅ Get managing partners from database - only active ones
+    managing_partners = ManagingPartner.objects.filter(
+        is_active=True
+    ).order_by('display_order')[:3]  # Limit to 3
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'regional_leaders': regional_leaders,
+        'managing_partners': managing_partners,
+    }
+    return render(request, 'managed_service/index.html', context)
+def managed_service_accounting(request):
+    """Accounting Services main page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Accounting Services',
+        'service_description': 'Comprehensive accounting solutions for your business.',
+    }
+    return render(request, 'managed_service/accounting_services/index.html', context)
+
+def managed_service_tax(request):
+    """Tax Services main page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Tax Services',
+        'service_description': 'Complete tax planning and compliance services.',
+    }
+    return render(request, 'managed_service/tax_services/index.html', context)
+
+def managed_service_technology(request):
+    """Technology Services main page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Technology Services',
+        'service_description': 'Comprehensive IT infrastructure and support solutions.',
+    }
+    return render(request, 'managed_service/technology_services/index.html', context)
+
+# Accounting Services Sub-views
+def account_management_bookkeeping_ms(request):
+    """Account Management & Bookkeeping page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Account Management & Bookkeeping',
+        'service_description': 'Professional account management and comprehensive bookkeeping solutions to maintain financial integrity and accuracy.',
+    }
+    return render(request, 'managed_service/accounting_services/account_management_bookkeeping.html', context)
+
+def financial_statement_preparation(request):
+    """Financial Statement Preparation page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Financial Statement Preparation',
+        'service_description': 'Professional preparation of comprehensive financial statements including balance sheets, income statements, and cash flow statements.',
+    }
+    return render(request, 'managed_service/accounting_services/financial_statement_preparation.html', context)
+
+def bank_reconciliation(request):
+    """Bank Reconciliation page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Bank Reconciliation',
+        'service_description': 'Accurate and timely bank reconciliation services to ensure financial records match bank statements.',
+    }
+    return render(request, 'managed_service/accounting_services/bank_reconciliation.html', context)
+
+def account_payable_receivable(request):
+    """Account Payable/Receivable page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Accounts Payable & Receivable Management',
+        'service_description': 'Comprehensive management of accounts payable and receivable to optimize cash flow and vendor relationships.',
+    }
+    return render(request, 'managed_service/accounting_services/account_payable_receivable.html', context)
+
+def budget_and_forecasting(request):
+    """Budget and Forecasting page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Budget and Forecasting',
+        'service_description': 'Strategic budgeting and financial forecasting services to guide business planning and decision-making.',
+    }
+    return render(request, 'managed_service/accounting_services/budget_and_forecasting.html', context)
+
+def forensic_accounting_ms(request):
+    """Forensic Accounting page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Forensic Accounting',
+        'service_description': 'Expert forensic accounting services to investigate financial discrepancies, fraud, and ensure financial integrity.',
+    }
+    return render(request, 'managed_service/accounting_services/forensic_accounting.html', context)
+
+def business_consulting_ms(request):
+    """Business Consulting page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Business Consulting',
+        'service_description': 'Strategic business consulting services to optimize operations, improve efficiency, and drive growth.',
+    }
+    return render(request, 'managed_service/accounting_services/business_consulting.html', context)
+
+def public_accounting(request):
+    """Public Accounting page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Public Accounting',
+        'service_description': 'Comprehensive public accounting services including audit, tax, and consulting for businesses and individuals.',
+    }
+    return render(request, 'managed_service/accounting_services/public_accounting.html', context)
+
+# Tax Services Sub-views
+def tax_planning_ms(request):
+    """Tax Planning page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Tax Planning',
+        'service_description': 'Strategic tax planning services to minimize tax liability and optimize your financial position.',
+    }
+    return render(request, 'managed_service/tax_services/tax_planning.html', context)
+
+def payroll_tax(request):
+    """Payroll Tax page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Payroll Tax Management',
+        'service_description': 'Comprehensive payroll tax services including calculation, filing, and compliance management.',
+    }
+    return render(request, 'managed_service/tax_services/payroll_tax.html', context)
+
+def individual_tax_1040(request):
+    """Individual Tax - 1040 page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Individual Tax - Form 1040',
+        'service_description': 'Complete individual tax preparation and filing services for Form 1040 and related schedules.',
+    }
+    return render(request, 'managed_service/tax_services/individual_tax_1040.html', context)
+
+def business_tax_1120s_1120(request):
+    """Business Tax – 1120s and 1120 page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Business Tax – Forms 1120 & 1120S',
+        'service_description': 'Comprehensive business tax services for corporations (Form 1120) and S-corporations (Form 1120S).',
+    }
+    return render(request, 'managed_service/tax_services/business_tax_1120s_1120.html', context)
+
+def nonprofit_tax_990(request):
+    """Non-profit Tax – 990 page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Non-profit Tax – Form 990',
+        'service_description': 'Specialized tax services for non-profit organizations including Form 990 preparation and compliance.',
+    }
+    return render(request, 'managed_service/tax_services/nonprofit_tax_990.html', context)
+
+def tax_accounting(request):
+    """Tax Accounting page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Tax Accounting',
+        'service_description': 'Professional tax accounting services including provision calculations, deferred taxes, and tax basis accounting.',
+    }
+    return render(request, 'managed_service/tax_services/tax_accounting.html', context)
+
+def international_tax(request):
+    """International Tax page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'International Tax',
+        'service_description': 'Expert international tax services including cross-border transactions, transfer pricing, and treaty analysis.',
+    }
+    return render(request, 'managed_service/tax_services/international_tax.html', context)
+
+# Technology Services Sub-views
+def asset_tracking_management(request):
+    """Asset Tracking and Management page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Asset Tracking and Management',
+        'service_description': 'Comprehensive IT asset tracking and management solutions to optimize technology investments and lifecycle management.',
+    }
+    return render(request, 'managed_service/technology_services/asset_tracking_management.html', context)
+
+def it_support_management(request):
+    """IT Support Management page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'IT Support Management',
+        'service_description': 'Professional IT support management services including help desk, technical support, and system maintenance.',
+    }
+    return render(request, 'managed_service/technology_services/it_support_management.html', context)
+
+def cybersecurity_ms(request):
+    """Cybersecurity page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Cybersecurity Services',
+        'service_description': 'Comprehensive cybersecurity solutions including threat protection, vulnerability assessment, and security monitoring.',
+    }
+    return render(request, 'managed_service/technology_services/cybersecurity.html', context)
+
+def network_support_health_check(request):
+    """Network Support/Health Check page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Network Support & Health Check',
+        'service_description': 'Professional network support services including health checks, optimization, and performance monitoring.',
+    }
+    return render(request, 'managed_service/technology_services/network_support_health_check.html', context)
+
+def inventory(request):
+    """Inventory page"""
+    managed_service_staff = User.objects.filter(
+        managed_service=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    context = {
+        'managed_service_staff': managed_service_staff,
+        'service_name': 'Inventory Management',
+        'service_description': 'Comprehensive inventory management solutions including tracking, optimization, and reporting.',
+    }
+    return render(request, 'managed_service/technology_services/inventory.html', context)
+
+
+
+# Insights Views
+def insights_main(request):
+    return render(request, 'insights/index.html')
+
+def ai_revolution_business_operations(request):
+    return render(request, 'insights/ai_revolution_business_operations.html')
+
+def digital_transformation_strategies(request):
+    return render(request, 'insights/digital_transformation_strategies.html')
+
+def esg_compliance_frameworks(request):
+    return render(request, 'insights/esg_compliance_frameworks.html')
+
+def remote_workforce_management(request):
+    return render(request, 'insights/remote_workforce_management.html')
+
+def tax_law_changes_2024(request):
+    return render(request, 'insights/tax_law_changes_2024.html')
+
+def cybersecurity_threat_landscape(request):
+    return render(request, 'insights/cybersecurity_threat_landscape.html')
+
+def cloud_migration_best_practices(request):
+    return render(request, 'insights/cloud_migration_best_practices.html')
+
+# Industries Views
+def industries_main(request):
+    return render(request, 'industries/index.html')
+
+def financial_services(request):
+    return render(request, 'industries/financial_services.html')
+
+def government_public_sector(request):
+    return render(request, 'industries/government_public_sector.html')
+
+def consumer_business(request):
+    return render(request, 'industries/consumer_business.html')
+
+def healthcare_industry(request):
+    return render(request, 'industries/healthcare.html')
+
+def real_estate_construction(request):
+    return render(request, 'industries/real_estate_construction.html')
+
+def non_profit_organizations(request):
+    return render(request, 'industries/non_profit_organizations.html')
+
+def manufacturing_industry(request):
+    return render(request, 'industries/manufacturing.html')
+
+def professional_service_firms(request):
+    return render(request, 'industries/professional_service_firms.html')
+
+def technology_media_telecom(request):
+    return render(request, 'industries/technology_media_telecom.html')
+
+
+# Innovation Views
+def innovation_main(request):
+    """Main innovation page"""
+    # If you have an 'innovation' field in your User model, use it:
+    # innovation_staff = User.objects.filter(
+    #     innovation=True,
+    #     is_active=True,
+    #     is_approved=True
+    # ).select_related('office')
+
+    # Using advisory field as a proxy for innovation staff
+    innovation_staff = User.objects.filter(
+        advisory=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    # ✅ Get regional leaders from database - only active ones
+    regional_leaders = RegionalLeader.objects.filter(
+        is_active=True
+    ).order_by('display_order', 'region')[:8]  # Limit to 8 for the component
+
+    # ✅ Get managing partners from database - only active ones
+    managing_partners = ManagingPartner.objects.filter(
+        is_active=True
+    ).order_by('display_order')[:3]  # Limit to 3
+
+    context = {
+        'innovation_staff': innovation_staff,
+        'regional_leaders': regional_leaders,
+        'managing_partners': managing_partners,
+    }
+    return render(request, 'innovation/index.html', context)
+def ai_driven_business_intelligence(request):
+    return render(request, 'innovation/ai_driven_business_intelligence.html')
+
+def predictive_analytics_solutions(request):
+    return render(request, 'innovation/predictive_analytics_solutions.html')
+
+def natural_language_processing(request):
+    return render(request, 'innovation/natural_language_processing.html')
+
+def advanced_threat_protection(request):
+    return render(request, 'innovation/advanced_threat_protection.html')
+
+def zero_trust_architecture(request):
+    return render(request, 'innovation/zero_trust_architecture.html')
+
+def custom_software_development(request):
+    return render(request, 'innovation/custom_software_development.html')
+
+def enterprise_application_integration(request):
+    return render(request, 'innovation/enterprise_application_integration.html')
+
+def digital_forensic_tools(request):
+    return render(request, 'innovation/digital_forensic_tools.html')
+
+# In your views.py file
+def compliance_main(request):
+    """Main compliance solutions page"""
+    context = {
+        'title': 'Compliance Solutions | OB Global',
+        'description': 'Comprehensive compliance solutions for regulatory requirements, ESG frameworks, and industry standards.',
+    }
+    return render(request, 'compliance/compliance_main.html', context)
+
+
+from django.shortcuts import render, get_object_or_404
+from .models import RegionalLeader
+
+
+def regional_leader_profile(request, leader_id):
+    """Individual regional leader profile page using database"""
+    leader = get_object_or_404(RegionalLeader, id=leader_id, is_active=True)
+
+    context = {
+        'leader': leader,
+    }
+    return render(request, 'regional_leader_profile.html', context)
+
+def oil_and_gas_industry(request):
+    """Oil and Gas Industry page"""
+    # Get staff members who work in oil & gas or advisory services
+    # You may want to create a specific field for industries later
+    industry_staff = User.objects.filter(
+        advisory=True,  # Using advisory as a proxy filter for now
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    # Industry-specific data
+    industry_data = {
+        'name': 'Oil and Gas',
+        'tagline': 'Expert solutions for the energy sector',
+        'description': 'Comprehensive services for exploration, production, refining, and distribution.',
+        'stats': [
+            {'value': '20+', 'label': 'Years in Energy Sector'},
+            {'value': '150+', 'label': 'Energy Projects'},
+            {'value': '98%', 'label': 'Client Satisfaction'},
+        ],
+        # Add any other data your template needs
+    }
+
+    context = {
+        'industry_staff': industry_staff,
+        'industry': industry_data,
+        'industry_name': industry_data['name'],
+        'industry_tagline': industry_data['tagline'],
+    }
+
+    return render(request, 'industries/oil_and_gas.html', context)
+
+
+# Add this to your views.py after other views
+
+def executive_leadership(request):
+    """Executive Leadership page focusing on company-wide capabilities"""
+    # Get executive team members (users with executive_team=True)
+    executives = User.objects.filter(
+        executive_team=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    # Regional leaders data
+    regional_leaders = [
+        {
+            'id': 1,
+            'first_name': 'Sarah',
+            'last_name': 'Johnson',
+            'profile_image': 'https://i.pinimg.com/1200x/77/31/a1/7731a10b118bb5b0a0c77bc6f8544bfa.jpg',
+            'email': 'sarah.johnson@obglobal.com',
+            'linkedin': 'https://linkedin.com/in/sarahjohnson'
+        },
+        {
+            'id': 2,
+            'first_name': 'David',
+            'last_name': 'Chen',
+            'profile_image': 'https://i.pinimg.com/736x/ae/e6/d4/aee6d45245609592339c8508ae27182d.jpg',
+            'email': 'david.chen@obglobal.com',
+            'linkedin': 'https://linkedin.com/in/davidchen'
+        },
+        {
+            'id': 3,
+            'first_name': 'Amina',
+            'last_name': 'Diallo',
+            'profile_image': 'https://i.pinimg.com/736x/ae/e6/d4/aee6d45245609592339c8508ae27182d.jpg',
+            'email': 'amina.diallo@obglobal.com',
+            'linkedin': 'https://linkedin.com/in/aminadiallo'
+        },
+        {
+            'id': 4,
+            'first_name': 'Kwame',
+            'last_name': 'Osei',
+            'profile_image': 'https://i.pinimg.com/736x/ae/e6/d4/aee6d45245609592339c8508ae27182d.jpg',
+            'email': 'kwame.osei@obglobal.com',
+            'linkedin': 'https://linkedin.com/in/kwameosei'
+        },
+        {
+            'id': 5,
+            'first_name': 'Fatima',
+            'last_name': 'Bello',
+            'profile_image': 'https://i.pinimg.com/736x/ae/e6/d4/aee6d45245609592339c8508ae27182d.jpg',
+            'email': 'fatima.bello@obglobal.com',
+            'linkedin': 'https://linkedin.com/in/fatimabello'
+        }
+    ]
+
+    context = {
+        'executives': executives,
+        'regional_leaders': regional_leaders,
+    }
+
+    return render(request, 'about/leadership.html', context)
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required, user_passes_test
+from .models import Office, OfficeDetail
+from .forms import OfficeDetailForm
+
+
+def is_admin_or_staff(user):
+    """Check if user is admin or staff"""
+    return user.is_authenticated and user.role in ['admin', 'staff']
+
+
+@login_required
+@user_passes_test(is_admin_or_staff)
+def manage_office_details(request, office_id):
+    """
+    Main view to manage office details - shows existing details or form to create new ones
+    """
+    office = get_object_or_404(Office, id=office_id)
+
+    # Try to get existing details, or None if they don't exist
+    try:
+        office_details = OfficeDetail.objects.get(office=office)
+        form = None  # We'll show details instead of form
+    except OfficeDetail.DoesNotExist:
+        office_details = None
+        form = OfficeDetailForm()
+
+    if request.method == 'POST':
+        if office_details:
+            # Update existing details
+            form = OfficeDetailForm(request.POST, request.FILES, instance=office_details)
+        else:
+            # Create new details
+            form = OfficeDetailForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            office_detail = form.save(commit=False)
+            office_detail.office = office
+            office_detail.save()
+
+            action = "updated" if office_details else "added"
+            messages.success(request, f"Office details {action} successfully!")
+            return redirect('manage_office_details', office_id=office.id)
+
+    context = {
+        'office': office,
+        'office_details': office_details,
+        'form': form,
+    }
+    return render(request, 'manage/office_details.html', context)
+
+
+from django.shortcuts import render, get_object_or_404
+from .models import Office, OfficeDetail
+
+
+def office_detailed_view(request, office_id):
+    """
+    Detailed view for a single office showing all associated information
+    """
+    office = get_object_or_404(Office, id=office_id)
+
+    # Try to get office details if they exist
+    try:
+        office_details = OfficeDetail.objects.get(office=office)
+    except OfficeDetail.DoesNotExist:
+        office_details = None
+
+    # Get all staff members assigned to this office
+    office_staff = User.objects.filter(
+        office=office,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    # Get executives in this office
+    executives_in_office = User.objects.filter(
+        office=office,
+        executive_team=True,
+        is_active=True,
+        is_approved=True
+    ).select_related('office')
+
+    # Create Google Maps link for full view (if embed URL exists)
+    large_map_url = None
+    if office.google_map_url and 'maps/embed' in office.google_map_url.lower():
+        large_map_url = office.google_map_url.replace('/embed', '/place')
+
+    context = {
+        'office': office,
+        'office_details': office_details,
+        'office_staff': office_staff,
+        'executives_in_office': executives_in_office,
+        'large_map_url': large_map_url,
+    }
+
+    return render(request, 'office_detail_page.html', context)
+
+@login_required
+@user_passes_test(is_admin_or_staff)
+def edit_office_details(request, office_id):
+    """
+    Edit existing office details
+    """
+    office = get_object_or_404(Office, id=office_id)
+    office_details = get_object_or_404(OfficeDetail, office=office)
+
+    if request.method == 'POST':
+        form = OfficeDetailForm(request.POST, request.FILES, instance=office_details)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Office details updated successfully!")
+            return redirect('manage_office_details', office_id=office.id)
+    else:
+        form = OfficeDetailForm(instance=office_details)
+
+    context = {
+        'office': office,
+        'office_details': office_details,
+        'form': form,
+        'edit_mode': True,
+    }
+    return render(request, 'manage/edit_office_details.html', context)
+
+
+@login_required
+@user_passes_test(is_admin_or_staff)
+def delete_office_details(request, office_id):
+    """
+    Delete office details
+    """
+    office = get_object_or_404(Office, id=office_id)
+    office_details = get_object_or_404(OfficeDetail, office=office)
+
+    if request.method == 'POST':
+        office_name = office.office_Name
+        office_details.delete()
+        messages.success(request, f"Office details for {office_name} deleted successfully!")
+        return redirect('manage_offices')
+
+    context = {
+        'office': office,
+        'office_details': office_details,
+    }
+    return render(request, 'manage/delete_office_details.html', context)
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.db.models import Q
+from .models import RegionalLeader, ManagingPartner
+from .forms import RegionalLeaderForm, ManagingPartnerForm
+
+
+def is_admin(user):
+    return user.is_authenticated and user.role == 'admin'
+
+
+# Combined Leader Management Views
+@login_required
+@user_passes_test(is_admin)
+def manage_regional_leaders(request):
+    """View all regional leaders and managing partners"""
+    regional_leaders = RegionalLeader.objects.filter(is_active=True).order_by('display_order', 'region')
+    inactive_regional_leaders = RegionalLeader.objects.filter(is_active=False).order_by('display_order', 'region')
+
+    managing_partners = ManagingPartner.objects.filter(is_active=True).order_by('display_order')
+    inactive_managing_partners = ManagingPartner.objects.filter(is_active=False).order_by('display_order')
+
+    search_query = request.GET.get('search', '')
+    if search_query:
+        regional_leaders = regional_leaders.filter(
+            Q(first_name__icontains=search_query) |
+            Q(last_name__icontains=search_query) |
+            Q(region__icontains=search_query) |
+            Q(email__icontains=search_query)
+        )
+        managing_partners = managing_partners.filter(
+            Q(first_name__icontains=search_query) |
+            Q(last_name__icontains=search_query) |
+            Q(email__icontains=search_query)
+        )
+
+    context = {
+        'regional_leaders': regional_leaders,
+        'inactive_regional_leaders': inactive_regional_leaders,
+        'managing_partners': managing_partners,
+        'inactive_managing_partners': inactive_managing_partners,
+        'search_query': search_query,
+    }
+    return render(request, 'manage/manage_regional_leaders.html', context)
+
+
+@login_required
+@user_passes_test(is_admin)
+def add_regional_leader(request):
+    """Add a new regional leader or managing partner"""
+    leader_type = request.GET.get('type', 'regional_leader')
+
+    # Determine if it's a managing partner
+    is_managing_partner = leader_type == 'managing_partner'
+
+    if request.method == 'POST':
+        if is_managing_partner:
+            form = ManagingPartnerForm(request.POST, request.FILES)
+            success_message = 'Managing Partner'
+            success_redirect = 'manage_regional_leaders'
+        else:
+            form = RegionalLeaderForm(request.POST, request.FILES)
+            success_message = 'Regional Leader'
+            success_redirect = 'manage_regional_leaders'
+
+        if form.is_valid():
+            leader = form.save()
+            messages.success(request, f'{success_message} {leader.get_full_name()} added successfully!')
+            return redirect(success_redirect)
+        else:
+            # Store form errors in JSON format for JavaScript handling
+            form_errors = {}
+            for field, errors in form.errors.items():
+                if errors:
+                    form_errors[field] = errors[0]
+
+            # If form is invalid, we need to set page_title based on leader_type
+            if is_managing_partner:
+                page_title = 'Add Managing Partner'
+            else:
+                page_title = 'Add Regional Leader'
+
+    else:
+        # Initial form load
+        if is_managing_partner:
+            form = ManagingPartnerForm(
+                initial={
+                    'display_order': 0,
+                    'is_active': True,
+                    'leader_type': 'managing_partner'
+                }
+            )
+            page_title = 'Add Managing Partner'
+        else:
+            form = RegionalLeaderForm(
+                initial={
+                    'display_order': 0,
+                    'is_active': True,
+                    'leader_type': 'regional_leader'
+                }
+            )
+            page_title = 'Add Regional Leader'
+
+        # No form errors on initial load
+        form_errors = {}
+
+    # Convert form errors to JSON for JavaScript
+    form_errors_json = json.dumps(form_errors)
+
+    context = {
+        'form': form,
+        'page_title': page_title,
+        'is_managing_partner': is_managing_partner,
+        'leader_type': leader_type,
+        'form_errors_json': form_errors_json,
+    }
+
+    return render(request, 'manage/regional_leader_form.html', context)
+
+
+@login_required
+@user_passes_test(is_admin)
+def edit_regional_leader(request, leader_id):
+    """Edit an existing regional leader or managing partner"""
+
+    # Initialize variables
+    leader = None
+    is_managing_partner = False
+    form_class = None
+    form_errors = {}
+
+    # Try to get as RegionalLeader first
+    try:
+        leader = RegionalLeader.objects.get(id=leader_id)
+        is_managing_partner = False
+        form_class = RegionalLeaderForm
+        page_title = f'Edit Regional Leader - {leader.get_full_name()}'
+        success_message = 'Regional Leader'
+    except RegionalLeader.DoesNotExist:
+        # Try to get as ManagingPartner
+        try:
+            leader = ManagingPartner.objects.get(id=leader_id)
+            is_managing_partner = True
+            form_class = ManagingPartnerForm
+            page_title = f'Edit Managing Partner - {leader.get_full_name()}'
+            success_message = 'Managing Partner'
+        except ManagingPartner.DoesNotExist:
+            raise Http404("Leader not found")
+
+    if request.method == 'POST':
+        form = form_class(request.POST, request.FILES, instance=leader)
+        if form.is_valid():
+            updated_leader = form.save()
+            messages.success(request, f'{success_message} {updated_leader.get_full_name()} updated successfully!')
+            return redirect('manage_regional_leaders')
+        else:
+            # Store form errors in JSON format for JavaScript handling
+            for field, errors in form.errors.items():
+                if errors:
+                    form_errors[field] = errors[0]
+            # Keep the same page_title since form is invalid
+    else:
+        form = form_class(instance=leader)
+
+    # Convert form errors to JSON for JavaScript
+    form_errors_json = json.dumps(form_errors)
+
+    context = {
+        'form': form,
+        'leader': leader,
+        'page_title': page_title,
+        'is_managing_partner': is_managing_partner,
+        'form_errors_json': form_errors_json,
+        'existing_profile_image': leader.get_profile_image_url() if leader.profile_image else '',
+    }
+
+    return render(request, 'manage/regional_leader_form.html', context)
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.http import JsonResponse, Http404
+from .models import RegionalLeader, ManagingPartner
+import cloudinary.uploader  # For deleting Cloudinary images
+
+
+@login_required
+@user_passes_test(is_admin)
+def view_regional_leader(request, leader_id):
+    """View detailed information about a regional leader or managing partner"""
+    leader = None
+    leader_type = 'regional_leader'
+
+    # Try to get as regional leader first
+    try:
+        leader = RegionalLeader.objects.get(id=leader_id)
+        leader_type = 'regional_leader'
+    except RegionalLeader.DoesNotExist:
+        # If not found as regional leader, try as managing partner
+        try:
+            leader = ManagingPartner.objects.get(id=leader_id)
+            leader_type = 'managing_partner'
+        except ManagingPartner.DoesNotExist:
+            raise Http404("Leader not found")
+
+    context = {
+        'leader': leader,
+        'leader_type': leader_type,
+    }
+    return render(request, 'manage/view_regional_leader.html', context)
+
+
+@login_required
+@user_passes_test(is_admin)
+def delete_regional_leader(request, leader_id):
+    """Handle both deactivation and permanent deletion of leaders"""
+    leader = None
+    is_managing_partner = False
+    leader_type = 'Regional Leader'
+
+    # Try to get as regional leader first
+    try:
+        leader = RegionalLeader.objects.get(id=leader_id)
+        is_managing_partner = False
+        leader_type = 'Regional Leader'
+    except RegionalLeader.DoesNotExist:
+        # If not found as regional leader, try as managing partner
+        try:
+            leader = ManagingPartner.objects.get(id=leader_id)
+            is_managing_partner = True
+            leader_type = 'Managing Partner'
+        except ManagingPartner.DoesNotExist:
+            raise Http404("Leader not found")
+
+    if request.method == 'POST':
+        # Check if this is a permanent delete
+        if request.POST.get('permanent') == 'true':
+            # Permanent delete - remove from database
+            leader_name = leader.get_full_name()
+
+            # Delete profile image from Cloudinary if exists
+            if hasattr(leader, 'profile_image') and leader.profile_image:
+                try:
+                    cloudinary.uploader.destroy(leader.profile_image.public_id)
+                except:
+                    pass  # Silently fail if image deletion fails
+
+            leader.delete()
+            messages.success(request, f'{leader_type} {leader_name} permanently deleted from the system!')
+        else:
+            # Soft delete (deactivation) - just mark as inactive
+            leader.is_active = False
+            leader.save()
+            messages.success(request, f'{leader_type} {leader.get_full_name()} deactivated successfully!')
+
+        return redirect('manage_regional_leaders')
+
+    context = {
+        'leader': leader,
+        'leader_type': leader_type,
+        'is_managing_partner': is_managing_partner,
+    }
+
+    # If permanent delete is requested, show a different template
+    if request.GET.get('permanent') == 'true':
+        return render(request, 'manage/delete_regional_leader.html', context)
+
+    return render(request, 'manage/deactivate_regional_leader.html', context)
+
+
+@login_required
+@user_passes_test(is_admin)
+def activate_regional_leader(request, leader_id):
+    """Reactivate a regional leader or managing partner"""
+    leader = None
+    is_managing_partner = False
+    leader_type = 'Regional Leader'
+
+    # Try to get as regional leader first
+    try:
+        leader = RegionalLeader.objects.get(id=leader_id)
+        is_managing_partner = False
+        leader_type = 'Regional Leader'
+    except RegionalLeader.DoesNotExist:
+        # If not found as regional leader, try as managing partner
+        try:
+            leader = ManagingPartner.objects.get(id=leader_id)
+            is_managing_partner = True
+            leader_type = 'Managing Partner'
+        except ManagingPartner.DoesNotExist:
+            raise Http404("Leader not found")
+
+    leader.is_active = True
+    leader.save()
+    messages.success(request, f'{leader_type} {leader.get_full_name()} activated successfully!')
+    return redirect('manage_regional_leaders')
+
+
+# Public profile view for both leader types
+def regional_leader_profile(request, leader_id):
+    """Public profile view for regional leaders and managing partners"""
+    leader = None
+    leader_type = 'regional_leader'
+
+    # Try to get as regional leader first
+    try:
+        leader = RegionalLeader.objects.get(id=leader_id, is_active=True)
+        leader_type = 'regional_leader'
+    except RegionalLeader.DoesNotExist:
+        # If not found as regional leader, try as managing partner
+        try:
+            leader = ManagingPartner.objects.get(id=leader_id, is_active=True)
+            leader_type = 'managing_partner'
+        except ManagingPartner.DoesNotExist:
+            raise Http404("Leader not found")
+
+    context = {
+        'leader': leader,
+        'leader_type': leader_type,
+        # Add these additional context variables if your template needs them
+        'page_title': f"{leader.first_name} {leader.last_name} | OB Global",
+        'meta_description': f"Professional profile of {leader.first_name} {leader.last_name}, {'Regional Leader' if leader_type == 'regional_leader' else 'Managing Partner'} at OB Global",
+    }
+
+    # Use the correct template path based on your file location
+    # Your file is at: core/templates/regional_leader_profile.html
+    return render(request, 'regional_leader_profile.html', context)
+@login_required
+@user_passes_test(is_admin)
+def permanent_delete_regional_leader(request, leader_id):
+    leader = get_object_or_404(RegionalLeader, id=leader_id)
+    if request.method == 'DELETE':
+        leader.delete()
+        return JsonResponse({'success': True, 'message': 'Regional leader permanently deleted'})
+    return JsonResponse({'success': False, 'message': 'Invalid request method'}, status=405)
+
+@login_required
+@user_passes_test(is_admin)
+def permanent_delete_managing_partner(request, leader_id):
+    partner = get_object_or_404(ManagingPartner, id=leader_id)
+    if request.method == 'DELETE':
+        partner.delete()
+        return JsonResponse({'success': True, 'message': 'Managing partner permanently deleted'})
+    return JsonResponse({'success': False, 'message': 'Invalid request method'}, status=405)
+
+# Combined permanent delete view for both leader types
+@login_required
+@user_passes_test(is_admin)
+def permanent_delete_leader(request, leader_id):
+    """Permanently delete a leader (regional leader or managing partner) via AJAX"""
+    leader = None
+    leader_type = ''
+
+    # Try to get as regional leader first
+    try:
+        leader = RegionalLeader.objects.get(id=leader_id)
+        leader_type = 'Regional Leader'
+    except RegionalLeader.DoesNotExist:
+        # If not found as regional leader, try as managing partner
+        try:
+            leader = ManagingPartner.objects.get(id=leader_id)
+            leader_type = 'Managing Partner'
+        except ManagingPartner.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Leader not found'}, status=404)
+
+    if request.method == 'DELETE':
+        leader_name = leader.get_full_name()
+
+        # Delete profile image from Cloudinary if exists
+        if hasattr(leader, 'profile_image') and leader.profile_image:
+            try:
+                cloudinary.uploader.destroy(leader.profile_image.public_id)
+            except:
+                pass  # Silently fail if image deletion fails
+
+        leader.delete()
+        return JsonResponse({
+            'success': True,
+            'message': f'{leader_type} {leader_name} permanently deleted'
+        })
+
+    return JsonResponse({'success': False, 'message': 'Invalid request method'}, status=405)
+
+
+# Remove or comment out these separate views (they're now combined into permanent_delete_leader):
+# @login_required
+# @user_passes_test(is_admin)
+# def permanent_delete_regional_leader(request, leader_id):
+#     leader = get_object_or_404(RegionalLeader, id=leader_id)
+#     if request.method == 'DELETE':
+#         leader.delete()
+#         return JsonResponse({'success': True, 'message': 'Regional leader permanently deleted'})
+#     return JsonResponse({'success': False, 'message': 'Invalid request method'}, status=405)
+
+# @login_required
+# @user_passes_test(is_admin)
+# def permanent_delete_managing_partner(request, leader_id):
+#     partner = get_object_or_404(ManagingPartner, id=leader_id)
+#     if request.method == 'DELETE':
+#         partner.delete()
+#         return JsonResponse({'success': True, 'message': 'Managing partner permanently deleted'})
+#     return JsonResponse({'success': False, 'message': 'Invalid request method'}, status=405)

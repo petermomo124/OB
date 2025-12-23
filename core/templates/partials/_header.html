@@ -7,27 +7,36 @@
         <div class="container">
     {% comment %} Links visible to unauthenticated users (Public) {% endcomment %}
     {% if not user.is_authenticated %}
+        <span class="separator">|</span>
     <div class="global-links">
+    <a href="{% url 'index' %}" class="global-link admin-link">Home</a>
+        <span class="separator">|</span>
         <a href="{% url 'public_chatbot_view' %}"
-           style="text-decoration: none; color: #1e88e5; font-weight: 600; font-size: 1.1rem; padding: 5px 10px; border-radius: 5px; transition: color 0.3s ease;"
-           onmouseover="this.style.color='#0a5eb5'" onmouseout="this.style.color='#1e88e5'">
+           class="global-link admin-link">
             🤖 Ask OB
         </a>
-        <a href="{% url 'rfp_guide' %}" class="global-link"><i class="fas fa-question-circle"></i> <span>RFP Guide</span></a>
-<span class="separator">|</span>
-        <a href="{% url 'contact' %}" class="global-link"><i class="fas fa-envelope"></i> <span>Contact Us</span></a>
         <span class="separator">|</span>
-        <a href="{% url 'newsletter:subscribe' %}" class="global-link"><i class="fas fa-bell"></i> <span>Subscription</span></a>
+        <a href="{% url 'rfp_guide' %}" class="global-link admin-link"><i class="fas fa-question-circle"></i> <span>RFP Guide</span></a>
+<span class="separator">|</span>
+        <a href="{% url 'contact' %}" class="global-link admin-link"><i class="fas fa-envelope"></i> <span>Contact Us</span></a>
+        <span class="separator">|</span>
+        <a href="{% url 'newsletter:subscribe' %}" class="global-link admin-link"><i class="fas fa-bell"></i> <span>Subscription</span></a>
         <span class="separator">|</span>
         <a href="{% url 'client_portal' %}" id="portalLink" class="global-link admin-link"><i class="fas fa-lock"></i> <span>Portal</span></a>
+
+<span class="separator">|</span>
     </div>
 
     {% comment %} Links visible to authenticated users (Private) {% endcomment %}
     {% else %}
-    <div class="global-links">
-<a href="{% url 'chatbot_view' %}" class="global-link chatbot-link">
+    <div class="global-link">
+    <span class="separator">|</span>
+<a href="{% url 'chatbot_view' %}" class="global-link admin-link">
             <i class="fas fa-robot"></i> <span>AI Chatbot</span>
         </a>
+    <span class="separator">|</span>
+     <a href="{% url 'dashboard' %}" class="global-link admin-link"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
+    <span class="separator">|</span>
         {% comment %}
         RFP Link Visibility Logic:
         Check if the user is authenticated AND their role is 'admin' OR 'client'.
@@ -36,362 +45,1059 @@
         {% endcomment %}
         {% if user.role == 'admin' or user.role == 'client' %}
         <a href="{% url 'rfp_list' %}"
-           style="text-decoration: none; color: #1e88e5; font-weight: 600; font-size: 1.1rem; padding: 5px 10px; border-radius: 5px; transition: color 0.3s ease;"
-           onmouseover="this.style.color='#0a5eb5'"
-           onmouseout="this.style.color='#1e88e5'">
+           class="global-link admin-link">
             📄 RFP Management
         </a>
         <span class="separator">|</span>
         {% endif %}
 {% if request.user.role == 'admin' or request.user.role == 'staff' %}
-    
+
     <!-- Add Fieldwork link for both admin and staff -->
     {% if request.user.role == 'admin' %}
-        <a href="{% url 'fieldwork:field_job_list' %}" class="global-link"><i class="global-link chatbot-link"></i> <span>Fieldwork</span></a>
+        <a href="{% url 'manage_regional_leaders' %}" class="global-link admin-link">
+    <i class="fas fa-globe-americas"></i> <span>Regional Leaders</span>
+</a>
+<span class="separator">|</span>
+        <a href="{% url 'fieldwork:field_job_list' %}" class="global-link admin-link"><i class="fas fa-clipboard-list"></i> <span>Fieldwork</span></a>
     {% else %}
-        <a href="{% url 'fieldwork:staff_field_jobs' %}" class="global-link"><i class="global-link chatbot-link"></i> <span>Fieldwork</span></a>
+        <a href="{% url 'fieldwork:staff_field_jobs' %}" class="global-link admin-link"><i class="fas fa-clipboard-list"></i> <span>Fieldwork</span></a>
     {% endif %}
     <span class="separator">|</span>
 {% endif %}
         {% comment %} Links available to all authenticated users {% endcomment %}
 
+        
+        <a href="{% url 'user_logout' %}" class="global-link admin-link"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
         <span class="separator">|</span>
-        <a href="{% url 'user_logout' %}" class="global-link"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
     </div>
+        
     {% endif %}
 </div>
     </div>
 
     <!-- Main Header -->
-    <div class="header-container">
-        <div class="logo-container">
-            <a href="{% if user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'index' %}{% endif %}" class="logo">
-                <img src="{% static 'images/logo.png' %}" alt="OB Global Logo" class="logo-image">
-                <span class="global-text">GLOBAL</span>
-            </a>
-            <div class="hamburger">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
+<div class="header-container">
+    <div class="logo-container">
+        <a href="{% if user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'index' %}{% endif %}" class="logo">
+            <img src="{% static 'images/logo.png' %}" alt="OB Global Logo" class="logo-image">
+            <span class="global-text">GLOBAL</span>
+        </a>
+        <div class="hamburger">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+    </div>
+
+
+    <!-- Desktop Navigation -->
+    {% if not user.is_authenticated %}
+    <nav class="nav-menu">
+        <ul class="nav-list" style="display: flex; justify-content: center; align-items: center; margin: 0; padding: 0; list-style: none; gap: 40px;">
+
+            <!-- Capabilities - FIXED WIDTH Centered Dropdown -->
+            <li class="nav-item" style="position: static;">
+                <a href="#" class="nav-link">Capabilities</a>
+                <ul class="dropdown" style="width: 1200px !important; max-width: 1200px !important; left: 50% !important; transform: translateX(-50%) !important; margin: 0 !important; padding: 25px !important; box-sizing: border-box !important;">
+                    <div class="dropdown-grid" style="width: 100% !important; max-width: 1200px !important; margin: 0 auto !important; display: grid !important; grid-template-columns: 1fr 2fr !important; gap: 40px !important;">
+                        <!-- Left Panel - Service Categories -->
+                        <div class="categories-panel" style="min-width: 0 !important;">
+                            <h4 class="panel-title" style="margin-bottom: 20px; font-size: 18px; color: #333;">Our Services</h4>
+                            <div class="category-list">
+                                
+                                <div class="category-item-wrapper" data-category="forensic" style="margin-bottom: 8px !important; display: block;">
+                                    <div class="category-item-link" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: #f5f5f5; border-radius: 4px; text-decoration: none; color: #333; transition: all 0.3s ease;">
+                                        <a href="#" style="flex: 1; text-decoration: none; color: inherit;">Forensic Service</a>
+                                        <span class="arrow-btn" style="cursor: pointer; padding-left: 15px; font-size: 14px; color: #666;">&rarr;</span>
+                                    </div>
+                                    <div class="separator" style="height: 1px; background: #ddd; margin: 12px 0;"></div>
+                                </div>
+                                
+                                <div class="category-item-wrapper" data-category="audit" style="margin-bottom: 8px !important; display: block;">
+                                    <div class="category-item-link" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: #f5f5f5; border-radius: 4px; text-decoration: none; color: #333; transition: all 0.3s ease;">
+                                        <a href="#" style="flex: 1; text-decoration: none; color: inherit;">Audit</a>
+                                        <span class="arrow-btn" style="cursor: pointer; padding-left: 15px; font-size: 14px; color: #666;">&rarr;</span>
+                                    </div>
+                                    <div class="separator" style="height: 1px; background: #ddd; margin: 12px 0;"></div>
+                                </div>
+
+                                <div class="category-item-wrapper" data-category="tax" style="margin-bottom: 8px !important; display: block;">
+                                    <div class="category-item-link" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: #f5f5f5; border-radius: 4px; text-decoration: none; color: #333; transition: all 0.3s ease;">
+                                        <a href="#" style="flex: 1; text-decoration: none; color: inherit;">Tax</a>
+                                        <span class="arrow-btn" style="cursor: pointer; padding-left: 15px; font-size: 14px; color: #666;">&rarr;</span>
+                                    </div>
+                                    <div class="separator" style="height: 1px; background: #ddd; margin: 12px 0;"></div>
+                                </div>
+
+                                <div class="category-item-wrapper" data-category="consulting" style="margin-bottom: 8px !important; display: block;">
+                                    <div class="category-item-link" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: #f5f5f5; border-radius: 4px; text-decoration: none; color: #333; transition: all 0.3s ease;">
+                                        <a href="#" style="flex: 1; text-decoration: none; color: inherit;">Consulting</a>
+                                        <span class="arrow-btn" style="cursor: pointer; padding-left: 15px; font-size: 14px; color: #666;">&rarr;</span>
+                                    </div>
+                                    <div class="separator" style="height: 1px; background: #ddd; margin: 12px 0;"></div>
+                                </div>
+                                
+                                <div class="category-item-wrapper" data-category="advisory" style="margin-bottom: 8px !important; display: block;">
+                                    <div class="category-item-link" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: #f5f5f5; border-radius: 4px; text-decoration: none; color: #333; transition: all 0.3s ease;">
+                                        <a href="{% url 'advisory_main' %}" style="flex: 1; text-decoration: none; color: inherit;">Advisory</a>
+                                        <span class="arrow-btn" style="cursor: pointer; padding-left: 15px; font-size: 14px; color: #666;">&rarr;</span>
+                                    </div>
+                                    <div class="separator" style="height: 1px; background: #ddd; margin: 12px 0;"></div>
+                                </div>
+                                
+                                <div class="category-item-wrapper" data-category="technology" style="margin-bottom: 8px !important; display: block;">
+                                    <div class="category-item-link" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: #f5f5f5; border-radius: 4px; text-decoration: none; color: #333; transition: all 0.3s ease;">
+                                        <a href="{% url 'technology_main' %}" style="flex: 1; text-decoration: none; color: inherit;">Technology Solutions</a>
+                                        <span class="arrow-btn" style="cursor: pointer; padding-left: 15px; font-size: 14px; color: #666;">&rarr;</span>
+                                    </div>
+                                    <div class="separator" style="height: 1px; background: #ddd; margin: 12px 0;"></div>
+                                </div>
+                                
+                                <div class="category-item-wrapper" data-category="managed" style="margin-bottom: 8px !important; display: block;">
+                                    <div class="category-item-link" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: #f5f5f5; border-radius: 4px; text-decoration: none; color: #333; transition: all 0.3s ease;">
+                                        <a href="{% url 'managed_service_main' %}" style="flex: 1; text-decoration: none; color: inherit;">Managed Service</a>
+                                        <span class="arrow-btn" style="cursor: pointer; padding-left: 15px; font-size: 14px; color: #666;">&rarr;</span>
+                                    </div>
+                                    <div class="separator" style="height: 1px; background: #ddd; margin: 12px 0;"></div>
+                                </div>
+                                
+                            </div>
+                        </div>
+
+                        <!-- Right Panel - Service Details -->
+                        <div class="details-panel" style="min-width: 0 !important;">
+                            <h4 class="panel-title" style="margin-bottom: 20px; font-size: 18px; color: #333;">Service Details</h4>
+                            
+                            <div class="service-details active" data-category="forensic">
+    <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 20px; font-size: 20px; color: #333;">Forensic Service</h4>
+
+    <div style="display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 30px !important;">
+        <!-- Column 1: Core Services -->
+        <div class="dropdown-column" style="min-width: 0 !important;">
+            <div class="dropdown-section" style="min-width: 0 !important;">
+                <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 15px; font-size: 16px; color: #007bff;">Core Services</h4>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Data Analytics</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">IT Governance</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Fraud Assessment and Analysis</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Forensic Accounting</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Digital Evidence Collection</a>
             </div>
         </div>
 
-        <!-- Desktop Navigation -->
-        {% if not user.is_authenticated %}
-        <nav class="nav-menu">
-    <ul class="nav-list">
-        <!-- Forensic Service -->
-        <li class="nav-item">
-            <a href="#" class="nav-link">Forensic Service</a>
-            <ul class="dropdown">
-                <div class="dropdown-grid">
-                    <div class="dropdown-column">
-                        <div class="dropdown-section">
-                            <h4 class="dropdown-section-title">Core Services</h4>
-                            <a href="#" class="dropdown-link">Data Analytics</a>
-                            <a href="#" class="dropdown-link">IT Governance</a>
-                            <a href="#" class="dropdown-link">Fraud Assessment and Analysis</a>
-                            <a href="#" class="dropdown-link">Forensic Accounting</a>
-                        </div>
-                    </div>
-                    <div class="dropdown-column">
-                        <div class="dropdown-section">
-                            <h4 class="dropdown-section-title">Investigation</h4>
-                            <a href="#" class="dropdown-link">Fraud Inquiry</a>
-                            <a href="#" class="dropdown-link">Litigation Support</a>
-                            <a href="#" class="dropdown-link">Bank and Financial Statement Analysis</a>
-                            <a href="#" class="dropdown-link">Internal Investigation</a>
-                        </div>
-                    </div>
-                    <div class="dropdown-column">
-                        <div class="dropdown-section">
-                            <h4 class="dropdown-section-title">Analysis & Reporting</h4>
-                            <a href="#" class="dropdown-link">Data Benchmarking</a>
-                            <a href="#" class="dropdown-link">Creating Effective Financial Exhibits</a>
-                            <div class="sub-menu">
-                                <a href="#" class="dropdown-link">Computer Forensic</a>
-                                <ul class="sub-dropdown">
-                                    <li><a href="#" class="sub-dropdown-link">Bankruptcy</a></li>
-                                </ul>
-                            </div>
-                            <div class="sub-menu">
-                                <a href="#" class="dropdown-link">Inventory and Valuation Analysis</a>
-                                <ul class="sub-dropdown">
-                                    <li><a href="#" class="sub-dropdown-link">Asset Misappropriation</a></li>
-                                    <li><a href="#" class="sub-dropdown-link">Corporate Valuation Dispute</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </ul>
-        </li>
+        <!-- Column 2: Investigation -->
+        <div class="dropdown-column" style="min-width: 0 !important;">
+            <div class="dropdown-section" style="min-width: 0 !important;">
+                <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 15px; font-size: 16px; color: #007bff;">Investigation</h4>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Fraud Inquiry</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Litigation Support</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Bank and Financial Statement Analysis</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Internal Investigation</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Financial Crime Investigation</a>
+            </div>
+        </div>
 
-        <!-- Audit -->
-        <li class="nav-item">
-            <a href="#" class="nav-link">Audit</a>
-            <ul class="dropdown">
-                <div class="dropdown-grid">
-                    <div class="dropdown-column">
-                        <div class="dropdown-section">
-                            <h4 class="dropdown-section-title">Audit Services</h4>
-                            <a href="#" class="dropdown-link">Compilation and Audit Review</a>
-                            <a href="#" class="dropdown-link">Operational Audit</a>
-                            <a href="#" class="dropdown-link">Agreed Upon Procedure</a>
-                            <a href="#" class="dropdown-link">Follow-up Audit</a>
-                        </div>
-                    </div>
-                    <div class="dropdown-column">
-                        <div class="dropdown-section">
-                            <h4 class="dropdown-section-title">Specialized Audits</h4>
-                            <div class="sub-menu">
-                                <a href="#" class="dropdown-link">Financial Audit</a>
-                                <ul class="sub-dropdown">
-                                    <li><a href="#" class="sub-dropdown-link">Internal Audit</a></li>
-                                    <li><a href="#" class="sub-dropdown-link">Performance Audit</a></li>
-                                    <li><a href="#" class="sub-dropdown-link">Compliance Audit</a></li>
-                                </ul>
-                            </div>
-                            <a href="#" class="dropdown-link">Forensic Audit</a>
-                        </div>
-                    </div>
-                </div>
-            </ul>
-        </li>
+        <!-- Column 3: Analysis & Reporting -->
+        <div class="dropdown-column" style="min-width: 0 !important;">
+            <div class="dropdown-section" style="min-width: 0 !important;">
+                <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 15px; font-size: 16px; color: #007bff;">Analysis & Reporting</h4>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Data Benchmarking</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Creating Effective Financial Exhibits</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Computer Forensic</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Inventory and Valuation Analysis</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Expert Witness Testimony</a>
+            </div>
+        </div>
+    </div>
+</div>
 
-        <!-- Tax -->
-        <li class="nav-item">
-            <a href="#" class="nav-link">Tax</a>
-            <ul class="dropdown">
-                <div class="dropdown-grid">
-                    <div class="dropdown-column">
-                        <div class="dropdown-section">
-                            <h4 class="dropdown-section-title">Tax Services</h4>
-                            <a href="#" class="dropdown-link">Tax Preparation & Filing</a>
-                            <a href="#" class="dropdown-link">Tax Compliance</a>
-                            <a href="#" class="dropdown-link">Payroll Tax</a>
-                            <a href="#" class="dropdown-link">Business & Personal Tax</a>
-                        </div>
-                    </div>
-                    <div class="dropdown-column">
-                        <div class="dropdown-section">
-                            <h4 class="dropdown-section-title">Tax Education</h4>
-                            <div class="sub-menu">
-                                <a href="#" class="dropdown-link">Tax Education</a>
-                                <ul class="sub-dropdown">
-                                    <li><a href="#" class="sub-dropdown-link">Tax Accounting</a></li>
-                                    <li><a href="#" class="sub-dropdown-link">Tax Advisory</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </ul>
-        </li>
+                        <!-- Audit Details -->
+<div class="service-details" data-category="audit">
+    <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 20px; font-size: 20px; color: #333;">Audit</h4>
 
-        <!-- Consulting -->
-        <li class="nav-item">
-            <a href="#" class="nav-link">Consulting</a>
-            <ul class="dropdown">
-                <div class="dropdown-grid">
-                    <div class="dropdown-column">
-                        <div class="dropdown-section">
-                            <h4 class="dropdown-section-title">Business Consulting</h4>
-                            <a href="#" class="dropdown-link">Tax Consulting and Planning</a>
-                            <a href="#" class="dropdown-link">Tax Policy and Implementation</a>
-                            <a href="#" class="dropdown-link">Grant Management</a>
-                            <a href="#" class="dropdown-link">Business Analysis</a>
-                            <a href="#" class="dropdown-link">Risk Assessment</a>
-                        </div>
-                    </div>
-                    <div class="dropdown-column">
-                        <div class="dropdown-section">
-                            <h4 class="dropdown-section-title">Operational Consulting</h4>
-                            <a href="#" class="dropdown-link">Internal Control Review and Analysis</a>
-                            <a href="#" class="dropdown-link">Micro-assessment</a>
-                            <a href="#" class="dropdown-link">Spot Check</a>
-                            <div class="sub-menu">
-                                <a href="#" class="dropdown-link">Forensic Audit and Investigation</a>
-                                <ul class="sub-dropdown">
-                                    <li><a href="#" class="sub-dropdown-link">Reviews and Compilations of Financial Statements</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="dropdown-column">
-                        <div class="dropdown-section">
-                            <h4 class="dropdown-section-title">Specialized Consulting</h4>
-                            <div class="sub-menu">
-                                <a href="#" class="dropdown-link">Fraud Assessment and Analysis</a>
-                                <ul class="sub-dropdown">
-                                    <li><a href="#" class="sub-dropdown-link">Management Consulting</a></li>
-                                    <li><a href="#" class="sub-dropdown-link">Financial Advisory Consulting</a></li>
-                                    <li><a href="#" class="sub-dropdown-link">Risk & Compliance Consulting</a></li>
-                                    <li><a href="#" class="sub-dropdown-link">Operational Consulting</a></li>
-                                    <li><a href="#" class="sub-dropdown-link">Fraud Advisory</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </ul>
-        </li>
+    <div style="display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 30px !important;">
+        <!-- Column 1: Audit Services -->
+        <div class="dropdown-column" style="min-width: 0 !important;">
+            <div class="dropdown-section" style="min-width: 0 !important;">
+                <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 15px; font-size: 16px; color: #007bff;">Audit Services</h4>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Compilation and Audit Review</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Operational Audit</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Agreed Upon Procedure</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Follow-up Audit</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Sport and Entertainment audit</a>
+            </div>
+        </div>
 
-        <!-- Advisory -->
-        <li class="nav-item">
-            <a href="#" class="nav-link">Advisory</a>
-            <ul class="dropdown">
-                <div class="dropdown-grid">
-                    <div class="dropdown-column">
-                        <div class="dropdown-section">
-                            <h4 class="dropdown-section-title">Forensic Services</h4>
-                            <div class="sub-menu">
-                                <a href="#" class="dropdown-link">Forensic Accounting</a>
-                                <ul class="sub-dropdown">
-                                    <li class="sub-sub-menu">
-                                        <a href="#" class="sub-dropdown-link">Financial Accounting – Outsourcing</a>
-                                        <ul class="sub-sub-dropdown">
-                                            <li><a href="#" class="sub-sub-dropdown-link">CFO Service</a></li>
-                                            <li><a href="#" class="sub-sub-dropdown-link">Book-keeping Service</a></li>
-                                            <li><a href="#" class="sub-sub-dropdown-link">Tax Planning and Advisory</a></li>
-                                            <li><a href="#" class="sub-sub-dropdown-link">Internal Control (SOX) Compliance</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="sub-menu">
-                                <a href="#" class="dropdown-link">Forensic Audit and Investigation Analysis</a>
-                                <ul class="sub-dropdown">
-                                    <li><a href="#" class="sub-dropdown-link">Payroll Processing and Management</a></li>
-                                    <li><a href="#" class="sub-dropdown-link">Account Management and Bookkeeping</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="dropdown-column">
-                        <div class="dropdown-section">
-                            <h4 class="dropdown-section-title">Advisory Services</h4>
-                            <a href="#" class="dropdown-link">Tax Planning and Advisory</a>
-                            <a href="#" class="dropdown-link">Financial Accounting Advisory</a>
-                            <a href="#" class="dropdown-link">Internal Control Compliance (SOX)</a>
-                        </div>
-                    </div>
-                </div>
-            </ul>
-        </li>
+        <!-- Column 2: Specialized Audits -->
+        <div class="dropdown-column" style="min-width: 0 !important;">
+            <div class="dropdown-section" style="min-width: 0 !important;">
+                <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 15px; font-size: 16px; color: #007bff;">Specialized Audits</h4>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Financial Audit</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Internal Audit</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Performance Audit</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Compliance Audit</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Forensic Audit</a>
+            </div>
+        </div>
+    </div>
+</div>
 
-        <!-- Technology Solutions -->
-        <li class="nav-item">
-            <a href="#" class="nav-link">Technology Solutions</a>
-            <ul class="dropdown">
-                <div class="dropdown-grid">
-                    <div class="dropdown-column">
-                        <div class="dropdown-section">
-                            <h4 class="dropdown-section-title">Implementation Services</h4>
-                            <div class="sub-menu">
-                                <a href="#" class="dropdown-link">IT Project Management Service</a>
-                                <ul class="sub-dropdown">
-                                    <li><a href="#" class="sub-dropdown-link">Hardware Implementation Management</a></li>
-                                    <li><a href="#" class="sub-dropdown-link">Software Implementation Management</a></li>
-                                </ul>
-                            </div>
-                            <a href="#" class="dropdown-link">Software Deployment and Management</a>
-                            <a href="#" class="dropdown-link">Hardware Deployment and Maintenance</a>
-                            <a href="#" class="dropdown-link">IT Project Management</a>
-                        </div>
-                    </div>
-                    <div class="dropdown-column">
-                        <div class="dropdown-section">
-                            <h4 class="dropdown-section-title">Security & Consulting</h4>
-                            <a href="#" class="dropdown-link">Cybersecurity Assessment and Management</a>
-                            <a href="#" class="dropdown-link">Technology Consulting</a>
-                            <a href="#" class="dropdown-link">IT Consulting</a>
-                            <a href="#" class="dropdown-link">Managed IT Service</a>
-                            <a href="#" class="dropdown-link">IT Security</a>
-                        </div>
-                    </div>
-                    <div class="dropdown-column">
-                        <div class="dropdown-section">
-                            <h4 class="dropdown-section-title">Asset & Support</h4>
-                            <a href="#" class="dropdown-link">Cybersecurity</a>
-                            <a href="#" class="dropdown-link">Service Desk/Help Desk</a>
-                            <a href="#" class="dropdown-link">Equipment Supply and Setup</a>
-                            <a href="#" class="dropdown-link">Inventory Count and Assets Management</a>
-                            <div class="sub-menu">
-                                <a href="#" class="dropdown-link">Inventory and Asset Management</a>
-                                <ul class="sub-dropdown">
-                                    <li><a href="#" class="sub-dropdown-link">Asset Registry</a></li>
-                                    <li><a href="#" class="sub-dropdown-link">Barcoding</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </ul>
-        </li>
+                        <!-- Tax Details -->
+<div class="service-details" data-category="tax">
+    <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 20px; font-size: 20px; color: #333;">Tax</h4>
 
-        <!-- Managed Service -->
-        <li class="nav-item">
-            <a href="#" class="nav-link">Managed Service</a>
-            <ul class="dropdown">
-                <div class="dropdown-grid">
-                    <div class="dropdown-column">
-                        <div class="dropdown-section">
-                            <h4 class="dropdown-section-title">Accounting Services</h4>
-                            <div class="sub-menu">
-                                <a href="#" class="dropdown-link">Accounting Services</a>
-                                <ul class="sub-dropdown">
-                                    <li><a href="#" class="sub-dropdown-link">Account Management/Bookkeeping</a></li>
-                                    <li><a href="#" class="sub-dropdown-link">Financial Statement Preparation</a></li>
-                                    <li><a href="#" class="sub-dropdown-link">Bank Reconciliation</a></li>
-                                    <li><a href="#" class="sub-dropdown-link">Account Payable/Receivable</a></li>
-                                    <li><a href="#" class="sub-dropdown-link">Budget and Forecasting</a></li>
-                                    <li><a href="#" class="sub-dropdown-link">Forensic Accounting</a></li>
-                                    <li><a href="#" class="sub-dropdown-link">Business Consulting</a></li>
-                                    <li><a href="#" class="sub-dropdown-link">Public Accounting</a></li>
-                                </ul>
-                            </div>
-                        </div>
+    <div style="display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 30px !important;">
+        <!-- Column 1: Tax Services -->
+        <div class="dropdown-column" style="min-width: 0 !important;">
+            <div class="dropdown-section" style="min-width: 0 !important;">
+                <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 15px; font-size: 16px; color: #007bff;">Tax Services</h4>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Tax Preparation & Filing</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Tax Compliance</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Payroll Tax</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Business & Personal Tax</a>
+            </div>
+        </div>
+
+        <!-- Column 2: Tax Education -->
+        <div class="dropdown-column" style="min-width: 0 !important;">
+            <div class="dropdown-section" style="min-width: 0 !important;">
+                <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 15px; font-size: 16px; color: #007bff;">Tax Education</h4>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Tax Education</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Tax Accounting</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Tax Advisory</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+                        <!-- Consulting Details -->
+<div class="service-details" data-category="consulting">
+    <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 20px; font-size: 20px; color: #333;">Consulting</h4>
+
+    <div style="display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 30px !important;">
+        <!-- Column 1: Business Consulting -->
+        <div class="dropdown-column" style="min-width: 0 !important;">
+            <div class="dropdown-section" style="min-width: 0 !important;">
+                <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 15px; font-size: 16px; color: #007bff;">Business Consulting</h4>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Tax Consulting and Planning</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Tax Policy and Implementation</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Grant Management</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Business Analysis</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Risk Assessment</a>
+            </div>
+        </div>
+
+        <!-- Column 2: Operational Consulting -->
+        <div class="dropdown-column" style="min-width: 0 !important;">
+            <div class="dropdown-section" style="min-width: 0 !important;">
+                <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 15px; font-size: 16px; color: #007bff;">Operational Consulting</h4>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Internal Control Review and Analysis</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Micro-assessment</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Spot Check</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Forensic Audit and Investigation</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Reviews and Compilations of Financial Statements</a>
+            </div>
+        </div>
+
+        <!-- Column 3: Specialized Consulting -->
+        <div class="dropdown-column" style="min-width: 0 !important;">
+            <div class="dropdown-section" style="min-width: 0 !important;">
+                <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 15px; font-size: 16px; color: #007bff;">Specialized Consulting</h4>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Fraud Assessment and Analysis</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Management Consulting</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Financial Advisory Consulting</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Risk & Compliance Consulting</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Operational Consulting</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Fraud Advisory</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+                        <!-- Advisory Details -->
+<div class="service-details" data-category="advisory">
+    <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 20px; font-size: 20px; color: #333;">Advisory</h4>
+
+    <div style="display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 30px !important;">
+        <!-- Column 1: Forensic Services -->
+        <div class="dropdown-column" style="min-width: 0 !important;">
+            <div class="dropdown-section" style="min-width: 0 !important;">
+                <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 15px; font-size: 16px; color: #007bff;">Forensic Services</h4>
+                <a href="{% url 'forensic_accounting' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Forensic Accounting</a>
+                <a href="{% url 'cfo_service' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">CFO Service</a>
+                <a href="{% url 'bookkeeping_service' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Book-keeping Service</a>
+                <a href="{% url 'tax_planning_advisory' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Tax Planning and Advisory</a>
+                <a href="{% url 'internal_control_sox_compliance' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Internal Control (SOX) Compliance</a>
+                <a href="{% url 'forensic_audit_investigation' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Forensic Audit and Investigation Analysis</a>
+                <a href="{% url 'payroll_processing_management' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Payroll Processing and Management</a>
+                <a href="{% url 'account_management_bookkeeping' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Account Management and Bookkeeping</a>
+            </div>
+        </div>
+
+        <!-- Column 2: Advisory Services -->
+        <div class="dropdown-column" style="min-width: 0 !important;">
+            <div class="dropdown-section" style="min-width: 0 !important;">
+                <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 15px; font-size: 16px; color: #007bff;">Advisory Services</h4>
+                <a href="{% url 'tax_planning_advisory_main' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Tax Planning and Advisory</a>
+                <a href="{% url 'financial_accounting_advisory' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Financial Accounting Advisory</a>
+                <a href="{% url 'internal_control_sox_compliance_main' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Internal Control Compliance (SOX)</a>
+            </div>
+        </div>
+    </div>
+</div>
+                        <!-- Technology Solutions Details -->
+<div class="service-details" data-category="technology">
+    <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 20px; font-size: 20px; color: #333;">Technology Solutions</h4>
+
+    <div style="display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 30px !important;">
+        <!-- Column 1: Implementation Services -->
+        <div class="dropdown-column" style="min-width: 0 !important;">
+            <div class="dropdown-section" style="min-width: 0 !important;">
+                <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 15px; font-size: 16px; color: #007bff;">Implementation Services</h4>
+                <a href="{% url 'it_project_management_service' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">IT Project Management Service</a>
+                <a href="{% url 'hardware_implementation_management' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Hardware Implementation Management</a>
+                <a href="{% url 'software_implementation_management' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Software Implementation Management</a>
+                <a href="{% url 'software_deployment_management' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Software Deployment and Management</a>
+                <a href="{% url 'hardware_deployment_maintenance' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Hardware Deployment and Maintenance</a>
+                <a href="{% url 'it_project_management' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">IT Project Management</a>
+            </div>
+        </div>
+
+        <!-- Column 2: Security & Consulting -->
+        <div class="dropdown-column" style="min-width: 0 !important;">
+            <div class="dropdown-section" style="min-width: 0 !important;">
+                <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 15px; font-size: 16px; color: #007bff;">Security & Consulting</h4>
+                <a href="{% url 'cybersecurity_assessment_management' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Cybersecurity Assessment and Management</a>
+                <a href="{% url 'technology_consulting' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Technology Consulting</a>
+                <a href="{% url 'it_consulting' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">IT Consulting</a>
+                <a href="{% url 'managed_it_service' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Managed IT Service</a>
+                <a href="{% url 'it_security' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">IT Security</a>
+            </div>
+        </div>
+
+        <!-- Column 3: Asset & Support -->
+        <div class="dropdown-column" style="min-width: 0 !important;">
+            <div class="dropdown-section" style="min-width: 0 !important;">
+                <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 15px; font-size: 16px; color: #007bff;">Asset & Support</h4>
+                <a href="{% url 'cybersecurity_main' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Cybersecurity</a>
+                <a href="{% url 'service_desk_help_desk' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Service Desk/Help Desk</a>
+                <a href="{% url 'equipment_supply_setup' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Equipment Supply and Setup</a>
+                <a href="{% url 'inventory_count_assets_management' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Inventory Count and Assets Management</a>
+                <a href="{% url 'asset_registry' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Asset Registry</a>
+                <a href="{% url 'barcoding' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Barcoding</a>
+            </div>
+        </div>
+    </div>
+</div>
+                        <!-- Managed Service Details -->
+<div class="service-details" data-category="managed">
+    <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 20px; font-size: 20px; color: #333;">Managed Service</h4>
+
+    <div style="display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 30px !important;">
+        <!-- Column 1: Accounting Services -->
+        <div class="dropdown-column" style="min-width: 0 !important;">
+            <div class="dropdown-section" style="min-width: 0 !important;">
+                <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 15px; font-size: 16px; color: #007bff;">Accounting Services</h4>
+                <a href="{% url 'managed_service_accounting' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Accounting Services</a>
+                <a href="{% url 'account_management_bookkeeping_ms' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Account Management/Bookkeeping</a>
+                <a href="{% url 'financial_statement_preparation' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Financial Statement Preparation</a>
+                <a href="{% url 'bank_reconciliation' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Bank Reconciliation</a>
+                <a href="{% url 'account_payable_receivable' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Account Payable/Receivable</a>
+                <a href="{% url 'budget_and_forecasting' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Budget and Forecasting</a>
+                <a href="{% url 'forensic_accounting_ms' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Forensic Accounting</a>
+                <a href="{% url 'business_consulting_ms' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Business Consulting</a>
+                <a href="{% url 'public_accounting' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Public Accounting</a>
+            </div>
+        </div>
+
+        <!-- Column 2: Tax Services -->
+        <div class="dropdown-column" style="min-width: 0 !important;">
+            <div class="dropdown-section" style="min-width: 0 !important;">
+                <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 15px; font-size: 16px; color: #007bff;">Tax Services</h4>
+                <a href="{% url 'managed_service_tax' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Tax Services</a>
+                <a href="{% url 'tax_planning_ms' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Tax Planning</a>
+                <a href="{% url 'payroll_tax' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Payroll Tax</a>
+                <a href="{% url 'individual_tax_1040' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Individual Tax - 1040</a>
+                <a href="{% url 'business_tax_1120s_1120' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Business Tax – 1120s and 1120</a>
+                <a href="{% url 'nonprofit_tax_990' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Non-profit Tax – 990</a>
+                <a href="{% url 'tax_accounting' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Tax Accounting</a>
+                <a href="{% url 'international_tax' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">International Tax</a>
+            </div>
+        </div>
+
+        <!-- Column 3: Technology Services -->
+        <div class="dropdown-column" style="min-width: 0 !important;">
+            <div class="dropdown-section" style="min-width: 0 !important;">
+                <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 15px; font-size: 16px; color: #007bff;">Technology Services</h4>
+                <a href="{% url 'managed_service_technology' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Technology Services</a>
+                <a href="{% url 'asset_tracking_management' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Asset Tracking and Management</a>
+                <a href="{% url 'it_support_management' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">IT Support Management</a>
+                <a href="{% url 'cybersecurity_ms' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Cybersecurity</a>
+                <a href="{% url 'network_support_health_check' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Network Support/Health Check</a>
+                <a href="{% url 'inventory' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Inventory</a>
+            </div>
+        </div>
+    </div>
+</div>
                     </div>
-                    <div class="dropdown-column">
-                        <div class="dropdown-section">
-                            <h4 class="dropdown-section-title">Tax Services</h4>
-                            <div class="sub-menu">
-                                <a href="#" class="dropdown-link">Tax Services</a>
-                                <ul class="sub-dropdown">
-                                    <li><a href="#" class="sub-dropdown-link">Tax Planning</a></li>
-                                    <li><a href="#" class="sub-dropdown-link">Payroll Tax</a></li>
-                                    <li><a href="#" class="sub-dropdown-link">Individual Tax - 1040</a></li>
-                                    <li><a href="#" class="sub-dropdown-link">Business Tax – 1120s and 1120</a></li>
-                                    <li><a href="#" class="sub-dropdown-link">Non-for-profit Tax – 990</a></li>
-                                    <li><a href="#" class="sub-dropdown-link">Tax Accounting</a></li>
-                                    <li><a href="#" class="sub-dropdown-link">International Tax</a></li>
-                                </ul>
-                            </div>
+                </div>
+            </ul>
+        
+
+<!-- About Us -->
+<li class="nav-item" style="position: static;">
+    <a href="#" class="nav-link">About Us</a>
+    <ul class="dropdown" style="width: 1200px !important; max-width: 1200px !important; left: 50% !important; transform: translateX(-50%) !important; margin: 0 !important; padding: 25px !important; box-sizing: border-box !important;">
+        <div class="dropdown-grid" style="width: 100% !important; max-width: 1200px !important; margin: 0 auto !important; display: grid !important; grid-template-columns: 1fr 2fr !important; gap: 40px !important;">
+            <!-- Left Panel - About Categories -->
+            <div class="categories-panel" style="min-width: 0 !important;">
+                <h4 class="panel-title" style="margin-bottom: 20px; font-size: 18px; color: #333;">About OB Global</h4>
+                <div class="category-list">
+
+                    <div class="category-item-wrapper" data-category="about-background" style="margin-bottom: 8px !important; display: block;">
+                        <div class="category-item-link" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: #f5f5f5; border-radius: 4px; text-decoration: none; color: #333; transition: all 0.3s ease;">
+                            <a href="#" style="flex: 1; text-decoration: none; color: inherit;">Background</a>
+                            <span class="arrow-btn" style="cursor: pointer; padding-left: 15px; font-size: 14px; color: #666;">&rarr;</span>
                         </div>
+                        <div class="separator" style="height: 1px; background: #ddd; margin: 12px 0;"></div>
                     </div>
-                    <div class="dropdown-column">
-                        <div class="dropdown-section">
-                            <h4 class="dropdown-section-title">Technology Services</h4>
-                            <div class="sub-menu">
-                                <a href="#" class="dropdown-link">Technology Services</a>
-                                <ul class="sub-dropdown">
-                                    <li><a href="#" class="sub-dropdown-link">Asset Tracking and Management</a></li>
-                                    <li><a href="#" class="sub-dropdown-link">IT Support Management</a></li>
-                                    <li><a href="#" class="sub-dropdown-link">Cybersecurity</a></li>
-                                    <li><a href="#" class="sub-dropdown-link">Network Support/Health Check</a></li>
-                                    <li><a href="#" class="sub-dropdown-link">Inventory</a></li>
-                                </ul>
+
+                    <div class="category-item-wrapper" data-category="about-vision" style="margin-bottom: 8px !important; display: block;">
+                        <div class="category-item-link" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: #f5f5f5; border-radius: 4px; text-decoration: none; color: #333; transition: all 0.3s ease;">
+                            <a href="#" style="flex: 1; text-decoration: none; color: inherit;">Our Vision</a>
+                            <span class="arrow-btn" style="cursor: pointer; padding-left: 15px; font-size: 14px; color: #666;">&rarr;</span>
+                        </div>
+                        <div class="separator" style="height: 1px; background: #ddd; margin: 12px 0;"></div>
+                    </div>
+
+                    <div class="category-item-wrapper" data-category="about-purpose" style="margin-bottom: 8px !important; display: block;">
+                        <div class="category-item-link" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: #f5f5f5; border-radius: 4px; text-decoration: none; color: #333; transition: all 0.3s ease;">
+                            <a href="#" style="flex: 1; text-decoration: none; color: inherit;">Our Purpose</a>
+                            <span class="arrow-btn" style="cursor: pointer; padding-left: 15px; font-size: 14px; color: #666;">&rarr;</span>
+                        </div>
+                        <div class="separator" style="height: 1px; background: #ddd; margin: 12px 0;"></div>
+                    </div>
+<div class="category-item-wrapper" data-category="about-leadership" style="margin-bottom: 8px !important; display: block;">
+    <div class="category-item-link" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: #f5f5f5; border-radius: 4px; text-decoration: none; color: #333; transition: all 0.3s ease;">
+        <a href="#" style="flex: 1; text-decoration: none; color: inherit;">Global Leadership</a>
+        <span class="arrow-btn" style="cursor: pointer; padding-left: 15px; font-size: 14px; color: #666;">&rarr;</span>
+    </div>
+    <div class="separator" style="height: 1px; background: #ddd; margin: 12px 0;"></div>
+</div>
+                    <div class="category-item-wrapper" data-category="about-join" style="margin-bottom: 8px !important; display: block;">
+                        <div class="category-item-link" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: #f5f5f5; border-radius: 4px; text-decoration: none; color: #333; transition: all 0.3s ease;">
+                            <a href="{% url 'contact' %}" style="flex: 1; text-decoration: none; color: inherit;">Join Our Team</a>
+                            <span class="arrow-btn" style="cursor: pointer; padding-left: 15px; font-size: 14px; color: #666;">&rarr;</span>
+                        </div>
+                        <div class="separator" style="height: 1px; background: #ddd; margin: 12px 0;"></div>
+                    </div>
+<div class="category-item-wrapper" data-category="about-partnerships" style="margin-bottom: 8px !important; display: block;">
+    <div class="category-item-link" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: #f5f5f5; border-radius: 4px; text-decoration: none; color: #333; transition: all 0.3s ease;">
+        <a href="#" style="flex: 1; text-decoration: none; color: inherit;">Partnerships</a>
+        <span class="arrow-btn" style="cursor: pointer; padding-left: 15px; font-size: 14px; color: #666;">&rarr;</span>
+    </div>
+    <div class="separator" style="height: 1px; background: #ddd; margin: 12px 0;"></div>
+</div>
+                    <div class="category-item-wrapper" data-category="about-location" style="margin-bottom: 8px !important; display: block;">
+                        <div class="category-item-link" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: #f5f5f5; border-radius: 4px; text-decoration: none; color: #333; transition: all 0.3s ease;">
+                            <a href="#" style="flex: 1; text-decoration: none; color: inherit;">Location</a>
+                            <span class="arrow-btn" style="cursor: pointer; padding-left: 15px; font-size: 14px; color: #666;">&rarr;</span>
+                        </div>
+                        <div class="separator" style="height: 1px; background: #ddd; margin: 12px 0;"></div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Right Panel - About Details -->
+            <div class="details-panel" style="min-width: 0 !important;">
+                <h4 class="panel-title" style="margin-bottom: 20px; font-size: 18px; color: #333;">About Details</h4>
+
+                <!-- Background Details -->
+                <div class="service-details active" data-category="about-background">
+                    <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 20px; font-size: 20px; color: #333;">Our Background</h4>
+                    <div style="display: grid !important; grid-template-columns: 1fr !important; gap: 20px !important;">
+                        <div class="dropdown-column" style="min-width: 0 !important;">
+                            <div class="dropdown-section" style="min-width: 0 !important;">
+                                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Our History</a>
+                                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Company Milestones</a>
+                                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Our Global Presence</a>
                             </div>
                         </div>
                     </div>
                 </div>
-            </ul>
-        </li>
+
+                <!-- Global Leadership Details -->
+<div class="service-details" data-category="about-leadership">
+    <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 20px; font-size: 20px; color: #333;">Global Leadership</h4>
+    <div style="display: grid !important; grid-template-columns: 1fr !important; gap: 20px !important;">
+        <div class="dropdown-column" style="min-width: 0 !important;">
+            <div class="dropdown-section" style="min-width: 0 !important;">
+                <a href="{% url 'executive_leadership' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">View All Executive Leadership Info</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+                <!-- Purpose Details -->
+                <div class="service-details" data-category="about-purpose">
+                    <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 20px; font-size: 20px; color: #333;">Our Purpose</h4>
+                    <div style="display: grid !important; grid-template-columns: 1fr !important; gap: 20px !important;">
+                        <div class="dropdown-column" style="min-width: 0 !important;">
+                            <div class="dropdown-section" style="min-width: 0 !important;">
+                                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Mission Statement</a>
+                                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Core Values</a>
+                                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Corporate Responsibility</a>
+                                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Pro-bono</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Join Our Team Details -->
+                <div class="service-details" data-category="about-join">
+                    <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 20px; font-size: 20px; color: #333;">Join Our Team</h4>
+                    <div style="display: grid !important; grid-template-columns: 1fr !important; gap: 20px !important;">
+                        <div class="dropdown-column" style="min-width: 0 !important;">
+                            <div class="dropdown-section" style="min-width: 0 !important;">
+                                <a href="{% url 'contact' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Contact Us to Join</a>
+                                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Career Opportunities</a>
+                                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Internship Programs</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+<!-- Partnerships Details -->
+<div class="service-details" data-category="about-partnerships">
+    <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 20px; font-size: 20px; color: #333;">Our Strategic Partnerships</h4>
+    <div style="display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 30px !important;">
+        <!-- Column 1: Technology Partners -->
+        <div class="dropdown-column" style="min-width: 0 !important;">
+            <div class="dropdown-section" style="min-width: 0 !important;">
+                <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 15px; font-size: 16px; color: #007bff;">Technology Partners</h4>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Dell Technologies</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Lenovo</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Microsoft</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Oracle</a>
+            </div>
+        </div>
+
+        <!-- Column 2: Professional Partners -->
+        <div class="dropdown-column" style="min-width: 0 !important;">
+            <div class="dropdown-section" style="min-width: 0 !important;">
+                <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 15px; font-size: 16px; color: #007bff;">Professional Partners</h4>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">SAP</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">IBM</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Salesforce</a>
+                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Cisco Systems</a>
+            </div>
+        </div>
+    </div>
+</div>
+                <!-- Location Details -->
+                <div class="service-details" data-category="about-location">
+                    <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 20px; font-size: 20px; color: #333;">Our Locations</h4>
+                    <div style="display: grid !important; grid-template-columns: 1fr !important; gap: 20px !important;">
+                        <div class="dropdown-column" style="min-width: 0 !important;">
+                            <div class="dropdown-section" style="min-width: 0 !important;">
+                                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">All of our Offices</a>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ul>
+</li>
+
+<!-- Careers -->
+<li class="nav-item" style="position: static;">
+    <a href="#" class="nav-link">Opportunities and Careers</a>
+    <ul class="dropdown" style="width: 1200px !important; max-width: 1200px !important; left: 50% !important; transform: translateX(-50%) !important; margin: 0 !important; padding: 25px !important; box-sizing: border-box !important;">
+        <div class="dropdown-grid" style="width: 100% !important; max-width: 1200px !important; margin: 0 auto !important; display: grid !important; grid-template-columns: 1fr 2fr !important; gap: 40px !important;">
+            <!-- Left Panel - Career Categories -->
+            <div class="categories-panel" style="min-width: 0 !important;">
+                <h4 class="panel-title" style="margin-bottom: 20px; font-size: 18px; color: #333;">Career Opportunities</h4>
+                <div class="category-list">
+
+                    <div class="category-item-wrapper" data-category="career-what" style="margin-bottom: 8px !important; display: block;">
+                        <div class="category-item-link" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: #f5f5f5; border-radius: 4px; text-decoration: none; color: #333; transition: all 0.3s ease;">
+                            <a href="#" style="flex: 1; text-decoration: none; color: inherit;">What OB Global expect from you</a>
+                            <span class="arrow-btn" style="cursor: pointer; padding-left: 15px; font-size: 14px; color: #666;">&rarr;</span>
+                        </div>
+                        <div class="separator" style="height: 1px; background: #ddd; margin: 12px 0;"></div>
+                    </div>
+
+                    <div class="category-item-wrapper" data-category="career-like" style="margin-bottom: 8px !important; display: block;">
+                        <div class="category-item-link" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: #f5f5f5; border-radius: 4px; text-decoration: none; color: #333; transition: all 0.3s ease;">
+                            <a href="#" style="flex: 1; text-decoration: none; color: inherit;">What It's Like Here</a>
+                            <span class="arrow-btn" style="cursor: pointer; padding-left: 15px; font-size: 14px; color: #666;">&rarr;</span>
+                        </div>
+                        <div class="separator" style="height: 1px; background: #ddd; margin: 12px 0;"></div>
+                    </div>
+
+                    <div class="category-item-wrapper" data-category="career-join" style="margin-bottom: 8px !important; display: block;">
+                        <div class="category-item-link" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: #f5f5f5; border-radius: 4px; text-decoration: none; color: #333; transition: all 0.3s ease;">
+                            <a href="#" style="flex: 1; text-decoration: none; color: inherit;">How to Join</a>
+                            <span class="arrow-btn" style="cursor: pointer; padding-left: 15px; font-size: 14px; color: #666;">&rarr;</span>
+                        </div>
+                        <div class="separator" style="height: 1px; background: #ddd; margin: 12px 0;"></div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Right Panel - Career Details -->
+            <div class="details-panel" style="min-width: 0 !important;">
+                <h4 class="panel-title" style="margin-bottom: 20px; font-size: 18px; color: #333;">Career Details</h4>
+
+                <!-- What You Can Do Details -->
+                <div class="service-details active" data-category="career-what">
+                    <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 20px; font-size: 20px; color: #333;">Discover what's possible here at OB Global</h4>
+                    <div style="display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 30px !important;">
+                        <div class="dropdown-column" style="min-width: 0 !important;">
+                            <div class="dropdown-section" style="min-width: 0 !important;">
+                                <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 15px; font-size: 16px; color: #007bff;">Career Paths</h4>
+                                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Career in Technology</a>
+                                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Career in Advisory</a>
+                                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Career in Tax</a>
+                                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Career in Consulting</a>
+
+                            </div>
+                        </div>
+                        <div class="dropdown-column" style="min-width: 0 !important;">
+                            <div class="dropdown-section" style="min-width: 0 !important;">
+                                <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 15px; font-size: 16px; color: #007bff;">More Opportunities</h4>
+                                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Career in Forensic Service</a>
+                                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Career in Managed Service</a>
+                                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Career in Audit</a>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- What It's Like Here Details -->
+                <div class="service-details" data-category="career-like">
+                    <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 20px; font-size: 20px; color: #333;">What It's Like to Work Here</h4>
+                    <div style="display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 30px !important;">
+                        <div class="dropdown-column" style="min-width: 0 !important;">
+                            <div class="dropdown-section" style="min-width: 0 !important;">
+                                <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 15px; font-size: 16px; color: #007bff;">Culture & Environment</h4>
+                                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Belonging & Inclusiveness</a>
+                                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Career Flexibility & Mobility</a>
+                                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Personalized Career Development</a>
+                                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Life at OB Global</a>
+                            </div>
+                        </div>
+                        <div class="dropdown-column" style="min-width: 0 !important;">
+                            <div class="dropdown-section" style="min-width: 0 !important;">
+                                <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 15px; font-size: 16px; color: #007bff;">Benefits & Rewards</h4>
+                                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Total Rewards Package</a>
+                                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Health & Wellness</a>
+                                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Work-Life Balance</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- How to Join Details -->
+                <div class="service-details" data-category="career-join">
+                    <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 20px; font-size: 20px; color: #333;">How to Join Our Team</h4>
+                    <div style="display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 30px !important;">
+                        <div class="dropdown-column" style="min-width: 0 !important;">
+                            <div class="dropdown-section" style="min-width: 0 !important;">
+                                <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 15px; font-size: 16px; color: #007bff;">Recruitment Process</h4>
+                                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">What We Look For</a>
+                                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">How We Hire</a>
+                                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Application Tips</a>
+                            </div>
+                        </div>
+                        <div class="dropdown-column" style="min-width: 0 !important;">
+                            <div class="dropdown-section" style="min-width: 0 !important;">
+                                <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 15px; font-size: 16px; color: #007bff;">Support & Resources</h4>
+                                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Interview Preparation</a>
+                                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Frequently Asked Questions</a>
+                                <a href="#" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Contact Recruitment</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ul>
+</li>
+
+<!-- Insights -->
+<li class="nav-item" style="position: static;">
+    <a href="{% url 'insights_main' %}" class="nav-link">Insights</a>
+    <ul class="dropdown" style="width: 1200px !important; max-width: 1200px !important; left: 50% !important; transform: translateX(-50%) !important; margin: 0 !important; padding: 25px !important; box-sizing: border-box !important;">
+        <div class="dropdown-grid" style="width: 100% !important; max-width: 1200px !important; margin: 0 auto !important; display: grid !important; grid-template-columns: 1fr 2fr !important; gap: 40px !important;">
+            <!-- Left Panel - Insight Categories -->
+            <div class="categories-panel" style="min-width: 0 !important;">
+                <h4 class="panel-title" style="margin-bottom: 20px; font-size: 18px; color: #333;">Trending Topics</h4>
+                <div class="category-list">
+
+                    <div class="category-item-wrapper" data-category="insights-trending" style="margin-bottom: 8px !important; display: block;">
+                        <div class="category-item-link" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: #f5f5f5; border-radius: 4px; text-decoration: none; color: #333; transition: all 0.3s ease;">
+                            <a href="{% url 'insights_main' %}" style="flex: 1; text-decoration: none; color: inherit;">Trending Insights</a>
+                            <span class="arrow-btn" style="cursor: pointer; padding-left: 15px; font-size: 14px; color: #666;">&rarr;</span>
+                        </div>
+                        <div class="separator" style="height: 1px; background: #ddd; margin: 12px 0;"></div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Right Panel - Insights Details -->
+            <div class="details-panel" style="min-width: 0 !important;">
+                <h4 class="panel-title" style="margin-bottom: 20px; font-size: 18px; color: #333;">Latest Insights</h4>
+
+                <!-- Trending Insights Details -->
+                <div class="service-details active" data-category="insights-trending">
+                    <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 20px; font-size: 20px; color: #333;">Trending Topics</h4>
+                    <div style="display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 30px !important;">
+                        <div class="dropdown-column" style="min-width: 0 !important;">
+                            <div class="dropdown-section" style="min-width: 0 !important;">
+                                <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 15px; font-size: 16px; color: #007bff;">Industry Trends</h4>
+                                <a href="{% url 'ai_revolution_business_operations' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">AI Revolution in Business Operations</a>
+                                <a href="{% url 'digital_transformation_strategies' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Digital Transformation Strategies</a>
+                                <a href="{% url 'esg_compliance_frameworks' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">ESG Compliance Frameworks</a>
+                                <a href="{% url 'remote_workforce_management' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Remote Workforce Management</a>
+                            </div>
+                        </div>
+                        <div class="dropdown-column" style="min-width: 0 !important;">
+                            <div class="dropdown-section" style="min-width: 0 !important;">
+                                <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 15px; font-size: 16px; color: #007bff;">Expert Analysis</h4>
+                                <a href="{% url 'tax_law_changes_2024' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Tax Law Changes 2024</a>
+                                <a href="{% url 'cybersecurity_threat_landscape' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Cybersecurity Threat Landscape</a>
+                                <a href="{% url 'cloud_migration_best_practices' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Cloud Migration Best Practices</a>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ul>
+</li>
+
+<!-- Industries -->
+<li class="nav-item" style="position: static;">
+    <a href="{% url 'industries_main' %}" class="nav-link">Industries</a>
+    <ul class="dropdown" style="width: 1200px !important; max-width: 1200px !important; left: 50% !important; transform: translateX(-50%) !important; margin: 0 !important; padding: 25px !important; box-sizing: border-box !important;">
+        <div class="dropdown-grid" style="width: 100% !important; max-width: 1200px !important; margin: 0 auto !important; display: grid !important; grid-template-columns: 1fr 2fr !important; gap: 40px !important;">
+            <!-- Left Panel - Industry Categories -->
+            <div class="categories-panel" style="min-width: 0 !important;">
+                <h4 class="panel-title" style="margin-bottom: 20px; font-size: 18px; color: #333;">Industries We Serve</h4>
+                <div class="category-list">
+
+                    <div class="category-item-wrapper" data-category="industries-all" style="margin-bottom: 8px !important; display: block;">
+                        <div class="category-item-link" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: #f5f5f5; border-radius: 4px; text-decoration: none; color: #333; transition: all 0.3s ease;">
+                            <a href="{% url 'industries_main' %}" style="flex: 1; text-decoration: none; color: inherit;">All Industries</a>
+                            <span class="arrow-btn" style="cursor: pointer; padding-left: 15px; font-size: 14px; color: #666;">&rarr;</span>
+                        </div>
+                        <div class="separator" style="height: 1px; background: #ddd; margin: 12px 0;"></div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Right Panel - Industries Details -->
+            <div class="details-panel" style="min-width: 0 !important;">
+                <h4 class="panel-title" style="margin-bottom: 20px; font-size: 18px; color: #333;">Industry Expertise</h4>
+
+                <!-- All Industries Details -->
+                <div class="service-details active" data-category="industries-all">
+                    <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 20px; font-size: 20px; color: #333;">Industry Specializations</h4>
+                    <div style="display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 30px !important;">
+                        <div class="dropdown-column" style="min-width: 0 !important;">
+                            <div class="dropdown-section" style="min-width: 0 !important;">
+                                <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 15px; font-size: 16px; color: #007bff;">Core Industries</h4>
+                                <a href="{% url 'financial_services' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Financial Services<br><small>Banking & Capital Markets, Insurance</small></a>
+                                <a href="{% url 'government_public_sector' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Government & Public Sector<br><small>Federal Agencies, State & Local Government</small></a>
+                                <a href="{% url 'consumer_business' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Consumer Business<br><small>Retail, E-commerce, Consumer Goods</small></a>
+                                <a href="{% url 'healthcare_industry' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Healthcare<br><small>Providers, Payers, Life Sciences</small></a>
+
+                                <a href="{% url 'oil_and_gas' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Oil and Gas</a>
+                            </div>
+                        </div>
+                        <div class="dropdown-column" style="min-width: 0 !important;">
+                            <div class="dropdown-section" style="min-width: 0 !important;">
+                                <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 15px; font-size: 16px; color: #007bff;">Specialized Sectors</h4>
+                                <a href="{% url 'real_estate_construction' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Real Estate & Construction<br><small>Development, Property Management</small></a>
+                                <a href="{% url 'non_profit_organizations' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Non-Profit Organizations<br><small>Charities, Foundations, NGOs</small></a>
+                                <a href="{% url 'manufacturing_industry' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Manufacturing<br><small>Industrial, Automotive, Aerospace</small></a>
+                                <a href="{% url 'professional_service_firms' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Professional Service Firms<br><small>Legal, Consulting, Accounting</small></a>
+                                <a href="{% url 'technology_media_telecom' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Technology, Media & Telecom<br><small>Software, Media, Communications</small></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ul>
+</li>
+
+<!-- Innovative Thinking -->
+<li class="nav-item" style="position: static;">
+    <a href="{% url 'innovation_main' %}" class="nav-link">Innovation and Critical Thinking</a>
+    <ul class="dropdown" style="width: 1200px !important; max-width: 1200px !important; left: 50% !important; transform: translateX(-50%) !important; margin: 0 !important; padding: 25px !important; box-sizing: border-box !important;">
+        <div class="dropdown-grid" style="width: 100% !important; max-width: 1200px !important; margin: 0 auto !important; display: grid !important; grid-template-columns: 1fr 2fr !important; gap: 40px !important;">
+            <!-- Left Panel - Innovation Categories -->
+            <div class="categories-panel" style="min-width: 0 !important;">
+                <h4 class="panel-title" style="margin-bottom: 20px; font-size: 18px; color: #333;">Innovation Areas</h4>
+                <div class="category-list">
+
+                    <div class="category-item-wrapper" data-category="innovation-all" style="margin-bottom: 8px !important; display: block;">
+                        <div class="category-item-link" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: #f5f5f5; border-radius: 4px; text-decoration: none; color: #333; transition: all 0.3s ease;">
+                            <a href="{% url 'innovation_main' %}" style="flex: 1; text-decoration: none; color: inherit;">Innovation Solutions</a>
+                            <span class="arrow-btn" style="cursor: pointer; padding-left: 15px; font-size: 14px; color: #666;">&rarr;</span>
+                        </div>
+                        <div class="separator" style="height: 1px; background: #ddd; margin: 12px 0;"></div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Right Panel - Innovation Details -->
+            <div class="details-panel" style="min-width: 0 !important;">
+                <h4 class="panel-title" style="margin-bottom: 20px; font-size: 18px; color: #333;">Innovative Solutions</h4>
+
+                <!-- All Innovation Details -->
+                <div class="service-details active" data-category="innovation-all">
+                    <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 20px; font-size: 20px; color: #333;">Cutting-Edge Solutions</h4>
+                    <div style="display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 30px !important;">
+                        <div class="dropdown-column" style="min-width: 0 !important;">
+                            <div class="dropdown-section" style="min-width: 0 !important;">
+                                <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 15px; font-size: 16px; color: #007bff;">AI & Digital Solutions</h4>
+                                <a href="{% url 'ai_driven_business_intelligence' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">AI-Driven Business Intelligence</a>
+                                <a href="{% url 'predictive_analytics_solutions' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Predictive Analytics Solutions</a>
+                                <a href="{% url 'natural_language_processing' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Natural Language Processing</a>
+                            </div>
+                        </div>
+                        <div class="dropdown-column" style="min-width: 0 !important;">
+                            <div class="dropdown-section" style="min-width: 0 !important;">
+                                <h4 class="dropdown-section-title" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; margin-bottom: 15px; font-size: 16px; color: #007bff;">Security & Development</h4>
+                                <a href="{% url 'advanced_threat_protection' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Advanced Threat Protection</a>
+                                <a href="{% url 'zero_trust_architecture' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Zero Trust Architecture</a>
+                                <a href="{% url 'custom_software_development' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Custom Software Development</a>
+                                <a href="{% url 'enterprise_application_integration' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Enterprise Application Integration</a>
+                                <a href="{% url 'digital_forensic_tools' %}" class="dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Digital Forensic Tools</a>
+                               </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ul>
+</li>
     </ul>
 </nav>
-        {% endif %}
+    {% endif %}
 
+
+<style>
+/* Center the navigation */
+.nav-menu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+}
+
+.nav-list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    gap: 40px;
+}
+
+.nav-item {
+    position: relative;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    padding: 10px 15px;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #007bff;
+}
+
+/* Fixed width dropdown - override any other styles */
+.nav-item .dropdown {
+    width: 1200px !important;
+    max-width: 1200px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    position: absolute !important;
+    top: 100%;
+    background: white;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    z-index: 1000;
+    display: none;
+}
+
+.nav-item:hover .dropdown {
+    display: block;
+}
+
+/* New CSS for wrapper and link activation */
+.category-item-wrapper {
+    position: relative;
+}
+
+.category-item-link {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    cursor: default;
+}
+
+.category-item-link a {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.category-item-link a:hover {
+    color: #007bff !important;
+}
+
+/* Highlight the whole link area on hover/active */
+.category-item-wrapper:hover .category-item-link,
+.category-item-wrapper.active .category-item-link {
+    background-color: #e9e9e9 !important;
+    color: #000 !important;
+}
+
+/* Set the active state for the entire row when the panel is shown */
+.category-item-wrapper.active .category-item-link {
+    background-color: #007bff !important;
+    color: white !important;
+}
+
+.category-item-wrapper.active .category-item-link a {
+    color: white !important;
+}
+
+.category-item-wrapper.active .arrow-btn {
+    color: white !important;
+}
+
+/* Ensure text wrapping and visibility */
+.dropdown-section-title,
+.dropdown-link {
+    white-space: normal !important;
+    word-wrap: break-word !important;
+    overflow: visible !important;
+}
+
+/* Service details visibility */
+.service-details {
+    display: none;
+}
+
+.service-details.active {
+    display: block;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1400px) {
+    .dropdown-grid {
+        max-width: 95vw !important;
+        grid-template-columns: 1fr 2fr !important;
+    }
+    
+    .nav-item .dropdown {
+        width: 95vw !important;
+        max-width: 95vw !important;
+    }
+}
+
+@media (max-width: 1024px) {
+    .dropdown-grid {
+        grid-template-columns: 1fr !important;
+        gap: 30px !important;
+    }
+    
+    .nav-list {
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .dropdown-grid {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+    }
+    
+    .nav-item .dropdown {
+        padding: 15px !important;
+        width: 90vw !important;
+        max-width: 90vw !important;
+    }
+    
+    .nav-list {
+        gap: 15px;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Select the wrappers, as they hold the data-category attribute
+    const categoryItemWrappers = document.querySelectorAll('.category-item-wrapper');
+    const serviceDetails = document.querySelectorAll('.service-details');
+    const arrowButtons = document.querySelectorAll('.arrow-btn');
+    
+    // Add click listener to arrow buttons only
+    arrowButtons.forEach(arrow => {
+        arrow.addEventListener('click', function(e) {
+            e.stopPropagation(); // Prevent event from bubbling to wrapper
+            
+            const wrapper = this.closest('.category-item-wrapper');
+            const category = wrapper.getAttribute('data-category');
+            
+            // Remove active class from all wrappers
+            categoryItemWrappers.forEach(catWrapper => {
+                catWrapper.classList.remove('active');
+            });
+            
+            // Add active class to the current wrapper
+            wrapper.classList.add('active');
+            
+            // Hide all service details
+            serviceDetails.forEach(detail => {
+                detail.classList.remove('active');
+            });
+            
+            // Show the corresponding service details
+            const targetDetail = document.querySelector(`.service-details[data-category="${category}"]`);
+            if (targetDetail) {
+                targetDetail.classList.add('active');
+            }
+        });
+    });
+    
+    // Optional: Add hover effect for better UX
+    categoryItemWrappers.forEach(wrapper => {
+        wrapper.addEventListener('mouseenter', function() {
+            // Remove active class from all wrappers on hover
+            categoryItemWrappers.forEach(catWrapper => {
+                if (!catWrapper.classList.contains('active')) {
+                    catWrapper.classList.remove('active');
+                }
+            });
+        });
+    });
+});
+</script>
        <!-- User Links - Hidden on mobile, visible on desktop -->
 <div class="global-links desktop-only">
     {% if user.role == 'admin' %}
@@ -399,11 +1105,11 @@
 <a href="{% url 'attendance:admin_leave_requests' %}" class="global-link admin-link"><i class="fas fa-clipboard-list"></i> <span>Leave Management</span></a>
 
     <a href="{% url 'manage_offices' %}" class="global-link admin-link"><i class="fas fa-building"></i> <span>Manage Offices</span></a>
-        <span class="separator">|</span>
+       
         <a href="{% url 'manage_users' %}" class="global-link admin-link"><i class="fas fa-users-cog"></i> <span>Manage Users</span></a>
-    <span class="separator">|</span>
+    
     <a href="{% url 'newsletter:admin_dashboard' %}" class="global-link admin-link"><i class="fas fa-paper-plane"></i> <span>Newsletter</span></a>
-    <span class="separator">|</span>
+    
     {% endif %}
 
     {% if request.user.is_authenticated %}
@@ -418,8 +1124,8 @@
 {% endif %}
         
         {% if request.user.role == 'admin' or request.user.role == 'staff' %}
-            <a href="{% url 'task_list' %}" class="global-link"><i class="fas fa-tasks"></i> <span>Tasks</span></a>
-            <span class="separator">|</span>
+            <a href="{% url 'task_list' %}" class="global-link admin-link"><i class="fas fa-tasks"></i> <span>Tasks</span></a>
+           
            {% endif %}
         <a href="{% url 'view_my_profile' %}" class="global-link profile-link">
             <div class="face-card-container">
@@ -454,23 +1160,25 @@
             <div class="mobile-global-links">
                 <!-- Global links from top bar -->
                 {% if not user.is_authenticated %}
+                    <a href="{% url 'index' %}" class="mobile-global-link admin-link"><i class="fas fa-home"></i> Home</a>
                     <a href="{% url 'public_chatbot_view' %}"
-   style="text-decoration: none; color: #1e88e5; font-weight: 600; font-size: 1.1rem; padding: 5px 10px; border-radius: 5px; transition: color 0.3s ease;"
-   onmouseover="this.style.color='#0a5eb5'"
-   onmouseout="this.style.color='#1e88e5'">
+   class="mobile-global-link admin-link">
     🤖 Ask OB
 </a>
-                <a href="{% url 'contact' %}" class="mobile-global-link"><i class="fas fa-envelope"></i> Contact Us</a>
-                <a href="{% url 'rfp_guide' %}" class="global-link"><i class="fas fa-question-circle"></i> <span>RFP Guide</span></a>
-<span class="separator">|</span>
-                <a href="{% url 'newsletter:subscribe' %}" class="mobile-global-link"><i class="fas fa-bell"></i> Subscription</a>
+                <a href="{% url 'contact' %}" class="mobile-global-link admin-link"><i class="fas fa-envelope"></i> Contact Us</a>
+                <a href="{% url 'rfp_guide' %}" class="mobile-global-link admin-link"><i class="fas fa-question-circle"></i> <span>RFP Guide</span></a>
+
+                <a href="{% url 'newsletter:subscribe' %}" class="mobile-global-link admin-link"><i class="fas fa-bell"></i> Subscription</a>
                 <a href="{% url 'client_portal' %}" class="mobile-global-link admin-link"><i class="fas fa-lock"></i> Portal</a>
                 {% else %}
-                <a href="{% url 'user_logout' %}" class="mobile-global-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                {% endif %}
+                    <a href="{% url 'dashboard' %}" class="mobile-global-link admin-link"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
+                         {% endif %}
 
                 <!-- Admin links -->
                 {% if user.role == 'admin' %}
+                    <a href="{% url 'manage_regional_leaders' %}" class="mobile-global-link admin-link">
+    <i class="fas fa-globe-americas"></i> <span>Regional Leaders</span>
+</a>
                     <a href="{% url 'attendance:admin_dashboard' %}" class="mobile-global-link admin-link"><i class="fas fa-clipboard-check"></i> <span>Attendance Management</span></a>
 
 <a href="{% url 'attendance:admin_leave_requests' %}" class="mobile-global-link admin-link"><i class="fas fa-clipboard-list"></i> <span>Leave Management</span></a>
@@ -484,6 +1192,7 @@
 
                 <!-- User links -->
                 {% if request.user.is_authenticated %}
+
                     {% if user.role == 'staff'%}
 <!-- Staff Links -->
 <a href="{% url 'attendance:dashboard' %}" class="mobile-global-link admin-link"><i class="fas fa-user-clock"></i> <span>Attendance</span></a>
@@ -509,6 +1218,8 @@
     {% endif %}
                 {% endif %}
 
+                <a href="{% url 'user_logout' %}" class="mobile-global-link admin-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+
                 <!-- Profile link -->
                 <a href="{% url 'view_my_profile' %}" class="global-link profile-link">
                     <div class="face-card-container">
@@ -524,6 +1235,7 @@
                         <span class="face-card-role">{{ request.user.get_role_display }}</span>
                     </div>
                 </a>
+
                 {% endif %}
             </div>
 
@@ -577,6 +1289,7 @@
                 <li><a href="#" class="mobile-dropdown-link">Operational Audit</a></li>
                 <li><a href="#" class="mobile-dropdown-link">Agreed Upon Procedure</a></li>
                 <li><a href="#" class="mobile-dropdown-link">Follow-up Audit</a></li>
+                <li><a href="#" class="mobile-dropdown-link">Sport and Entertainment audit</a>
                 <li><a href="#" class="mobile-dropdown-link">Forensic Audit</a></li>
             </ul>
         </li>
@@ -631,110 +1344,281 @@
         </li>
 
         <!-- Advisory -->
-        <li class="mobile-nav-item">
-            <a href="#" class="mobile-nav-link">Advisory <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
-            <ul class="mobile-dropdown">
-                <li class="mobile-sub-menu">
-                    <a href="#" class="mobile-dropdown-link">Forensic Accounting <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
-                    <ul class="mobile-sub-dropdown">
-                        <li class="mobile-sub-sub-menu">
-                            <a href="#" class="mobile-sub-dropdown-link">Financial Accounting – Outsourcing <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
-                            <ul class="mobile-sub-sub-dropdown">
-                                <li><a href="#" class="mobile-sub-sub-dropdown-link">CFO Service</a></li>
-                                <li><a href="#" class="mobile-sub-sub-dropdown-link">Book-keeping Service</a></li>
-                                <li><a href="#" class="mobile-sub-sub-dropdown-link">Tax Planning and Advisory</a></li>
-                                <li><a href="#" class="mobile-sub-sub-dropdown-link">Internal Control (SOX) Compliance</a></li>
-                            </ul>
-                        </li>
+<li class="mobile-nav-item">
+    <a href="{% url 'advisory_main' %}" class="mobile-nav-link">Advisory <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
+    <ul class="mobile-dropdown">
+        <li class="mobile-sub-menu">
+            <a href="{% url 'forensic_accounting' %}" class="mobile-dropdown-link">Forensic Accounting <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
+            <ul class="mobile-sub-dropdown">
+                <li class="mobile-sub-sub-menu">
+                    <a href="{% url 'forensic_accounting' %}" class="mobile-sub-dropdown-link">Financial Accounting – Outsourcing <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
+                    <ul class="mobile-sub-sub-dropdown">
+                        <li><a href="{% url 'cfo_service' %}" class="mobile-sub-sub-dropdown-link">CFO Service</a></li>
+                        <li><a href="{% url 'bookkeeping_service' %}" class="mobile-sub-sub-dropdown-link">Book-keeping Service</a></li>
+                        <li><a href="{% url 'tax_planning_advisory' %}" class="mobile-sub-sub-dropdown-link">Tax Planning and Advisory</a></li>
+                        <li><a href="{% url 'internal_control_sox_compliance' %}" class="mobile-sub-sub-dropdown-link">Internal Control (SOX) Compliance</a></li>
                     </ul>
                 </li>
-                <li class="mobile-sub-menu">
-                    <a href="#" class="mobile-dropdown-link">Forensic Audit and Investigation Analysis <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
-                    <ul class="mobile-sub-dropdown">
-                        <li><a href="#" class="mobile-sub-dropdown-link">Payroll Processing and Management</a></li>
-                        <li><a href="#" class="mobile-sub-dropdown-link">Account Management and Bookkeeping</a></li>
-                    </ul>
-                </li>
-                <li><a href="#" class="mobile-dropdown-link">Tax Planning and Advisory</a></li>
-                <li><a href="#" class="mobile-dropdown-link">Financial Accounting Advisory</a></li>
-                <li><a href="#" class="mobile-dropdown-link">Internal Control Compliance (SOX)</a></li>
             </ul>
         </li>
+        <li class="mobile-sub-menu">
+            <a href="{% url 'forensic_audit_investigation' %}" class="mobile-dropdown-link">Forensic Audit and Investigation Analysis <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
+            <ul class="mobile-sub-dropdown">
+                <li><a href="{% url 'payroll_processing_management' %}" class="mobile-sub-dropdown-link">Payroll Processing and Management</a></li>
+                <li><a href="{% url 'account_management_bookkeeping' %}" class="mobile-sub-dropdown-link">Account Management and Bookkeeping</a></li>
+            </ul>
+        </li>
+        <li><a href="{% url 'tax_planning_advisory_main' %}" class="mobile-dropdown-link">Tax Planning and Advisory</a></li>
+        <li><a href="{% url 'financial_accounting_advisory' %}" class="mobile-dropdown-link">Financial Accounting Advisory</a></li>
+        <li><a href="{% url 'internal_control_sox_compliance_main' %}" class="mobile-dropdown-link">Internal Control Compliance (SOX)</a></li>
+    </ul>
+</li>
 
         <!-- Technology Solutions -->
-        <li class="mobile-nav-item">
-            <a href="#" class="mobile-nav-link">Technology Solutions <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
-            <ul class="mobile-dropdown">
-                <li class="mobile-sub-menu">
-                    <a href="#" class="mobile-dropdown-link">IT Project Management Service <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
-                    <ul class="mobile-sub-dropdown">
-                        <li><a href="#" class="mobile-sub-dropdown-link">Hardware Implementation Management</a></li>
-                        <li><a href="#" class="mobile-sub-dropdown-link">Software Implementation Management</a></li>
-                    </ul>
-                </li>
-                <li><a href="#" class="mobile-dropdown-link">Software Deployment and Management</a></li>
-                <li><a href="#" class="mobile-dropdown-link">Hardware Deployment and Maintenance</a></li>
-                <li><a href="#" class="mobile-dropdown-link">Cybersecurity Assessment and Management</a></li>
-                <li><a href="#" class="mobile-dropdown-link">IT Project Management</a></li>
-                <li class="mobile-sub-menu">
-                    <a href="#" class="mobile-dropdown-link">Inventory and Asset Management <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
-                    <ul class="mobile-sub-dropdown">
-                        <li><a href="#" class="mobile-sub-dropdown-link">Asset Registry</a></li>
-                        <li><a href="#" class="mobile-sub-dropdown-link">Barcoding</a></li>
-                    </ul>
-                </li>
-                <li><a href="#" class="mobile-dropdown-link">Technology Consulting</a></li>
-                <li><a href="#" class="mobile-dropdown-link">IT Consulting</a></li>
-                <li><a href="#" class="mobile-dropdown-link">Managed IT Service</a></li>
-                <li><a href="#" class="mobile-dropdown-link">IT Security</a></li>
-                <li><a href="#" class="mobile-dropdown-link">Cybersecurity</a></li>
-                <li><a href="#" class="mobile-dropdown-link">Service Desk/Help Desk</a></li>
-                <li><a href="#" class="mobile-dropdown-link">Equipment Supply and Setup</a></li>
-                <li><a href="#" class="mobile-dropdown-link">Inventory Count and Assets Management</a></li>
+<li class="mobile-nav-item">
+    <a href="#" class="mobile-nav-link">Technology Solutions <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
+    <ul class="mobile-dropdown">
+        <li class="mobile-sub-menu">
+            <a href="#" class="mobile-dropdown-link">IT Project Management Service <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
+            <ul class="mobile-sub-dropdown">
+                <li><a href="{% url 'hardware_implementation_management' %}" class="mobile-sub-dropdown-link">Hardware Implementation Management</a></li>
+                <li><a href="{% url 'software_implementation_management' %}" class="mobile-sub-dropdown-link">Software Implementation Management</a></li>
             </ul>
         </li>
+        <li><a href="{% url 'software_deployment_management' %}" class="mobile-dropdown-link">Software Deployment and Management</a></li>
+        <li><a href="{% url 'hardware_deployment_maintenance' %}" class="mobile-dropdown-link">Hardware Deployment and Maintenance</a></li>
+        <li><a href="{% url 'cybersecurity_assessment_management' %}" class="mobile-dropdown-link">Cybersecurity Assessment and Management</a></li>
+        <li><a href="{% url 'it_project_management' %}" class="mobile-dropdown-link">IT Project Management</a></li>
+        <li class="mobile-sub-menu">
+            <a href="#" class="mobile-dropdown-link">Inventory and Asset Management <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
+            <ul class="mobile-sub-dropdown">
+                <li><a href="{% url 'asset_registry' %}" class="mobile-sub-dropdown-link">Asset Registry</a></li>
+                <li><a href="{% url 'barcoding' %}" class="mobile-sub-dropdown-link">Barcoding</a></li>
+            </ul>
+        </li>
+        <li><a href="{% url 'technology_consulting' %}" class="mobile-dropdown-link">Technology Consulting</a></li>
+        <li><a href="{% url 'it_consulting' %}" class="mobile-dropdown-link">IT Consulting</a></li>
+        <li><a href="{% url 'managed_it_service' %}" class="mobile-dropdown-link">Managed IT Service</a></li>
+        <li><a href="{% url 'it_security' %}" class="mobile-dropdown-link">IT Security</a></li>
+        <li><a href="{% url 'cybersecurity_main' %}" class="mobile-dropdown-link">Cybersecurity</a></li>
+        <li><a href="{% url 'service_desk_help_desk' %}" class="mobile-dropdown-link">Service Desk/Help Desk</a></li>
+        <li><a href="{% url 'equipment_supply_setup' %}" class="mobile-dropdown-link">Equipment Supply and Setup</a></li>
+        <li><a href="{% url 'inventory_count_assets_management' %}" class="mobile-dropdown-link">Inventory Count and Assets Management</a></li>
+    </ul>
+</li>
 
         <!-- Managed Service -->
-        <li class="mobile-nav-item">
-            <a href="#" class="mobile-nav-link">Managed Service <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
-            <ul class="mobile-dropdown">
-                <li class="mobile-sub-menu">
-                    <a href="#" class="mobile-dropdown-link">Accounting Services <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
-                    <ul class="mobile-sub-dropdown">
-                        <li><a href="#" class="mobile-sub-dropdown-link">Account Management/Bookkeeping</a></li>
-                        <li><a href="#" class="mobile-sub-dropdown-link">Financial Statement Preparation</a></li>
-                        <li><a href="#" class="mobile-sub-dropdown-link">Bank Reconciliation</a></li>
-                        <li><a href="#" class="mobile-sub-dropdown-link">Account Payable/Receivable</a></li>
-                        <li><a href="#" class="mobile-sub-dropdown-link">Budget and Forecasting</a></li>
-                        <li><a href="#" class="mobile-sub-dropdown-link">Forensic Accounting</a></li>
-                        <li><a href="#" class="mobile-sub-dropdown-link">Business Consulting</a></li>
-                        <li><a href="#" class="mobile-sub-dropdown-link">Public Accounting</a></li>
-                    </ul>
-                </li>
-                <li class="mobile-sub-menu">
-                    <a href="#" class="mobile-dropdown-link">Tax Services <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
-                    <ul class="mobile-sub-dropdown">
-                        <li><a href="#" class="mobile-sub-dropdown-link">Tax Planning</a></li>
-                        <li><a href="#" class="mobile-sub-dropdown-link">Payroll Tax</a></li>
-                        <li><a href="#" class="mobile-sub-dropdown-link">Individual Tax - 1040</a></li>
-                        <li><a href="#" class="mobile-sub-dropdown-link">Business Tax – 1120s and 1120</a></li>
-                        <li><a href="#" class="mobile-sub-dropdown-link">Non-for-profit Tax – 990</a></li>
-                        <li><a href="#" class="mobile-sub-dropdown-link">Tax Accounting</a></li>
-                        <li><a href="#" class="mobile-sub-dropdown-link">International Tax</a></li>
-                    </ul>
-                </li>
-                <li class="mobile-sub-menu">
-                    <a href="#" class="mobile-dropdown-link">Technology Services <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
-                    <ul class="mobile-sub-dropdown">
-                        <li><a href="#" class="mobile-sub-dropdown-link">Asset Tracking and Management</a></li>
-                        <li><a href="#" class="mobile-sub-dropdown-link">IT Support Management</a></li>
-                        <li><a href="#" class="mobile-sub-dropdown-link">Cybersecurity</a></li>
-                        <li><a href="#" class="mobile-sub-dropdown-link">Network Support/Health Check</a></li>
-                        <li><a href="#" class="mobile-sub-dropdown-link">Inventory</a></li>
-                    </ul>
-                </li>
+<li class="mobile-nav-item">
+    <a href="{% url 'managed_service_main' %}" class="mobile-nav-link">Managed Service <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
+    <ul class="mobile-dropdown">
+        <li class="mobile-sub-menu">
+            <a href="{% url 'managed_service_accounting' %}" class="mobile-dropdown-link">Accounting Services <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
+            <ul class="mobile-sub-dropdown">
+                <li><a href="{% url 'account_management_bookkeeping_ms' %}" class="mobile-sub-dropdown-link">Account Management/Bookkeeping</a></li>
+                <li><a href="{% url 'financial_statement_preparation' %}" class="mobile-sub-dropdown-link">Financial Statement Preparation</a></li>
+                <li><a href="{% url 'bank_reconciliation' %}" class="mobile-sub-dropdown-link">Bank Reconciliation</a></li>
+                <li><a href="{% url 'account_payable_receivable' %}" class="mobile-sub-dropdown-link">Account Payable/Receivable</a></li>
+                <li><a href="{% url 'budget_and_forecasting' %}" class="mobile-sub-dropdown-link">Budget and Forecasting</a></li>
+                <li><a href="{% url 'forensic_accounting_ms' %}" class="mobile-sub-dropdown-link">Forensic Accounting</a></li>
+                <li><a href="{% url 'business_consulting_ms' %}" class="mobile-sub-dropdown-link">Business Consulting</a></li>
+                <li><a href="{% url 'public_accounting' %}" class="mobile-sub-dropdown-link">Public Accounting</a></li>
             </ul>
         </li>
+        <li class="mobile-sub-menu">
+            <a href="{% url 'managed_service_tax' %}" class="mobile-dropdown-link">Tax Services <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
+            <ul class="mobile-sub-dropdown">
+                <li><a href="{% url 'tax_planning_ms' %}" class="mobile-sub-dropdown-link">Tax Planning</a></li>
+                <li><a href="{% url 'payroll_tax' %}" class="mobile-sub-dropdown-link">Payroll Tax</a></li>
+                <li><a href="{% url 'individual_tax_1040' %}" class="mobile-sub-dropdown-link">Individual Tax - 1040</a></li>
+                <li><a href="{% url 'business_tax_1120s_1120' %}" class="mobile-sub-dropdown-link">Business Tax – 1120s and 1120</a></li>
+                <li><a href="{% url 'nonprofit_tax_990' %}" class="mobile-sub-dropdown-link">Non-for-profit Tax – 990</a></li>
+                <li><a href="{% url 'tax_accounting' %}" class="mobile-sub-dropdown-link">Tax Accounting</a></li>
+                <li><a href="{% url 'international_tax' %}" class="mobile-sub-dropdown-link">International Tax</a></li>
+            </ul>
+        </li>
+        <li class="mobile-sub-menu">
+            <a href="{% url 'managed_service_technology' %}" class="mobile-dropdown-link">Technology Services <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
+            <ul class="mobile-sub-dropdown">
+                <li><a href="{% url 'asset_tracking_management' %}" class="mobile-sub-dropdown-link">Asset Tracking and Management</a></li>
+                <li><a href="{% url 'it_support_management' %}" class="mobile-sub-dropdown-link">IT Support Management</a></li>
+                <li><a href="{% url 'cybersecurity_ms' %}" class="mobile-sub-dropdown-link">Cybersecurity</a></li>
+                <li><a href="{% url 'network_support_health_check' %}" class="mobile-sub-dropdown-link">Network Support/Health Check</a></li>
+                <li><a href="{% url 'inventory' %}" class="mobile-sub-dropdown-link">Inventory</a></li>
+            </ul>
+        </li>
+    </ul>
+</li>
+        
+        <!-- About Us -->
+<li class="mobile-nav-item">
+    <a href="#" class="mobile-nav-link">About Us <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
+    <ul class="mobile-dropdown">
+        <li class="mobile-sub-menu">
+            <a href="#" class="mobile-dropdown-link">Background <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
+            <ul class="mobile-sub-dropdown">
+                <li><a href="#" class="mobile-sub-dropdown-link">Our History</a></li>
+                <li><a href="#" class="mobile-sub-dropdown-link">Company Milestones</a></li>
+                <li><a href="#" class="mobile-sub-dropdown-link">Our Global Presence</a></li>
+            </ul>
+        </li>
+        <li class="mobile-sub-menu">
+            <a href="#" class="mobile-dropdown-link">Our Vision <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
+            <ul class="mobile-sub-dropdown">
+                <li><a href="#" class="mobile-sub-dropdown-link">Future Goals</a></li>
+                <li><a href="#" class="mobile-sub-dropdown-link">Strategic Direction</a></li>
+                <li><a href="#" class="mobile-sub-dropdown-link">Industry Leadership</a></li>
+            </ul>
+        </li>
+        <li class="mobile-sub-menu">
+    <a href="#" class="mobile-dropdown-link">Partnerships <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
+    <ul class="mobile-sub-dropdown">
+        <li><a href="#" class="mobile-sub-dropdown-link">Dell Technologies</a></li>
+        <li><a href="#" class="mobile-sub-dropdown-link">Lenovo</a></li>
+        <li><a href="#" class="mobile-sub-dropdown-link">Microsoft</a></li>
+        <li><a href="#" class="mobile-sub-dropdown-link">Oracle</a></li>
+        <li><a href="#" class="mobile-sub-dropdown-link">SAP</a></li>
+        <li><a href="#" class="mobile-sub-dropdown-link">IBM</a></li>
+        <li><a href="#" class="mobile-sub-dropdown-link">Salesforce</a></li>
+        <li><a href="#" class="mobile-sub-dropdown-link">Cisco Systems</a></li>
+    </ul>
+</li>
+
+        <li class="mobile-sub-menu" style="margin-bottom: 8px !important; display: block; list-style: none;">
+    <a href="#" class="mobile-dropdown-link" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: #f5f5f5; border-radius: 4px; text-decoration: none; color: #333; transition: all 0.3s ease;">
+        Global Leadership <i class="fas fa-chevron-down mobile-dropdown-icon" style="cursor: pointer; padding-left: 15px; font-size: 14px; color: #666;"></i>
+    </a>
+    <ul class="mobile-sub-dropdown" style="margin: 0; padding: 0; list-style: none; background: #f9f9f9; border-radius: 4px; margin-top: 4px;">
+        <li style="margin: 0; padding: 0;">
+            <a href="{% url 'executive_leadership' %}" class="mobile-sub-dropdown-link" style="display: block; padding: 10px 15px 10px 25px; text-decoration: none; color: #333; border-bottom: 1px solid #eee; transition: all 0.2s ease;">
+                Executive Leadership
+            </a>
+        </li>
+    </ul>
+    <div class="separator" style="height: 1px; background: #ddd; margin: 12px 0;"></div>
+</li>
+        <li class="mobile-sub-menu">
+            <a href="#" class="mobile-dropdown-link">Our Purpose <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
+            <ul class="mobile-sub-dropdown">
+                <li><a href="#" class="mobile-sub-dropdown-link">Mission Statement</a></li>
+                <li><a href="#" class="mobile-sub-dropdown-link">Core Values</a></li>
+                <li><a href="#" class="mobile-sub-dropdown-link">Corporate Responsibility</a></li>
+                <li><a href="#" class="mobile-sub-dropdown-link">Pro-bono</a></li>
+            </ul>
+        </li>
+        <li class="mobile-sub-menu">
+            <a href="{% url 'contact' %}" class="mobile-dropdown-link">Join Our Team <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
+            <ul class="mobile-sub-dropdown">
+                <li><a href="{% url 'contact' %}" class="mobile-sub-dropdown-link">Contact Us to Join</a></li>
+                <li><a href="#" class="mobile-sub-dropdown-link">Career Opportunities</a></li>
+                <li><a href="#" class="mobile-sub-dropdown-link">Internship Programs</a></li>
+            </ul>
+        </li>
+        <li><a href="#" class="mobile-dropdown-link">Location</a></li>
+    </ul>
+</li>
+
+<!-- Careers -->
+<li class="mobile-nav-item">
+    <a href="#" class="mobile-nav-link">Opportunities and Careers <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
+    <ul class="mobile-dropdown">
+        <li class="mobile-sub-menu">
+            <a href="#" class="mobile-dropdown-link">What OB Global expect from you<i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
+            <ul class="mobile-sub-dropdown">
+                <li><a href="#" class="mobile-sub-dropdown-link">Career in Technology</a></li>
+                <li><a href="#" class="mobile-sub-dropdown-link">Career in Advisory</a></li>
+                <li><a href="#" class="mobile-sub-dropdown-link">Career in Tax</a></li>
+                <li><a href="#" class="mobile-sub-dropdown-link">Career in Consulting</a></li>
+                <li><a href="#" class="mobile-sub-dropdown-link">Career in Forensic Service</a></li>
+                <li><a href="#" class="mobile-sub-dropdown-link">Career in Managed Service</a></li>
+                <li><a href="#" class="mobile-sub-dropdown-link">Career in Audit</a></li>
+            </ul>
+        </li>
+        <li class="mobile-sub-menu">
+            <a href="#" class="mobile-dropdown-link">What It's Like Here <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
+            <ul class="mobile-sub-dropdown">
+                <a href="#" class="mobile-sub-dropdown-link" style="white-space: normal !important; word-wrap: break-word !important; overflow: visible !important; display: block !important; margin-bottom: 10px; padding: 5px 0;">Life at OB Global</a>
+                <li><a href="#" class="mobile-sub-dropdown-link">Belonging & Inclusiveness</a></li>
+                <li><a href="#" class="mobile-sub-dropdown-link">Career Flexibility & Mobility</a></li>
+                <li><a href="#" class="mobile-sub-dropdown-link">Personalized Career Development</a></li>
+                <li><a href="#" class="mobile-sub-dropdown-link">Total Rewards Package</a></li>
+                <li><a href="#" class="mobile-sub-dropdown-link">Health & Wellness</a></li>
+                <li><a href="#" class="mobile-sub-dropdown-link">Work-Life Balance</a></li>
+            </ul>
+        </li>
+        <li class="mobile-sub-menu">
+            <a href="#" class="mobile-dropdown-link">How to Join <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
+            <ul class="mobile-sub-dropdown">
+                <li><a href="#" class="mobile-sub-dropdown-link">What We Look For</a></li>
+                <li><a href="#" class="mobile-sub-dropdown-link">How We Hire</a></li>
+                <li><a href="#" class="mobile-sub-dropdown-link">Application Tips</a></li>
+                <li><a href="#" class="mobile-sub-dropdown-link">Interview Preparation</a></li>
+                <li><a href="#" class="mobile-sub-dropdown-link">Frequently Asked Questions</a></li>
+                <li><a href="#" class="mobile-sub-dropdown-link">Contact Recruitment</a></li>
+            </ul>
+        </li>
+    </ul>
+</li>
+<!-- Insights -->
+<li class="mobile-nav-item">
+    <a href="{% url 'insights_main' %}" class="mobile-nav-link">Insights <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
+    <ul class="mobile-dropdown">
+        <li class="mobile-sub-menu">
+            <a href="{% url 'insights_main' %}" class="mobile-dropdown-link">Trending Insights <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
+            <ul class="mobile-sub-dropdown">
+                <li><a href="{% url 'ai_revolution_business_operations' %}" class="mobile-sub-dropdown-link">AI Revolution in Business Operations</a></li>
+                <li><a href="{% url 'digital_transformation_strategies' %}" class="mobile-sub-dropdown-link">Digital Transformation Strategies</a></li>
+                <li><a href="{% url 'esg_compliance_frameworks' %}" class="mobile-sub-dropdown-link">ESG Compliance Frameworks</a></li>
+                <li><a href="{% url 'remote_workforce_management' %}" class="mobile-sub-dropdown-link">Remote Workforce Management</a></li>
+                <li><a href="{% url 'tax_law_changes_2024' %}" class="mobile-sub-dropdown-link">Tax Law Changes 2024</a></li>
+                <li><a href="{% url 'cybersecurity_threat_landscape' %}" class="mobile-sub-dropdown-link">Cybersecurity Threat Landscape</a></li>
+                <li><a href="{% url 'cloud_migration_best_practices' %}" class="mobile-sub-dropdown-link">Cloud Migration Best Practices</a></li>
+            </ul>
+        </li>
+    </ul>
+</li>
+
+<!-- Industries -->
+<li class="mobile-nav-item">
+    <a href="{% url 'industries_main' %}" class="mobile-nav-link">Industries <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
+    <ul class="mobile-dropdown">
+        <li class="mobile-sub-menu">
+            <a href="{% url 'industries_main' %}" class="mobile-dropdown-link">All Industries <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
+            <ul class="mobile-sub-dropdown">
+                <li><a href="{% url 'financial_services' %}" class="mobile-sub-dropdown-link">Financial Services</a></li>
+                <li><a href="{% url 'government_public_sector' %}" class="mobile-sub-dropdown-link">Government & Public Sector</a></li>
+                <li><a href="{% url 'consumer_business' %}" class="mobile-sub-dropdown-link">Consumer Business</a></li>
+                <li><a href="{% url 'healthcare_industry' %}" class="mobile-sub-dropdown-link">Healthcare</a></li>
+                <li><a href="{% url 'real_estate_construction' %}" class="mobile-sub-dropdown-link">Real Estate & Construction</a></li>
+                <li><a href="{% url 'non_profit_organizations' %}" class="mobile-sub-dropdown-link">Non-Profit Organizations</a></li>
+                <li><a href="{% url 'manufacturing_industry' %}" class="mobile-sub-dropdown-link">Manufacturing</a></li>
+                <li><a href="{% url 'professional_service_firms' %}" class="mobile-sub-dropdown-link">Professional Service Firms</a></li>
+                <li><a href="{% url 'technology_media_telecom' %}" class="mobile-sub-dropdown-link">Technology, Media & Telecom</a></li>
+
+            <li><a href="{% url 'oil_and_gas' %}" class="mobile-sub-dropdown-link">Oil and Gas</a></li>
+            </ul>
+        </li>
+    </ul>
+</li>
+
+<!-- Innovation -->
+<li class="mobile-nav-item">
+    <a href="{% url 'innovation_main' %}" class="mobile-nav-link">Innovation and Critical Thinking <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
+    <ul class="mobile-dropdown">
+        <li class="mobile-sub-menu">
+            <a href="{% url 'innovation_main' %}" class="mobile-dropdown-link">Innovation Solutions <i class="fas fa-chevron-down mobile-dropdown-icon"></i></a>
+            <ul class="mobile-sub-dropdown">
+                <li><a href="{% url 'ai_driven_business_intelligence' %}" class="mobile-sub-dropdown-link">AI-Driven Business Intelligence</a></li>
+                <li><a href="{% url 'predictive_analytics_solutions' %}" class="mobile-sub-dropdown-link">Predictive Analytics Solutions</a></li>
+                <li><a href="{% url 'natural_language_processing' %}" class="mobile-sub-dropdown-link">Natural Language Processing</a></li>
+                <li><a href="{% url 'advanced_threat_protection' %}" class="mobile-sub-dropdown-link">Advanced Threat Protection</a></li>
+                <li><a href="{% url 'zero_trust_architecture' %}" class="mobile-sub-dropdown-link">Zero Trust Architecture</a></li>
+                <li><a href="{% url 'custom_software_development' %}" class="mobile-sub-dropdown-link">Custom Software Development</a></li>
+                <li><a href="{% url 'enterprise_application_integration' %}" class="mobile-sub-dropdown-link">Enterprise Application Integration</a></li>
+                <li><a href="{% url 'digital_forensic_tools' %}" class="mobile-sub-dropdown-link">Digital Forensic Tools</a></li>
+            </ul>
+        </li>
+    </ul>
+</li>
     </ul>
 </nav>
 {% endif %}

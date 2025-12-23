@@ -1,0 +1,4273 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="regional-leader-form-management">
+    <!-- Header Section -->
+    <div class="form-header">
+        <div class="header-content">
+            <div class="header-main">
+                <div class="header-icon">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <div class="header-text">
+                    <h1 class="page-title">{{ page_title }}</h1>
+                    <p class="page-subtitle">
+                        {% if form.instance.pk %}
+                            Edit leader information
+                        {% else %}
+                            Add a new leader to the team
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+            <a href="{% url 'manage_regional_leaders' %}" class="btn-back-list">
+                <i class="fas fa-arrow-left"></i>
+                <span>Back to Leaders</span>
+            </a>
+        </div>
+
+        <!-- Progress Steps -->
+        <div class="form-progress">
+            <div class="progress-steps">
+                <div class="step active" data-step="1">
+                    <div class="step-circle">1</div>
+                    <span class="step-label">Basic Info</span>
+                </div>
+                <div class="step" data-step="2">
+                    <div class="step-circle">2</div>
+                    <span class="step-label">Contact</span>
+                </div>
+                <div class="step" data-step="3">
+                    <div class="step-circle">3</div>
+                    <span class="step-label">Profile</span>
+                </div>
+                <div class="step" data-step="4">
+                    <div class="step-circle">4</div>
+                    <span class="step-label">Professional</span>
+                </div>
+                <div class="step" data-step="5">
+                    <div class="step-circle">5</div>
+                    <span class="step-label">Review</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Section -->
+    <div class="form-section">
+        <form method="post" enctype="multipart/form-data" novalidate class="leader-form" id="leaderForm">
+            {% csrf_token %}
+
+            <!-- Hidden field for existing image -->
+            <input type="hidden" name="existing_profile_image" id="existingProfileImage" value="{{ form.instance.profile_image.url|default:'' }}">
+
+            <!-- Step 1: Basic Information -->
+<div class="form-step active" id="step1">
+    <div class="step-header">
+        <h3 class="step-title">
+            <i class="fas fa-user-circle"></i>
+            Basic Information
+        </h3>
+        <p class="step-description">Enter the leader's personal details and position information</p>
+    </div>
+
+    <div class="form-grid">
+        <!-- First Name -->
+        <div class="form-group">
+            <label class="form-label required">
+                <span>First Name</span>
+                <i class="fas fa-asterisk"></i>
+            </label>
+            <div class="input-group">
+                <span class="input-icon">
+                    <i class="fas fa-user"></i>
+                </span>
+                <input type="text"
+                       name="first_name"
+                       id="id_first_name"
+                       class="form-control"
+                       placeholder="Enter first name"
+                       required
+                       value="{{ form.instance.first_name }}">
+            </div>
+            {% if form.first_name.errors %}
+            <div class="error-message">
+                <i class="fas fa-exclamation-circle"></i>
+                {{ form.first_name.errors }}
+            </div>
+            {% endif %}
+            <div class="form-hint">Enter the leader's first name</div>
+        </div>
+
+        <!-- Last Name -->
+        <div class="form-group">
+            <label class="form-label required">
+                <span>Last Name</span>
+                <i class="fas fa-asterisk"></i>
+            </label>
+            <div class="input-group">
+                <span class="input-icon">
+                    <i class="fas fa-user"></i>
+                </span>
+                <input type="text"
+                       name="last_name"
+                       id="id_last_name"
+                       class="form-control"
+                       placeholder="Enter last name"
+                       required
+                       value="{{ form.instance.last_name }}">
+            </div>
+            {% if form.last_name.errors %}
+            <div class="error-message">
+                <i class="fas fa-exclamation-circle"></i>
+                {{ form.last_name.errors }}
+            </div>
+            {% endif %}
+            <div class="form-hint">Enter the leader's last name</div>
+        </div>
+
+        <!-- Leader Type (hidden for edit mode, visible for add mode) -->
+        {% if not form.instance.pk %}
+        <div class="form-group">
+            <label class="form-label required">
+                <span>Leader Type</span>
+                <i class="fas fa-asterisk"></i>
+            </label>
+            <div class="input-group">
+                <span class="input-icon">
+                    <i class="fas fa-users"></i>
+                </span>
+                <select name="leader_type" id="id_leader_type" class="form-control" required>
+                    <option value="">Select leader type</option>
+                    <option value="regional_leader" {% if not is_managing_partner %}selected{% endif %}>Regional Leader</option>
+                    <option value="managing_partner" {% if is_managing_partner %}selected{% endif %}>Managing Partner</option>
+                </select>
+            </div>
+            <div class="form-hint">Select the type of leader</div>
+        </div>
+        {% else %}
+        <input type="hidden" name="leader_type" value="{% if is_managing_partner %}managing_partner{% else %}regional_leader{% endif %}">
+        {% endif %}
+
+        <!-- Region Field (only for Regional Leaders) -->
+        <div class="form-group" id="regionFieldGroup" {% if is_managing_partner %}style="display: none;"{% endif %}>
+            <label class="form-label {% if not is_managing_partner %}required{% endif %}">
+                <span>Region</span>
+                {% if not is_managing_partner %}<i class="fas fa-asterisk"></i>{% endif %}
+            </label>
+            <div class="input-group">
+                <span class="input-icon">
+
+                </span>
+                <select name="region" id="id_region" class="form-control" {% if is_managing_partner %}disabled{% else %}required{% endif %}>
+                    <option value="">Select a region</option>
+                    <option value="all" {% if form.instance.region == 'all' %}selected{% endif %}>All Regions</option>
+                    {% for value, label in form.region.field.choices %}
+                        {% if value != 'all' %}
+                        <option value="{{ value }}" {% if form.instance.region == value %}selected{% endif %}>
+                            {{ label }}
+                        </option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            {% if form.region.errors %}
+            <div class="error-message">
+                <i class="fas fa-exclamation-circle"></i>
+                {{ form.region.errors }}
+            </div>
+            {% endif %}
+            <div class="form-hint">Select the leader's primary region</div>
+        </div>
+
+        <!-- Position Title (different field name for each type) -->
+        <div class="form-group">
+            <label class="form-label required">
+                <span>Position Title</span>
+                <i class="fas fa-asterisk"></i>
+            </label>
+            <div class="input-group">
+                <span class="input-icon">
+                    <i class="fas fa-briefcase"></i>
+                </span>
+                <input type="text"
+                       name="{% if is_managing_partner %}position_title{% else %}region_title{% endif %}"
+                       id="id_position_title"
+                       class="form-control"
+                       placeholder="{% if is_managing_partner %}e.g., Managing Partner{% else %}e.g., Regional Director for Africa{% endif %}"
+                       required
+                       value="{% if is_managing_partner %}{{ form.instance.position_title|default:'' }}{% else %}{{ form.instance.region_title|default:'' }}{% endif %}">
+            </div>
+            {% if is_managing_partner %}
+                {% if form.position_title.errors %}
+                <div class="error-message">
+                    <i class="fas fa-exclamation-circle"></i>
+                    {{ form.position_title.errors }}
+                </div>
+                {% endif %}
+            {% else %}
+                {% if form.region_title.errors %}
+                <div class="error-message">
+                    <i class="fas fa-exclamation-circle"></i>
+                    {{ form.region_title.errors }}
+                </div>
+                {% endif %}
+            {% endif %}
+            <div class="form-hint">
+                {% if is_managing_partner %}
+                    Position title (e.g., Managing Partner)
+                {% else %}
+                    Region title (e.g., Regional Director for Africa)
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="step-actions">
+        <button type="button" class="btn-next-step" onclick="goToStep(2)">
+            Next: Contact Information
+            <i class="fas fa-arrow-right"></i>
+        </button>
+    </div>
+</div>
+
+<!-- Step 2: Contact Information -->
+<div class="form-step" id="step2">
+    <div class="step-header">
+        <h3 class="step-title">
+            <i class="fas fa-address-book"></i>
+            Contact Information
+        </h3>
+        <p class="step-description">Add contact details and professional links</p>
+    </div>
+
+    <div class="form-grid">
+        <!-- Email -->
+        <div class="form-group">
+            <label class="form-label required">
+                <span>Email Address</span>
+                <i class="fas fa-asterisk"></i>
+            </label>
+            <div class="input-group">
+                <span class="input-icon">
+                    <i class="fas fa-envelope"></i>
+                </span>
+                <input type="email"
+                       name="email"
+                       id="id_email"
+                       class="form-control"
+                       placeholder="Enter email address"
+                       required
+                       value="{{ form.instance.email }}">
+            </div>
+            {% if form.email.errors %}
+            <div class="error-message">
+                <i class="fas fa-exclamation-circle"></i>
+                {{ form.email.errors }}
+            </div>
+            {% endif %}
+            <div class="form-hint">Official email address</div>
+        </div>
+
+        <!-- Phone -->
+        <div class="form-group">
+            <label class="form-label required">
+                <span>Phone Number</span>
+                <i class="fas fa-asterisk"></i>
+            </label>
+            <div class="input-group">
+                <span class="input-icon">
+                    <i class="fas fa-phone"></i>
+                </span>
+                <input type="tel"
+                       name="phone"
+                       id="id_phone"
+                       class="form-control"
+                       placeholder="Enter phone number"
+                       required
+                       value="{{ form.instance.phone }}">
+            </div>
+            {% if form.phone.errors %}
+            <div class="error-message">
+                <i class="fas fa-exclamation-circle"></i>
+                {{ form.phone.errors }}
+            </div>
+            {% endif %}
+            <div class="form-hint">Contact phone number</div>
+        </div>
+
+        <!-- LinkedIn -->
+        <div class="form-group">
+            <label class="form-label required">
+                <span>LinkedIn Profile</span>
+                <i class="fas fa-asterisk"></i>
+            </label>
+            <div class="input-group">
+                <span class="input-icon">
+                    <i class="fab fa-linkedin"></i>
+                </span>
+                <input type="url"
+                       name="linkedin"
+                       id="id_linkedin"
+                       class="form-control"
+                       placeholder="https://linkedin.com/in/username"
+                       required
+                       value="{{ form.instance.linkedin }}">
+            </div>
+            {% if form.linkedin.errors %}
+            <div class="error-message">
+                <i class="fas fa-exclamation-circle"></i>
+                {{ form.linkedin.errors }}
+            </div>
+            {% endif %}
+            <div class="form-hint">Full LinkedIn profile URL</div>
+        </div>
+
+        <!-- Profile Image Upload - Updated Design -->
+        <div class="form-group full-width">
+            <label class="form-label">
+                <span>Profile Image</span>
+                <span class="optional-badge">Optional</span>
+            </label>
+            <div class="image-upload-area" id="imageUploadArea">
+                <div class="upload-preview-container">
+                    {% if form.instance.profile_image %}
+                    <div class="current-image-container">
+                        <img src="{{ form.instance.get_profile_image_url }}"
+                             alt="Current profile image"
+                             class="current-image"
+                             id="currentImage">
+                    </div>
+                    {% else %}
+                    <div class="upload-placeholder">
+                        <i class="fas fa-user-circle"></i>
+                        <span>No Image Selected</span>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="upload-controls-simple">
+                    <input type="file"
+                           name="profile_image"
+                           id="profileImageInput"
+                           accept="image/*"
+                           class="visually-hidden">
+                    <button type="button" class="btn-upload-simple" onclick="document.getElementById('profileImageInput').click()">
+                        <i class="fas fa-camera"></i>
+                        <span>Choose Profile Image</span>
+                    </button>
+                    {% if form.instance.profile_image %}
+                    <div class="image-info">
+                        <div class="image-status">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Current image loaded</span>
+                        </div>
+                        <div class="image-actions">
+                            <button type="button" class="btn-image-action" onclick="keepExistingImage()">
+                                <i class="fas fa-redo"></i>
+                                Keep Current
+                            </button>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="upload-hint">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Recommended: 400x400px, max 2MB. Leave empty to keep current image.</span>
+                </div>
+            </div>
+            {% if form.profile_image.errors %}
+            <div class="error-message">
+                <i class="fas fa-exclamation-circle"></i>
+                {{ form.profile_image.errors }}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="step-actions">
+        <button type="button" class="btn-prev-step" onclick="goToStep(1)">
+            <i class="fas fa-arrow-left"></i>
+            Previous
+        </button>
+        <button type="button" class="btn-next-step" onclick="goToStep(3)">
+            Next: Professional Information
+            <i class="fas fa-arrow-right"></i>
+        </button>
+    </div>
+</div>
+
+<!-- Step 3: Professional Information -->
+<div class="form-step" id="step3">
+    <div class="step-header">
+        <h3 class="step-title">
+            <i class="fas fa-graduation-cap"></i>
+            Professional Information
+        </h3>
+        <p class="step-description">Add background, expertise, and achievements</p>
+    </div>
+
+    <div class="form-grid">
+        <!-- Bio -->
+        <div class="form-group full-width">
+            <label class="form-label required">
+                <span>Biography</span>
+                <i class="fas fa-asterisk"></i>
+            </label>
+            <div class="textarea-group">
+                <textarea name="bio"
+                          id="id_bio"
+                          class="form-control"
+                          placeholder="Enter professional biography"
+                          rows="6"
+                          required>{{ form.instance.bio }}</textarea>
+                <div class="char-counter" id="bioCounter">
+                    <span class="char-count">0</span>/5000
+                </div>
+            </div>
+            {% if form.bio.errors %}
+            <div class="error-message">
+                <i class="fas fa-exclamation-circle"></i>
+                {{ form.bio.errors }}
+            </div>
+            {% endif %}
+            <div class="form-hint">Brief professional biography (minimum 100 characters)</div>
+        </div>
+
+        <!-- Education -->
+        <div class="form-group full-width">
+            <label class="form-label required">
+                <span>Education</span>
+                <i class="fas fa-asterisk"></i>
+            </label>
+            <div class="textarea-group">
+                <textarea name="education"
+                          id="id_education"
+                          class="form-control"
+                          placeholder="Enter education background"
+                          rows="4"
+                          required>{{ form.instance.education }}</textarea>
+                <div class="char-counter" id="educationCounter">
+                    <span class="char-count">0</span>/2000
+                </div>
+            </div>
+            {% if form.education.errors %}
+            <div class="error-message">
+                <i class="fas fa-exclamation-circle"></i>
+                {{ form.education.errors }}
+            </div>
+            {% endif %}
+            <div class="form-hint">Academic background and qualifications</div>
+        </div>
+
+        <!-- Expertise Field (different for each type) -->
+        <div class="form-group full-width">
+            <label class="form-label required">
+                <span id="expertiseLabel">
+                    {% if is_managing_partner %}
+                        Expertise
+                    {% else %}
+                        Regional Expertise
+                    {% endif %}
+                </span>
+                <i class="fas fa-asterisk"></i>
+            </label>
+            <div class="textarea-group">
+                <textarea name="{% if is_managing_partner %}expertise{% else %}regional_expertise{% endif %}"
+                          id="id_expertise"
+                          class="form-control"
+                          placeholder="{% if is_managing_partner %}Enter professional expertise{% else %}Enter regional expertise{% endif %}"
+                          rows="4"
+                          required>{% if is_managing_partner %}{{ form.instance.expertise|default:'' }}{% else %}{{ form.instance.regional_expertise|default:'' }}{% endif %}</textarea>
+                <div class="char-counter" id="expertiseCounter">
+                    <span class="char-count">0</span>/2000
+                </div>
+            </div>
+            {% if is_managing_partner %}
+                {% if form.expertise.errors %}
+                <div class="error-message">
+                    <i class="fas fa-exclamation-circle"></i>
+                    {{ form.expertise.errors }}
+                </div>
+                {% endif %}
+            {% else %}
+                {% if form.regional_expertise.errors %}
+                <div class="error-message">
+                    <i class="fas fa-exclamation-circle"></i>
+                    {{ form.regional_expertise.errors }}
+                </div>
+                {% endif %}
+            {% endif %}
+            <div class="form-hint" id="expertiseHint">
+                {% if is_managing_partner %}
+                    Areas of expertise and specializations
+                {% else %}
+                    Specific regional knowledge and experience
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Achievements -->
+        <div class="form-group full-width">
+            <label class="form-label required">
+                <span>Achievements</span>
+                <i class="fas fa-asterisk"></i>
+            </label>
+            <div class="textarea-group">
+                <textarea name="achievements"
+                          id="id_achievements"
+                          class="form-control"
+                          placeholder="Enter notable achievements"
+                          rows="4"
+                          required>{{ form.instance.achievements }}</textarea>
+                <div class="char-counter" id="achievementsCounter">
+                    <span class="char-count">0</span>/2000
+                </div>
+            </div>
+            {% if form.achievements.errors %}
+            <div class="error-message">
+                <i class="fas fa-exclamation-circle"></i>
+                {{ form.achievements.errors }}
+            </div>
+            {% endif %}
+            <div class="form-hint">Notable accomplishments and milestones</div>
+        </div>
+    </div>
+
+    <div class="step-actions">
+        <button type="button" class="btn-prev-step" onclick="goToStep(2)">
+            <i class="fas fa-arrow-left"></i>
+            Previous
+        </button>
+        <button type="button" class="btn-next-step" onclick="goToStep(4)">
+            Next: Additional Details
+            <i class="fas fa-arrow-right"></i>
+        </button>
+    </div>
+</div>
+
+<!-- Step 4: Additional Details -->
+<div class="form-step" id="step4">
+    <div class="step-header">
+        <h3 class="step-title">
+            <i class="fas fa-cog"></i>
+            Additional Details
+        </h3>
+        <p class="step-description">Set display order, joining date, and status</p>
+    </div>
+
+    <div class="form-grid">
+        <!-- Joining Date with Calendar Picker -->
+        <div class="form-group">
+            <label class="form-label required">
+                <span>Joining Date</span>
+                <i class="fas fa-asterisk"></i>
+            </label>
+            <div class="input-group">
+                <span class="input-icon">
+                    <i class="fas fa-calendar"></i>
+                </span>
+                <input type="date"
+                       name="joining_date"
+                       id="id_joining_date"
+                       class="form-control date-picker"
+                       required
+                       value="{{ form.instance.joining_date|date:'Y-m-d' }}">
+                <button type="button" class="date-picker-btn" onclick="openCalendar()">
+                    <i class="fas fa-calendar-alt"></i>
+                </button>
+            </div>
+            {% if form.joining_date.errors %}
+            <div class="error-message">
+                <i class="fas fa-exclamation-circle"></i>
+                {{ form.joining_date.errors }}
+            </div>
+            {% endif %}
+            <div class="form-hint">Date joined the company/role</div>
+            <div class="date-preview" id="datePreview"></div>
+        </div>
+
+        <!-- Years in Role (only for Managing Partners) -->
+        <div class="form-group" id="yearsInRoleField" {% if not is_managing_partner %}style="display: none;"{% endif %}>
+            <label class="form-label {% if is_managing_partner %}required{% endif %}" id="yearsInRoleLabel">
+                <span>Years in Role</span>
+                {% if is_managing_partner %}<i class="fas fa-asterisk"></i>{% endif %}
+            </label>
+            <div class="input-group">
+                <span class="input-icon">
+                    <i class="fas fa-clock"></i>
+                </span>
+                <input type="number"
+                       name="years_in_role"
+                       id="id_years_in_role"
+                       class="form-control"
+                       min="0"
+                       max="50"
+                       {% if is_managing_partner %}required{% endif %}
+                       value="{{ form.instance.years_in_role|default:'0' }}">
+            </div>
+            {% if form.years_in_role.errors %}
+            <div class="error-message">
+                <i class="fas fa-exclamation-circle"></i>
+                {{ form.years_in_role.errors }}
+            </div>
+            {% endif %}
+            <div class="form-hint">Years served in current role</div>
+        </div>
+
+        <!-- Display Order -->
+        <div class="form-group">
+            <label class="form-label required">
+                <span>Display Order</span>
+                <i class="fas fa-asterisk"></i>
+            </label>
+            <div class="input-group">
+                <span class="input-icon">
+                    <i class="fas fa-sort-numeric-up"></i>
+                </span>
+                <input type="number"
+                       name="display_order"
+                       id="id_display_order"
+                       class="form-control"
+                       min="0"
+                       max="100"
+                       required
+                       value="{{ form.instance.display_order|default:'0' }}">
+            </div>
+            {% if form.display_order.errors %}
+            <div class="error-message">
+                <i class="fas fa-exclamation-circle"></i>
+                {{ form.display_order.errors }}
+            </div>
+            {% endif %}
+            <div class="order-hint">
+                <span class="hint-text">Lower numbers appear first</span>
+                <button type="button" class="hint-btn" onclick="suggestOrder()">
+                    <i class="fas fa-lightbulb"></i>
+                    Suggest
+                </button>
+            </div>
+        </div>
+
+        <!-- Status -->
+        <div class="form-group">
+            <label class="form-label required">
+                <span>Status</span>
+                <i class="fas fa-asterisk"></i>
+            </label>
+            <div class="status-toggle">
+                <label class="toggle-switch">
+                    <input type="checkbox"
+                           name="is_active"
+                           id="id_is_active"
+                           {% if form.instance.is_active or not form.instance.pk %}checked{% endif %}>
+                    <span class="toggle-slider"></span>
+                </label>
+                <div class="status-label">
+                    <span class="status-text">Active</span>
+                    <span class="status-description">Visible on website</span>
+                </div>
+            </div>
+            {% if form.is_active.errors %}
+            <div class="error-message">
+                <i class="fas fa-exclamation-circle"></i>
+                {{ form.is_active.errors }}
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Company Impact -->
+        <div class="form-group full-width">
+            <label class="form-label required">
+                <span>Company Impact</span>
+                <i class="fas fa-asterisk"></i>
+            </label>
+            <div class="textarea-group">
+                <textarea name="company_impact"
+                          id="id_company_impact"
+                          class="form-control"
+                          placeholder="Describe impact on company"
+                          rows="3"
+                          required>{{ form.instance.company_impact }}</textarea>
+                <div class="char-counter">
+                    <span class="char-count">0</span>/2000
+                </div>
+            </div>
+            {% if form.company_impact.errors %}
+            <div class="error-message">
+                <i class="fas fa-exclamation-circle"></i>
+                {{ form.company_impact.errors }}
+            </div>
+            {% endif %}
+            <div class="form-hint">Impact and contributions to the company</div>
+        </div>
+
+        <!-- Leadership Style/Philosophy (different for each type) -->
+        <div class="form-group full-width">
+            <label class="form-label required">
+                <span id="leadershipLabel">
+                    {% if is_managing_partner %}
+                        Leadership Philosophy
+                    {% else %}
+                        Leadership Style
+                    {% endif %}
+                </span>
+                <i class="fas fa-asterisk"></i>
+            </label>
+            <div class="textarea-group">
+                <textarea name="{% if is_managing_partner %}leadership_philosophy{% else %}leadership_style{% endif %}"
+                          id="id_leadership"
+                          class="form-control"
+                          placeholder="{% if is_managing_partner %}Describe leadership philosophy{% else %}Describe leadership style{% endif %}"
+                          rows="3"
+                          required>{% if is_managing_partner %}{{ form.instance.leadership_philosophy|default:'' }}{% else %}{{ form.instance.leadership_style|default:'' }}{% endif %}</textarea>
+                <div class="char-counter">
+                    <span class="char-count">0</span>/2000
+                </div>
+            </div>
+            {% if is_managing_partner %}
+                {% if form.leadership_philosophy.errors %}
+                <div class="error-message">
+                    <i class="fas fa-exclamation-circle"></i>
+                    {{ form.leadership_philosophy.errors }}
+                </div>
+                {% endif %}
+            {% else %}
+                {% if form.leadership_style.errors %}
+                <div class="error-message">
+                    <i class="fas fa-exclamation-circle"></i>
+                    {{ form.leadership_style.errors }}
+                </div>
+                {% endif %}
+            {% endif %}
+            <div class="form-hint" id="leadershipHint">
+                {% if is_managing_partner %}
+                    Leadership philosophy and approach
+                {% else %}
+                    Leadership style and methodology
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Market Insights/Strategic Vision (different for each type) -->
+        <div class="form-group full-width">
+            <label class="form-label required">
+                <span id="visionInsightsLabel">
+                    {% if is_managing_partner %}
+                        Strategic Vision
+                    {% else %}
+                        Market Insights
+                    {% endif %}
+                </span>
+                <i class="fas fa-asterisk"></i>
+            </label>
+            <div class="textarea-group">
+                <textarea name="{% if is_managing_partner %}strategic_vision{% else %}market_insights{% endif %}"
+                          id="id_vision_insights"
+                          class="form-control"
+                          placeholder="{% if is_managing_partner %}Share strategic vision for the company{% else %}Share market insights{% endif %}"
+                          rows="3"
+                          required>{% if is_managing_partner %}{{ form.instance.strategic_vision|default:'' }}{% else %}{{ form.instance.market_insights|default:'' }}{% endif %}</textarea>
+                <div class="char-counter">
+                    <span class="char-count">0</span>/2000
+                </div>
+            </div>
+            {% if is_managing_partner %}
+                {% if form.strategic_vision.errors %}
+                <div class="error-message">
+                    <i class="fas fa-exclamation-circle"></i>
+                    {{ form.strategic_vision.errors }}
+                </div>
+                {% endif %}
+            {% else %}
+                {% if form.market_insights.errors %}
+                <div class="error-message">
+                    <i class="fas fa-exclamation-circle"></i>
+                    {{ form.market_insights.errors }}
+                </div>
+                {% endif %}
+            {% endif %}
+            <div class="form-hint" id="visionInsightsHint">
+                {% if is_managing_partner %}
+                    Strategic vision for the company
+                {% else %}
+                    Perspective on market trends and insights
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="step-actions">
+        <button type="button" class="btn-prev-step" onclick="goToStep(3)">
+            <i class="fas fa-arrow-left"></i>
+            Previous
+        </button>
+        <button type="button" class="btn-review-step" onclick="goToStep(5)">
+            <i class="fas fa-eye"></i>
+            Review & Save
+        </button>
+    </div>
+</div>
+
+<!-- Add this JavaScript to handle dynamic field changes -->
+<script>
+// Handle leader type changes for dynamic fields
+function handleLeaderTypeChange() {
+    const leaderTypeSelect = document.getElementById('id_leader_type');
+
+    if (!leaderTypeSelect) return;
+
+    leaderTypeSelect.addEventListener('change', function() {
+        const isManagingPartner = this.value === 'managing_partner';
+
+        // Show/hide region field
+        const regionFieldGroup = document.getElementById('regionFieldGroup');
+        const regionSelect = document.getElementById('id_region');
+
+        if (regionFieldGroup) {
+            if (isManagingPartner) {
+                regionFieldGroup.style.display = 'none';
+                if (regionSelect) {
+                    regionSelect.disabled = true;
+                    regionSelect.required = false;
+                }
+                // Remove asterisk from region label
+                const regionLabel = regionFieldGroup.querySelector('.form-label .fa-asterisk');
+                if (regionLabel) regionLabel.remove();
+            } else {
+                regionFieldGroup.style.display = 'block';
+                if (regionSelect) {
+                    regionSelect.disabled = false;
+                    regionSelect.required = true;
+                }
+                // Add asterisk to region label if not present
+                const regionLabel = regionFieldGroup.querySelector('.form-label');
+                if (regionLabel && !regionLabel.querySelector('.fa-asterisk')) {
+                    const asterisk = document.createElement('i');
+                    asterisk.className = 'fas fa-asterisk';
+                    regionLabel.appendChild(asterisk);
+                }
+            }
+        }
+
+        // Show/hide years in role field
+        const yearsInRoleField = document.getElementById('yearsInRoleField');
+        const yearsInRoleLabel = document.getElementById('yearsInRoleLabel');
+        const yearsInRoleInput = document.getElementById('id_years_in_role');
+
+        if (yearsInRoleField) {
+            if (isManagingPartner) {
+                yearsInRoleField.style.display = 'block';
+                if (yearsInRoleInput) yearsInRoleInput.required = true;
+                // Add asterisk to label
+                if (yearsInRoleLabel && !yearsInRoleLabel.querySelector('.fa-asterisk')) {
+                    const asterisk = document.createElement('i');
+                    asterisk.className = 'fas fa-asterisk';
+                    yearsInRoleLabel.appendChild(asterisk);
+                }
+            } else {
+                yearsInRoleField.style.display = 'none';
+                if (yearsInRoleInput) yearsInRoleInput.required = false;
+                // Remove asterisk from label
+                const asterisk = yearsInRoleLabel?.querySelector('.fa-asterisk');
+                if (asterisk) asterisk.remove();
+            }
+        }
+
+        // Update position title field
+        const positionTitleInput = document.getElementById('id_position_title');
+        if (positionTitleInput) {
+            if (isManagingPartner) {
+                positionTitleInput.name = 'position_title';
+                positionTitleInput.placeholder = 'e.g., Managing Partner';
+            } else {
+                positionTitleInput.name = 'region_title';
+                positionTitleInput.placeholder = 'e.g., Regional Director for Africa';
+            }
+        }
+
+        // Update expertise field
+        const expertiseInput = document.getElementById('id_expertise');
+        const expertiseLabel = document.getElementById('expertiseLabel');
+        const expertiseHint = document.getElementById('expertiseHint');
+
+        if (expertiseInput) {
+            if (isManagingPartner) {
+                expertiseInput.name = 'expertise';
+                expertiseInput.placeholder = 'Enter professional expertise';
+                if (expertiseLabel) expertiseLabel.textContent = 'Expertise';
+                if (expertiseHint) expertiseHint.textContent = 'Areas of expertise and specializations';
+            } else {
+                expertiseInput.name = 'regional_expertise';
+                expertiseInput.placeholder = 'Enter regional expertise';
+                if (expertiseLabel) expertiseLabel.textContent = 'Regional Expertise';
+                if (expertiseHint) expertiseHint.textContent = 'Specific regional knowledge and experience';
+            }
+        }
+
+        // Update leadership field
+        const leadershipInput = document.getElementById('id_leadership');
+        const leadershipLabel = document.getElementById('leadershipLabel');
+        const leadershipHint = document.getElementById('leadershipHint');
+
+        if (leadershipInput) {
+            if (isManagingPartner) {
+                leadershipInput.name = 'leadership_philosophy';
+                leadershipInput.placeholder = 'Describe leadership philosophy';
+                if (leadershipLabel) leadershipLabel.textContent = 'Leadership Philosophy';
+                if (leadershipHint) leadershipHint.textContent = 'Leadership philosophy and approach';
+            } else {
+                leadershipInput.name = 'leadership_style';
+                leadershipInput.placeholder = 'Describe leadership style';
+                if (leadershipLabel) leadershipLabel.textContent = 'Leadership Style';
+                if (leadershipHint) leadershipHint.textContent = 'Leadership style and methodology';
+            }
+        }
+
+        // Update vision/insights field
+        const visionInsightsInput = document.getElementById('id_vision_insights');
+        const visionInsightsLabel = document.getElementById('visionInsightsLabel');
+        const visionInsightsHint = document.getElementById('visionInsightsHint');
+
+        if (visionInsightsInput) {
+            if (isManagingPartner) {
+                visionInsightsInput.name = 'strategic_vision';
+                visionInsightsInput.placeholder = 'Share strategic vision for the company';
+                if (visionInsightsLabel) visionInsightsLabel.textContent = 'Strategic Vision';
+                if (visionInsightsHint) visionInsightsHint.textContent = 'Strategic vision for the company';
+            } else {
+                visionInsightsInput.name = 'market_insights';
+                visionInsightsInput.placeholder = 'Share market insights';
+                if (visionInsightsLabel) visionInsightsLabel.textContent = 'Market Insights';
+                if (visionInsightsHint) visionInsightsHint.textContent = 'Perspective on market trends and insights';
+            }
+        }
+
+        // Update review section
+        updateReviewSection();
+    });
+}
+
+// Call this function when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    handleLeaderTypeChange();
+
+    // Also update review section to handle initial state
+    updateReviewSection();
+});
+
+// Update the updateReviewSection function to handle dynamic fields
+function updateReviewSection() {
+    // Get current leader type
+    const leaderTypeSelect = document.getElementById('id_leader_type');
+    let isManagingPartner = {{ is_managing_partner|yesno:"true,false" }};
+
+    if (leaderTypeSelect) {
+        isManagingPartner = leaderTypeSelect.value === 'managing_partner';
+    }
+
+    // Update position title in review
+    const positionTitle = document.getElementById('id_position_title')?.value || 'Not provided';
+    document.getElementById('reviewPosition').textContent = positionTitle;
+
+    // Update expertise in review
+    const expertise = document.getElementById('id_expertise')?.value || 'Not provided';
+    document.getElementById('reviewExpertise').textContent = expertise;
+
+    // Update leadership in review
+    const leadership = document.getElementById('id_leadership')?.value || 'Not provided';
+    document.getElementById('reviewLeadershipStyle').textContent = leadership;
+
+    // Update vision/insights in review
+    const visionInsights = document.getElementById('id_vision_insights')?.value || 'Not provided';
+    document.getElementById('reviewMarketInsights').textContent = visionInsights;
+
+    // Update years in role if visible
+    const yearsInRole = document.getElementById('id_years_in_role')?.value || '0';
+    if (isManagingPartner) {
+        // You might want to add this to your review section
+        const yearsReview = document.getElementById('reviewYearsInRole');
+        if (yearsReview) {
+            yearsReview.textContent = yearsInRole;
+        }
+    }
+}
+</script>
+
+           <!-- Step 5: Review Section -->
+<div class="form-step" id="step5">
+    <div class="step-header">
+        <h3 class="step-title">
+            <i class="fas fa-check-circle"></i>
+            Review All Information
+        </h3>
+        <p class="step-description">Review all entered information before submission</p>
+    </div>
+
+    <div class="review-section">
+        <!-- Review List Layout (One after another, mobile-friendly) -->
+        <div class="review-list">
+            <!-- Personal Information -->
+            <div class="review-category">
+                <div class="category-header">
+                    <i class="fas fa-user"></i>
+                    <h4>Personal Information</h4>
+                </div>
+                <div class="category-content">
+                    <div class="info-item">
+                        <span class="info-label">Full Name:</span>
+                        <span class="info-value" id="reviewFullName">Loading...</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Position Title:</span>
+                        <span class="info-value" id="reviewPosition">Loading...</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Leader Type:</span>
+                        <span class="info-value" id="reviewLeaderType">Loading...</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Region:</span>
+                        <span class="info-value" id="reviewRegion">Loading...</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Joining Date:</span>
+                        <span class="info-value" id="reviewJoiningDate">Loading...</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Display Order:</span>
+                        <span class="info-value" id="reviewDisplayOrder">Loading...</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Status:</span>
+                        <span class="info-value">
+                            <span class="status-badge" id="reviewStatus">Loading...</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="review-category">
+                <div class="category-header">
+                    <i class="fas fa-address-book"></i>
+                    <h4>Contact Information</h4>
+                </div>
+                <div class="category-content">
+                    <div class="info-item">
+                        <span class="info-label">Email Address:</span>
+                        <span class="info-value" id="reviewEmail">Loading...</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Phone Number:</span>
+                        <span class="info-value" id="reviewPhone">Loading...</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">LinkedIn Profile:</span>
+                        <span class="info-value">
+                            <a href="#" id="reviewLinkedin" target="_blank" class="link-value">View Profile</a>
+                        </span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Profile Image:</span>
+                        <span class="info-value" id="reviewImageStatus">Loading...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Professional Information -->
+            <div class="review-category">
+                <div class="category-header">
+                    <i class="fas fa-briefcase"></i>
+                    <h4>Professional Information</h4>
+                </div>
+                <div class="category-content">
+                    <div class="info-item full-width">
+                        <span class="info-label">Biography:</span>
+                        <div class="info-text" id="reviewBio">Loading...</div>
+                    </div>
+                    <div class="info-item full-width">
+                        <span class="info-label">Education:</span>
+                        <div class="info-text" id="reviewEducation">Loading...</div>
+                    </div>
+                    <div class="info-item full-width">
+                        <span class="info-label" id="reviewExpertiseLabel">Regional Expertise:</span>
+                        <div class="info-text" id="reviewExpertise">Loading...</div>
+                    </div>
+                    <div class="info-item full-width">
+                        <span class="info-label">Achievements:</span>
+                        <div class="info-text" id="reviewAchievements">Loading...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Details -->
+            <div class="review-category">
+                <div class="category-header">
+                    <i class="fas fa-chart-line"></i>
+                    <h4>Additional Details</h4>
+                </div>
+                <div class="category-content">
+                    <div class="info-item full-width">
+                        <span class="info-label">Company Impact:</span>
+                        <div class="info-text" id="reviewCompanyImpact">Loading...</div>
+                    </div>
+                    <div class="info-item full-width">
+                        <span class="info-label" id="reviewLeadershipLabel">Leadership Style:</span>
+                        <div class="info-text" id="reviewLeadershipStyle">Loading...</div>
+                    </div>
+                    <div class="info-item full-width">
+                        <span class="info-label" id="reviewVisionInsightsLabel">Market Insights:</span>
+                        <div class="info-text" id="reviewMarketInsights">Loading...</div>
+                    </div>
+                    <!-- Years in Role (only for Managing Partners) -->
+                    <div class="info-item" id="reviewYearsInRoleItem" style="display: none;">
+                        <span class="info-label">Years in Role:</span>
+                        <span class="info-value" id="reviewYearsInRole">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-errors" style="display: none;" id="formErrors">
+            <div class="error-alert">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div class="error-content">
+                    <h6>Please fix the following errors:</h6>
+                    <ul id="errorList"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="step-actions">
+        <button type="button" class="btn-prev-step" onclick="goToStep(4)">
+            <i class="fas fa-arrow-left"></i>
+            Edit Details
+        </button>
+        <button type="submit" class="btn-save-form">
+            <i class="fas fa-save"></i>
+            {% if form.instance.pk %}
+                Update Leader
+            {% else %}
+                Save Leader
+            {% endif %}
+        </button>
+    </div>
+</div>
+<!-- Add this JavaScript to handle dynamic field changes and review updates -->
+<script>
+// Handle leader type changes for dynamic fields
+function handleLeaderTypeChange() {
+    const leaderTypeSelect = document.getElementById('id_leader_type');
+
+    if (!leaderTypeSelect) return;
+
+    leaderTypeSelect.addEventListener('change', function() {
+        const isManagingPartner = this.value === 'managing_partner';
+
+        // Show/hide region field
+        const regionFieldGroup = document.getElementById('regionFieldGroup');
+        const regionSelect = document.getElementById('id_region');
+
+        if (regionFieldGroup) {
+            if (isManagingPartner) {
+                regionFieldGroup.style.display = 'none';
+                if (regionSelect) {
+                    regionSelect.disabled = true;
+                    regionSelect.required = false;
+                }
+                // Remove asterisk from region label
+                const regionLabel = regionFieldGroup.querySelector('.form-label .fa-asterisk');
+                if (regionLabel) regionLabel.remove();
+            } else {
+                regionFieldGroup.style.display = 'block';
+                if (regionSelect) {
+                    regionSelect.disabled = false;
+                    regionSelect.required = true;
+                }
+                // Add asterisk to region label if not present
+                const regionLabel = regionFieldGroup.querySelector('.form-label');
+                if (regionLabel && !regionLabel.querySelector('.fa-asterisk')) {
+                    const asterisk = document.createElement('i');
+                    asterisk.className = 'fas fa-asterisk';
+                    regionLabel.appendChild(asterisk);
+                }
+            }
+        }
+
+        // Show/hide years in role field
+        const yearsInRoleField = document.getElementById('yearsInRoleField');
+        const yearsInRoleLabel = document.getElementById('yearsInRoleLabel');
+        const yearsInRoleInput = document.getElementById('id_years_in_role');
+
+        if (yearsInRoleField) {
+            if (isManagingPartner) {
+                yearsInRoleField.style.display = 'block';
+                if (yearsInRoleInput) yearsInRoleInput.required = true;
+                // Add asterisk to label
+                if (yearsInRoleLabel && !yearsInRoleLabel.querySelector('.fa-asterisk')) {
+                    const asterisk = document.createElement('i');
+                    asterisk.className = 'fas fa-asterisk';
+                    yearsInRoleLabel.appendChild(asterisk);
+                }
+            } else {
+                yearsInRoleField.style.display = 'none';
+                if (yearsInRoleInput) yearsInRoleInput.required = false;
+                // Remove asterisk from label
+                const asterisk = yearsInRoleLabel?.querySelector('.fa-asterisk');
+                if (asterisk) asterisk.remove();
+            }
+        }
+
+        // Update position title field
+        const positionTitleInput = document.getElementById('id_position_title');
+        if (positionTitleInput) {
+            if (isManagingPartner) {
+                positionTitleInput.name = 'position_title';
+                positionTitleInput.placeholder = 'e.g., Managing Partner';
+            } else {
+                positionTitleInput.name = 'region_title';
+                positionTitleInput.placeholder = 'e.g., Regional Director for Africa';
+            }
+        }
+
+        // Update expertise field
+        const expertiseInput = document.getElementById('id_expertise');
+        const expertiseLabel = document.getElementById('expertiseLabel');
+        const expertiseHint = document.getElementById('expertiseHint');
+
+        if (expertiseInput) {
+            if (isManagingPartner) {
+                expertiseInput.name = 'expertise';
+                expertiseInput.placeholder = 'Enter professional expertise';
+                if (expertiseLabel) expertiseLabel.textContent = 'Expertise';
+                if (expertiseHint) expertiseHint.textContent = 'Areas of expertise and specializations';
+            } else {
+                expertiseInput.name = 'regional_expertise';
+                expertiseInput.placeholder = 'Enter regional expertise';
+                if (expertiseLabel) expertiseLabel.textContent = 'Regional Expertise';
+                if (expertiseHint) expertiseHint.textContent = 'Specific regional knowledge and experience';
+            }
+        }
+
+        // Update leadership field
+        const leadershipInput = document.getElementById('id_leadership');
+        const leadershipLabel = document.getElementById('leadershipLabel');
+        const leadershipHint = document.getElementById('leadershipHint');
+
+        if (leadershipInput) {
+            if (isManagingPartner) {
+                leadershipInput.name = 'leadership_philosophy';
+                leadershipInput.placeholder = 'Describe leadership philosophy';
+                if (leadershipLabel) leadershipLabel.textContent = 'Leadership Philosophy';
+                if (leadershipHint) leadershipHint.textContent = 'Leadership philosophy and approach';
+            } else {
+                leadershipInput.name = 'leadership_style';
+                leadershipInput.placeholder = 'Describe leadership style';
+                if (leadershipLabel) leadershipLabel.textContent = 'Leadership Style';
+                if (leadershipHint) leadershipHint.textContent = 'Leadership style and methodology';
+            }
+        }
+
+        // Update vision/insights field
+        const visionInsightsInput = document.getElementById('id_vision_insights');
+        const visionInsightsLabel = document.getElementById('visionInsightsLabel');
+        const visionInsightsHint = document.getElementById('visionInsightsHint');
+
+        if (visionInsightsInput) {
+            if (isManagingPartner) {
+                visionInsightsInput.name = 'strategic_vision';
+                visionInsightsInput.placeholder = 'Share strategic vision for the company';
+                if (visionInsightsLabel) visionInsightsLabel.textContent = 'Strategic Vision';
+                if (visionInsightsHint) visionInsightsHint.textContent = 'Strategic vision for the company';
+            } else {
+                visionInsightsInput.name = 'market_insights';
+                visionInsightsInput.placeholder = 'Share market insights';
+                if (visionInsightsLabel) visionInsightsLabel.textContent = 'Market Insights';
+                if (visionInsightsHint) visionInsightsHint.textContent = 'Perspective on market trends and insights';
+            }
+        }
+
+        // Update review section labels
+        updateReviewSectionLabels(isManagingPartner);
+
+        // Update review section values
+        updateReviewSection();
+    });
+}
+
+// Update review section labels based on leader type
+function updateReviewSectionLabels(isManagingPartner) {
+    // Update expertise label
+    const reviewExpertiseLabel = document.getElementById('reviewExpertiseLabel');
+    if (reviewExpertiseLabel) {
+        reviewExpertiseLabel.textContent = isManagingPartner ? 'Expertise:' : 'Regional Expertise:';
+    }
+
+    // Update leadership label
+    const reviewLeadershipLabel = document.getElementById('reviewLeadershipLabel');
+    if (reviewLeadershipLabel) {
+        reviewLeadershipLabel.textContent = isManagingPartner ? 'Leadership Philosophy:' : 'Leadership Style:';
+    }
+
+    // Update vision/insights label
+    const reviewVisionInsightsLabel = document.getElementById('reviewVisionInsightsLabel');
+    if (reviewVisionInsightsLabel) {
+        reviewVisionInsightsLabel.textContent = isManagingPartner ? 'Strategic Vision:' : 'Market Insights:';
+    }
+
+    // Show/hide years in role in review
+    const reviewYearsInRoleItem = document.getElementById('reviewYearsInRoleItem');
+    if (reviewYearsInRoleItem) {
+        reviewYearsInRoleItem.style.display = isManagingPartner ? 'block' : 'none';
+    }
+}
+
+// Update the updateReviewSection function to handle dynamic fields
+function updateReviewSection() {
+    // Get current leader type
+    const leaderTypeSelect = document.getElementById('id_leader_type');
+    let isManagingPartner = {{ is_managing_partner|yesno:"true,false" }};
+
+    if (leaderTypeSelect) {
+        isManagingPartner = leaderTypeSelect.value === 'managing_partner';
+    }
+
+    // Update labels based on leader type
+    updateReviewSectionLabels(isManagingPartner);
+
+    // Update Personal Information
+    const firstName = document.getElementById('id_first_name')?.value || '';
+    const lastName = document.getElementById('id_last_name')?.value || '';
+    const fullName = `${firstName} ${lastName}`.trim() || 'Not provided';
+    document.getElementById('reviewFullName').textContent = fullName;
+
+    const positionTitle = document.getElementById('id_position_title')?.value || 'Not provided';
+    document.getElementById('reviewPosition').textContent = positionTitle;
+
+    const leaderType = document.getElementById('id_leader_type')?.value || (isManagingPartner ? 'managing_partner' : 'regional_leader');
+    const leaderTypeText = leaderType === 'managing_partner' ? 'Managing Partner' : 'Regional Leader';
+    document.getElementById('reviewLeaderType').textContent = leaderTypeText;
+
+    const regionSelect = document.getElementById('id_region');
+    if (regionSelect) {
+        const selectedOption = regionSelect.options[regionSelect.selectedIndex];
+        const regionName = selectedOption ? selectedOption.textContent : 'Not selected';
+        document.getElementById('reviewRegion').textContent = regionName;
+    } else {
+        document.getElementById('reviewRegion').textContent = isManagingPartner ? 'All Regions (Managing Partner)' : 'Not selected';
+    }
+
+    const joiningDate = document.getElementById('id_joining_date')?.value;
+    if (joiningDate) {
+        try {
+            const date = new Date(joiningDate);
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('reviewJoiningDate').textContent = date.toLocaleDateString('en-US', options);
+        } catch (e) {
+            document.getElementById('reviewJoiningDate').textContent = 'Invalid date';
+        }
+    } else {
+        document.getElementById('reviewJoiningDate').textContent = 'Not selected';
+    }
+
+    const displayOrder = document.getElementById('id_display_order')?.value || '0';
+    document.getElementById('reviewDisplayOrder').textContent = displayOrder;
+
+    const isActive = document.getElementById('id_is_active')?.checked || false;
+    const statusBadge = document.getElementById('reviewStatus');
+    statusBadge.textContent = isActive ? 'Active' : 'Inactive';
+    statusBadge.className = `status-badge ${isActive ? 'active' : 'inactive'}`;
+
+    // Update Contact Information
+    const email = document.getElementById('id_email')?.value || 'Not provided';
+    document.getElementById('reviewEmail').textContent = email;
+
+    const phone = document.getElementById('id_phone')?.value || 'Not provided';
+    document.getElementById('reviewPhone').textContent = phone;
+
+    const linkedin = document.getElementById('id_linkedin')?.value;
+    const linkedinLink = document.getElementById('reviewLinkedin');
+    if (linkedin && linkedin.trim()) {
+        linkedinLink.href = linkedin;
+        linkedinLink.textContent = linkedin.length > 30 ? linkedin.substring(0, 30) + '...' : linkedin;
+    } else {
+        linkedinLink.href = '#';
+        linkedinLink.textContent = 'Not provided';
+    }
+
+    // Check image status
+    const hasNewImage = document.getElementById('profileImageInput')?.files?.length > 0;
+    const hasExistingImage = document.getElementById('existingProfileImage')?.value;
+    const imageStatus = document.getElementById('reviewImageStatus');
+
+    if (keepExistingImageFlag || (!hasNewImage && hasExistingImage)) {
+        imageStatus.textContent = 'Using current image';
+    } else if (hasNewImage) {
+        imageStatus.textContent = 'New image uploaded';
+    } else if (!hasExistingImage && !document.querySelector('input[name="existing_profile_image"]')) {
+        imageStatus.textContent = 'Will use default image';
+    } else {
+        imageStatus.textContent = 'No image provided';
+    }
+
+    // Update Professional Information
+    const bio = document.getElementById('id_bio')?.value || 'Not provided';
+    document.getElementById('reviewBio').textContent = bio || 'Not provided';
+
+    const education = document.getElementById('id_education')?.value || 'Not provided';
+    document.getElementById('reviewEducation').textContent = education || 'Not provided';
+
+    // Get expertise based on leader type
+    const expertise = document.getElementById('id_expertise')?.value || 'Not provided';
+    document.getElementById('reviewExpertise').textContent = expertise || 'Not provided';
+
+    const achievements = document.getElementById('id_achievements')?.value || 'Not provided';
+    document.getElementById('reviewAchievements').textContent = achievements || 'Not provided';
+
+    // Update Additional Details
+    const companyImpact = document.getElementById('id_company_impact')?.value || 'Not provided';
+    document.getElementById('reviewCompanyImpact').textContent = companyImpact || 'Not provided';
+
+    // Get leadership based on leader type
+    const leadership = document.getElementById('id_leadership')?.value || 'Not provided';
+    document.getElementById('reviewLeadershipStyle').textContent = leadership || 'Not provided';
+
+    // Get vision/insights based on leader type
+    const visionInsights = document.getElementById('id_vision_insights')?.value || 'Not provided';
+    document.getElementById('reviewMarketInsights').textContent = visionInsights || 'Not provided';
+
+    // Update years in role if visible
+    const yearsInRole = document.getElementById('id_years_in_role')?.value || '0';
+    const reviewYearsInRole = document.getElementById('reviewYearsInRole');
+    if (reviewYearsInRole) {
+        reviewYearsInRole.textContent = yearsInRole;
+    }
+}
+
+// Call this function when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    handleLeaderTypeChange();
+
+    // Also update review section to handle initial state
+    updateReviewSection();
+
+    // Add input listeners to update review section in real-time
+    document.querySelectorAll('input, select, textarea').forEach(input => {
+        input.addEventListener('input', updateReviewSection);
+        input.addEventListener('change', updateReviewSection);
+    });
+});
+</script>
+<!-- Calendar Modal -->
+<div class="modal fade" id="calendarModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Select Joining Date</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <button type="button" class="calendar-nav" onclick="changeMonth(-1)">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <h6 id="currentMonthYear">Loading...</h6>
+                        <button type="button" class="calendar-nav" onclick="changeMonth(1)">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="calendar-grid" id="calendarGrid">
+                        <!-- Calendar will be populated here -->
+                    </div>
+                    <div class="calendar-footer">
+                        <button type="button" class="btn btn-secondary" onclick="selectToday()">
+                            Today
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="confirmDate()">
+                            Select Date
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Image Crop Modal -->
+<div class="modal fade" id="imageCropModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Crop Profile Image</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="crop-container">
+                    <img id="imageToCrop" class="crop-image">
+                </div>
+                <div class="crop-controls">
+                    <div class="zoom-control">
+                        <button type="button" class="zoom-btn" onclick="adjustZoom(-0.1)">
+                            <i class="fas fa-search-minus"></i>
+                        </button>
+                        <span>Zoom</span>
+                        <button type="button" class="zoom-btn" onclick="adjustZoom(0.1)">
+                            <i class="fas fa-search-plus"></i>
+                        </button>
+                    </div>
+                    <div class="rotation-control">
+                        <button type="button" class="rotate-btn" onclick="rotateImage(-90)">
+                            <i class="fas fa-undo"></i>
+                        </button>
+                        <span>Rotate</span>
+                        <button type="button" class="rotate-btn" onclick="rotateImage(90)">
+                            <i class="fas fa-redo"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="cropImage()">Crop & Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* ===== VARIABLES ===== */
+:root {
+    --primary: #4F46E5;
+    --primary-light: #818CF8;
+    --primary-dark: #3730A3;
+    --secondary: #10B981;
+    --danger: #EF4444;
+    --warning: #F59E0B;
+    --info: #3B82F6;
+    --text-dark: #1F2937;
+    --text-medium: #6B7280;
+    --text-light: #9CA3AF;
+    --bg-white: #FFFFFF;
+    --bg-light: #F9FAFB;
+    --bg-gray: #F3F4F6;
+    --border: #E5E7EB;
+    --border-light: #F3F4F6;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    --transition: all 0.2s ease;
+}
+
+/* ===== FORM LAYOUT ===== */
+.regional-leader-form-management {
+    padding: 1rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* ===== HEADER STYLES ===== */
+.form-header {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.form-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+}
+
+.header-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.header-main {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.header-icon {
+    background: rgba(255, 255, 255, 0.2);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    backdrop-filter: blur(10px);
+}
+
+.header-text {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.page-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.page-subtitle {
+    opacity: 0.9;
+    margin: 0.25rem 0 0 0;
+    font-size: 0.9rem;
+}
+
+.btn-back-list {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    width: 100%;
+    justify-content: center;
+}
+
+.btn-back-list:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateX(-2px);
+    color: white;
+}
+
+/* ===== PROGRESS STEPS ===== */
+.form-progress {
+    position: relative;
+    z-index: 1;
+}
+
+.progress-steps {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin-top: 0.5rem;
+}
+
+.progress-steps::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.3);
+    z-index: 0;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    max-width: 80px;
+}
+
+.step-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.75rem;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    transition: var(--transition);
+}
+
+.step.active .step-circle {
+    background: white;
+    color: var(--primary);
+    border-color: white;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+}
+
+.step-label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    opacity: 0.8;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.step.active .step-label {
+    opacity: 1;
+    font-weight: 600;
+}
+
+/* ===== FORM SECTION ===== */
+.form-section {
+    background: var(--bg-white);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 1.5rem;
+}
+
+.leader-form {
+    position: relative;
+}
+
+/* ===== FORM STEPS ===== */
+.form-step {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.form-step.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.step-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--border-light);
+}
+
+.step-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-dark);
+}
+
+.step-title i {
+    color: var(--primary);
+}
+
+.step-description {
+    color: var(--text-medium);
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+/* ===== FORM GRID ===== */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.form-label.required .fa-asterisk {
+    color: var(--danger);
+    font-size: 0.7rem;
+}
+
+.optional-badge {
+    background: var(--bg-gray);
+    color: var(--text-medium);
+    font-size: 0.7rem;
+    padding: 0.125rem 0.5rem;
+    border-radius: 10px;
+    margin-left: 0.5rem;
+    font-weight: 500;
+}
+
+/* ===== INPUT GROUPS ===== */
+.input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 0.75rem;
+    color: var(--text-light);
+    font-size: 1rem;
+    z-index: 1;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="url"],
+input[type="number"],
+input[type="date"],
+input[type="tel"],
+select,
+textarea {
+    width: 100%;
+    padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: 0.95rem;
+    transition: var(--transition);
+    background: var(--bg-white);
+    color: var(--text-dark);
+    font-family: inherit;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+input[type="tel"]:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* Date picker button */
+.date-picker-btn {
+    position: absolute;
+    right: 0.75rem;
+    background: none;
+    border: none;
+    color: var(--text-light);
+    cursor: pointer;
+    padding: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.date-picker-btn:hover {
+    color: var(--primary);
+}
+
+.date-preview {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-medium);
+    padding: 0.5rem;
+    background: var(--bg-light);
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--primary);
+}
+
+select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1.25em;
+    padding-right: 2.5rem;
+}
+
+/* ===== TEXTAREA GROUPS ===== */
+.textarea-group {
+    position: relative;
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+    padding-top: 0.75rem;
+    line-height: 1.5;
+}
+
+.char-counter {
+    position: absolute;
+    bottom: 0.5rem;
+    right: 0.75rem;
+    font-size: 0.75rem;
+    color: var(--text-light);
+    background: var(--bg-white);
+    padding: 0.125rem 0.5rem;
+    border-radius: var(--radius-sm);
+}
+
+.char-count {
+    font-weight: 600;
+}
+
+/* ===== FORM HINTS & ERRORS ===== */
+.form-hint {
+    font-size: 0.75rem;
+    color: var(--text-light);
+    margin-top: 0.375rem;
+    line-height: 1.4;
+}
+
+.error-message {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    color: var(--danger);
+    font-size: 0.8rem;
+    margin-top: 0.375rem;
+    background: rgba(239, 68, 68, 0.05);
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(239, 68, 68, 0.1);
+}
+
+.error-message i {
+    margin-top: 0.125rem;
+}
+
+/* ===== UPDATED IMAGE UPLOAD ===== */
+.image-upload-area {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    transition: var(--transition);
+    background: var(--bg-light);
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.upload-preview-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 150px;
+}
+
+.current-image-container {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid white;
+    box-shadow: var(--shadow-md);
+}
+
+.current-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.upload-placeholder {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: var(--bg-white);
+    border: 2px dashed var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-light);
+    gap: 0.5rem;
+    text-align: center;
+    padding: 1rem;
+}
+
+.upload-placeholder i {
+    font-size: 2.5rem;
+}
+
+.upload-placeholder span {
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.upload-controls-simple {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+
+.btn-upload-simple {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.875rem 1.5rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 1rem;
+    width: 100%;
+    max-width: 300px;
+    justify-content: center;
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-upload-simple:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.image-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center;
+    width: 100%;
+}
+
+.image-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--secondary);
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.image-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    width: 100%;
+}
+
+.btn-image-action {
+    background: var(--bg-white);
+    color: var(--text-medium);
+    border: 1px solid var(--border);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 0.875rem;
+}
+
+.btn-image-action:hover {
+    background: var(--bg-light);
+    border-color: var(--primary-light);
+    color: var(--primary);
+}
+
+.upload-hint {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    text-align: center;
+    line-height: 1.4;
+    background: var(--bg-white);
+    padding: 0.75rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-light);
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ===== ORDER HINT ===== */
+.order-hint {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.375rem;
+}
+
+.hint-text {
+    font-size: 0.8rem;
+    color: var(--text-light);
+}
+
+.hint-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-medium);
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    cursor: pointer;
+    transition: var(--transition);
+    width: fit-content;
+}
+
+.hint-btn:hover {
+    background: var(--bg-light);
+    border-color: var(--primary-light);
+}
+
+/* ===== STATUS TOGGLE ===== */
+.status-toggle {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    background: var(--bg-light);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 52px;
+    height: 28px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--border);
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+    background-color: var(--secondary);
+}
+
+input:checked + .toggle-slider:before {
+    transform: translateX(24px);
+}
+
+.status-label {
+    display: flex;
+    flex-direction: column;
+}
+
+.status-text {
+    font-weight: 600;
+    color: var(--text-dark);
+    font-size: 0.9rem;
+}
+
+.status-description {
+    font-size: 0.8rem;
+    color: var(--text-light);
+}
+
+/* ===== STEP ACTIONS ===== */
+.step-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-light);
+}
+
+.btn-prev-step,
+.btn-next-step,
+.btn-review-step,
+.btn-save-form {
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: var(--transition);
+    border: 2px solid transparent;
+    font-size: 0.9rem;
+    width: 100%;
+}
+
+.btn-prev-step {
+    background: var(--bg-light);
+    color: var(--text-medium);
+    border-color: var(--border);
+}
+
+.btn-prev-step:hover {
+    background: var(--bg-gray);
+}
+
+.btn-next-step,
+.btn-review-step,
+.btn-save-form {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-next-step:hover,
+.btn-review-step:hover,
+.btn-save-form:hover {
+    background: var(--primary-dark);
+}
+
+.btn-review-step {
+    background: var(--secondary);
+}
+
+.btn-review-step:hover {
+    background: #0da271;
+}
+
+.btn-save-form {
+    background: var(--info);
+}
+
+.btn-save-form:hover {
+    background: #2563eb;
+}
+
+/* ===== REVIEW SECTION ===== */
+.review-section {
+    background: var(--bg-light);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border);
+}
+
+.review-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.review-category {
+    background: white;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    border: 1px solid var(--border);
+}
+
+.review-category:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.category-header {
+    background: var(--primary);
+    color: white;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.category-header i {
+    font-size: 1.25rem;
+}
+
+.category-header h4 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.category-content {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.info-item.full-width {
+    width: 100%;
+}
+
+.info-label {
+    font-weight: 600;
+    color: var(--text-dark);
+    font-size: 0.9rem;
+    min-width: 120px;
+}
+
+.info-value {
+    color: var(--text-medium);
+    font-size: 0.9rem;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.5;
+}
+
+.link-value {
+    color: var(--primary);
+    text-decoration: none;
+    word-break: break-all;
+}
+
+.link-value:hover {
+    text-decoration: underline;
+}
+
+.info-text {
+    color: var(--text-medium);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    padding: 0.75rem;
+    background: var(--bg-gray);
+    border-radius: var(--radius-sm);
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    width: fit-content;
+    min-width: 80px;
+    text-align: center;
+}
+
+.status-badge.active {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--secondary);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.status-badge.inactive {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+/* ===== CALENDAR MODAL ===== */
+.calendar-container {
+    width: 100%;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.calendar-header h6 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    text-align: center;
+    flex: 1;
+}
+
+.calendar-nav {
+    background: none;
+    border: none;
+    color: var(--text-medium);
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+}
+
+.calendar-nav:hover {
+    background: var(--bg-light);
+    color: var(--primary);
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.25rem;
+    margin-bottom: 1rem;
+}
+
+.calendar-day-header {
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.75rem;
+    color: var(--text-medium);
+    padding: 0.5rem;
+}
+
+.calendar-day {
+    text-align: center;
+    padding: 0.5rem;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+    font-size: 0.9rem;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.calendar-day:hover {
+    background: var(--primary-light);
+    color: white;
+}
+
+.calendar-day.selected {
+    background: var(--primary);
+    color: white;
+}
+
+.calendar-day.today {
+    border: 2px solid var(--secondary);
+}
+
+.calendar-day.disabled {
+    color: var(--text-light);
+    cursor: not-allowed;
+    background: var(--bg-light);
+}
+
+.calendar-day.disabled:hover {
+    background: var(--bg-light);
+    color: var(--text-light);
+}
+
+.calendar-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+}
+
+.calendar-footer .btn {
+    width: 100%;
+    padding: 0.75rem;
+}
+
+/* ===== IMAGE CROP MODAL ===== */
+.crop-container {
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    border-radius: var(--radius-md);
+    background: var(--bg-gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.crop-image {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+}
+
+.crop-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--bg-light);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+}
+
+.zoom-control,
+.rotation-control {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.zoom-control span,
+.rotation-control span {
+    font-size: 0.9rem;
+    color: var(--text-medium);
+    font-weight: 500;
+}
+
+.zoom-btn,
+.rotate-btn {
+    background: white;
+    border: 1px solid var(--border);
+    color: var(--text-medium);
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.zoom-btn:hover,
+.rotate-btn:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+/* ===== FORM ERRORS ===== */
+.form-errors {
+    margin-bottom: 1rem;
+}
+
+.error-alert {
+    background: rgba(239, 68, 68, 0.05);
+    border: 1px solid rgba(239, 68, 68, 0.1);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    display: flex;
+    gap: 0.75rem;
+}
+
+.error-alert i {
+    color: var(--danger);
+    font-size: 1.25rem;
+    margin-top: 0.125rem;
+}
+
+.error-content h6 {
+    margin: 0 0 0.5rem 0;
+    color: var(--danger);
+    font-size: 0.9rem;
+}
+
+.error-content ul {
+    margin: 0;
+    padding-left: 1.25rem;
+}
+
+.error-content li {
+    font-size: 0.85rem;
+    color: var(--text-dark);
+    margin-bottom: 0.25rem;
+}
+
+/* ===== RESPONSIVE STYLES ===== */
+
+/* Mobile (default) */
+@media (max-width: 575px) {
+    .image-upload-area {
+        padding: 1rem;
+    }
+
+    .upload-preview-container {
+        min-height: 120px;
+    }
+
+    .current-image-container,
+    .upload-placeholder {
+        width: 100px;
+        height: 100px;
+    }
+
+    .upload-placeholder i {
+        font-size: 2rem;
+    }
+
+    .btn-upload-simple {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .image-actions {
+        flex-direction: column;
+    }
+
+    .btn-image-action {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Tablet (576px and up) */
+@media (min-width: 576px) {
+    .regional-leader-form-management {
+        padding: 1.5rem;
+    }
+
+    .form-header {
+        padding: 2rem;
+    }
+
+    .header-content {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .btn-back-list {
+        width: auto;
+        padding: 0.75rem 1.5rem;
+    }
+
+    .step-actions {
+        flex-direction: row;
+        gap: 1rem;
+    }
+
+    .btn-prev-step,
+    .btn-next-step,
+    .btn-review-step,
+    .btn-save-form {
+        width: auto;
+    }
+
+    .upload-controls-simple {
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .image-info {
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .calendar-footer {
+        flex-direction: row;
+    }
+
+    .calendar-footer .btn {
+        width: auto;
+        flex: 1;
+    }
+}
+
+/* Tablet Landscape (768px and up) */
+@media (min-width: 768px) {
+    .form-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .form-group.full-width {
+        grid-column: 1 / -1;
+    }
+
+    .step-actions {
+        justify-content: space-between;
+    }
+
+    .crop-controls {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .calendar-day {
+        padding: 0.75rem;
+    }
+
+    .image-upload-area {
+        padding: 2rem;
+    }
+
+    .upload-preview-container {
+        min-height: 180px;
+    }
+
+    .current-image-container,
+    .upload-placeholder {
+        width: 150px;
+        height: 150px;
+    }
+}
+
+/* Desktop (992px and up) */
+@media (min-width: 992px) {
+    .regional-leader-form-management {
+        padding: 2rem;
+    }
+
+    .page-title {
+        font-size: 2rem;
+    }
+
+    .header-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+    }
+
+    .step-title {
+        font-size: 1.5rem;
+    }
+
+    .info-item {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+
+    .info-label {
+        min-width: 150px;
+    }
+
+    .info-value {
+        flex: 1;
+    }
+
+    .upload-controls-simple {
+        flex-direction: column;
+    }
+
+    .image-info {
+        flex-direction: column;
+    }
+}
+
+/* Large Desktop (1200px and up) */
+@media (min-width: 1200px) {
+    .image-upload-area {
+        padding: 2.5rem;
+    }
+
+    .upload-preview-container {
+        min-height: 200px;
+    }
+
+    .current-image-container,
+    .upload-placeholder {
+        width: 180px;
+        height: 180px;
+    }
+
+    .btn-upload-simple {
+        max-width: 350px;
+    }
+}
+
+/* ===== DARK MODE SUPPORT ===== */
+@media (prefers-color-scheme: dark) {
+    .regional-leader-form-management {
+        background: #1a1a1a;
+    }
+
+    .form-header {
+        background: linear-gradient(135deg, #2d1b69, #1a0b3d);
+    }
+
+    .form-section {
+        background: #2d2d2d;
+        border-color: #404040;
+    }
+
+    .step-title {
+        color: #e5e5e5;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="url"],
+    input[type="number"],
+    input[type="date"],
+    input[type="tel"],
+    select,
+    textarea {
+        background: #333;
+        border-color: #404040;
+        color: #e5e5e5;
+    }
+
+    .image-upload-area {
+        background: #252525;
+        border-color: #404040;
+    }
+
+    .upload-placeholder {
+        background: #333;
+        border-color: #404040;
+        color: #a0a0a0;
+    }
+
+    .btn-image-action {
+        background: #333;
+        color: #e5e5e5;
+        border-color: #404040;
+    }
+
+    .btn-image-action:hover {
+        background: #404040;
+        border-color: var(--primary-light);
+        color: var(--primary-light);
+    }
+
+    .upload-hint {
+        background: #333;
+        border-color: #404040;
+        color: #a0a0a0;
+    }
+
+    .review-category {
+        background: #333;
+        border-color: #404040;
+    }
+
+    .category-header {
+        background: #2d1b69;
+    }
+
+    .info-label {
+        color: #e5e5e5;
+    }
+
+    .info-text {
+        background: #252525;
+        color: #a0a0a0;
+    }
+
+    .form-hint,
+    .status-description {
+        color: #a0a0a0;
+    }
+
+    .calendar-day.disabled {
+        background: #252525;
+        color: #666;
+    }
+
+    .crop-container {
+        background: #252525;
+    }
+}
+
+
+</style>
+
+<script>
+// Global variables
+let currentStep = 1;
+const totalSteps = 5;
+let selectedDate = null;
+let currentMonth = new Date().getMonth();
+let currentYear = new Date().getFullYear();
+let cropper = null;
+let keepExistingImageFlag = false;
+let isManagingPartner = {{ is_managing_partner|yesno:"true,false" }};
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize form
+    initializeForm();
+
+    // Setup character counters
+    setupCharCounters();
+
+    // Setup image upload preview
+    setupImageUpload();
+
+    // Setup calendar
+    initializeCalendar();
+
+    // Setup form validation
+    setupFormValidation();
+
+    // Populate review section
+    populateReviewSection();
+
+    // Initialize region field
+    initializeRegionField();
+
+    // Handle form errors from Django if any
+    handleFormErrors();
+});
+
+// Initialize form steps
+function initializeForm() {
+    showStep(1);
+
+    // Add input listeners for step indicators
+    document.querySelectorAll('input, select, textarea').forEach(input => {
+        input.addEventListener('input', updateStepIndicators);
+        input.addEventListener('change', updateStepIndicators);
+        input.addEventListener('input', updateReviewSection);
+        input.addEventListener('change', updateReviewSection);
+    });
+
+    // Initial population of review section
+    setTimeout(() => {
+        populateReviewSection();
+    }, 100);
+}
+
+// Initialize region field - always visible
+function initializeRegionField() {
+    const leaderTypeSelect = document.getElementById('id_leader_type');
+    const regionSelect = document.getElementById('id_region');
+
+    // Add change listener for leader type
+    if (leaderTypeSelect) {
+        leaderTypeSelect.addEventListener('change', function() {
+            updateRegionFieldRequirement();
+        });
+
+        // Initial update
+        updateRegionFieldRequirement();
+    }
+}
+
+// Update region field requirement based on leader type
+function updateRegionFieldRequirement() {
+    const leaderTypeSelect = document.getElementById('id_leader_type');
+    const leaderType = leaderTypeSelect ? leaderTypeSelect.value : '';
+    const regionSelect = document.getElementById('id_region');
+    const regionLabel = document.querySelector('#regionFieldGroup .form-label');
+
+    if (leaderType === 'managing_partner' || isManagingPartner) {
+        if (regionSelect) {
+            regionSelect.disabled = false; // Always enabled
+            regionSelect.required = false;
+        }
+        if (regionLabel) {
+            // Remove asterisk for managing partner
+            const asterisk = regionLabel.querySelector('.fa-asterisk');
+            if (asterisk) {
+                asterisk.remove();
+            }
+        }
+    } else {
+        if (regionSelect) {
+            regionSelect.disabled = false;
+            regionSelect.required = true;
+        }
+        if (regionLabel) {
+            // Add asterisk if not present
+            if (!regionLabel.querySelector('.fa-asterisk')) {
+                const asterisk = document.createElement('i');
+                asterisk.className = 'fas fa-asterisk';
+                regionLabel.appendChild(asterisk);
+            }
+        }
+    }
+}
+
+// Form Steps Management
+function showStep(stepNumber) {
+    // Hide all steps
+    document.querySelectorAll('.form-step').forEach(step => {
+        step.classList.remove('active');
+    });
+
+    // Show current step
+    const stepElement = document.getElementById(`step${stepNumber}`);
+    if (stepElement) {
+        stepElement.classList.add('active');
+    }
+
+    // Update progress steps
+    document.querySelectorAll('.step').forEach(step => {
+        const stepNum = parseInt(step.dataset.step);
+        if (stepNum <= stepNumber) {
+            step.classList.add('active');
+        } else {
+            step.classList.remove('active');
+        }
+    });
+
+    currentStep = stepNumber;
+}
+
+function goToStep(stepNumber) {
+    if (validateStep(currentStep)) {
+        showStep(stepNumber);
+
+        // Update URL hash
+        window.location.hash = `step-${stepNumber}`;
+
+        // Scroll to top of form
+        document.querySelector('.form-section').scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+
+        // If going to review step, update all information
+        if (stepNumber === 5) {
+            updateReviewSection();
+        }
+    }
+}
+
+function validateStep(stepNumber) {
+    const stepElement = document.getElementById(`step${stepNumber}`);
+    const inputs = stepElement.querySelectorAll('input[required]:not([disabled]), select[required]:not([disabled]), textarea[required]');
+    let isValid = true;
+
+    inputs.forEach(input => {
+        if (!input.value.trim()) {
+            isValid = false;
+            highlightError(input, 'This field is required');
+        } else {
+            clearError(input);
+
+            // Email validation
+            if (input.type === 'email' && input.value) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(input.value)) {
+                    isValid = false;
+                    highlightError(input, 'Please enter a valid email address');
+                }
+            }
+
+            // URL validation
+            if (input.type === 'url' && input.value) {
+                try {
+                    new URL(input.value);
+                } catch (e) {
+                    isValid = false;
+                    highlightError(input, 'Please enter a valid URL');
+                }
+            }
+
+            // Phone validation
+            if (input.type === 'tel' && input.value) {
+                const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+                if (!phoneRegex.test(input.value.replace(/[\s\-\(\)]/g, ''))) {
+                    isValid = false;
+                    highlightError(input, 'Please enter a valid phone number');
+                }
+            }
+
+            // Text length validation for textareas
+            if (input.tagName === 'TEXTAREA') {
+                const minLength = 100; // Minimum 100 characters for biography
+                if (input.id === 'id_bio' && input.value.length < minLength) {
+                    isValid = false;
+                    highlightError(input, `Biography must be at least ${minLength} characters`);
+                }
+            }
+        }
+    });
+
+    return isValid;
+}
+
+function highlightError(input, message) {
+    const formGroup = input.closest('.form-group');
+    if (!formGroup) return;
+
+    let errorElement = formGroup.querySelector('.error-message');
+    if (!errorElement) {
+        errorElement = document.createElement('div');
+        errorElement.className = 'error-message';
+        errorElement.innerHTML = `<i class="fas fa-exclamation-circle"></i>${message}`;
+        formGroup.appendChild(errorElement);
+    } else {
+        errorElement.innerHTML = `<i class="fas fa-exclamation-circle"></i>${message}`;
+    }
+
+    input.style.borderColor = 'var(--danger)';
+}
+
+function clearError(input) {
+    input.style.borderColor = '';
+    const errorElement = input.closest('.form-group')?.querySelector('.error-message');
+    if (errorElement) {
+        errorElement.remove();
+    }
+}
+
+// Character Counters
+function setupCharCounters() {
+    const textareas = document.querySelectorAll('textarea');
+    textareas.forEach(textarea => {
+        const counter = textarea.closest('.textarea-group')?.querySelector('.char-counter .char-count');
+        if (counter) {
+            // Initial count
+            counter.textContent = textarea.value.length;
+
+            // Update on input
+            textarea.addEventListener('input', function() {
+                counter.textContent = this.value.length;
+
+                // Add warning at 90% capacity
+                const maxLength = parseInt(this.getAttribute('maxlength')) || 5000;
+                if (this.value.length > maxLength * 0.9) {
+                    counter.style.color = 'var(--warning)';
+                } else {
+                    counter.style.color = '';
+                }
+
+                // Update review section in real-time
+                updateReviewSection();
+            });
+        }
+    });
+}
+
+// Image Upload Preview
+function setupImageUpload() {
+    const imageInput = document.getElementById('profileImageInput');
+    const uploadArea = document.getElementById('imageUploadArea');
+
+    if (!imageInput) return;
+
+    // Handle file selection
+    imageInput.addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+            const file = this.files[0];
+            validateAndPreviewImage(file);
+        }
+    });
+
+    function validateAndPreviewImage(file) {
+        // Validate file type
+        const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (!validTypes.includes(file.type)) {
+            showToast('Please upload a valid image file (JPEG, PNG, GIF, or WebP).', 'error');
+            imageInput.value = '';
+            return;
+        }
+
+        // Validate file size (2MB limit)
+        if (file.size > 2 * 1024 * 1024) {
+            showToast('Image size must be less than 2MB', 'error');
+            imageInput.value = '';
+            return;
+        }
+
+        previewImage(file);
+    }
+
+    function previewImage(file) {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            const previewContainer = uploadArea.querySelector('.upload-preview-container');
+
+            // Clear previous preview
+            previewContainer.innerHTML = '';
+
+            const imgContainer = document.createElement('div');
+            imgContainer.className = 'current-image-container';
+
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.className = 'current-image';
+            img.alt = 'Uploaded profile image';
+
+            imgContainer.appendChild(img);
+            previewContainer.appendChild(imgContainer);
+
+            // Show image info section
+            const imageInfo = uploadArea.querySelector('.image-info');
+            if (imageInfo) {
+                imageInfo.style.display = 'flex';
+
+                // Update status
+                const status = imageInfo.querySelector('.image-status');
+                if (status) {
+                    status.innerHTML = '<i class="fas fa-upload"></i><span>New image selected</span>';
+                }
+            }
+
+            // Update review section
+            updateReviewSection();
+
+            // Show success message
+            showToast('Profile image selected successfully!', 'success');
+        };
+
+        reader.readAsDataURL(file);
+    }
+}
+
+// Keep existing image
+function keepExistingImage() {
+    const imageInput = document.getElementById('profileImageInput');
+    const existingImageInput = document.getElementById('existingProfileImage');
+
+    // Clear file input
+    imageInput.value = '';
+
+    // Set flag to keep existing image
+    keepExistingImageFlag = true;
+
+    // Update preview to show existing image
+    const uploadArea = document.getElementById('imageUploadArea');
+    const previewContainer = uploadArea.querySelector('.upload-preview-container');
+    const existingImageUrl = existingImageInput.value;
+
+    if (existingImageUrl) {
+        // Clear preview container
+        previewContainer.innerHTML = '';
+
+        const imgContainer = document.createElement('div');
+        imgContainer.className = 'current-image-container';
+
+        const img = document.createElement('img');
+        img.src = existingImageUrl;
+        img.className = 'current-image';
+        img.alt = 'Current profile image';
+
+        imgContainer.appendChild(img);
+        previewContainer.appendChild(imgContainer);
+
+        // Update image info
+        const imageInfo = uploadArea.querySelector('.image-info');
+        if (imageInfo) {
+            const status = imageInfo.querySelector('.image-status');
+            if (status) {
+                status.innerHTML = '<i class="fas fa-check-circle"></i><span>Keeping current image</span>';
+            }
+        }
+    }
+
+    // Update review section
+    updateReviewSection();
+
+    // Show success message
+    showToast('Keeping current profile image', 'success');
+}
+
+// Image Cropping
+function showCropModal(imageSrc) {
+    const modal = new bootstrap.Modal(document.getElementById('imageCropModal'));
+    const cropImage = document.getElementById('imageToCrop');
+
+    cropImage.src = imageSrc;
+
+    // Initialize cropper if not already initialized
+    if (!cropper) {
+        cropper = new Cropper(cropImage, {
+            aspectRatio: 1,
+            viewMode: 1,
+            autoCropArea: 0.8,
+            responsive: true,
+            guides: true,
+            center: true,
+            highlight: false,
+            cropBoxMovable: true,
+            cropBoxResizable: true,
+            toggleDragModeOnDblclick: false,
+        });
+    } else {
+        cropper.replace(imageSrc);
+    }
+
+    modal.show();
+}
+
+function adjustZoom(amount) {
+    if (cropper) {
+        cropper.zoom(amount);
+    }
+}
+
+function rotateImage(degrees) {
+    if (cropper) {
+        cropper.rotate(degrees);
+    }
+}
+
+function cropImage() {
+    if (cropper) {
+        const canvas = cropper.getCroppedCanvas({
+            width: 400,
+            height: 400,
+            imageSmoothingEnabled: true,
+            imageSmoothingQuality: 'high'
+        });
+
+        // Convert canvas to blob
+        canvas.toBlob(function(blob) {
+            // Create a new File from the blob
+            const file = new File([blob], 'profile_image.jpg', { type: 'image/jpeg' });
+
+            // Create a new DataTransfer object and add the file
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+
+            // Update the file input
+            document.getElementById('profileImageInput').files = dataTransfer.files;
+
+            // Update the preview
+            const uploadArea = document.getElementById('imageUploadArea');
+            const previewContainer = uploadArea.querySelector('.upload-preview-container');
+            previewContainer.innerHTML = '';
+
+            const imgContainer = document.createElement('div');
+            imgContainer.className = 'current-image-container';
+
+            const img = document.createElement('img');
+            img.src = canvas.toDataURL('image/jpeg');
+            img.className = 'current-image';
+            img.alt = 'Cropped profile image';
+
+            imgContainer.appendChild(img);
+            previewContainer.appendChild(imgContainer);
+
+            // Clear keep existing flag
+            keepExistingImageFlag = false;
+
+            // Update review section
+            updateReviewSection();
+
+            // Close modal
+            bootstrap.Modal.getInstance(document.getElementById('imageCropModal')).hide();
+
+            // Destroy cropper
+            cropper.destroy();
+            cropper = null;
+
+            // Show success message
+            showToast('Profile image cropped successfully!', 'success');
+        }, 'image/jpeg', 0.9);
+    }
+}
+
+// Calendar Functions
+function initializeCalendar() {
+    const dateInput = document.getElementById('id_joining_date');
+    if (dateInput) {
+        // Set max date to today
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.max = today;
+
+        // Set initial selected date
+        if (dateInput.value) {
+            selectedDate = new Date(dateInput.value);
+        } else {
+            selectedDate = new Date();
+        }
+
+        // Update date preview
+        updateDatePreview();
+
+        // Update review section when date changes
+        dateInput.addEventListener('change', function() {
+            selectedDate = new Date(this.value);
+            updateDatePreview();
+            updateReviewSection();
+        });
+
+        // Generate calendar for current month
+        generateCalendar();
+    }
+}
+
+function openCalendar() {
+    const modal = new bootstrap.Modal(document.getElementById('calendarModal'));
+    generateCalendar();
+    modal.show();
+}
+
+function generateCalendar() {
+    const calendarGrid = document.getElementById('calendarGrid');
+    const monthYear = document.getElementById('currentMonthYear');
+
+    if (!calendarGrid || !monthYear) return;
+
+    // Clear previous calendar
+    calendarGrid.innerHTML = '';
+
+    // Set month year header
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                       'July', 'August', 'September', 'October', 'November', 'December'];
+    monthYear.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+
+    // Add day headers
+    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    dayNames.forEach(day => {
+        const dayHeader = document.createElement('div');
+        dayHeader.className = 'calendar-day-header';
+        dayHeader.textContent = day;
+        calendarGrid.appendChild(dayHeader);
+    });
+
+    // Get first day of month
+    const firstDay = new Date(currentYear, currentMonth, 1);
+    const startingDay = firstDay.getDay();
+
+    // Get days in month
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+    // Add empty days for starting positions
+    for (let i = 0; i < startingDay; i++) {
+        const emptyDay = document.createElement('div');
+        emptyDay.className = 'calendar-day disabled';
+        calendarGrid.appendChild(emptyDay);
+    }
+
+    // Add days of month
+    const today = new Date();
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dayElement = document.createElement('div');
+        dayElement.className = 'calendar-day';
+        dayElement.textContent = day;
+        dayElement.dataset.day = day;
+        dayElement.dataset.month = currentMonth;
+        dayElement.dataset.year = currentYear;
+
+        // Check if this is today
+        if (currentYear === today.getFullYear() &&
+            currentMonth === today.getMonth() &&
+            day === today.getDate()) {
+            dayElement.classList.add('today');
+        }
+
+        // Check if this is selected date
+        if (selectedDate &&
+            currentYear === selectedDate.getFullYear() &&
+            currentMonth === selectedDate.getMonth() &&
+            day === selectedDate.getDate()) {
+            dayElement.classList.add('selected');
+        }
+
+        // Add click event
+        dayElement.addEventListener('click', function() {
+            selectCalendarDay(this);
+        });
+
+        calendarGrid.appendChild(dayElement);
+    }
+}
+
+function changeMonth(direction) {
+    currentMonth += direction;
+
+    if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+    } else if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+    }
+
+    generateCalendar();
+}
+
+function selectCalendarDay(dayElement) {
+    // Remove selected class from all days
+    document.querySelectorAll('.calendar-day').forEach(day => {
+        day.classList.remove('selected');
+    });
+
+    // Add selected class to clicked day
+    dayElement.classList.add('selected');
+
+    // Update selected date
+    selectedDate = new Date(
+        parseInt(dayElement.dataset.year),
+        parseInt(dayElement.dataset.month),
+        parseInt(dayElement.dataset.day)
+    );
+}
+
+function selectToday() {
+    const today = new Date();
+    currentMonth = today.getMonth();
+    currentYear = today.getFullYear();
+    selectedDate = today;
+    generateCalendar();
+}
+
+function confirmDate() {
+    if (selectedDate) {
+        // Format date as YYYY-MM-DD
+        const year = selectedDate.getFullYear();
+        const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+        const day = String(selectedDate.getDate()).padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day}`;
+
+        // Update date input
+        document.getElementById('id_joining_date').value = formattedDate;
+
+        // Update preview
+        updateDatePreview();
+
+        // Update review section
+        updateReviewSection();
+
+        // Close modal
+        bootstrap.Modal.getInstance(document.getElementById('calendarModal')).hide();
+
+        // Show success message
+        showToast('Joining date selected successfully!', 'success');
+    }
+}
+
+function updateDatePreview() {
+    const datePreview = document.getElementById('datePreview');
+    const dateInput = document.getElementById('id_joining_date');
+
+    if (datePreview && dateInput.value) {
+        const date = new Date(dateInput.value);
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        datePreview.textContent = `Selected date: ${date.toLocaleDateString('en-US', options)}`;
+    } else if (datePreview) {
+        datePreview.textContent = 'No date selected';
+    }
+}
+
+// Order Suggestion
+function suggestOrder() {
+    // In a real implementation, this would make an AJAX call
+    // For now, suggest the next available number
+    const displayOrderInput = document.getElementById('id_display_order');
+    if (displayOrderInput) {
+        // Get all existing display orders (would come from server in real app)
+        const existingOrders = [0, 1, 2, 3, 4, 5]; // Example orders
+
+        // Find the next available number
+        let suggestedOrder = 0;
+        while (existingOrders.includes(suggestedOrder)) {
+            suggestedOrder++;
+        }
+
+        displayOrderInput.value = suggestedOrder;
+
+        // Show success message
+        showToast(`Suggested order: ${suggestedOrder}`, 'success');
+
+        // Update review section
+        updateReviewSection();
+    }
+}
+
+// Form Validation
+function setupFormValidation() {
+    const form = document.getElementById('leaderForm');
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Validate all steps
+        let isValid = true;
+        const errors = [];
+
+        for (let i = 1; i <= totalSteps; i++) {
+            if (!validateStep(i)) {
+                isValid = false;
+            }
+        }
+
+        // Additional validation rules
+        const requiredFields = form.querySelectorAll('[required]:not([disabled])');
+        requiredFields.forEach(field => {
+            if (!field.value.trim()) {
+                isValid = false;
+                const fieldName = field.name.replace(/_/g, ' ');
+                errors.push(`${fieldName} is required`);
+            }
+        });
+
+        if (!isValid) {
+            // Show error summary
+            const errorContainer = document.getElementById('formErrors');
+            const errorList = document.getElementById('errorList');
+
+            errorList.innerHTML = '';
+            errors.forEach(error => {
+                const li = document.createElement('li');
+                li.textContent = error;
+                errorList.appendChild(li);
+            });
+
+            errorContainer.style.display = 'block';
+
+            // Scroll to errors
+            errorContainer.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+
+            // Show toast
+            showToast('Please fix the errors before submitting', 'error');
+
+            return false;
+        }
+
+        // All valid, submit form
+        this.submit();
+    });
+}
+
+// Update Step Indicators
+function updateStepIndicators() {
+    const steps = document.querySelectorAll('.step');
+
+    steps.forEach(step => {
+        const stepNum = parseInt(step.dataset.step);
+        const requiredFields = document.querySelectorAll(`#step${stepNum} [required]:not([disabled])`);
+        let isComplete = true;
+
+        requiredFields.forEach(field => {
+            if (!field.value.trim()) {
+                isComplete = false;
+            }
+        });
+
+        if (isComplete) {
+            step.classList.add('completed');
+        } else {
+            step.classList.remove('completed');
+        }
+    });
+}
+// Populate Review Section
+function populateReviewSection() {
+    // Update Personal Information
+    const firstName = document.getElementById('id_first_name')?.value || '';
+    const lastName = document.getElementById('id_last_name')?.value || '';
+    const fullName = `${firstName} ${lastName}`.trim() || 'Not provided';
+    document.getElementById('reviewFullName').textContent = fullName || 'Loading...';
+
+    // Get position title from the dynamic field
+    const position = document.getElementById('id_position_title')?.value || 'Not provided';
+    document.getElementById('reviewPosition').textContent = position || 'Loading...';
+
+    const leaderTypeSelect = document.getElementById('id_leader_type');
+    let leaderTypeText = 'Loading...';
+    if (leaderTypeSelect) {
+        const selectedOption = leaderTypeSelect.options[leaderTypeSelect.selectedIndex];
+        leaderTypeText = selectedOption ? selectedOption.textContent : 'Regional Leader';
+    }
+    document.getElementById('reviewLeaderType').textContent = leaderTypeText;
+
+    const regionSelect = document.getElementById('id_region');
+    let regionName = 'Loading...';
+    if (regionSelect) {
+        const selectedOption = regionSelect.options[regionSelect.selectedIndex];
+        regionName = selectedOption ? selectedOption.textContent : 'Not selected';
+    }
+    document.getElementById('reviewRegion').textContent = regionName;
+
+    const joiningDate = document.getElementById('id_joining_date')?.value;
+    if (joiningDate) {
+        try {
+            const date = new Date(joiningDate);
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('reviewJoiningDate').textContent = date.toLocaleDateString('en-US', options);
+        } catch (e) {
+            document.getElementById('reviewJoiningDate').textContent = 'Invalid date';
+        }
+    } else {
+        document.getElementById('reviewJoiningDate').textContent = 'Not selected';
+    }
+
+    const displayOrder = document.getElementById('id_display_order')?.value || '0';
+    document.getElementById('reviewDisplayOrder').textContent = displayOrder;
+
+    const isActiveCheckbox = document.getElementById('id_is_active');
+    const isActive = isActiveCheckbox ? isActiveCheckbox.checked : true;
+    const statusBadge = document.getElementById('reviewStatus');
+    statusBadge.textContent = isActive ? 'Active' : 'Inactive';
+    statusBadge.className = `status-badge ${isActive ? 'active' : 'inactive'}`;
+
+    // Update Contact Information
+    const email = document.getElementById('id_email')?.value || 'Not provided';
+    document.getElementById('reviewEmail').textContent = email;
+
+    const phone = document.getElementById('id_phone')?.value || 'Not provided';
+    document.getElementById('reviewPhone').textContent = phone;
+
+    const linkedin = document.getElementById('id_linkedin')?.value;
+    const linkedinLink = document.getElementById('reviewLinkedin');
+    if (linkedin && linkedin.trim()) {
+        linkedinLink.href = linkedin;
+        linkedinLink.textContent = linkedin.length > 30 ? linkedin.substring(0, 30) + '...' : linkedin;
+    } else {
+        linkedinLink.href = '#';
+        linkedinLink.textContent = 'Not provided';
+    }
+
+    // Check image status
+    const hasNewImage = document.getElementById('profileImageInput')?.files?.length > 0;
+    const hasExistingImage = document.getElementById('existingProfileImage')?.value;
+    const imageStatus = document.getElementById('reviewImageStatus');
+
+    if (keepExistingImageFlag) {
+        imageStatus.textContent = 'Keeping current image';
+    } else if (hasNewImage) {
+        imageStatus.textContent = 'New image uploaded';
+    } else if (hasExistingImage) {
+        imageStatus.textContent = 'Using current image';
+    } else {
+        imageStatus.textContent = 'No image provided';
+    }
+
+    // Update Professional Information with null checks
+    const bio = document.getElementById('id_bio')?.value || 'Not provided';
+    document.getElementById('reviewBio').textContent = bio;
+
+    const education = document.getElementById('id_education')?.value || 'Not provided';
+    document.getElementById('reviewEducation').textContent = education;
+
+    // Get expertise from the dynamic field
+    const expertise = document.getElementById('id_expertise')?.value || 'Not provided';
+    document.getElementById('reviewExpertise').textContent = expertise;
+
+    const achievements = document.getElementById('id_achievements')?.value || 'Not provided';
+    document.getElementById('reviewAchievements').textContent = achievements;
+
+    // Update Additional Details with null checks
+    const companyImpact = document.getElementById('id_company_impact')?.value || 'Not provided';
+    document.getElementById('reviewCompanyImpact').textContent = companyImpact;
+
+    // Get leadership from the dynamic field
+    const leadership = document.getElementById('id_leadership')?.value || 'Not provided';
+    document.getElementById('reviewLeadershipStyle').textContent = leadership;
+
+    // Get vision/insights from the dynamic field
+    const visionInsights = document.getElementById('id_vision_insights')?.value || 'Not provided';
+    document.getElementById('reviewMarketInsights').textContent = visionInsights;
+}
+
+function updateReviewSection() {
+    // Update Personal Information
+    const firstName = document.getElementById('id_first_name')?.value || '';
+    const lastName = document.getElementById('id_last_name')?.value || '';
+    const fullName = `${firstName} ${lastName}`.trim() || 'Not provided';
+    document.getElementById('reviewFullName').textContent = fullName;
+
+    // Get position title from the dynamic field
+    const position = document.getElementById('id_position_title')?.value || 'Not provided';
+    document.getElementById('reviewPosition').textContent = position;
+
+    const leaderType = document.getElementById('id_leader_type')?.value || 'regional_leader';
+    const leaderTypeText = leaderType === 'managing_partner' ? 'Managing Partner' : 'Regional Leader';
+    document.getElementById('reviewLeaderType').textContent = leaderTypeText;
+
+    const regionSelect = document.getElementById('id_region');
+    if (regionSelect) {
+        const selectedOption = regionSelect.options[regionSelect.selectedIndex];
+        const regionName = selectedOption.textContent || 'Not selected';
+        document.getElementById('reviewRegion').textContent = regionName;
+    }
+
+    const joiningDate = document.getElementById('id_joining_date')?.value;
+    if (joiningDate) {
+        try {
+            const date = new Date(joiningDate);
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('reviewJoiningDate').textContent = date.toLocaleDateString('en-US', options);
+        } catch (e) {
+            document.getElementById('reviewJoiningDate').textContent = 'Invalid date';
+        }
+    } else {
+        document.getElementById('reviewJoiningDate').textContent = 'Not selected';
+    }
+
+    const displayOrder = document.getElementById('id_display_order')?.value || '0';
+    document.getElementById('reviewDisplayOrder').textContent = displayOrder;
+
+    const isActive = document.getElementById('id_is_active')?.checked || false;
+    const statusBadge = document.getElementById('reviewStatus');
+    statusBadge.textContent = isActive ? 'Active' : 'Inactive';
+    statusBadge.className = `status-badge ${isActive ? 'active' : 'inactive'}`;
+
+    // Update Contact Information
+    const email = document.getElementById('id_email')?.value || 'Not provided';
+    document.getElementById('reviewEmail').textContent = email;
+
+    const phone = document.getElementById('id_phone')?.value || 'Not provided';
+    document.getElementById('reviewPhone').textContent = phone;
+
+    const linkedin = document.getElementById('id_linkedin')?.value;
+    const linkedinLink = document.getElementById('reviewLinkedin');
+    if (linkedin && linkedin.trim()) {
+        linkedinLink.href = linkedin;
+        linkedinLink.textContent = linkedin.length > 30 ? linkedin.substring(0, 30) + '...' : linkedin;
+    } else {
+        linkedinLink.href = '#';
+        linkedinLink.textContent = 'Not provided';
+    }
+
+    // Check if image exists
+    const hasNewImage = document.getElementById('profileImageInput')?.files?.length > 0;
+    const hasExistingImage = document.getElementById('existingProfileImage')?.value;
+    const imageStatus = document.getElementById('reviewImageStatus');
+
+    if (keepExistingImageFlag || (!hasNewImage && hasExistingImage)) {
+        imageStatus.textContent = 'Using current image';
+    } else if (hasNewImage) {
+        imageStatus.textContent = 'New image uploaded';
+    } else if (!hasExistingImage && !document.querySelector('input[name="existing_profile_image"]')) {
+        imageStatus.textContent = 'Will use default image';
+    } else {
+        imageStatus.textContent = 'No image provided';
+    }
+
+    // Update Professional Information
+    const bio = document.getElementById('id_bio')?.value || 'Not provided';
+    document.getElementById('reviewBio').textContent = bio || 'Not provided';
+
+    const education = document.getElementById('id_education')?.value || 'Not provided';
+    document.getElementById('reviewEducation').textContent = education || 'Not provided';
+
+    // Get expertise from the dynamic field
+    const expertise = document.getElementById('id_expertise')?.value || 'Not provided';
+    document.getElementById('reviewExpertise').textContent = expertise || 'Not provided';
+
+    const achievements = document.getElementById('id_achievements')?.value || 'Not provided';
+    document.getElementById('reviewAchievements').textContent = achievements || 'Not provided';
+
+    // Update Additional Details
+    const companyImpact = document.getElementById('id_company_impact')?.value || 'Not provided';
+    document.getElementById('reviewCompanyImpact').textContent = companyImpact || 'Not provided';
+
+    // Get leadership from the dynamic field
+    const leadership = document.getElementById('id_leadership')?.value || 'Not provided';
+    document.getElementById('reviewLeadershipStyle').textContent = leadership || 'Not provided';
+
+    // Get vision/insights from the dynamic field
+    const visionInsights = document.getElementById('id_vision_insights')?.value || 'Not provided';
+    document.getElementById('reviewMarketInsights').textContent = visionInsights || 'Not provided';
+}
+// Toast Notification
+function showToast(message, type = 'info') {
+    // Remove existing toasts
+    document.querySelectorAll('.toast-notification').forEach(toast => toast.remove());
+
+    const toast = document.createElement('div');
+    toast.className = `toast-notification ${type}`;
+    toast.innerHTML = `
+        <div class="toast-content">
+            <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+            <span>${message}</span>
+        </div>
+    `;
+
+    // Add styles
+    toast.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        left: 20px;
+        background: ${type === 'success' ? 'var(--secondary)' : type === 'error' ? 'var(--danger)' : 'var(--info)'};
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-lg);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        transform: translateY(-100%);
+        transition: transform 0.3s ease;
+        max-width: 400px;
+        margin: 0 auto;
+    `;
+
+    document.body.appendChild(toast);
+
+    // Show toast
+    setTimeout(() => {
+        toast.style.transform = 'translateY(0)';
+    }, 10);
+
+    // Remove after delay
+    setTimeout(() => {
+        toast.style.transform = 'translateY(-100%)';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+// Keyboard Navigation
+document.addEventListener('keydown', function(e) {
+    // Ctrl/Cmd + S to save
+    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        if (currentStep === totalSteps) {
+            document.querySelector('.btn-save-form').click();
+        } else {
+            goToStep(currentStep + 1);
+        }
+    }
+
+    // Escape to go back
+    if (e.key === 'Escape') {
+        if (currentStep > 1) {
+            goToStep(currentStep - 1);
+        } else {
+            window.history.back();
+        }
+    }
+
+    // Arrow keys for navigation
+    if (e.key === 'ArrowRight' && !e.ctrlKey) {
+        e.preventDefault();
+        if (currentStep < totalSteps) {
+            goToStep(currentStep + 1);
+        }
+    }
+
+    if (e.key === 'ArrowLeft' && !e.ctrlKey) {
+        e.preventDefault();
+        if (currentStep > 1) {
+            goToStep(currentStep - 1);
+        }
+    }
+});
+
+// Auto-save (local storage)
+function autoSaveForm() {
+    const formData = new FormData(document.getElementById('leaderForm'));
+    const formObject = {};
+
+    for (let [key, value] of formData.entries()) {
+        if (key !== 'profile_image') { // Skip file for security
+            formObject[key] = value;
+        }
+    }
+
+    localStorage.setItem('leaderFormDraft', JSON.stringify(formObject));
+    localStorage.setItem('leaderFormLastSaved', new Date().toISOString());
+}
+
+// Load draft from local storage
+function loadDraft() {
+    const draft = localStorage.getItem('leaderFormDraft');
+    if (draft) {
+        const formObject = JSON.parse(draft);
+
+        Object.keys(formObject).forEach(key => {
+            const input = document.querySelector(`[name="${key}"]`);
+            if (input && input.type !== 'file') {
+                input.value = formObject[key];
+
+                // Trigger change events
+                input.dispatchEvent(new Event('change'));
+                input.dispatchEvent(new Event('input'));
+            }
+        });
+
+        showToast('Draft loaded successfully', 'info');
+
+        // Update step indicators
+        updateStepIndicators();
+        updateReviewSection();
+    }
+}
+
+// Clear draft
+function clearDraft() {
+    localStorage.removeItem('leaderFormDraft');
+    localStorage.removeItem('leaderFormLastSaved');
+    showToast('Draft cleared', 'info');
+}
+
+// Auto-save on input (debounced)
+let autoSaveTimeout;
+document.querySelectorAll('input, select, textarea').forEach(input => {
+    input.addEventListener('input', function() {
+        clearTimeout(autoSaveTimeout);
+        autoSaveTimeout = setTimeout(autoSaveForm, 2000);
+    });
+});
+
+// Check for unsaved changes before leaving
+window.addEventListener('beforeunload', function(e) {
+    const hasDraft = localStorage.getItem('leaderFormDraft');
+    if (hasDraft) {
+        e.preventDefault();
+        e.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
+    }
+});
+
+// Initialize Cropper.js if available
+if (typeof Cropper === 'undefined') {
+    // Load Cropper.js dynamically
+    const cropperScript = document.createElement('script');
+    cropperScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js';
+    cropperScript.onload = function() {
+        console.log('Cropper.js loaded successfully');
+    };
+    document.head.appendChild(cropperScript);
+
+    const cropperCSS = document.createElement('link');
+    cropperCSS.rel = 'stylesheet';
+    cropperCSS.href = 'https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css';
+    document.head.appendChild(cropperCSS);
+}
+
+// Check for existing draft on load
+window.addEventListener('load', function() {
+    const lastSaved = localStorage.getItem('leaderFormLastSaved');
+    if (lastSaved) {
+        const saveTime = new Date(lastSaved);
+        const now = new Date();
+        const hoursDiff = Math.abs(now - saveTime) / 36e5;
+
+        if (hoursDiff < 24) { // Draft is less than 24 hours old
+            const loadDraft = confirm('You have a saved draft from ' +
+                saveTime.toLocaleTimeString() + '. Would you like to load it?');
+            if (loadDraft) {
+                loadDraft();
+            }
+        }
+    }
+});
+
+// Handle form errors from Django
+function handleFormErrors() {
+    // Check if there are form errors from Django
+    const formErrorsJson = '{{ form_errors_json|safe }}';
+    if (formErrorsJson && formErrorsJson !== '{}' && formErrorsJson !== '{}') {
+        try {
+            const errors = JSON.parse(formErrorsJson);
+            const errorContainer = document.getElementById('formErrors');
+            const errorList = document.getElementById('errorList');
+
+            if (Object.keys(errors).length > 0) {
+                errorList.innerHTML = '';
+
+                Object.entries(errors).forEach(([field, message]) => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<strong>${field.replace(/_/g, ' ').toUpperCase()}:</strong> ${message}`;
+                    errorList.appendChild(li);
+
+                    // Highlight the field with error
+                    const input = document.querySelector(`[name="${field}"]`);
+                    if (input) {
+                        highlightError(input, message);
+
+                        // Go to the step containing the error
+                        const stepElement = input.closest('.form-step');
+                        if (stepElement) {
+                            const stepNumber = stepElement.id.replace('step', '');
+                            showStep(parseInt(stepNumber));
+                        }
+                    }
+                });
+
+                errorContainer.style.display = 'block';
+                errorContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                showToast('Please fix the errors before submitting', 'error');
+            }
+        } catch (e) {
+            console.error('Error parsing form errors:', e);
+        }
+    }
+}
+
+// Handle image loading errors
+document.addEventListener('DOMContentLoaded', function() {
+    // Add error handler for profile images
+    document.querySelectorAll('.current-image').forEach(img => {
+        img.addEventListener('error', function() {
+            this.src = '/static/images/default-profile.jpg';
+            this.onerror = null; // Prevent infinite loop
+        });
+    });
+});
+
+// Add this function to handle the form fields that change based on leader type
+function updateFormFieldsBasedOnType() {
+    const leaderTypeSelect = document.getElementById('id_leader_type');
+    if (!leaderTypeSelect) return;
+
+    const leaderType = leaderTypeSelect.value;
+
+    // Update expertise field label and placeholder based on type
+    const expertiseField = document.getElementById('id_regional_expertise') || document.getElementById('id_expertise');
+    if (expertiseField) {
+        if (leaderType === 'managing_partner') {
+            expertiseField.placeholder = 'Enter professional expertise and skills';
+        } else {
+            expertiseField.placeholder = 'Enter regional expertise and knowledge';
+        }
+    }
+
+    // Update review section immediately
+    updateReviewSection();
+}
+
+// Add event listener for leader type change
+document.addEventListener('DOMContentLoaded', function() {
+    const leaderTypeSelect = document.getElementById('id_leader_type');
+    if (leaderTypeSelect) {
+        leaderTypeSelect.addEventListener('change', function() {
+            updateRegionFieldRequirement();
+            updateFormFieldsBasedOnType();
+            updateReviewSection();
+        });
+    }
+});
+
+// Add mobile-friendly touch events
+if ('ontouchstart' in window) {
+    document.addEventListener('DOMContentLoaded', function() {
+        // Make buttons more touch-friendly
+        document.querySelectorAll('button, .btn-action, .calendar-day').forEach(element => {
+            element.style.minHeight = '44px';
+            element.style.minWidth = '44px';
+        });
+
+        // Prevent zoom on input focus for iOS
+        document.querySelectorAll('input, select, textarea').forEach(input => {
+            input.addEventListener('touchstart', function(e) {
+                if (document.activeElement !== this) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+        });
+
+        // Add touch feedback for buttons
+        document.querySelectorAll('.btn-prev-step, .btn-next-step, .btn-review-step, .btn-save-form').forEach(btn => {
+            btn.addEventListener('touchstart', function() {
+                this.style.transform = 'scale(0.95)';
+                this.style.transition = 'transform 0.1s ease';
+            });
+
+            btn.addEventListener('touchend', function() {
+                this.style.transform = 'scale(1)';
+            });
+
+            btn.addEventListener('touchcancel', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    });
+}
+
+// Add this function to validate image dimensions
+function validateImageDimensions(file) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        const url = URL.createObjectURL(file);
+
+        img.onload = function() {
+            URL.revokeObjectURL(url);
+            if (img.width < 200 || img.height < 200) {
+                reject('Image dimensions must be at least 200x200 pixels');
+            } else {
+                resolve();
+            }
+        };
+
+        img.onerror = function() {
+            URL.revokeObjectURL(url);
+            reject('Failed to load image for validation');
+        };
+
+        img.src = url;
+    });
+}
+
+// Update the image upload preview function to validate dimensions
+function validateAndPreviewImage(file) {
+    // Validate file type
+    const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+        showToast('Please upload a valid image file (JPEG, PNG, GIF, or WebP).', 'error');
+        imageInput.value = '';
+        return;
+    }
+
+    // Validate file size (2MB limit)
+    if (file.size > 2 * 1024 * 1024) {
+        showToast('Image size must be less than 2MB', 'error');
+        imageInput.value = '';
+        return;
+    }
+
+    // Validate dimensions
+    validateImageDimensions(file)
+        .then(() => {
+            previewImage(file);
+        })
+        .catch(error => {
+            showToast(error, 'error');
+            imageInput.value = '';
+        });
+}
+</script>
+
+{% endblock %}
