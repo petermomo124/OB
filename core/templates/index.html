@@ -5532,9 +5532,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <div class="office-actions">
     {% if office.google_map_url %}
     <!-- Open map in a modal instead of direct link -->
-    <button type="button" class="office-map-btn" data-bs-toggle="modal" data-bs-target="#mapModal{{ office.id }}">
-        <i class="fas fa-map-marked-alt me-2"></i>View on Map
-    </button>
+
     {% endif %}
     <!-- Add this new button: -->
     <a href="{% url 'office_detailed_view' office.id %}" class="office-detail-btn">

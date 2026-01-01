@@ -1,0 +1,2369 @@
+{% extends "base.html" %}
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}Sport & Entertainment Industry Solutions | OB Global{% endblock %}
+
+{% block content %}
+<div class="insights-page-container">
+    <!-- Hero Section - Full Screen -->
+    <section class="insights-hero">
+        <div class="hero-background"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">
+                Sport & Entertainment <span>Industry</span>
+            </h1>
+
+            <p class="hero-description">
+                Transforming fan experiences, optimizing athlete performance, and revolutionizing content delivery 
+                through innovative technology solutions for sports organizations, media companies, and entertainment venues.
+            </p>
+        </div>
+    </section>
+
+    <!-- Sport & Entertainment Impact Visualization Section -->
+    <section class="ai-impact-visualization">
+        <div class="container">
+            <h2 class="section-title">Digital Transformation in Sports & Entertainment</h2>
+            
+            <!-- Digital Evolution Timeline -->
+            <div class="timeline-section" style="
+                background: linear-gradient(135deg, rgba(220, 53, 69, 0.05) 0%, rgba(253, 126, 20, 0.05) 100%);
+                border-radius: 1rem;
+                padding: clamp(1rem, 3vw, 2rem);
+                margin-bottom: clamp(1.5rem, 4vw, 3rem);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+                border-left: clamp(3px, 1vw, 6px) solid #dc3545;
+                animation: fadeInUp 0.8s ease-out;
+                overflow: hidden;
+            ">
+                <h3 style="
+                    font-size: clamp(1.25rem, 4vw, 2rem);
+                    margin-bottom: clamp(1rem, 3vw, 2rem);
+                    color: #333;
+                    text-align: center;
+                    font-weight: 700;
+                    background: linear-gradient(135deg, #dc3545, #fd7e14);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    line-height: 1.3;
+                    padding: 0 0.5rem;
+                ">🏟️ Evolution of Sports & Entertainment Technology</h3>
+                
+                <div class="timeline" style="
+                    position: relative;
+                    max-width: 800px;
+                    margin: 0 auto;
+                    padding: 0 clamp(0.5rem, 2vw, 1rem);
+                ">
+                    <!-- Timeline Line -->
+                    <div class="timeline-line" style="
+                        position: absolute;
+                        left: clamp(40px, 12vw, 50px);
+                        top: 0;
+                        bottom: 0;
+                        width: clamp(2px, 0.5vw, 4px);
+                        background: linear-gradient(to bottom, #dc3545, #fd7e14);
+                        border-radius: 2px;
+                        z-index: 1;
+                    "></div>
+                    
+                    <div class="timeline-item" style="
+                        position: relative;
+                        margin-bottom: clamp(2rem, 5vw, 3rem);
+                        padding-left: clamp(70px, 20vw, 100px);
+                        animation: slideInLeft 0.6s ease-out;
+                        z-index: 2;
+                    ">
+                        <div class="timeline-year" style="
+                            position: absolute;
+                            left: clamp(10px, 3vw, 20px);
+                            top: 0;
+                            background: linear-gradient(135deg, #dc3545, #c82333);
+                            color: white;
+                            padding: clamp(0.4rem, 1.5vw, 0.5rem) clamp(0.8rem, 2vw, 1rem);
+                            border-radius: clamp(0.5rem, 2vw, 1rem);
+                            font-weight: 700;
+                            font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+                            min-width: clamp(50px, 15vw, 80px);
+                            text-align: center;
+                            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+                            z-index: 3;
+                        ">2000-2005</div>
+                        <div class="timeline-content" style="
+                            background: white;
+                            padding: clamp(1.5rem, 4vw, 2rem) clamp(1rem, 3vw, 1.5rem);
+                            border-radius: clamp(0.5rem, 2vw, 0.75rem);
+                            border-left: clamp(2px, 1vw, 4px) solid #dc3545;
+                            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                            transition: all 0.3s ease;
+                            position: relative;
+                            margin-top: 0;
+                            min-height: 120px;
+                        ">
+                            <h4 style="
+                                font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+                                margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                                color: #333;
+                                font-weight: 600;
+                                line-height: 1.3;
+                                padding-top: 0;
+                            ">Digital Ticketing & Basic Analytics</h4>
+                            <p style="
+                                color: #666;
+                                line-height: 1.5;
+                                margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                                font-size: clamp(0.85rem, 2.5vw, 1rem);
+                            ">Introduction of digital ticketing systems and basic performance analytics. Stadiums began implementing early digital displays and basic fan engagement systems.</p>
+                            <div class="adoption-stats" style="
+                                display: flex;
+                                align-items: center;
+                                gap: clamp(0.5rem, 2vw, 1rem);
+                                padding: clamp(0.75rem, 2vw, 1rem);
+                                background: linear-gradient(135deg, rgba(220, 53, 69, 0.1), rgba(200, 35, 51, 0.1));
+                                border-radius: clamp(0.25rem, 1vw, 0.5rem);
+                                border: 1px solid rgba(220, 53, 69, 0.2);
+                                flex-wrap: wrap;
+                            ">
+                                <div class="stat" style="
+                                    font-size: clamp(1.5rem, 5vw, 2rem);
+                                    font-weight: 800;
+                                    color: #dc3545;
+                                    line-height: 1;
+                                ">32%</div>
+                                <span style="
+                                    color: #666;
+                                    font-size: clamp(0.75rem, 2vw, 0.9rem);
+                                    line-height: 1.2;
+                                ">Digital Ticket Adoption</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item" style="
+                        position: relative;
+                        margin-bottom: clamp(2rem, 5vw, 3rem);
+                        padding-left: clamp(70px, 20vw, 100px);
+                        animation: slideInLeft 0.6s ease-out 0.2s both;
+                        z-index: 2;
+                    ">
+                        <div class="timeline-year" style="
+                            position: absolute;
+                            left: clamp(10px, 3vw, 20px);
+                            top: 0;
+                            background: linear-gradient(135deg, #fd7e14, #e8590c);
+                            color: white;
+                            padding: clamp(0.4rem, 1.5vw, 0.5rem) clamp(0.8rem, 2vw, 1rem);
+                            border-radius: clamp(0.5rem, 2vw, 1rem);
+                            font-weight: 700;
+                            font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+                            min-width: clamp(50px, 15vw, 80px);
+                            text-align: center;
+                            box-shadow: 0 4px 15px rgba(253, 126, 20, 0.3);
+                            z-index: 3;
+                        ">2006-2010</div>
+                        <div class="timeline-content" style="
+                            background: white;
+                            padding: clamp(1.5rem, 4vw, 2rem) clamp(1rem, 3vw, 1.5rem);
+                            border-radius: clamp(0.5rem, 2vw, 0.75rem);
+                            border-left: clamp(2px, 1vw, 4px) solid #fd7e14;
+                            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                            transition: all 0.3s ease;
+                            position: relative;
+                            margin-top: 0;
+                            min-height: 120px;
+                        ">
+                            <h4 style="
+                                font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+                                margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                                color: #333;
+                                font-weight: 600;
+                                line-height: 1.3;
+                                padding-top: 0;
+                            ">HD Streaming & Social Media Integration</h4>
+                            <p style="
+                                color: #666;
+                                line-height: 1.5;
+                                margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                                font-size: clamp(0.85rem, 2.5vw, 1rem);
+                            ">HD streaming services revolutionized sports broadcasting. Social media platforms transformed fan engagement and content distribution across the entertainment industry.</p>
+                            <div class="adoption-stats" style="
+                                display: flex;
+                                align-items: center;
+                                gap: clamp(0.5rem, 2vw, 1rem);
+                                padding: clamp(0.75rem, 2vw, 1rem);
+                                background: linear-gradient(135deg, rgba(253, 126, 20, 0.1), rgba(232, 89, 12, 0.1));
+                                border-radius: clamp(0.25rem, 1vw, 0.5rem);
+                                border: 1px solid rgba(253, 126, 20, 0.2);
+                                flex-wrap: wrap;
+                            ">
+                                <div class="stat" style="
+                                    font-size: clamp(1.5rem, 5vw, 2rem);
+                                    font-weight: 800;
+                                    color: #fd7e14;
+                                    line-height: 1;
+                                ">58%</div>
+                                <span style="
+                                    color: #666;
+                                    font-size: clamp(0.75rem, 2vw, 0.9rem);
+                                    line-height: 1.2;
+                                ">Digital Content Consumption</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item" style="
+                        position: relative;
+                        margin-bottom: clamp(2rem, 5vw, 3rem);
+                        padding-left: clamp(70px, 20vw, 100px);
+                        animation: slideInLeft 0.6s ease-out 0.4s both;
+                        z-index: 2;
+                    ">
+                        <div class="timeline-year" style="
+                            position: absolute;
+                            left: clamp(10px, 3vw, 20px);
+                            top: 0;
+                            background: linear-gradient(135deg, #6f42c1, #5a2d9c);
+                            color: white;
+                            padding: clamp(0.4rem, 1.5vw, 0.5rem) clamp(0.8rem, 2vw, 1rem);
+                            border-radius: clamp(0.5rem, 2vw, 1rem);
+                            font-weight: 700;
+                            font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+                            min-width: clamp(50px, 15vw, 80px);
+                            text-align: center;
+                            box-shadow: 0 4px 15px rgba(111, 66, 193, 0.3);
+                            z-index: 3;
+                        ">2011-2015</div>
+                        <div class="timeline-content" style="
+                            background: white;
+                            padding: clamp(1.5rem, 4vw, 2rem) clamp(1rem, 3vw, 1.5rem);
+                            border-radius: clamp(0.5rem, 2vw, 0.75rem);
+                            border-left: clamp(2px, 1vw, 4px) solid #6f42c1;
+                            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                            transition: all 0.3s ease;
+                            position: relative;
+                            margin-top: 0;
+                            min-height: 120px;
+                        ">
+                            <h4 style="
+                                font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+                                margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                                color: #333;
+                                font-weight: 600;
+                                line-height: 1.3;
+                                padding-top: 0;
+                            ">Wearable Tech & Advanced Analytics</h4>
+                            <p style="
+                                color: #666;
+                                line-height: 1.5;
+                                margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                                font-size: clamp(0.85rem, 2.5vw, 1rem);
+                            ">Wearable technology transformed athlete performance monitoring. Advanced analytics and data visualization tools revolutionized sports strategy and fan insights.</p>
+                            <div class="adoption-stats" style="
+                                display: flex;
+                                align-items: center;
+                                gap: clamp(0.5rem, 2vw, 1rem);
+                                padding: clamp(0.75rem, 2vw, 1rem);
+                                background: linear-gradient(135deg, rgba(111, 66, 193, 0.1), rgba(90, 45, 156, 0.1));
+                                border-radius: clamp(0.25rem, 1vw, 0.5rem);
+                                border: 1px solid rgba(111, 66, 193, 0.2);
+                                flex-wrap: wrap;
+                            ">
+                                <div class="stat" style="
+                                    font-size: clamp(1.5rem, 5vw, 2rem);
+                                    font-weight: 800;
+                                    color: #6f42c1;
+                                    line-height: 1;
+                                ">71%</div>
+                                <span style="
+                                    color: #666;
+                                    font-size: clamp(0.75rem, 2vw, 0.9rem);
+                                    line-height: 1.2;
+                                ">Data-Driven Decisions</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item" style="
+                        position: relative;
+                        margin-bottom: clamp(2rem, 5vw, 3rem);
+                        padding-left: clamp(70px, 20vw, 100px);
+                        animation: slideInLeft 0.6s ease-out 0.6s both;
+                        z-index: 2;
+                    ">
+                        <div class="timeline-year" style="
+                            position: absolute;
+                            left: clamp(10px, 3vw, 20px);
+                            top: 0;
+                            background: linear-gradient(135deg, #28a745, #20c997);
+                            color: white;
+                            padding: clamp(0.4rem, 1.5vw, 0.5rem) clamp(0.8rem, 2vw, 1rem);
+                            border-radius: clamp(0.5rem, 2vw, 1rem);
+                            font-weight: 700;
+                            font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+                            min-width: clamp(50px, 15vw, 80px);
+                            text-align: center;
+                            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+                            z-index: 3;
+                        ">2016+</div>
+                        <div class="timeline-content" style="
+                            background: white;
+                            padding: clamp(1.5rem, 4vw, 2rem) clamp(1rem, 3vw, 1.5rem);
+                            border-radius: clamp(0.5rem, 2vw, 0.75rem);
+                            border-left: clamp(2px, 1vw, 4px) solid #28a745;
+                            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                            transition: all 0.3s ease;
+                            position: relative;
+                            margin-top: 0;
+                            min-height: 120px;
+                        ">
+                            <h4 style="
+                                font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+                                margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                                color: #333;
+                                font-weight: 600;
+                                line-height: 1.3;
+                                padding-top: 0;
+                            ">AI & Immersive Experiences</h4>
+                            <p style="
+                                color: #666;
+                                line-height: 1.5;
+                                margin-bottom: clamp(0.75rem, 2vw, 1rem);
+                                font-size: clamp(0.85rem, 2.5vw, 1rem);
+                            ">Artificial intelligence and immersive technologies (AR/VR) revolutionized fan engagement. Personalization, predictive analytics, and interactive experiences transformed sports and entertainment.</p>
+                            <div class="adoption-stats" style="
+                                display: flex;
+                                align-items: center;
+                                gap: clamp(0.5rem, 2vw, 1rem);
+                                padding: clamp(0.75rem, 2vw, 1rem);
+                                background: linear-gradient(135deg, rgba(40, 167, 69, 0.1), rgba(32, 201, 151, 0.1));
+                                border-radius: clamp(0.25rem, 1vw, 0.5rem);
+                                border: 1px solid rgba(40, 167, 69, 0.2);
+                                flex-wrap: wrap;
+                            ">
+                                <div class="stat" style="
+                                    font-size: clamp(1.5rem, 5vw, 2rem);
+                                    font-weight: 800;
+                                    color: #28a745;
+                                    line-height: 1;
+                                ">92%</div>
+                                <span style="
+                                    color: #666;
+                                    font-size: clamp(0.75rem, 2vw, 0.9rem);
+                                    line-height: 1.2;
+                                ">Digital Transformation Goal</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Performance Metrics -->
+            <div class="metrics-section" style="
+                background: linear-gradient(135deg, rgba(220, 53, 69, 0.05) 0%, rgba(253, 126, 20, 0.05) 100%);
+                border-radius: 1rem;
+                padding: 2rem;
+                margin-bottom: 3rem;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+                border-left: 6px solid #dc3545;
+                animation: fadeInUp 0.8s ease-out 0.3s both;
+            ">
+                <h3 style="
+                    font-size: clamp(1.5rem, 3vw, 2rem);
+                    margin-bottom: 2rem;
+                    color: #333;
+                    text-align: center;
+                    font-weight: 700;
+                    background: linear-gradient(135deg, #dc3545, #fd7e14);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                ">🏆 Sports & Entertainment Performance Metrics</h3>
+                <div class="metrics-grid" style="
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                    gap: 1.5rem;
+                ">
+                    <div class="metric-card" style="
+                        text-align: center;
+                        padding: 2rem 1.5rem;
+                        background: white;
+                        border-radius: 1rem;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        transition: all 0.3s ease;
+                        border-top: 4px solid #dc3545;
+                        animation: bounceIn 0.6s ease-out;
+                    ">
+                        <div class="metric-value" style="
+                            font-size: 3rem;
+                            font-weight: 800;
+                            color: #dc3545;
+                            margin-bottom: 1rem;
+                        ">42%</div>
+                        <div class="metric-label" style="
+                            font-size: 1.2rem;
+                            font-weight: 700;
+                            color: #333;
+                            margin-bottom: 1rem;
+                        ">Increase in Fan Engagement</div>
+                        <div class="metric-description" style="
+                            color: #666;
+                            line-height: 1.5;
+                            font-size: 0.9rem;
+                        ">Digital platforms and personalized experiences significantly increase fan interaction, loyalty, and engagement across sports and entertainment properties.</div>
+                    </div>
+                    
+                    <div class="metric-card" style="
+                        text-align: center;
+                        padding: 2rem 1.5rem;
+                        background: white;
+                        border-radius: 1rem;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        transition: all 0.3s ease;
+                        border-top: 4px solid #fd7e14;
+                        animation: bounceIn 0.6s ease-out 0.2s both;
+                    ">
+                        <div class="metric-value" style="
+                            font-size: 3rem;
+                            font-weight: 800;
+                            color: #fd7e14;
+                            margin-bottom: 1rem;
+                        ">3.5x</div>
+                        <div class="metric-label" style="
+                            font-size: 1.2rem;
+                            font-weight: 700;
+                            color: #333;
+                            margin-bottom: 1rem;
+                        ">Higher Content Monetization</div>
+                        <div class="metric-description" style="
+                            color: #666;
+                            line-height: 1.5;
+                            font-size: 0.9rem;
+                        ">Digital content platforms and subscription models dramatically increase revenue streams from sports and entertainment content distribution.</div>
+                    </div>
+                    
+                    <div class="metric-card" style="
+                        text-align: center;
+                        padding: 2rem 1.5rem;
+                        background: white;
+                        border-radius: 1rem;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        transition: all 0.3s ease;
+                        border-top: 4px solid #6f42c1;
+                        animation: bounceIn 0.6s ease-out 0.4s both;
+                    ">
+                        <div class="metric-value" style="
+                            font-size: 3rem;
+                            font-weight: 800;
+                            color: #6f42c1;
+                            margin-bottom: 1rem;
+                        ">68%</div>
+                        <div class="metric-label" style="
+                            font-size: 1.2rem;
+                            font-weight: 700;
+                            color: #333;
+                            margin-bottom: 1rem;
+                        ">Improved Operational Efficiency</div>
+                        <div class="metric-description" style="
+                            color: #666;
+                            line-height: 1.5;
+                            font-size: 0.9rem;
+                        ">Digital operations and venue management systems significantly reduce costs and improve efficiency across sports facilities and entertainment venues.</div>
+                    </div>
+                    
+                    <div class="metric-card" style="
+                        text-align: center;
+                        padding: 2rem 1.5rem;
+                        background: white;
+                        border-radius: 1rem;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        transition: all 0.3s ease;
+                        border-top: 4px solid #28a745;
+                        animation: bounceIn 0.6s ease-out 0.6s both;
+                    ">
+                        <div class="metric-value" style="
+                            font-size: 3rem;
+                            font-weight: 800;
+                            color: #28a745;
+                            margin-bottom: 1rem;
+                        ">4.2x</div>
+                        <div class="metric-label" style="
+                            font-size: 1.2rem;
+                            font-weight: 700;
+                            color: #333;
+                            margin-bottom: 1rem;
+                        ">ROI on Digital Transformation</div>
+                        <div class="metric-description" style="
+                            color: #666;
+                            line-height: 1.5;
+                            font-size: 0.9rem;
+                        ">Strategic technology investments deliver substantial returns through enhanced fan experiences, increased revenue, and improved operational performance.</div>
+                    </div>
+
+                    <!-- New Metric Cards -->
+                    <div class="metric-card" style="
+                        text-align: center;
+                        padding: 2rem 1.5rem;
+                        background: white;
+                        border-radius: 1rem;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        transition: all 0.3s ease;
+                        border-top: 4px solid #17a2b8;
+                        animation: bounceIn 0.6s ease-out 0.8s both;
+                    ">
+                        <div class="metric-value" style="
+                            font-size: 3rem;
+                            font-weight: 800;
+                            color: #17a2b8;
+                            margin-bottom: 1rem;
+                        ">55%</div>
+                        <div class="metric-label" style="
+                            font-size: 1.2rem;
+                            font-weight: 700;
+                            color: #333;
+                            margin-bottom: 1rem;
+                        ">Increase in Sponsorship Value</div>
+                        <div class="metric-description" style="
+                            color: #666;
+                            line-height: 1.5;
+                            font-size: 0.9rem;
+                        ">Digital sponsorship platforms and data-driven insights significantly increase the value and effectiveness of sports and entertainment sponsorships.</div>
+                    </div>
+                    
+                    <div class="metric-card" style="
+                        text-align: center;
+                        padding: 2rem 1.5rem;
+                        background: white;
+                        border-radius: 1rem;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        transition: all 0.3s ease;
+                        border-top: 4px solid #ffc107;
+                        animation: bounceIn 0.6s ease-out 1s both;
+                    ">
+                        <div class="metric-value" style="
+                            font-size: 3rem;
+                            font-weight: 800;
+                            color: #ffc107;
+                            margin-bottom: 1rem;
+                        ">89%</div>
+                        <div class="metric-label" style="
+                            font-size: 1.2rem;
+                            font-weight: 700;
+                            color: #333;
+                            margin-bottom: 1rem;
+                        ">Fan Satisfaction Rate</div>
+                        <div class="metric-description" style="
+                            color: #666;
+                            line-height: 1.5;
+                            font-size: 0.9rem;
+                        ">Enhanced digital experiences and personalized content significantly improve fan satisfaction and loyalty across sports and entertainment platforms.</div>
+                    </div>
+
+                    <!-- Additional Metric Cards -->
+                    <div class="metric-card" style="
+                        text-align: center;
+                        padding: 2rem 1.5rem;
+                        background: white;
+                        border-radius: 1rem;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        transition: all 0.3s ease;
+                        border-top: 4px solid #e83e8c;
+                        animation: bounceIn 0.6s ease-out 1.2s both;
+                    ">
+                        <div class="metric-value" style="
+                            font-size: 3rem;
+                            font-weight: 800;
+                            color: #e83e8c;
+                            margin-bottom: 1rem;
+                        ">3.8x</div>
+                        <div class="metric-label" style="
+                            font-size: 1.2rem;
+                            font-weight: 700;
+                            color: #333;
+                            margin-bottom: 1rem;
+                        ">Content Distribution Reach</div>
+                        <div class="metric-description" style="
+                            color: #666;
+                            line-height: 1.5;
+                            font-size: 0.9rem;
+                        ">Digital platforms and streaming services dramatically expand the global reach and accessibility of sports and entertainment content.</div>
+                    </div>
+                    
+                    <div class="metric-card" style="
+                        text-align: center;
+                        padding: 2rem 1.5rem;
+                        background: white;
+                        border-radius: 1rem;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        transition: all 0.3s ease;
+                        border-top: 4px solid #20c997;
+                        animation: bounceIn 0.6s ease-out 1.4s both;
+                    ">
+                        <div class="metric-value" style="
+                            font-size: 3rem;
+                            font-weight: 800;
+                            color: #20c997;
+                            margin-bottom: 1rem;
+                        ">76%</div>
+                        <div class="metric-label" style="
+                            font-size: 1.2rem;
+                            font-weight: 700;
+                            color: #333;
+                            margin-bottom: 1rem;
+                        ">Athlete Performance Improvement</div>
+                        <div class="metric-description" style="
+                            color: #666;
+                            line-height: 1.5;
+                            font-size: 0.9rem;
+                        ">Advanced analytics and performance monitoring technologies significantly improve athlete training, recovery, and competitive performance.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comprehensive Solutions -->
+            <div class="applications-section" style="
+                background: linear-gradient(135deg, rgba(220, 53, 69, 0.05) 0%, rgba(111, 66, 193, 0.05) 100%);
+                border-radius: 1rem;
+                padding: 2rem;
+                margin-bottom: 3rem;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+                border-left: 6px solid #dc3545;
+                animation: fadeInUp 0.8s ease-out 0.5s both;
+            ">
+                <h3 style="
+                    font-size: clamp(1.5rem, 3vw, 2rem);
+                    margin-bottom: 2rem;
+                    color: #333;
+                    text-align: center;
+                    font-weight: 700;
+                    background: linear-gradient(135deg, #dc3545, #6f42c1);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                ">🎯 Comprehensive Sports & Entertainment Solutions</h3>
+                <div class="applications-grid" style="
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                    gap: 2rem;
+                ">
+                    <div class="application-area" style="
+                        padding: 1.5rem;
+                        background: white;
+                        border-radius: 0.75rem;
+                        border-left: 4px solid #dc3545;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        transition: transform 0.3s ease;
+                        animation: zoomIn 0.6s ease-out;
+                    ">
+                        <h4 style="
+                            font-size: 1.3rem;
+                            margin-bottom: 1rem;
+                            color: #333;
+                            font-weight: 600;
+                        ">🏟️ Stadium & Venue Management</h4>
+                        <ul class="application-list" style="
+                            list-style: none;
+                            padding: 0;
+                        ">
+                            <li style="
+                                padding: 0.5rem 0;
+                                color: #666;
+                                line-height: 1.5;
+                                border-bottom: 1px solid #e9ecef;
+                                position: relative;
+                                padding-left: 1.5rem;
+                            ">Smart stadium operations and automation</li>
+                            <li style="
+                                padding: 0.5rem 0;
+                                color: #666;
+                                line-height: 1.5;
+                                border-bottom: 1px solid #e9ecef;
+                                position: relative;
+                                padding-left: 1.5rem;
+                            ">Digital ticketing and access control systems</li>
+                            <li style="
+                                padding: 0.5rem 0;
+                                color: #666;
+                                line-height: 1.5;
+                                border-bottom: 1px solid #e9ecef;
+                                position: relative;
+                                padding-left: 1.5rem;
+                            ">Concessions and retail management</li>
+                            <li style="
+                                padding: 0.5rem 0;
+                                color: #666;
+                                line-height: 1.5;
+                                border-bottom: 1px solid #e9ecef;
+                                position: relative;
+                                padding-left: 1.5rem;
+                            ">Crowd management and safety systems</li>
+                            <li style="
+                                padding: 0.5rem 0;
+                                color: #666;
+                                line-height: 1.5;
+                                position: relative;
+                                padding-left: 1.5rem;
+                            ">Facility maintenance and energy management</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="application-area" style="
+                        padding: 1.5rem;
+                        background: white;
+                        border-radius: 0.75rem;
+                        border-left: 4px solid #fd7e14;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        transition: transform 0.3s ease;
+                        animation: zoomIn 0.6s ease-out 0.2s both;
+                    ">
+                        <h4 style="
+                            font-size: 1.3rem;
+                            margin-bottom: 1rem;
+                            color: #333;
+                            font-weight: 600;
+                        ">📺 Media & Broadcasting</h4>
+                        <ul class="application-list" style="
+                            list-style: none;
+                            padding: 0;
+                        ">
+                            <li style="
+                                padding: 0.5rem 0;
+                                color: #666;
+                                line-height: 1.5;
+                                border-bottom: 1px solid #e9ecef;
+                                position: relative;
+                                padding-left: 1.5rem;
+                            ">Live streaming and OTT platforms</li>
+                            <li style="
+                                padding: 0.5rem 0;
+                                color: #666;
+                                line-height: 1.5;
+                                border-bottom: 1px solid #e9ecef;
+                                position: relative;
+                                padding-left: 1.5rem;
+                            ">Content management and distribution systems</li>
+                            <li style="
+                                padding: 0.5rem 0;
+                                color: #666;
+                                line-height: 1.5;
+                                border-bottom: 1px solid #e9ecef;
+                                position: relative;
+                                padding-left: 1.5rem;
+                            ">Digital rights management and monetization</li>
+                            <li style="
+                                padding: 0.5rem 0;
+                                color: #666;
+                                line-height: 1.5;
+                                border-bottom: 1px solid #e9ecef;
+                                position: relative;
+                                padding-left: 1.5rem;
+                            ">Interactive broadcasting and viewer analytics</li>
+                            <li style="
+                                padding: 0.5rem 0;
+                                color: #666;
+                                line-height: 1.5;
+                                position: relative;
+                                padding-left: 1.5rem;
+                            ">Advertising technology and sponsorship integration</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="application-area" style="
+                        padding: 1.5rem;
+                        background: white;
+                        border-radius: 0.75rem;
+                        border-left: 4px solid #6f42c1;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        transition: transform 0.3s ease;
+                        animation: zoomIn 0.6s ease-out 0.4s both;
+                    ">
+                        <h4 style="
+                            font-size: 1.3rem;
+                            margin-bottom: 1rem;
+                            color: #333;
+                            font-weight: 600;
+                        ">🏀 Athlete Performance & Analytics</h4>
+                        <ul class="application-list" style="
+                            list-style: none;
+                            padding: 0;
+                        ">
+                            <li style="
+                                padding: 0.5rem 0;
+                                color: #666;
+                                line-height: 1.5;
+                                border-bottom: 1px solid #e9ecef;
+                                position: relative;
+                                padding-left: 1.5rem;
+                            ">Performance monitoring and biometric tracking</li>
+                            <li style="
+                                padding: 0.5rem 0;
+                                color: #666;
+                                line-height: 1.5;
+                                border-bottom: 1px solid #e9ecef;
+                                position: relative;
+                                padding-left: 1.5rem;
+                            ">Injury prevention and recovery systems</li>
+                            <li style="
+                                padding: 0.5rem 0;
+                                color: #666;
+                                line-height: 1.5;
+                                border-bottom: 1px solid #e9ecef;
+                                position: relative;
+                                padding-left: 1.5rem;
+                            ">Talent scouting and player development</li>
+                            <li style="
+                                padding: 0.5rem 0;
+                                color: #666;
+                                line-height: 1.5;
+                                border-bottom: 1px solid #e9ecef;
+                                position: relative;
+                                padding-left: 1.5rem;
+                            ">Game strategy and opponent analysis</li>
+                            <li style="
+                                padding: 0.5rem 0;
+                                color: #666;
+                                line-height: 1.5;
+                                position: relative;
+                                padding-left: 1.5rem;
+                            ">Nutrition and wellness management systems</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="application-area" style="
+                        padding: 1.5rem;
+                        background: white;
+                        border-radius: 0.75rem;
+                        border-left: 4px solid #28a745;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        transition: transform 0.3s ease;
+                        animation: zoomIn 0.6s ease-out 0.6s both;
+                    ">
+                        <h4 style="
+                            font-size: 1.3rem;
+                            margin-bottom: 1rem;
+                            color: #333;
+                            font-weight: 600;
+                        ">🎮 Fan Engagement & Experience</h4>
+                        <ul class="application-list" style="
+                            list-style: none;
+                            padding: 0;
+                        ">
+                            <li style="
+                                padding: 0.5rem 0;
+                                color: #666;
+                                line-height: 1.5;
+                                border-bottom: 1px solid #e9ecef;
+                                position: relative;
+                                padding-left: 1.5rem;
+                            ">Mobile apps and digital fan platforms</li>
+                            <li style="
+                                padding: 0.5rem 0;
+                                color: #666;
+                                line-height: 1.5;
+                                border-bottom: 1px solid #e9ecef;
+                                position: relative;
+                                padding-left: 1.5rem;
+                            ">Augmented and virtual reality experiences</li>
+                            <li style="
+                                padding: 0.5rem 0;
+                                color: #666;
+                                line-height: 1.5;
+                                border-bottom: 1px solid #e9ecef;
+                                position: relative;
+                                padding-left: 1.5rem;
+                            ">Social media integration and community building</li>
+                            <li style="
+                                padding: 0.5rem 0;
+                                color: #666;
+                                line-height: 1.5;
+                                border-bottom: 1px solid #e9ecef;
+                                position: relative;
+                                padding-left: 1.5rem;
+                            ">Personalized content and recommendations</li>
+                            <li style="
+                                padding: 0.5rem 0;
+                                color: #666;
+                                line-height: 1.5;
+                                position: relative;
+                                padding-left: 1.5rem;
+                            ">Gamification and interactive experiences</li>
+                        </ul>
+                    </div>
+
+                    <!-- New Application Areas -->
+                    <div class="application-area" style="
+                        padding: 1.5rem;
+                        background: white;
+                        border-radius: 0.75rem;
+                        border-left: 4px solid #17a2b8;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        transition: transform 0.3s ease;
+                        animation: zoomIn 0.6s ease-out 0.8s both;
+                    ">
+                        <h4 style="
+                            font-size: 1.3rem;
+                            margin-bottom: 1rem;
+                            color: #333;
+                            font-weight: 600;
+                        ">💼 Business Operations & Commerce</h4>
+                        <ul class="application-list" style="
+                            list-style: none;
+                            padding: 0;
+                        ">
+                            <li style="
+                                padding: 0.5rem 0;
+                                color: #666;
+                                line-height: 1.5;
+                                border-bottom: 1px solid #e9ecef;
+                                position: relative;
+                                padding-left: 1.5rem;
+                            ">Merchandise and e-commerce platforms</li>
+                            <li style="
+                                padding: 0.5rem 0;
+                                color: #666;
+                                line-height: 1.5;
+                                border-bottom: 1px solid #e9ecef;
+                                position: relative;
+                                padding-left: 1.5rem;
+                            ">Sponsorship management and activation</li>
+                            <li style="
+                                padding: 0.5rem 0;
+                                color: #666;
+                                line-height: 1.5;
+                                border-bottom: 1px solid #e9ecef;
+                                position: relative;
+                                padding-left: 1.5rem;
+                            ">Revenue management and forecasting</li>
+                            <li style="
+                                padding: 0.5rem 0;
+                                color: #666;
+                                line-height: 1.5;
+                                border-bottom: 1px solid #e9ecef;
+                                position: relative;
+                                padding-left: 1.5rem;
+                            ">Customer relationship management (CRM)</li>
+                            <li style="
+                                padding: 0.5rem 0;
+                                color: #666;
+                                line-height: 1.5;
+                                position: relative;
+                                padding-left: 1.5rem;
+                            ">Partnership and affiliate management</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="application-area" style="
+                        padding: 1.5rem;
+                        background: white;
+                        border-radius: 0.75rem;
+                        border-left: 4px solid #ffc107;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        transition: transform 0.3s ease;
+                        animation: zoomIn 0.6s ease-out 1s both;
+                    ">
+                        <h4 style="
+                            font-size: 1.3rem;
+                            margin-bottom: 1rem;
+                            color: #333;
+                            font-weight: 600;
+                        ">🎬 Entertainment & Event Production</h4>
+                        <ul class="application-list" style="
+                            list-style: none;
+                            padding: 0;
+                        ">
+                            <li style="
+                                padding: 0.5rem 0;
+                                color: #666;
+                                line-height: 1.5;
+                                border-bottom: 1px solid #e9ecef;
+                                position: relative;
+                                padding-left: 1.5rem;
+                            ">Event planning and production management</li>
+                            <li style="
+                                padding: 0.5rem 0;
+                                color: #666;
+                                line-height: 1.5;
+                                border-bottom: 1px solid #e9ecef;
+                                position: relative;
+                                padding-left: 1.5rem;
+                            ">Stage and lighting automation systems</li>
+                            <li style="
+                                padding: 0.5rem 0;
+                                color: #666;
+                                line-height: 1.5;
+                                border-bottom: 1px solid #e9ecef;
+                                position: relative;
+                                padding-left: 1.5rem;
+                            ">Special effects and immersive technologies</li>
+                            <li style="
+                                padding: 0.5rem 0;
+                                color: #666;
+                                line-height: 1.5;
+                                border-bottom: 1px solid #e9ecef;
+                                position: relative;
+                                padding-left: 1.5rem;
+                            ">Backstage and crew management</li>
+                            <li style="
+                                padding: 0.5rem 0;
+                                color: #666;
+                                line-height: 1.5;
+                                position: relative;
+                                padding-left: 1.5rem;
+                            ">Tour and logistics coordination</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Implementation Framework -->
+            <div class="framework-section" style="
+                background: linear-gradient(135deg, rgba(220, 53, 69, 0.05) 0%, rgba(40, 167, 69, 0.05) 100%);
+                border-radius: 1rem;
+                padding: 2rem;
+                margin-bottom: 3rem;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+                border-left: 6px solid #dc3545;
+                animation: fadeInUp 0.8s ease-out 0.7s both;
+            ">
+                <h3 style="
+                    font-size: clamp(1.5rem, 3vw, 2rem);
+                    margin-bottom: 2rem;
+                    color: #333;
+                    text-align: center;
+                    font-weight: 700;
+                    background: linear-gradient(135deg, #dc3545, #28a745);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                ">🛠️ Digital Transformation Framework</h3>
+                <div class="framework-steps">
+                    <div class="framework-step" style="
+                        display: flex;
+                        align-items: flex-start;
+                        gap: 2rem;
+                        margin-bottom: 2.5rem;
+                        padding: 1.5rem;
+                        background: white;
+                        border-radius: 0.75rem;
+                        border-left: 4px solid #dc3545;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        transition: transform 0.3s ease;
+                        animation: slideInRight 0.6s ease-out;
+                    ">
+                        <div class="step-number" style="
+                            background: linear-gradient(135deg, #dc3545, #c82333);
+                            color: white;
+                            width: 50px;
+                            height: 50px;
+                            border-radius: 50%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 1.2rem;
+                            font-weight: 700;
+                            flex-shrink: 0;
+                            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+                        ">01</div>
+                        <div class="step-content">
+                            <h4 style="
+                                font-size: 1.3rem;
+                                margin-bottom: 1rem;
+                                color: #333;
+                                font-weight: 600;
+                            ">Digital Strategy & Assessment</h4>
+                            <p style="
+                                color: #666;
+                                line-height: 1.6;
+                            ">Comprehensive analysis of current technology infrastructure, fan engagement platforms, and operational systems. Develop a strategic roadmap for digital transformation in sports and entertainment.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="framework-step" style="
+                        display: flex;
+                        align-items: flex-start;
+                        gap: 2rem;
+                        margin-bottom: 2.5rem;
+                        padding: 1.5rem;
+                        background: white;
+                        border-radius: 0.75rem;
+                        border-left: 4px solid #fd7e14;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        transition: transform 0.3s ease;
+                        animation: slideInRight 0.6s ease-out 0.2s both;
+                    ">
+                        <div class="step-number" style="
+                            background: linear-gradient(135deg, #fd7e14, #e8590c);
+                            color: white;
+                            width: 50px;
+                            height: 50px;
+                            border-radius: 50%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 1.2rem;
+                            font-weight: 700;
+                            flex-shrink: 0;
+                            box-shadow: 0 4px 15px rgba(253, 126, 20, 0.3);
+                        ">02</div>
+                        <div class="step-content">
+                            <h4 style="
+                                font-size: 1.3rem;
+                                margin-bottom: 1rem;
+                                color: #333;
+                                font-weight: 600;
+                            ">Fan Experience Enhancement</h4>
+                            <p style="
+                                color: #666;
+                                line-height: 1.6;
+                            ">Implement personalized fan engagement platforms, mobile apps, and immersive experiences. Develop data-driven strategies to enhance fan loyalty and increase engagement across all touchpoints.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="framework-step" style="
+                        display: flex;
+                        align-items: flex-start;
+                        gap: 2rem;
+                        margin-bottom: 2.5rem;
+                        padding: 1.5rem;
+                        background: white;
+                        border-radius: 0.75rem;
+                        border-left: 4px solid #6f42c1;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        transition: transform 0.3s ease;
+                        animation: slideInRight 0.6s ease-out 0.4s both;
+                    ">
+                        <div class="step-number" style="
+                            background: linear-gradient(135deg, #6f42c1, #5a2d9c);
+                            color: white;
+                            width: 50px;
+                            height: 50px;
+                            border-radius: 50%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 1.2rem;
+                            font-weight: 700;
+                            flex-shrink: 0;
+                            box-shadow: 0 4px 15px rgba(111, 66, 193, 0.3);
+                        ">03</div>
+                        <div class="step-content">
+                            <h4 style="
+                                font-size: 1.3rem;
+                                margin-bottom: 1rem;
+                                color: #333;
+                                font-weight: 600;
+                            ">Content & Media Transformation</h4>
+                            <p style="
+                                color: #666;
+                                line-height: 1.6;
+                            ">Develop digital content strategies, implement OTT platforms, and create immersive broadcasting experiences. Optimize content distribution and monetization across multiple channels.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="framework-step" style="
+                        display: flex;
+                        align-items: flex-start;
+                        gap: 2rem;
+                        margin-bottom: 2.5rem;
+                        padding: 1.5rem;
+                        background: white;
+                        border-radius: 0.75rem;
+                        border-left: 4px solid #28a745;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        transition: transform 0.3s ease;
+                        animation: slideInRight 0.6s ease-out 0.6s both;
+                    ">
+                        <div class="step-number" style="
+                            background: linear-gradient(135deg, #28a745, #20c997);
+                            color: white;
+                            width: 50px;
+                            height: 50px;
+                            border-radius: 50%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 1.2rem;
+                            font-weight: 700;
+                            flex-shrink: 0;
+                            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+                        ">04</div>
+                        <div class="step-content">
+                            <h4 style="
+                                font-size: 1.3rem;
+                                margin-bottom: 1rem;
+                                color: #333;
+                                font-weight: 600;
+                            ">Venue & Operations Optimization</h4>
+                            <p style="
+                                color: #666;
+                                line-height: 1.6;
+                            ">Implement smart venue technologies, automated operations, and data-driven management systems. Create seamless experiences for fans, athletes, and event staff.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="framework-step" style="
+                        display: flex;
+                        align-items: flex-start;
+                        gap: 2rem;
+                        margin-bottom: 2.5rem;
+                        padding: 1.5rem;
+                        background: white;
+                        border-radius: 0.75rem;
+                        border-left: 4px solid #17a2b8;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        transition: transform 0.3s ease;
+                        animation: slideInRight 0.6s ease-out 0.8s both;
+                    ">
+                        <div class="step-number" style="
+                            background: linear-gradient(135deg, #17a2b8, #138496);
+                            color: white;
+                            width: 50px;
+                            height: 50px;
+                            border-radius: 50%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 1.2rem;
+                            font-weight: 700;
+                            flex-shrink: 0;
+                            box-shadow: 0 4px 15px rgba(23, 162, 184, 0.3);
+                        ">05</div>
+                        <div class="step-content">
+                            <h4 style="
+                                font-size: 1.3rem;
+                                margin-bottom: 1rem;
+                                color: #333;
+                                font-weight: 600;
+                            ">Data Analytics & Performance</h4>
+                            <p style="
+                                color: #666;
+                                line-height: 1.6;
+                            ">Implement advanced analytics platforms for fan insights, athlete performance, and business intelligence. Develop predictive models and real-time dashboards for decision making.</p>
+                        </div>
+                    </div>
+
+                    <!-- New Framework Steps -->
+                    <div class="framework-step" style="
+                        display: flex;
+                        align-items: flex-start;
+                        gap: 2rem;
+                        margin-bottom: 2.5rem;
+                        padding: 1.5rem;
+                        background: white;
+                        border-radius: 0.75rem;
+                        border-left: 4px solid #ffc107;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        transition: transform 0.3s ease;
+                        animation: slideInRight 0.6s ease-out 1s both;
+                    ">
+                        <div class="step-number" style="
+                            background: linear-gradient(135deg, #ffc107, #e0a800);
+                            color: white;
+                            width: 50px;
+                            height: 50px;
+                            border-radius: 50%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 1.2rem;
+                            font-weight: 700;
+                            flex-shrink: 0;
+                            box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
+                        ">06</div>
+                        <div class="step-content">
+                            <h4 style="
+                                font-size: 1.3rem;
+                                margin-bottom: 1rem;
+                                color: #333;
+                                font-weight: 600;
+                            ">Revenue Optimization</h4>
+                            <p style="
+                                color: #666;
+                                line-height: 1.6;
+                            ">Develop integrated commerce platforms, dynamic pricing models, and sponsorship activation systems. Implement data-driven strategies to maximize revenue across all channels.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="framework-step" style="
+                        display: flex;
+                        align-items: flex-start;
+                        gap: 2rem;
+                        margin-bottom: 2.5rem;
+                        padding: 1.5rem;
+                        background: white;
+                        border-radius: 0.75rem;
+                        border-left: 4px solid #e83e8c;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        transition: transform 0.3s ease;
+                        animation: slideInRight 0.6s ease-out 1.2s both;
+                    ">
+                        <div class="step-number" style="
+                            background: linear-gradient(135deg, #e83e8c, #d81b60);
+                            color: white;
+                            width: 50px;
+                            height: 50px;
+                            border-radius: 50%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 1.2rem;
+                            font-weight: 700;
+                            flex-shrink: 0;
+                            box-shadow: 0 4px 15px rgba(232, 62, 140, 0.3);
+                        ">07</div>
+                        <div class="step-content">
+                            <h4 style="
+                                font-size: 1.3rem;
+                                margin-bottom: 1rem;
+                                color: #333;
+                                font-weight: 600;
+                            ">Innovation & Future Readiness</h4>
+                            <p style="
+                                color: #666;
+                                line-height: 1.6;
+                            ">Establish innovation labs, pilot emerging technologies, and develop future-ready capabilities. Foster digital culture and continuous improvement across the organization.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenges & Solutions -->
+            <div class="challenges-section" style="
+                background: linear-gradient(135deg, rgba(253, 126, 20, 0.05) 0%, rgba(255, 193, 7, 0.05) 100%);
+                border-radius: 1rem;
+                padding: 2rem;
+                margin-bottom: 3rem;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+                border-left: 6px solid #fd7e14;
+                animation: fadeInUp 0.8s ease-out 0.9s both;
+            ">
+                <h3 style="
+                    font-size: clamp(1.5rem, 3vw, 2rem);
+                    margin-bottom: 2rem;
+                    color: #333;
+                    text-align: center;
+                    font-weight: 700;
+                    background: linear-gradient(135deg, #fd7e14, #ffc107);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                ">⚡ Overcoming Industry Challenges</h3>
+                <div class="challenges-grid" style="
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                    gap: 2rem;
+                ">
+                    <div class="challenge-item" style="
+                        padding: 1.5rem;
+                        background: white;
+                        border-radius: 0.75rem;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        border-top: 4px solid #dc3545;
+                        transition: transform 0.3s ease;
+                        animation: flipInX 0.6s ease-out;
+                    ">
+                        <h4 style="
+                            font-size: 1.2rem;
+                            margin-bottom: 1rem;
+                            color: #333;
+                            font-weight: 600;
+                        ">Changing Fan Expectations</h4>
+                        <p style="
+                            color: #666;
+                            line-height: 1.6;
+                            margin-bottom: 1rem;
+                        ">Modern fans expect personalized, interactive experiences across multiple channels, challenging traditional sports and entertainment models to adapt quickly to digital demands.</p>
+                        <div class="solution" style="
+                            padding: 1rem;
+                            background: linear-gradient(135deg, rgba(220, 53, 69, 0.1), rgba(200, 35, 51, 0.1));
+                            border-radius: 0.5rem;
+                            border-left: 4px solid #28a745;
+                            font-size: 0.9rem;
+                            line-height: 1.5;
+                        ">
+                            <strong>Solution:</strong> Implement omnichannel fan engagement platforms with AI-powered personalization. Create immersive experiences using AR/VR and develop community-building digital ecosystems.
+                        </div>
+                    </div>
+                    
+                    <div class="challenge-item" style="
+                        padding: 1.5rem;
+                        background: white;
+                        border-radius: 0.75rem;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        border-top: 4px solid #fd7e14;
+                        transition: transform 0.3s ease;
+                        animation: flipInX 0.6s ease-out 0.2s both;
+                    ">
+                        <h4 style="
+                            font-size: 1.2rem;
+                            margin-bottom: 1rem;
+                            color: #333;
+                            font-weight: 600;
+                        ">Content Fragmentation</h4>
+                        <p style="
+                            color: #666;
+                            line-height: 1.6;
+                            margin-bottom: 1rem;
+                        ">Increasing competition from streaming platforms and content creators fragments audience attention and challenges traditional distribution models.</p>
+                        <div class="solution" style="
+                            padding: 1rem;
+                            background: linear-gradient(135deg, rgba(253, 126, 20, 0.1), rgba(232, 89, 12, 0.1));
+                            border-radius: 0.5rem;
+                            border-left: 4px solid #28a745;
+                            font-size: 0.9rem;
+                            line-height: 1.5;
+                        ">
+                            <strong>Solution:</strong> Develop multi-platform content strategies and direct-to-consumer distribution channels. Implement content recommendation engines and create exclusive, high-value experiences.
+                        </div>
+                    </div>
+                    
+                    <div class="challenge-item" style="
+                        padding: 1.5rem;
+                        background: white;
+                        border-radius: 0.75rem;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        border-top: 4px solid #6f42c1;
+                        transition: transform 0.3s ease;
+                        animation: flipInX 0.6s ease-out 0.4s both;
+                    ">
+                        <h4 style="
+                            font-size: 1.2rem;
+                            margin-bottom: 1rem;
+                            color: #333;
+                            font-weight: 600;
+                        ">Data Security & Privacy</h4>
+                        <p style="
+                            color: #666;
+                            line-height: 1.6;
+                            margin-bottom: 1rem;
+                        ">Sports and entertainment organizations handle sensitive fan data and intellectual property, requiring robust security measures and privacy compliance across global operations.</p>
+                        <div class="solution" style="
+                            padding: 1rem;
+                            background: linear-gradient(135deg, rgba(111, 66, 193, 0.1), rgba(90, 45, 156, 0.1));
+                            border-radius: 0.5rem;
+                            border-left: 4px solid #28a745;
+                            font-size: 0.9rem;
+                            line-height: 1.5;
+                        ">
+                            <strong>Solution:</strong> Implement comprehensive cybersecurity frameworks with encryption, access controls, and regular audits. Ensure GDPR and CCPA compliance while maintaining transparent data practices.
+                        </div>
+                    </div>
+                    
+                    <div class="challenge-item" style="
+                        padding: 1.5rem;
+                        background: white;
+                        border-radius: 0.75rem;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        border-top: 4px solid #28a745;
+                        transition: transform 0.3s ease;
+                        animation: flipInX 0.6s ease-out 0.6s both;
+                    ">
+                        <h4 style="
+                            font-size: 1.2rem;
+                            margin-bottom: 1rem;
+                            color: #333;
+                            font-weight: 600;
+                        ">Venue Experience Optimization</h4>
+                        <p style="
+                            color: #666;
+                            line-height: 1.6;
+                            margin-bottom: 1rem;
+                        ">Balancing traditional in-person experiences with digital enhancements while managing operational costs and maintaining safety standards presents significant challenges.</p>
+                        <div class="solution" style="
+                            padding: 1rem;
+                            background: linear-gradient(135deg, rgba(40, 167, 69, 0.1), rgba(32, 201, 151, 0.1));
+                            border-radius: 0.5rem;
+                            border-left: 4px solid #28a745;
+                            font-size: 0.9rem;
+                            line-height: 1.5;
+                        ">
+                            <strong>Solution:</strong> Implement smart venue technologies with IoT sensors, mobile integration, and cashless systems. Use data analytics to optimize operations and enhance fan experiences.
+                        </div>
+                    </div>
+
+                    <!-- New Challenge Items -->
+                    <div class="challenge-item" style="
+                        padding: 1.5rem;
+                        background: white;
+                        border-radius: 0.75rem;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        border-top: 4px solid #17a2b8;
+                        transition: transform 0.3s ease;
+                        animation: flipInX 0.6s ease-out 0.8s both;
+                    ">
+                        <h4 style="
+                            font-size: 1.2rem;
+                            margin-bottom: 1rem;
+                            color: #333;
+                            font-weight: 600;
+                        ">Athlete Performance & Health</h4>
+                        <p style="
+                            color: #666;
+                            line-height: 1.6;
+                            margin-bottom: 1rem;
+                        ">Managing athlete performance data, preventing injuries, and optimizing recovery while maintaining data privacy and competitive advantages.</p>
+                        <div class="solution" style="
+                            padding: 1rem;
+                            background: linear-gradient(135deg, rgba(23, 162, 184, 0.1), rgba(19, 132, 150, 0.1));
+                            border-radius: 0.5rem;
+                            border-left: 4px solid #28a745;
+                            font-size: 0.9rem;
+                            line-height: 1.5;
+                        ">
+                            <strong>Solution:</strong> Implement integrated performance management systems with wearable technology, biometric monitoring, and predictive analytics for injury prevention and performance optimization.
+                        </div>
+                    </div>
+                    
+                    <div class="challenge-item" style="
+                        padding: 1.5rem;
+                        background: white;
+                        border-radius: 0.75rem;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        border-top: 4px solid #ffc107;
+                        transition: transform 0.3s ease;
+                        animation: flipInX 0.6s ease-out 1s both;
+                    ">
+                        <h4 style="
+                            font-size: 1.2rem;
+                            margin-bottom: 1rem;
+                            color: #333;
+                            font-weight: 600;
+                        ">Revenue Diversification</h4>
+                        <p style="
+                            color: #666;
+                            line-height: 1.6;
+                            margin-bottom: 1rem;
+                        ">Traditional revenue streams face pressure from changing consumption patterns, requiring innovative approaches to monetization and new business models.</p>
+                        <div class="solution" style="
+                            padding: 1rem;
+                            background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(224, 168, 0, 0.1));
+                            border-radius: 0.5rem;
+                            border-left: 4px solid #28a745;
+                            font-size: 0.9rem;
+                            line-height: 1.5;
+                        ">
+                            <strong>Solution:</strong> Develop diversified revenue models including subscription services, premium content, interactive experiences, and data-driven sponsorship activation. Implement dynamic pricing and personalized offers.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Future Trends -->
+            <div class="future-trends-section" style="
+                background: linear-gradient(135deg, rgba(111, 66, 193, 0.05) 0%, rgba(232, 62, 140, 0.05) 100%);
+                border-radius: 1rem;
+                padding: 2rem;
+                margin-bottom: 3rem;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+                border-left: 6px solid #6f42c1;
+                animation: fadeInUp 0.8s ease-out 1.1s both;
+            ">
+                <h3 style="
+                    font-size: clamp(1.5rem, 3vw, 2rem);
+                    margin-bottom: 2rem;
+                    color: #333;
+                    text-align: center;
+                    font-weight: 700;
+                    background: linear-gradient(135deg, #6f42c1, #e83e8c);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                ">🔮 Future of Sports & Entertainment</h3>
+                <div class="trends-content" style="
+                    display: grid;
+                    gap: 2rem;
+                ">
+                    <div class="trend-category" style="
+                        padding: 1.5rem;
+                        background: white;
+                        border-radius: 0.75rem;
+                        border-left: 4px solid #6f42c1;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        transition: transform 0.3s ease;
+                        animation: fadeIn 0.6s ease-out;
+                    ">
+                        <h4 style="
+                            font-size: 1.3rem;
+                            margin-bottom: 1rem;
+                            color: #333;
+                            font-weight: 600;
+                        ">Immersive Fan Experiences</h4>
+                        <p style="
+                            color: #666;
+                            line-height: 1.6;
+                        ">Extended reality (XR) technologies will create fully immersive fan experiences. Virtual attendance, interactive games, and personalized content will transform how fans engage with sports and entertainment.</p>
+                    </div>
+                    
+                    <div class="trend-category" style="
+                        padding: 1.5rem;
+                        background: white;
+                        border-radius: 0.75rem;
+                        border-left: 4px solid #dc3545;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        transition: transform 0.3s ease;
+                        animation: fadeIn 0.6s ease-out 0.2s both;
+                    ">
+                        <h4 style="
+                            font-size: 1.3rem;
+                            margin-bottom: 1rem;
+                            color: #333;
+                            font-weight: 600;
+                        ">AI-Powered Personalization</h4>
+                        <p style="
+                            color: #666;
+                            line-height: 1.6;
+                        ">Advanced AI algorithms will deliver hyper-personalized content, recommendations, and experiences. Predictive analytics will anticipate fan preferences and optimize engagement strategies.</p>
+                    </div>
+                    
+                    <div class="trend-category" style="
+                        padding: 1.5rem;
+                        background: white;
+                        border-radius: 0.75rem;
+                        border-left: 4px solid #fd7e14;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        transition: transform 0.3s ease;
+                        animation: fadeIn 0.6s ease-out 0.4s both;
+                    ">
+                        <h4 style="
+                            font-size: 1.3rem;
+                            margin-bottom: 1rem;
+                            color: #333;
+                            font-weight: 600;
+                        ">Smart Venue Ecosystems</h4>
+                        <p style="
+                            color: #666;
+                            line-height: 1.6;
+                        ">IoT-connected smart venues will create seamless experiences. From parking to concessions, every aspect will be optimized through data and automation, enhancing both fan experience and operational efficiency.</p>
+                    </div>
+                    
+                    <div class="trend-category" style="
+                        padding: 1.5rem;
+                        background: white;
+                        border-radius: 0.75rem;
+                        border-left: 4px solid #28a745;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        transition: transform 0.3s ease;
+                        animation: fadeIn 0.6s ease-out 0.6s both;
+                    ">
+                        <h4 style="
+                            font-size: 1.3rem;
+                            margin-bottom: 1rem;
+                            color: #333;
+                            font-weight: 600;
+                        ">Direct-to-Consumer Platforms</h4>
+                        <p style="
+                            color: #666;
+                            line-height: 1.6;
+                        ">Sports and entertainment organizations will increasingly bypass traditional distribution channels, building direct relationships with fans through owned platforms and communities.</p>
+                    </div>
+                    
+                    <div class="trend-category" style="
+                        padding: 1.5rem;
+                        background: white;
+                        border-radius: 0.75rem;
+                        border-left: 4px solid #17a2b8;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        transition: transform 0.3s ease;
+                        animation: fadeIn 0.6s ease-out 0.8s both;
+                    ">
+                        <h4 style="
+                            font-size: 1.3rem;
+                            margin-bottom: 1rem;
+                            color: #333;
+                            font-weight: 600;
+                        ">Esports Integration</h4>
+                        <p style="
+                            color: #666;
+                            line-height: 1.6;
+                        ">Traditional sports organizations will increasingly integrate esports and gaming elements, creating hybrid experiences that appeal to digital-native audiences and open new revenue streams.</p>
+                    </div>
+
+                    <!-- New Trend Categories -->
+                    <div class="trend-category" style="
+                        padding: 1.5rem;
+                        background: white;
+                        border-radius: 0.75rem;
+                        border-left: 4px solid #ffc107;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        transition: transform 0.3s ease;
+                        animation: fadeIn 0.6s ease-out 1s both;
+                    ">
+                        <h4 style="
+                            font-size: 1.3rem;
+                            margin-bottom: 1rem;
+                            color: #333;
+                            font-weight: 600;
+                        ">Sustainable Sports & Entertainment</h4>
+                        <p style="
+                            color: #666;
+                            line-height: 1.6;
+                        ">Green technologies and sustainable practices will transform venue operations and event production. Carbon-neutral events and eco-friendly fan experiences will become industry standards.</p>
+                    </div>
+                    
+                    <div class="trend-category" style="
+                        padding: 1.5rem;
+                        background: white;
+                        border-radius: 0.75rem;
+                        border-left: 4px solid #e83e8c;
+                        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                        transition: transform 0.3s ease;
+                        animation: fadeIn 0.6s ease-out 1.2s both;
+                    ">
+                        <h4 style="
+                            font-size: 1.3rem;
+                            margin-bottom: 1rem;
+                            color: #333;
+                            font-weight: 600;
+                        ">Web3 & Digital Ownership</h4>
+                        <p style="
+                            color: #666;
+                            line-height: 1.6;
+                        ">Blockchain technology will enable digital collectibles, fan tokens, and new forms of engagement. Web3 platforms will create decentralized sports and entertainment ecosystems.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Call to Action -->
+            <div class="cta-section" style="
+                background: linear-gradient(270deg, #dc3545, #c82333, #fd7e14, #e8590c);
+                background-size: 800% 800%;
+                animation: gradientShift 12s ease infinite;
+                padding: 3rem 2rem;
+                border-radius: 12px;
+                text-align: center;
+                color: white;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                margin: 2rem 0;
+                position: relative;
+                overflow: hidden;
+            ">
+                <h3 style="
+                    font-size: clamp(1.5rem, 4vw, 2.2rem);
+                    margin-bottom: 1.5rem;
+                    font-weight: 700;
+                    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+                ">🏆 Transform Your Sports & Entertainment Organization</h3>
+                <p style="
+                    font-size: clamp(1rem, 2.5vw, 1.2rem);
+                    line-height: 1.6;
+                    margin-bottom: 2rem;
+                    max-width: 800px;
+                    margin-left: auto;
+                    margin-right: auto;
+                    opacity: 0.95;
+                ">Our team of sports and entertainment experts combines deep industry knowledge with cutting-edge technology solutions to help you create unforgettable fan experiences, optimize operations, and drive revenue growth. From stadium management to digital content distribution, we partner with you to build a more engaging, efficient, and profitable organization.</p>
+                <div class="cta-buttons" style="
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 1rem;
+                    justify-content: center;
+                    align-items: center;
+                ">
+                    <a href="{% url 'contact' %}" class="btn-primary" style="
+                        background: rgba(255,255,255,0.2);
+                        backdrop-filter: blur(10px);
+                        border: 2px solid rgba(255,255,255,0.3);
+                        color: white;
+                        padding: 0.8rem 1.8rem;
+                        border-radius: 50px;
+                        text-decoration: none;
+                        font-weight: 600;
+                        font-size: clamp(0.9rem, 2vw, 1rem);
+                        transition: all 0.3s ease;
+                        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                    ">Schedule Industry Consultation</a>
+                    <a href="{% url 'industries_main' %}" class="btn-secondary" style="
+                        background: white;
+                        color: #dc3545;
+                        padding: 0.8rem 1.8rem;
+                        border-radius: 50px;
+                        text-decoration: none;
+                        font-weight: 600;
+                        font-size: clamp(0.9rem, 2vw, 1rem);
+                        transition: all 0.3s ease;
+                        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+                    ">Explore Industry Solutions</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+}
+
+/* Base Container - Full Width */
+.insights-page-container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Hero Section - Full Viewport */
+.insights-hero {
+    position: relative;
+    color: white;
+    padding: 0;
+    text-align: center;
+    margin-bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+}
+
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(220, 53, 69, 0.8) 0%, rgba(253, 126, 20, 0.8) 100%);
+    background-image: url('https://i.pinimg.com/1200x/a9/a5/8d/a9a58d3e35ec8bb956339e810de6b671.jpg');
+    background-size: cover;
+    background-position: center;
+    background-blend-mode: overlay;
+    background-attachment: scroll;
+    background-repeat: no-repeat;
+    z-index: -1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    padding: 0 20px;
+    width: 100%;
+}
+
+.hero-title {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    margin-bottom: 1.5rem;
+    font-weight: 900;
+    line-height: 1.1;
+    text-shadow: 3px 3px 10px rgba(0,0,0,0.7);
+    animation: fadeInUp 1s ease-out;
+    background: linear-gradient(135deg, #ffffff 0%, #f0f8ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+    position: relative;
+    display: inline-block;
+}
+
+.hero-title span {
+    background: linear-gradient(135deg, #dc3545, #fd7e14);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+    text-shadow: none;
+}
+
+.hero-description {
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    margin: 0 auto;
+    line-height: 1.6;
+    opacity: 0.95;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    animation: fadeInUp 1s ease-out 0.3s both;
+    background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(240,248,255,0.9) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 500;
+    max-width: 700px;
+    padding: 1rem 0;
+    position: relative;
+    letter-spacing: 0.2px;
+}
+
+/* Section Title */
+.section-title {
+    text-align: center;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    margin-bottom: 3rem;
+    color: #333;
+    font-weight: 800;
+    line-height: 1.2;
+    background: linear-gradient(135deg, #dc3545, #c82333, #fd7e14, #e8590c);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+/* AI Impact Visualization Section */
+.ai-impact-visualization {
+    padding: 4rem 0;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    width: 100%;
+}
+
+.visualization-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Enhanced Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+    70% {
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes flipInX {
+    from {
+        transform: perspective(400px) rotateX(90deg);
+        opacity: 0;
+    }
+    to {
+        transform: perspective(400px) rotateX(0deg);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Enhanced Mobile Responsiveness */
+@media (max-width: 768px) {
+    .insights-hero {
+        height: 100vh;
+        min-height: 100vh;
+        padding: 0 1rem;
+        width: 100vw;
+        margin-left: -50vw;
+        margin-right: -50vw;
+        left: 50%;
+        right: 50%;
+    }
+
+    .hero-content {
+        padding: 0 1rem;
+    }
+
+    .ai-impact-visualization {
+        padding: 2rem 0;
+    }
+
+    .timeline-section,
+    .metrics-section,
+    .applications-section,
+    .framework-section,
+    .challenges-section,
+    .future-trends-section {
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .timeline::before {
+        left: 20px;
+    }
+
+    .timeline-item {
+        padding-left: 60px;
+    }
+
+    .timeline-year {
+        min-width: 60px;
+        font-size: 0.8rem;
+        padding: 0.4rem 0.8rem;
+    }
+
+    .metrics-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .applications-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .framework-step {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .step-number {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+
+    .challenges-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        width: 100%;
+        max-width: 300px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 1rem;
+    }
+
+    .timeline-item {
+        padding-left: 50px;
+    }
+
+    .timeline-year {
+        min-width: 50px;
+        font-size: 0.7rem;
+        padding: 0.3rem 0.6rem;
+    }
+
+    .metric-value {
+        font-size: 2.5rem;
+    }
+
+    .application-area {
+        padding: 1rem;
+    }
+
+    .cta-section {
+        padding: 2rem 1rem;
+    }
+
+    .cta-section h3 {
+        font-size: 1.5rem;
+    }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 360px) {
+    .timeline-item {
+        padding-left: 45px;
+    }
+
+    .timeline-year {
+        min-width: 45px;
+    }
+
+    .metric-card {
+        padding: 1.5rem 1rem;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .metric-card:hover,
+    .framework-step:hover,
+    .application-area:hover,
+    .challenge-item:hover,
+    .trend-category:hover {
+        transform: none;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .metric-card,
+    .framework-step,
+    .application-area,
+    .challenge-item,
+    .trend-category,
+    .btn-primary,
+    .btn-secondary {
+        transition: none;
+    }
+    
+    .hero-title,
+    .hero-description {
+        animation: none;
+    }
+    
+    .timeline-item,
+    .metric-card,
+    .application-area,
+    .framework-step,
+    .challenge-item,
+    .trend-category {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .ai-impact-visualization {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    }
+    
+    .section-title {
+        color: white;
+    }
+
+    .timeline-section,
+    .metrics-section,
+    .applications-section,
+    .framework-section,
+    .challenges-section,
+    .future-trends-section {
+        background: #2d2d2d;
+        color: white;
+    }
+
+    .timeline-content,
+    .application-area,
+    .framework-step,
+    .challenge-item,
+    .trend-category,
+    .metric-card {
+        background: #1a1a1a;
+        color: white;
+    }
+
+    .timeline-section h3,
+    .metrics-section h3,
+    .applications-section h3,
+    .framework-section h3,
+    .challenges-section h3,
+    .future-trends-section h3,
+    .timeline-content h4,
+    .application-area h4,
+    .step-content h4,
+    .challenge-item h4,
+    .trend-category h4,
+    .metric-label {
+        color: white;
+    }
+
+    .timeline-content p,
+    .metric-description,
+    .application-list li,
+    .step-content p,
+    .challenge-item p,
+    .trend-category p {
+        color: #ccc;
+    }
+
+    .adoption-stats {
+        background: #2d2d2d;
+        border-color: #444;
+    }
+
+    .adoption-stats span {
+        color: #ccc;
+    }
+}
+
+/* Mobile-specific hero background fix */
+@media (max-width: 768px) {
+    .hero-background {
+        background-attachment: scroll !important;
+        background-size: cover;
+        background-position: center center;
+    }
+}
+
+/* Text readability improvements */
+.timeline-content h4,
+.application-area h4,
+.step-content h4,
+.challenge-item h4,
+.trend-category h4 {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Container max-width for very large screens */
+@media (min-width: 1400px) {
+    .container {
+        max-width: 1320px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .applications-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .challenges-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Hover effects for interactive elements */
+@media (hover: hover) {
+    .metric-card:hover,
+    .framework-step:hover,
+    .application-area:hover,
+    .challenge-item:hover,
+    .trend-category:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    }
+    
+    .btn-primary:hover {
+        background: rgba(255,255,255,0.3);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+    
+    .btn-secondary:hover {
+        background: rgba(255,255,255,0.9);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Enhanced interactive effects for mobile
+document.addEventListener('DOMContentLoaded', function() {
+    // Add intersection observer for scroll animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    // Animate elements on scroll
+    const animatedElements = document.querySelectorAll('.timeline-item, .metric-card, .application-area, .framework-step, .challenge-item, .trend-category');
+    animatedElements.forEach(element => {
+        element.style.opacity = '0';
+        element.style.transform = 'translateY(20px)';
+        element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(element);
+    });
+});
+
+// Performance optimization
+let scrollTimeout;
+window.addEventListener('scroll', function() {
+    if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
+    }
+    scrollTimeout = setTimeout(function() {
+        // Handle scroll-based animations if needed
+    }, 100);
+});
+</script>
+{% endblock %}

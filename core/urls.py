@@ -239,4 +239,9 @@ path('api/regional-leaders/<int:leader_id>/permanent-delete/', views.permanent_d
 path('api/managing-partners/<int:leader_id>/permanent-delete/', views.permanent_delete_managing_partner, name='permanent_delete_managing_partner'),
 
 
+
+# Add these with your other industry URLs
+path('industries/sport-entertainment/', views.sport_entertainment_industry, name='sport_entertainment_industry'),
+path('industries/marine/', views.marine_industry, name='marine_industry'),
+path('industries/aerospace/', views.aerospace_industry, name='aerospace_industry'),
 ]

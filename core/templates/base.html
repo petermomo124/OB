@@ -5,18 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Obllcus - Intelligent Operations & Digital Transformation{% endblock %}</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
     <!-- Favicon -->
-
-<link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
-
-<!-- Additional favicon formats for better browser support -->
-<link rel="shortcut icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
-<link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon-32x32.png' %}">
-<link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon-16x16.png' %}">
-<link rel="apple-touch-icon" sizes="180x180" href="{% static 'apple-touch-icon.png' %}">
-<link rel="manifest" href="{% static 'site.webmanifest' %}">    
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
+    <!-- Additional favicon formats for better browser support -->
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon-16x16.png' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'apple-touch-icon.png' %}">
+    <link rel="manifest" href="{% static 'site.webmanifest' %}">    
     <!-- Preconnect to external domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -41,22 +39,6 @@
     
     <!-- AOS (Animate On Scroll) JS -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    
-    <!-- Custom JavaScript -->
-    <script src="{% static 'src/js/header.js' %}"></script>
-    <script src="{% static 'src/js/homepage.js' %}"></script>
-    
-    <!-- Initialize AOS -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            AOS.init({
-                duration: 800,
-                once: true,
-                easing: 'ease-in-out',
-                offset: 100
-            });
-        });
-    </script>
     
     <!-- Slider and Dynamic Elements CSS -->
     <link href="{% static 'css/components/sliders.css' %}" rel="stylesheet">
@@ -88,6 +70,8 @@
         body {
             background-color: #ffffff;
             color: #111827;
+            position: relative;
+            min-height: 100vh;
         }
         
         /* Links */
@@ -181,54 +165,234 @@
         .animate-fade-in {
             animation: fadeIn 0.5s ease-out forwards;
         }
+
+        /* Loading overlay and spinner - ENHANCED WITH BETTER TRANSITIONS */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999999;
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .loading-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* Enhanced Spinner - Mobile friendly */
+        .spinner-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .spinner {
+            width: 80px;
+            height: 80px;
+            border: 5px solid rgba(123, 160, 212, 0.1);
+            border-radius: 50%;
+            border-top-color: #7ba0d4;
+            border-right-color: #7ba0d4;
+            animation: spin 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+            box-shadow: 0 0 20px rgba(123, 160, 212, 0.2);
+        }
+
+        /* Inner spinner for layered effect */
+        .spinner-inner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border: 3px solid transparent;
+            border-radius: 50%;
+            border-top-color: #5a7fb8;
+            animation: spinReverse 1.5s linear infinite;
+        }
+
+        /* Center dot */
+        .spinner-center {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #7ba0d4;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(123, 160, 212, 0.5);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes spinReverse {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(-360deg); }
+        }
+
+        /* Content wrapper for blur effect */
+        .content-wrapper {
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Page transition animations */
+        .page-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 999998;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .page-transition.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Header specific styles to prevent glitching */
+        header {
+            position: relative;
+            z-index: 100;
+            transition: opacity 0.2s ease;
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .spinner-container {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .spinner {
+                width: 70px;
+                height: 70px;
+                border-width: 4px;
+            }
+            
+            .spinner-inner {
+                width: 50px;
+                height: 50px;
+                border-width: 2.5px;
+            }
+            
+            .spinner-center {
+                width: 16px;
+                height: 16px;
+            }
+            
+            .loading-overlay {
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .spinner-container {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .spinner {
+                width: 60px;
+                height: 60px;
+                border-width: 3px;
+            }
+            
+            .spinner-inner {
+                width: 40px;
+                height: 40px;
+                border-width: 2px;
+            }
+            
+            .spinner-center {
+                width: 14px;
+                height: 14px;
+            }
+        }
     </style>
     
     {% block extra_css %}{% endblock %}
 </head>
 <body class="font-sans antialiased text-gray-900">
-    {% include 'partials/_header.html' %}
+    <!-- Page Transition Overlay -->
+    <div id="page-transition" class="page-transition"></div>
     
-    <main class="min-h-screen">
-        <!-- Django Messages System -->
-        {% if messages %}
-        <div class="fixed top-20 right-4 z-50 max-w-sm w-full">
-            {% for message in messages %}
-            <div class="alert mb-2 p-4 rounded-lg shadow-lg border-l-4
-                        {% if message.tags == 'success' %}bg-green-100 border-green-500 text-green-700
-                        {% elif message.tags == 'error' %}bg-green-100 border-green-500 text-black-700
-                        {% elif message.tags == 'warning' %}bg-yellow-100 border-yellow-500 text-yellow-700
-                        {% else %}bg-blue-100 border-blue-500 text-blue-700{% endif %}">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        {% if message.tags == 'success' %}
-                        <i class="fas fa-check-circle"></i>
-                        {% elif message.tags == 'error' %}
-                        <i class="fas fa-exclamation-circle"></i>
-                        {% elif message.tags == 'warning' %}
-                        <i class="fas fa-exclamation-triangle"></i>
-                        {% else %}
-                        <i class="fas fa-info-circle"></i>
-                        {% endif %}
-                    </div>
-                    <div class="ml-3">
-                        <p class="text-sm font-medium">{{ message }}</p>
-                    </div>
-                    <div class="ml-auto pl-3">
-                        <button class="alert-close" onclick="this.parentElement.parentElement.parentElement.remove()">
-                            <i class="fas fa-times"></i>
-                        </button>
+    <!-- Loading Overlay - ALWAYS VISIBLE INITIALLY -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="spinner-container">
+            <div class="spinner"></div>
+            <div class="spinner-inner"></div>
+            <div class="spinner-center"></div>
+        </div>
+    </div>
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="content-wrapper">
+        {% include 'partials/_header.html' %}
+        
+        <main class="min-h-screen">
+            <!-- Django Messages System -->
+            {% if messages %}
+            <div class="fixed top-20 right-4 z-50 max-w-sm w-full">
+                {% for message in messages %}
+                <div class="alert mb-2 p-4 rounded-lg shadow-lg border-l-4
+                            {% if message.tags == 'success' %}bg-green-100 border-green-500 text-green-700
+                            {% elif message.tags == 'error' %}bg-green-100 border-green-500 text-black-700
+                            {% elif message.tags == 'warning' %}bg-yellow-100 border-yellow-500 text-yellow-700
+                            {% else %}bg-blue-100 border-blue-500 text-blue-700{% endif %}">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            {% if message.tags == 'success' %}
+                            <i class="fas fa-check-circle"></i>
+                            {% elif message.tags == 'error' %}
+                            <i class="fas fa-exclamation-circle"></i>
+                            {% elif message.tags == 'warning' %}
+                            <i class="fas fa-exclamation-triangle"></i>
+                            {% else %}
+                            <i class="fas fa-info-circle"></i>
+                            {% endif %}
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium">{{ message }}</p>
+                        </div>
+                        <div class="ml-auto pl-3">
+                            <button class="alert-close" onclick="this.parentElement.parentElement.parentElement.remove()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-        </div>
-        {% endif %}
+            {% endif %}
 
-        {% block content %}
-        <!-- Content will be overridden by child templates -->
-        {% endblock %}
-    </main>
-{% include 'partials/_footer.html' %}
+            {% block content %}
+            <!-- Content will be overridden by child templates -->
+            {% endblock %}
+        </main>
+        
+        {% include 'partials/_footer.html' %}
+    </div> <!-- Close content-wrapper -->
 
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
@@ -237,42 +401,482 @@
 <!-- Alpine.js -->
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js" defer></script>
 
+<!-- AOS Initialization -->
 <script>
-    // Add any global JavaScript here
     document.addEventListener('DOMContentLoaded', function() {
-        // Initialize any global components
-        console.log('Document loaded');
-
-        // Auto-dismiss messages after 20 seconds
-        setTimeout(function() {
-            const alerts = document.querySelectorAll('.alert');
-            alerts.forEach(function(alert) {
-                alert.style.transition = 'opacity 0.5s ease';
-                alert.style.opacity = '0';
-                setTimeout(function() {
-                    alert.remove();
-                }, 500);
-            });
-        }, 20000);
+        AOS.init({
+            duration: 800,
+            once: true,
+            easing: 'ease-in-out',
+            offset: 100
+        });
     });
 </script>
 
+<!-- Loading Manager Script - FIXED HEADER GLITCHING -->
+<script>
+    (function() {
+        'use strict';
+        
+        console.log('🔄 Loading Manager Initialized - Header Glitch Fix');
+        
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const pageTransition = document.getElementById('page-transition');
+        const contentWrapper = document.getElementById('content-wrapper');
+        
+        // State tracking
+        let isInitialLoad = true;
+        let isNavigationLoading = false;
+        let navigationTimeout = null;
+        let pageFullyLoaded = false;
+        let minimumDisplayTime = 1000; // Minimum 1 second
+        let startTime = Date.now();
+        let navigationUrl = null;
+        
+        // Store original fetch for AJAX detection
+        const originalFetch = window.fetch;
+        
+        // Function to show loading smoothly
+        function showLoading() {
+            if (loadingOverlay) {
+                // First show page transition
+                if (pageTransition) {
+                    pageTransition.classList.add('active');
+                }
+                
+                // Then show loading overlay
+                setTimeout(() => {
+                    loadingOverlay.classList.remove('hidden');
+                    console.log('🔵 Loading shown smoothly');
+                }, 50);
+            }
+        }
+        
+        // Function to hide loading smoothly
+        function hideLoading() {
+            if (isInitialLoad) {
+                const elapsedTime = Date.now() - startTime;
+                const remainingTime = Math.max(0, minimumDisplayTime - elapsedTime);
+                
+                setTimeout(() => {
+                    isInitialLoad = false;
+                    pageFullyLoaded = true;
+                    
+                    if (loadingOverlay) {
+                        loadingOverlay.classList.add('hidden');
+                    }
+                    if (pageTransition) {
+                        pageTransition.classList.remove('active');
+                    }
+                    
+                    console.log('✅ Initial loading hidden - Page fully loaded');
+                }, remainingTime);
+            } else if (isNavigationLoading) {
+                // For navigation, hide immediately when cancelled
+                isNavigationLoading = false;
+                pageFullyLoaded = true;
+                navigationUrl = null;
+                
+                if (loadingOverlay) {
+                    loadingOverlay.classList.add('hidden');
+                }
+                if (pageTransition) {
+                    pageTransition.classList.remove('active');
+                }
+                
+                console.log('🚫 Navigation cancelled - Loading hidden');
+            }
+        }
+        
+        // Function to handle smooth navigation
+        function handleSmoothNavigation(url) {
+            if (isNavigationLoading) {
+                console.log('⚠️ Navigation already in progress');
+                return;
+            }
+            
+            isNavigationLoading = true;
+            navigationUrl = url;
+            showLoading();
+            
+            // Set timeout to detect cancelled navigation
+            navigationTimeout = setTimeout(function() {
+                if (isNavigationLoading && navigationUrl === url) {
+                    console.log('🚫 Navigation cancelled or timed out');
+                    hideLoading();
+                }
+            }, 5000);
+        }
+        
+        // Function to handle initial page load
+        function handleInitialLoad() {
+            console.log('🚀 Initial page load started');
+            startTime = Date.now();
+            
+            // Show loading immediately
+            showLoading();
+            
+            // Check if page is already loaded
+            if (document.readyState === 'complete') {
+                console.log('📄 Page already loaded');
+                setTimeout(hideLoading, 300);
+            } else {
+                // Wait for window load event
+                window.addEventListener('load', function() {
+                    console.log('🌐 Window fully loaded');
+                    
+                    // Wait for all images to load
+                    const images = document.getElementsByTagName('img');
+                    const totalImages = images.length;
+                    let loadedImages = 0;
+                    
+                    if (totalImages === 0) {
+                        console.log('🖼️ No images to load');
+                        setTimeout(hideLoading, 300);
+                    } else {
+                        // Check each image
+                        for (let i = 0; i < images.length; i++) {
+                            if (images[i].complete) {
+                                loadedImages++;
+                            } else {
+                                images[i].addEventListener('load', function() {
+                                    loadedImages++;
+                                    if (loadedImages === totalImages) {
+                                        console.log('🖼️ All images loaded');
+                                        setTimeout(hideLoading, 300);
+                                    }
+                                });
+                                images[i].addEventListener('error', function() {
+                                    loadedImages++;
+                                    if (loadedImages === totalImages) {
+                                        console.log('🖼️ All images loaded (with errors)');
+                                        setTimeout(hideLoading, 300);
+                                    }
+                                });
+                            }
+                        }
+                        
+                        // If all images are already loaded
+                        if (loadedImages === totalImages) {
+                            console.log('🖼️ All images already loaded');
+                            setTimeout(hideLoading, 300);
+                        }
+                    }
+                    
+                    // Safety timeout - hide loading after max 8 seconds
+                    setTimeout(function() {
+                        if (isInitialLoad) {
+                            console.log('⏰ Safety timeout - hiding loading');
+                            hideLoading();
+                        }
+                    }, 8000);
+                });
+            }
+        }
+        
+        // Intercept link clicks - ONLY for actual page navigation (EXCLUDING CHAT)
+        document.addEventListener('click', function(e) {
+            let target = e.target;
+            
+            // Find the closest anchor tag
+            while (target && target.tagName !== 'A') {
+                target = target.parentElement;
+                if (!target) break;
+            }
+            
+            if (!target || !target.href) return;
+            
+            // Skip if it's not a regular link
+            if (target.href.startsWith('javascript:') || 
+                target.href.startsWith('#') ||
+                target.target === '_blank' ||
+                target.hasAttribute('download') ||
+                target.hasAttribute('data-no-loader') ||
+                target.hasAttribute('data-ajax')) {
+                return;
+            }
+            
+            // SKIP CHAT-RELATED LINKS AND FORMS
+            if (target.closest('.chat-container') || 
+                target.closest('#chat-form') ||
+                target.closest('[data-chat]') ||
+                target.closest('.chat-message') ||
+                target.closest('.chat-input')) {
+                console.log('💬 Chat element clicked - skipping loader');
+                return;
+            }
+            
+            // SKIP HEADER NAVIGATION LINKS THAT MIGHT CAUSE GLITCHING
+            const header = document.querySelector('header');
+            if (header && header.contains(target)) {
+                console.log('🔝 Header navigation - using smooth transition');
+                // We'll handle header links specially
+            }
+            
+            try {
+                const linkUrl = new URL(target.href);
+                const currentUrl = new URL(window.location.href);
+                
+                // Only show loader for same-origin navigation
+                if (linkUrl.origin === currentUrl.origin && 
+                    linkUrl.pathname !== currentUrl.pathname) {
+                    
+                    console.log('🔗 Page navigation detected:', linkUrl.pathname);
+                    e.preventDefault();
+                    
+                    // Handle header links with extra care to prevent glitching
+                    const isHeaderLink = header && header.contains(target);
+                    if (isHeaderLink) {
+                        // For header links, add a tiny delay to ensure smooth transition
+                        setTimeout(() => {
+                            handleSmoothNavigation(target.href);
+                            setTimeout(function() {
+                                window.location.href = target.href;
+                            }, 350);
+                        }, 50);
+                    } else {
+                        // For regular links
+                        handleSmoothNavigation(target.href);
+                        setTimeout(function() {
+                            window.location.href = target.href;
+                        }, 300);
+                    }
+                }
+            } catch (error) {
+                console.log('Error parsing URL:', error);
+            }
+        });
+        
+        // Intercept form submissions - EXCLUDE CHAT FORMS
+        document.addEventListener('submit', function(e) {
+            const form = e.target;
+            
+            // Skip chat forms
+            if (form.id === 'chat-form' || 
+                form.closest('.chat-container') ||
+                form.closest('[data-chat]') ||
+                form.hasAttribute('data-ajax') ||
+                form.hasAttribute('data-no-loader')) {
+                console.log('💬 Chat form submitted - skipping loader');
+                return;
+            }
+            
+            // Only show loader for non-AJAX forms that cause page reload
+            if (!form.hasAttribute('data-ajax') && 
+                !form.hasAttribute('data-no-loader')) {
+                console.log('📝 Form submission causing page reload');
+                e.preventDefault();
+                handleSmoothNavigation(form.action || window.location.href);
+                setTimeout(function() {
+                    form.submit();
+                }, 300);
+            }
+        });
+        
+        // Handle browser navigation (back/forward)
+        window.addEventListener('popstate', function() {
+            console.log('↩️ Browser navigation detected');
+            handleSmoothNavigation(window.location.href);
+            
+            // Hide after a short delay if still on same page
+            setTimeout(function() {
+                if (isNavigationLoading) {
+                    hideLoading();
+                }
+            }, 1000);
+        });
+        
+        // Handle page unloading (actual navigation) - FIX FOR HEADER GLITCHING
+        window.addEventListener('beforeunload', function() {
+            if (isNavigationLoading) {
+                console.log('🚀 Page is unloading - navigation confirmed');
+                // Keep the loading overlay visible during transition
+                if (loadingOverlay) {
+                    loadingOverlay.style.transition = 'none'; // Prevent flickering
+                }
+            } else {
+                // If beforeunload fires but we're not expecting navigation,
+                // it might be a page refresh
+                console.log('🔄 Page refresh detected');
+                showLoading();
+            }
+        });
+        
+        // Handle page load - restore transitions
+        window.addEventListener('load', function() {
+            if (loadingOverlay) {
+                loadingOverlay.style.transition = 'opacity 0.3s ease, visibility 0.3s ease';
+            }
+        });
+        
+        // Intercept AJAX requests to avoid triggering page loader (SPECIAL HANDLING FOR CHAT)
+        if (originalFetch) {
+            window.fetch = function(...args) {
+                // Check if it's a chat-related request
+                const isChatRequest = args[0] && (
+                    typeof args[0] === 'string' && (
+                        args[0].includes('/chat/') || 
+                        args[0].includes('/send-message') ||
+                        args[0].includes('/get-response') ||
+                        args[0].includes('chatbot')
+                    )
+                );
+                
+                // Check headers for no-loader flag
+                const shouldShowLoader = !isChatRequest && 
+                    !(args[1] && (args[1].headers && args[1].headers['X-No-Loader']));
+                
+                if (shouldShowLoader && !isNavigationLoading && !isInitialLoad) {
+                    console.log('📡 Fetch request detected (non-chat)');
+                    // Don't show full page loader for non-chat AJAX
+                } else if (isChatRequest) {
+                    console.log('💬 Chat fetch request - skipping loader');
+                }
+                
+                return originalFetch.apply(this, args);
+            };
+        }
+        
+        // Handle jQuery AJAX for chat (SPECIAL PROTECTION)
+        if (window.jQuery) {
+            // Store original ajax method
+            const originalAjax = $.ajax;
+            let chatAjaxCount = 0;
+            let nonChatAjaxCount = 0;
+            
+            // Override jQuery ajax
+            $.ajax = function(options) {
+                // Check if it's a chat request
+                const isChatRequest = options.url && (
+                    options.url.includes('/chat/') || 
+                    options.url.includes('/send-message') ||
+                    options.url.includes('/get-response') ||
+                    options.url.includes('chatbot') ||
+                    (options.data && (
+                        (typeof options.data === 'string' && options.data.includes('chat')) ||
+                        (typeof options.data === 'object' && options.data.chat)
+                    ))
+                );
+                
+                // Don't interfere with chat requests
+                if (isChatRequest) {
+                    chatAjaxCount++;
+                    console.log('💬 Chat AJAX request (' + chatAjaxCount + ') - skipping loader');
+                    
+                    const originalSuccess = options.success;
+                    const originalError = options.error;
+                    const originalComplete = options.complete;
+                    
+                    // Wrap callbacks to ensure proper counting
+                    options.success = function(...args) {
+                        chatAjaxCount = Math.max(0, chatAjaxCount - 1);
+                        console.log('💬 Chat AJAX success (' + chatAjaxCount + ' remaining)');
+                        if (originalSuccess) originalSuccess.apply(this, args);
+                    };
+                    
+                    options.error = function(...args) {
+                        chatAjaxCount = Math.max(0, chatAjaxCount - 1);
+                        console.log('💬 Chat AJAX error (' + chatAjaxCount + ' remaining)');
+                        if (originalError) originalError.apply(this, args);
+                    };
+                    
+                    options.complete = function(...args) {
+                        if (originalComplete) originalComplete.apply(this, args);
+                    };
+                    
+                    return originalAjax.call($, options);
+                }
+                
+                // For non-chat AJAX
+                nonChatAjaxCount++;
+                console.log('📡 Non-chat AJAX request (' + nonChatAjaxCount + ')');
+                
+                const originalSuccess = options.success;
+                const originalError = options.error;
+                const originalComplete = options.complete;
+                
+                options.success = function(...args) {
+                    nonChatAjaxCount = Math.max(0, nonChatAjaxCount - 1);
+                    console.log('📡 Non-chat AJAX success (' + nonChatAjaxCount + ' remaining)');
+                    if (originalSuccess) originalSuccess.apply(this, args);
+                };
+                
+                options.error = function(...args) {
+                    nonChatAjaxCount = Math.max(0, nonChatAjaxCount - 1);
+                    console.log('📡 Non-chat AJAX error (' + nonChatAjaxCount + ' remaining)');
+                    if (originalError) originalError.apply(this, args);
+                };
+                
+                options.complete = function(...args) {
+                    if (originalComplete) originalComplete.apply(this, args);
+                };
+                
+                return originalAjax.call($, options);
+            };
+            
+            // Don't trigger global AJAX events for chat
+            $(document).on('ajaxSend', function(event, xhr, options) {
+                if (options.url && options.url.includes('/chat/')) {
+                    event.stopPropagation();
+                }
+            });
+        }
+        
+        // Initialize on DOM ready
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('📄 DOM Content Loaded');
+            handleInitialLoad();
+            
+            // Mark all chat-related elements to prevent loader triggering
+            setTimeout(function() {
+                const chatElements = document.querySelectorAll(
+                    '#chat-form, form[data-chat], .chat-container, [data-chat], .chat-message, .chat-input'
+                );
+                chatElements.forEach(element => {
+                    element.setAttribute('data-ajax', 'true');
+                    element.setAttribute('data-no-loader', 'true');
+                });
+                console.log('🔒 Chat elements protected from loader');
+            }, 100);
+        });
+        
+        // Make functions available globally
+        window.showLoadingOverlay = showLoading;
+        window.hideLoadingOverlay = hideLoading;
+        window.isNavigationInProgress = function() { return isNavigationLoading; };
+        
+        // Initialize AOS after loading
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                if (typeof AOS !== 'undefined') {
+                    AOS.refresh();
+                }
+            }, 100);
+        });
+        
+    })();
+</script>
+
+<!-- Authentication and Header Script -->
 <script src="{% static 'js/header.js' %}"></script>
 
 <script>
     // Combined global JavaScript
     document.addEventListener('DOMContentLoaded', function() {
-        // Initialize any global components
-        console.log('Document loaded');
-
+        console.log('📄 DOM Content Loaded - Global scripts');
+        
         // 🔑 AUTHENTICATION REDIRECT LOGIC
         const isIndexPage = window.location.pathname === '/' || 
                            window.location.pathname === '/client-portal/';
         const isAuthenticated = {% if user.is_authenticated %}true{% else %}false{% endif %};
         
         if (isAuthenticated && isIndexPage) {
-            console.log('User is authenticated, redirecting to dashboard...');
-            window.location.href = "{% url 'dashboard' %}";
+            console.log('🔑 User is authenticated, redirecting to dashboard...');
+            // Show loading before redirect
+            if (window.showLoadingOverlay) window.showLoadingOverlay();
+            setTimeout(() => {
+                window.location.href = "{% url 'dashboard' %}";
+            }, 500);
             return; // Stop execution to prevent further processing
         }
         
@@ -284,8 +888,8 @@
             localStorage.removeItem('userAuthenticated');
             localStorage.removeItem('lastLogin');
         }
-
-        // Auto-dismiss messages after 20 seconds (only if not redirected)
+        
+        // Auto-dismiss messages after 20 seconds
         setTimeout(function() {
             const alerts = document.querySelectorAll('.alert');
             alerts.forEach(function(alert) {
@@ -296,11 +900,19 @@
                 }, 500);
             });
         }, 20000);
+        
+        // Initialize homepage scripts if they exist
+        if (typeof initHomepage !== 'undefined') {
+            initHomepage();
+        }
     });
 </script>
 
+<!-- Additional Custom Scripts -->
+<script src="{% static 'src/js/header.js' %}"></script>
+<script src="{% static 'src/js/homepage.js' %}"></script>
 
 {% block extra_js %}{% endblock %}
- {% include 'partials/_cookie_consent.html' %}
+{% include 'partials/_cookie_consent.html' %}
 </body>
 </html>

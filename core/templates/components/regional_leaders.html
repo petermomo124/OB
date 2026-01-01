@@ -5,7 +5,7 @@
         <div class="header-content">
             <div class="header-icon">🌍</div>
             <div class="header-text">
-                <h4 class="header-title">Regional Leadership</h4>
+                <h4 class="header-title">Executive Leadership</h4>
                 <p class="header-subtitle">Our Global Experts</p>
             </div>
         </div>
@@ -13,6 +13,37 @@
     </div>
     
     <div class="regional-leaders-list">
+    {% for partner in managing_partners %}
+        <div class="leader-item" data-leader-id="{{ partner.id }}">
+            <div class="leader-card">
+                <div class="leader-avatar-container">
+                    <div class="leader-avatar">
+                        <img src="{{ partner.get_profile_image_url }}" 
+                             alt="{{ partner.first_name }} {{ partner.last_name }}"
+                             class="leader-image"
+                             loading="lazy">
+                    </div>
+                </div>
+                
+                <div class="leader-info">
+                    <div class="leader-name-container">
+                        <a href="{% url 'regional_leader_profile' partner.id %}" class="leader-name">
+                            {{ partner.first_name }} {{ partner.last_name }}
+                        </a>
+                        <div class="leader-badge">
+                            <i class="fas fa-star"></i>
+                            Managing Partner
+                        </div>
+                    </div>
+                    
+                    <p class="leader-position" title="{{ partner.position_title|default:'Managing Partner' }}">
+                        {{ partner.position_title|default:"Managing Partner" }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    
         {% for leader in regional_leaders %}
         <div class="leader-item" data-leader-id="{{ leader.id }}">
             <div class="leader-card">
@@ -50,36 +81,7 @@
         </div>
         {% endfor %}
         
-        {% for partner in managing_partners %}
-        <div class="leader-item" data-leader-id="{{ partner.id }}">
-            <div class="leader-card">
-                <div class="leader-avatar-container">
-                    <div class="leader-avatar">
-                        <img src="{{ partner.get_profile_image_url }}" 
-                             alt="{{ partner.first_name }} {{ partner.last_name }}"
-                             class="leader-image"
-                             loading="lazy">
-                    </div>
-                </div>
-                
-                <div class="leader-info">
-                    <div class="leader-name-container">
-                        <a href="{% url 'regional_leader_profile' partner.id %}" class="leader-name">
-                            {{ partner.first_name }} {{ partner.last_name }}
-                        </a>
-                        <div class="leader-badge">
-                            <i class="fas fa-star"></i>
-                            Managing Partner
-                        </div>
-                    </div>
-                    
-                    <p class="leader-position" title="{{ partner.position_title|default:'Managing Partner' }}">
-                        {{ partner.position_title|default:"Managing Partner" }}
-                    </p>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
+        
         
         {% if regional_leaders|length > 5 %}
         <div class="view-all-container">
@@ -760,6 +762,8 @@
         border-color: rgba(255, 255, 255, 0.1);
     }
 }
+
+
 </style>
 
 <script>

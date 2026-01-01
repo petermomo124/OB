@@ -3809,3 +3809,50 @@ def permanent_delete_leader(request, leader_id):
 #         partner.delete()
 #         return JsonResponse({'success': True, 'message': 'Managing partner permanently deleted'})
 #     return JsonResponse({'success': False, 'message': 'Invalid request method'}, status=405)
+
+
+
+def sport_entertainment_industry(request):
+    context = {
+        'title': 'Sport & Entertainment Industry',
+        'description': 'Specialized services for sports teams, entertainment companies, venues, and media rights.',
+        'services': [
+            'Sport and Entertainment Audit',
+            'Media Rights Valuation',
+            'Sponsorship Revenue Analysis',
+            'Venue Management Consulting',
+            'Player Contract Analysis',
+            'Event Financial Management'
+        ]
+    }
+    return render(request, 'industries/sport_entertainment.html', context)
+
+def marine_industry(request):
+    context = {
+        'title': 'Marine & Maritime Industry',
+        'description': 'Expert services for shipping, ports, offshore operations, and maritime logistics.',
+        'services': [
+            'Maritime Compliance Audit',
+            'Port Operations Analysis',
+            'Shipping Financial Management',
+            'Offshore Asset Valuation',
+            'Marine Insurance Consulting',
+            'Supply Chain Optimization'
+        ]
+    }
+    return render(request, 'industries/marine.html', context)
+
+def aerospace_industry(request):
+    context = {
+        'title': 'Aerospace & Aviation Industry',
+        'description': 'Specialized solutions for aircraft manufacturing, airline operations, and aerospace defense.',
+        'services': [
+            'Aerospace Manufacturing Audit',
+            'Airline Operations Analysis',
+            'Aircraft Lease Accounting',
+            'Defense Contract Compliance',
+            'Aviation Tax Advisory',
+            'Maintenance Cost Optimization'
+        ]
+    }
+    return render(request, 'industries/aerospace.html', context)
